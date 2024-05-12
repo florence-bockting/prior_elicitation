@@ -6,21 +6,14 @@ import pandas as pd
 
 tfd = tfp.distributions
 
-from tensorflow import keras
 from functions.helper_functions import LogsInfo, save_as_pkl
-from configs.config_training import exp_decay_schedule, cos_decay_schedule
-from functions.prior_simulation import priors
+from configs.config_savings import save_hyperparameters, marginal_prior_moments
 
-def training_loop(load_prerequisits, load_expert_data, priors,
+def training_loop(load_expert_data, priors,
                   one_forward_simulation, compute_loss, global_dict):
     
     # initialize feedback behavior
     logs = LogsInfo(global_dict["log_info"])
-
-    if global_dict["learning_rate_decay"]:
-        lr_schedule = cos_decay_schedule(global_dict)
-    # load design matrix for generative model
-    design_matrix_path = load_prerequisits(global_dict)
     # get expert data
     expert_elicited_statistics = load_expert_data(global_dict)
     # prepare generative model
@@ -33,12 +26,13 @@ def training_loop(load_prerequisits, load_expert_data, priors,
         # runtime of one epoch
         epoch_time_start = time.time()
         # initialize the adam optimizer
-        optimizer = keras.optimizers.legacy.Adam(learning_rate = lr_schedule, 
-                                                clipnorm = global_dict["clipnorm_value"])
+        get_optimizer = global_dict["optimization_settings"]["optimizer"]
+        args_optimizer = global_dict["optimization_settings"]["optimizer_specs"]
+        optimizer = get_optimizer(**args_optimizer)
         
         with tf.GradientTape() as tape: 
             # generate simulations from model
-            training_elicited_statistics = one_forward_simulation(prior_model, design_matrix_path, global_dict)
+            training_elicited_statistics = one_forward_simulation(prior_model, global_dict)
             # comput loss
             weighted_total_loss = compute_loss(training_elicited_statistics, expert_elicited_statistics, global_dict, epoch)
             logs("## compute gradients and update hyperparameters", 2)
@@ -58,8 +52,12 @@ def training_loop(load_prerequisits, load_expert_data, priors,
             break
         # inform about epoch time, total loss and learning rate
         if epoch % global_dict["view_ep"] == 0:
+            if type(global_dict["optimization_settings"]["optimizer_specs"]["learning_rate"]) is float:
+                lr = global_dict["optimization_settings"]["optimizer_specs"]["learning_rate"]
+            else:
+                lr = global_dict["optimization_settings"]["optimizer_specs"]["learning_rate"](epoch)
             print(f"epoch_time: {epoch_time:.3f} sec")
-            print(f"Epoch: {epoch}, loss: {weighted_total_loss:.5f}, lr: {lr_schedule(epoch):.6f}")
+            print(f"Epoch: {epoch}, loss: {weighted_total_loss:.5f}, lr: {lr:.6f}")
         # inform about estimated time until completion
         if epoch > 0 and epoch % global_dict["view_ep"] == 0:
             avg_ep_time = np.mean(time_per_epoch)
@@ -70,7 +68,7 @@ def training_loop(load_prerequisits, load_expert_data, priors,
             print("Done :)")
 
         # save gradients in file
-        saving_path = global_dict["saving_path"]
+        saving_path = global_dict["output_path"]["data"]
         if global_dict["method"] == "parametric_prior":
             path = saving_path+'/gradients.pkl'
             save_as_pkl(gradients, path)
@@ -80,13 +78,11 @@ def training_loop(load_prerequisits, load_expert_data, priors,
         # savings per epoch
         time_per_epoch.append(epoch_time)
         total_loss.append(weighted_total_loss)
-        import configs.config_savings as ccs
+  
         if global_dict["method"] == "parametric_prior":
-            save_hyperparam = getattr(ccs, "save_hyperparameters")
-            res_dict = save_hyperparam(prior_model, epoch, global_dict)
+            res_dict = save_hyperparameters(prior_model, epoch, global_dict)
         else:
-            save_hyperparam = getattr(ccs, "marginal_prior_moments")
-            res_dict = save_hyperparam(pd.read_pickle(saving_path+"/prior_samples.pkl"), epoch, global_dict)
+            res_dict = marginal_prior_moments(pd.read_pickle(saving_path+"/prior_samples.pkl"), epoch, global_dict)
         
         
     # save final results in file

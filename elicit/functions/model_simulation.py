@@ -7,22 +7,19 @@ tfd = tfp.distributions
 
 from functions.helper_functions import save_as_pkl, LogsInfo
 
-def softmax_gumbel_trick(model_simulations, design_matrix, global_dict, ground_truth):
+def softmax_gumbel_trick(model_simulations, global_dict, ground_truth):
     # set batch size to 1 if simulating expert
     if ground_truth:
         B = 1
     else:
-        B = global_dict["b"]
+        B = global_dict["B"]
     # initialize counter
     number_obs = 0
     # get number of observations
-    if len(design_matrix.shape) == 1:
-        number_obs = len(design_matrix)
-    else:
-        number_obs = design_matrix.shape[-2]
-
+    number_obs = model_simulations["epred"].shape[2]
     # constant outcome vector (including zero outcome)
-    c = tf.range(global_dict["upper_threshold"]+1, delta=1, dtype=tf.float32)
+    c = tf.range(global_dict["generative_model"]["softmax_gumble_specs"]["upper_threshold"]+1, 
+                 delta=1, dtype=tf.float32)
     # broadcast to shape (B, rep, outcome-length)
     c_brct = tf.broadcast_to(c[None, None, None, :], 
                              shape=(B, global_dict["rep"], number_obs, len(c)))
@@ -36,35 +33,30 @@ def softmax_gumbel_trick(model_simulations, design_matrix, global_dict, ground_t
     g = -tf.math.log(-tf.math.log(u))
     # softmax gumbel trick
     w = tf.nn.softmax(
-        tf.math.divide(tf.math.add(tf.math.log(pi), g), global_dict["temperature_softmax"])
+        tf.math.divide(tf.math.add(tf.math.log(pi), g), 
+                       global_dict["generative_model"]["softmax_gumble_specs"]["temperature"])
     )
     # reparameterization/linear transformation
     ypred = tf.reduce_sum(tf.multiply(w, c), axis=-1)
     return ypred    
  
-def simulate_from_generator(prior_samples, design_matrix_path, ground_truth, global_dict): 
+def simulate_from_generator(prior_samples, ground_truth, global_dict): 
     # initialize feedback behavior
     logs = LogsInfo(global_dict["log_info"])   
-    # load design matrix
-    design_matrix = pd.read_pickle(rf"{design_matrix_path}")
     # get model and initialize generative model
-    import configs.config_models as ccm
-    GenerativeModel = getattr(ccm, global_dict["model_name"])
+    # TODO: I silently assume that the given model_function is an "uninitialized class"
+    GenerativeModel = global_dict["generative_model"]["model_function"]
     generative_model = GenerativeModel() 
-    # get model specific variables from config file 
-    add_model_args = set(inspect.getfullargspec(generative_model)[0]).difference({"self","prior_samples", "design_matrix"})
-    dict_mapping = {}
-    if len(add_model_args) != 0:
-        for key in add_model_args:
-            dict_mapping[key] = global_dict[key]
+    # get model specific arguments (that are not prior samples) 
+    add_model_args = global_dict["generative_model"]["additional_model_args"]
     # simulate from generator
-    model_simulations = generative_model(prior_samples, design_matrix, **dict_mapping)
+    model_simulations = generative_model(prior_samples, **add_model_args)
     # estimate gradients for discrete likelihood if necessary
     if model_simulations["likelihood"].reparameterization_type != tfd.FULLY_REPARAMETERIZED:
         logs("...apply softmax-gumbel trick for discrete likelihood", 3)
-        model_simulations["ypred"] = softmax_gumbel_trick(model_simulations, design_matrix, global_dict, ground_truth)
+        model_simulations["ypred"] = softmax_gumbel_trick(model_simulations, global_dict, ground_truth)
     # save file in object
-    saving_path = global_dict["saving_path"]
+    saving_path = global_dict["output_path"]["data"]
     if ground_truth:
         saving_path = saving_path+"/expert"
     path = saving_path +'/model_simulations.pkl'

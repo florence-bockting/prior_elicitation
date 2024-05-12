@@ -3,14 +3,9 @@ import numpy as np
 import tensorflow as tf
 import pandas as pd
 import patsy as pa
-import numpy as np
-
-from functions.helper_functions import save_as_pkl
 
 
-def load_design_matrix_haberman(global_dict):
-    scaling = global_dict["scaling"]
-    select_obs = global_dict["select_obs"]
+def load_design_matrix_haberman(scaling, selected_obs):
     # load dataset from repo
     from ucimlrepo import fetch_ucirepo 
     # fetch dataset 
@@ -37,16 +32,13 @@ def load_design_matrix_haberman(global_dict):
         d_final = d_scaled.select(["intercept", "X_scaled"])
     if scaling is None:
         d_final = data_reordered
-    # select specific observations
-    d_final = tf.gather(d_final, select_obs)
+    # select only relevant observations
+    d_final = tf.gather(d_final, selected_obs, axis = 0)
     # convert pandas data frame to tensor
     array = tf.cast(d_final, tf.float32)
-    # save file in object
-    path = global_dict["saving_path"]+'/design_matrix.pkl'
-    save_as_pkl(array, path)
-    return path
+    return array
 
-def load_design_matrix_equality(global_dict):
+def load_design_matrix_equality(scaling, selected_obs):
     # load dataset from repo
     url = "https://github.com/bayes-rules/bayesrules/blob/404fbdbae2957976820f9249e9cc663a72141463/data-raw/equality_index/equality_index.csv?raw=true"
     df = pd.read_csv(url)
@@ -65,22 +57,24 @@ def load_design_matrix_equality(global_dict):
     data_reordered = design_matrix.assign(percent_urban=df_prep.loc[:, "percent_urban"]
                                           ).sort_values(by=["gop","swing","percent_urban"]).dropna()
     # scale predictor if specified
-    if global_dict["scaling"] == "divide_by_std":
+    if scaling == "divide_by_std":
         sd = np.std(np.array(data_reordered["percent_urban"]))
         d_scaled = data_reordered.assign(percent_urban_scaled = np.array(data_reordered["percent_urban"])/sd)
         d_final = d_scaled.loc[:,["intercept", "percent_urban_scaled","gop","swing"]]
-    if global_dict["scaling"] == "standardize":
+    if scaling == "standardize":
         sd = np.std(np.array(data_reordered["percent_urban"]))
         mean = np.mean(np.array(data_reordered["percent_urban"]))
         d_scaled = data_reordered.assign(percent_urban_scaled = (np.array(data_reordered["percent_urban"])-mean)/sd)
         d_final = d_scaled.loc[:, ["intercept", "percent_urban_scaled", "gop","swing"]]
-    if global_dict["scaling"] is None:
+    if scaling is None:
         d_final = data_reordered
-    # select specific observations
-    d_final = tf.gather(d_final, global_dict["select_obs"])
+    # select only relevant observations
+    d_final = tf.gather(d_final, selected_obs, axis = 0)
     # convert pandas data frame to tensor
     array = tf.cast(d_final, tf.float32)
+    return array
+
+
     # save file in object
-    path = global_dict["saving_path"]+'/design_matrix.pkl'
-    save_as_pkl(array, path)
-    return path
+    # path = saving_path+'/design_matrix.pkl'
+    # save_as_pkl(array, path)

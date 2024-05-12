@@ -30,7 +30,7 @@ def intialize_priors(global_dict):
     logs = LogsInfo(global_dict["log_info"])
     logs("...initialize prior distributions", 4)
     # number parameters
-    no_param = len(global_dict["name_param"])
+    no_param = len(global_dict["model_params"]["name"])
 
     if global_dict["method"] == "parametric_prior":
         # list for saving initialize hyperparameter values
@@ -38,46 +38,39 @@ def intialize_priors(global_dict):
         # loop over model parameter and initialize each hyperparameter 
         # given the user specified initialization
         for model_param in range(no_param):
+            get_hyp_dict = global_dict["model_params"]["hyperparams_dict"]
             initialized_hyperparam = dict()
-            for hyperparam, hyperparam_name in enumerate(global_dict["name_hyperparam"][model_param]):
-
-                init_dist = global_dict["initialization"][model_param][hyperparam]
-
-                initialized_hyperparam[f"{hyperparam_name}"] = tf.Variable(
-                    initial_value=init_dist.sample(),
-                    trainable=True,
-                    name=f"{hyperparam_name}",
+            for name, init_val in zip(get_hyp_dict[model_param].keys(), 
+                                      get_hyp_dict[model_param].values()):
+                # check whether initial value is a distributions
+                # TODO currently we silently assume that we have either a value or a tdf.distribution object
+                try:
+                    init_val.reparameterization_type
+                except:
+                    initial_value = init_val
+                else:
+                    initial_value = init_val.sample()
+                
+                # initialize hyperparameter
+                initialized_hyperparam[f"{name}"] = tf.Variable(
+                    initial_value = initial_value,
+                    trainable = True,
+                    name = f"{name}",
                 )
             init_hyperparam_list.append(initialized_hyperparam)    
         # save initialized priors
         init_prior = init_hyperparam_list
         # save file in object
-        path = global_dict["saving_path"]+'/init_prior.pkl'
+        path = global_dict["output_path"]["data"]+'/init_prior.pkl'
         save_as_pkl(init_prior, path)
 
     if global_dict["method"] == "deep_prior":
         # for more information see BayesFlow documentation
         # https://bayesflow.org/api/bayesflow.inference_networks.html
-        coupling_settings = {
-            "dense_args": dict(
-                units = global_dict["units"],
-                activation = global_dict["activation_function"],
-                kernel_regularizer = global_dict["kernel_regularizer"]
-            ),
-            "hidden_layers": global_dict["hidden_layers"],
-            "dropout": global_dict["dropout"]
-        }
-        
-        if global_dict["coupling_design"] == "spline":
-            coupling_settings["bins"] = global_dict["bins"]
             
         invertible_neural_network = bfn.InvertibleNetwork(
             num_params = no_param,
-            num_coupling_layers = global_dict["num_coupling_layers"],
-            coupling_design = global_dict["coupling_design"],
-            coupling_settings = coupling_settings,
-            permutation = global_dict["permutation"],
-            use_act_norm = False
+            **global_dict["model_params"]['normalizing_flow_specs']
         )
         # save initialized priors
         init_prior = invertible_neural_network
@@ -87,17 +80,18 @@ def intialize_priors(global_dict):
 def sample_from_priors(initialized_priors, ground_truth, global_dict):
     # extract variables from dict
     rep = global_dict["rep"]
-    B = global_dict["b"]
+    B = global_dict["B"]
     method = global_dict["method"]
-    scale_prior_samples = global_dict["scale_prior_samples"]
+    scale_prior_samples = global_dict["model_params"]["scaling_value"]
     # initialize feedback behavior
     logs = LogsInfo(global_dict["log_info"])
     # number parameters
-    no_param = len(global_dict["name_param"])
+    no_param = len(global_dict["model_params"]["name"])
 
     if ground_truth:
         priors = []
-        for prior in global_dict["true"]:
+        # TODO: check what happens if you specify one multivariate distribution: How does the code has to be changed?
+        for prior in list(global_dict["expert_input"]['simulator_specs'].values()):
             # sample from the prior distribution 
             priors.append(prior.sample((1, rep)))
         prior_samples = tf.stack(priors, axis=-1)
@@ -107,12 +101,7 @@ def sample_from_priors(initialized_priors, ground_truth, global_dict):
         priors = []
         for model_param in range(no_param):
             # get the prior distribution family as specified by the user
-            prior_family = global_dict["family"][model_param]
-            if type(prior_family) is str:
-                if prior_family.startswith("custom_"):
-                    # if prior distribution family is a custom function; import it from custom_functions
-                    import configs.config_custom_functions as cccf
-                    prior_family = getattr(cccf, prior_family)
+            prior_family = global_dict["model_params"]["family"][model_param]
             # save hyperparameter values in list
             hyperparams = [initialized_hyperparameters[model_param][key] for key 
                            in initialized_hyperparameters[model_param].keys()]
@@ -136,15 +125,15 @@ def sample_from_priors(initialized_priors, ground_truth, global_dict):
         "prior_samples": prior_samples
     }
 
-    if scale_prior_samples is not None and not ground_truth:
-        logs("...scale samples from prior distributions", 4)
-        # scale prior samples
-        scaled_prior_samples = tf.stack([prior_samples[:,:,i]*scaling_factor for i, scaling_factor in enumerate(scale_prior_samples)], -1)
-        # save results in dict
-        prior_samples_dict["scaled_prior_samples"] = scaled_prior_samples
+    ## scaling of prior distributions, default is no scaling (value = 1.)
+    logs("...scale samples from prior distributions", 4)
+    # scale prior samples
+    scaled_prior_samples = tf.stack([prior_samples[:,:,i]*scaling_factor for i, scaling_factor in enumerate(global_dict["model_params"]["scaling_value"])], -1)
+    # save results in dict
+    prior_samples_dict["scaled_prior_samples"] = scaled_prior_samples
     
     # save results in path
-    saving_path = global_dict["saving_path"]
+    saving_path = global_dict["output_path"]["data"]
     if ground_truth:
         saving_path = saving_path+"/expert"
     path_prior_samples_dict = saving_path+'/prior_samples_dict.pkl'

@@ -53,6 +53,5 @@ class GenerativePoissonModel(tf.Module):
         return dict(likelihood = likelihood,     
                     ypred = None,                 
                     epred = epred,
-                    prior_samples = prior_samples,
-                    design_matrix = design_matrix                
+                    prior_samples = prior_samples               
                     )

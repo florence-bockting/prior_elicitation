@@ -32,18 +32,26 @@ def compute_loss_components(elicited_statistics, global_dict, expert):
         loss_component = elicited_statistics[name]
         
         if tf.rank(loss_component) == 1:
-            assert global_dict["combine_loss"][i_target] == "all", f"the elicited statistic {name} has rank=1 and can therefore support only combine_loss = 'all'"
+            assert global_dict["target_quantities"]["loss_components"][i_target] == "all", f"the elicited statistic {name} has rank=1 and can therefore support only combine_loss = 'all'"
             # add a last axis for loss computation
             final_loss_component = tf.expand_dims(loss_component, axis = -1)
             # store result
             loss_component_res[f"{name}_loss"] = final_loss_component
         
         else:
-            if global_dict["combine_loss"][i_target] == "all":
+            if global_dict["target_quantities"]["loss_components"][i_target] == "all":
                 assert tf.rank(loss_component) <= 2, f"the elicited statistic {name} has more than 2 dimensions; combine_loss = all is therefore not possible. Consider using combine_loss = 'by-group'"
-                loss_component_res[f"{name}_loss_{j}"] = final_loss_component
+                loss_component_res[f"{name}_loss_{i_target}"] = final_loss_component
             
-            if global_dict["combine_loss"][i_target] == "by-group":
+            if global_dict["target_quantities"]["loss_components"][i_target] == "by-stats":
+                assert global_dict["target_quantities"]["elicitation_method"][i_target] == "quantiles", "loss combination method 'by-stats' is currently only possible for elicitation techniques: 'quantiles'."
+                for j in range(loss_component.shape[1]):
+                    if tf.rank(loss_component) == 2:
+                        loss_component_res[f"{name}_loss_{j}"] = loss_component[:,j]
+                    if tf.rank(loss_component) == 3:
+                        loss_component_res[f"{name}_loss_{j}"] = loss_component[:,j,:]
+                        
+            if global_dict["target_quantities"]["loss_components"][i_target] == "by-group":
                 for j in range(loss_component.shape[-1]):
                     final_loss_component = loss_component[...,j]
                     if tf.rank(final_loss_component) == 1:
@@ -51,7 +59,7 @@ def compute_loss_components(elicited_statistics, global_dict, expert):
 
                     loss_component_res[f"{name}_loss_{j}"] = final_loss_component
     # save file in object
-    saving_path = global_dict["saving_path"]
+    saving_path = global_dict["output_path"]["data"]
     if expert:
         saving_path = saving_path+"/expert"
     path = saving_path+'/loss_components.pkl'
@@ -126,19 +134,21 @@ def dynamic_weight_averaging(epoch, loss_per_component_current,
 
 
 def compute_discrepancy(loss_components_expert, loss_components_training, global_dict):
-    # import function
-    import configs.config_loss as ccl
-    loss_function = getattr(ccl, global_dict["loss_function"])
+    # import loss function 
+    loss_function = global_dict["loss_function"]["loss_function"]
     # create dictionary for storing results
     loss_per_component = []
     # compute discrepancy 
     for name in list(loss_components_expert.keys()):
         # broadcast expert loss to training-shape
-        loss_comp_expert = tf.broadcast_to(loss_components_expert[name], shape=loss_components_training[name].shape)
+        loss_comp_expert = tf.broadcast_to(loss_components_expert[name], 
+                                           shape=loss_components_training[name].shape)
         # compute loss
-        loss_per_component.append(loss_function(loss_comp_expert, loss_components_training[name], global_dict["b"]))
+        loss_per_component.append(loss_function(loss_comp_expert, 
+                                                loss_components_training[name], 
+                                                global_dict["B"]))
     # save file in object
-    saving_path = global_dict["saving_path"]
+    saving_path = global_dict["output_path"]["data"]
     path = saving_path+'/loss_per_component.pkl'
     save_as_pkl(loss_per_component, path)
     return loss_per_component

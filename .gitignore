@@ -1,9 +1,4 @@
 results/
 logs/
 prior_elicitation/
-elicit/__pycache__/
-elicit/configs/__pycache__/
-elicit/dags/__pycache__/
-elicit/dags/dags_airflow/__pycache__/
-elicit/functions/__pycache__/
-elicit/validation/__pycache__/
+**/__pycache__
