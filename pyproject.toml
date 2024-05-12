@@ -11,7 +11,7 @@ authors = [
 ]
 packages = [
     { include = "functions", from = "elicit"},
-    { include = "configs", from = "elicit" },
+    { include = "user_input", from = "elicit" },
     { include = "validation", from = "elicit" },
     { include = "dags", from = "elicit" },
 ]

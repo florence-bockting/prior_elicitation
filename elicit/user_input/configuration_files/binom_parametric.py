@@ -3,7 +3,7 @@ import tensorflow as tf
 import keras
 tfd = tfp.distributions 
 
-from configs.input_functions import param, model, target, loss, expert, optimization, prior_elicitation
+from functions.user_interface.input_functions import param, model, target, loss, expert, optimization, prior_elicitation
 
 #%% Model parameters
 def model_params():  
@@ -30,11 +30,11 @@ def expert_input():
                       })
 
 #%% Generative model
-from configs.config_models import GenerativeBinomialModel
-from configs.config_data import load_design_matrix_haberman
+from user_input.generative_models import GenerativeBinomialModel
+from user_input.design_matrices import load_design_matrix_haberman
+
 design_matrix = load_design_matrix_haberman("standardize", 
                                             [0, 5, 10, 15, 20, 25, 30])
-
 def generative_model():
     return model(GenerativeBinomialModel,
                  additional_model_args = {

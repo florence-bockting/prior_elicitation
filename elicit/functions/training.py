@@ -7,7 +7,7 @@ import pandas as pd
 tfd = tfp.distributions
 
 from functions.helper_functions import LogsInfo, save_as_pkl
-from configs.config_savings import save_hyperparameters, marginal_prior_moments
+from user_input.utils import save_hyperparameters, marginal_prior_moments
 
 def training_loop(load_expert_data, priors,
                   one_forward_simulation, compute_loss, global_dict):

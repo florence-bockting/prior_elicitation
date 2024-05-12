@@ -3,7 +3,7 @@ import tensorflow as tf
 import keras
 tfd = tfp.distributions 
 
-from configs.input_functions import param, model, target, loss, expert, optimization, prior_elicitation
+from functions.user_interface.input_functions import param, model, target, loss, expert, optimization, prior_elicitation
 
 #%% Model parameters
 def model_params():  
@@ -42,8 +42,8 @@ def expert_input():
                       })
 
 #%% Generative model
-from configs.config_models import GenerativePoissonModel
-from configs.config_data import load_design_matrix_equality
+from user_input.generative_models import GenerativePoissonModel
+from user_input.design_matrices import load_design_matrix_equality
 design_matrix = load_design_matrix_equality("standardize", [1, 11, 27, 33, 17, 15])
 
 def generative_model():
@@ -57,7 +57,7 @@ def generative_model():
                 )
 
 #%% Target quantities and elicited statistics
-from configs.config_custom_functions import custom_group_means
+from user_input.custom_functions import custom_group_means
 
 def target_quantities():
     return (
@@ -116,22 +116,18 @@ prior_elicitation(
     )
 
 import pandas as pd
-from elicit.validation.diagnostic_plots import plot_loss, plot_gradients, plot_convergence, plot_marginal_priors, plot_joint_prior, plot_elicited_statistics, plot_elicited_statistics_pois
+from elicit.validation.diagnostic_plots import plot_loss, plot_gradients, plot_convergence, plot_marginal_priors, plot_joint_prior, plot_elicited_statistics
 
 global_dict = pd.read_pickle("results/data/parametric_prior/pois_01/global_dict.pkl")
 
 plot_loss(global_dict, save_fig = True)
 plot_gradients(global_dict, save_fig = True)
 plot_convergence(global_dict, save_fig = True)
-plot_marginal_priors(global_dict, save_fig = True)
+plot_marginal_priors(global_dict, sims = 100, save_fig = True)
 plot_joint_prior(global_dict, save_fig = True)
-plot_elicited_statistics_pois(global_dict, sims = 100, save_fig = True)
+plot_elicited_statistics(global_dict, sims = 100,
+                         selected_obs=[1, 11, 27, 33, 17, 15], save_fig = True)
 
-
-
-pd.read_pickle("results/data/parametric_prior/pois_01/expert/prior_samples.pkl")
-
-pd.read_pickle("results/data/parametric_prior/pois_01/prior_samples.pkl")
 
 
 

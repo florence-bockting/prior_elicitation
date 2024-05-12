@@ -2,3 +2,9 @@ results/
 logs/
 prior_elicitation/
 **/__pycache__
+.spyproject/
+.vscode/
+airflow.cfg
+airflow.db
+dags/dags_airflow/
+webserver_config.py

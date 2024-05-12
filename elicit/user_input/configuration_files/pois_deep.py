@@ -3,7 +3,7 @@ import tensorflow as tf
 import keras
 tfd = tfp.distributions 
 
-from configs.input_functions import param, model, target, loss, expert, normalizing_flow_specs, optimization, prior_elicitation
+from functions.user_interface.input_functions import param, model, target, loss, expert, normalizing_flow_specs, optimization, prior_elicitation
 
 #%% Model parameters
 def model_params():  
@@ -27,10 +27,11 @@ def expert_input():
                       })
 
 #%% Generative model
-from configs.config_models import GenerativePoissonModel
-from configs.config_data import load_design_matrix_equality
-scaling = "standardize"
-design_matrix = load_design_matrix_equality(scaling)
+from user_input.generative_models import GenerativePoissonModel
+from user_input.design_matrices import load_design_matrix_equality
+
+design_matrix = load_design_matrix_equality("standardize", 
+                                            [1, 11, 27, 33, 17, 15])
 
 def generative_model():
     return model(GenerativePoissonModel,
@@ -48,7 +49,6 @@ def target_quantities():
     return (
         target(name = "ypred",
                elicitation_method = "histogram",
-               select_obs = [1, 11, 27, 33, 17, 15],
                loss_components = "by-group"
                ),
         target(name = "group_means",
@@ -102,18 +102,17 @@ prior_elicitation(
     )
 
 ########### postprocessing
+import pandas as pd
+from elicit.validation.diagnostic_plots import plot_loss, plot_convergence, plot_marginal_priors, plot_joint_prior, plot_elicited_statistics
 
-from elicit.validation.diagnostic_plots import plot_loss, plot_gradients, plot_convergence, plot_marginal_priors, plot_joint_prior, plot_elicited_statistics, plot_elicited_statistics_pois
-
+global_dict = pd.read_pickle("results/data/deep_prior/pois_01/global_dict.pkl")
 
 plot_loss(global_dict, save_fig = True)
-# not for deep-prior method:
-plot_gradients(global_dict, save_fig = True)
 plot_convergence(global_dict, save_fig = True)
-plot_marginal_priors(global_dict, save_fig = True)
+plot_marginal_priors(global_dict, sims = 100, save_fig = True)
 plot_joint_prior(global_dict, save_fig = True)
-plot_elicited_statistics(global_dict, save_fig = True)
-plot_elicited_statistics_pois(global_dict, sims = 100, save_fig = True)
+plot_elicited_statistics(global_dict, sims = 100, 
+                         selected_obs=[1, 11, 27, 33, 17, 15], save_fig = True)
 
 
 

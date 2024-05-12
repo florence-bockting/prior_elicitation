@@ -2,9 +2,9 @@ import inspect
 import keras
 import tensorflow as tf
 import warnings
-from configs.config_loss import MmdEnergy
-from configs.config_user_input import create_global_dict
-from dags.dag_tf import prior_elicitation_dag
+from functions.loss_functions import MmdEnergy
+from functions.user_interface.create_dictionaries import create_global_dict
+from dags.elicitation_pipeline import prior_elicitation_dag
 
 def normalizing_flow_specs(
         num_coupling_layers: int = 7,
