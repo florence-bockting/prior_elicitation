@@ -74,7 +74,10 @@ def load_design_matrix_equality(scaling, selected_obs):
     array = tf.cast(d_final, tf.float32)
     return array
 
-
-    # save file in object
-    # path = saving_path+'/design_matrix.pkl'
-    # save_as_pkl(array, path)
+def load_design_matrix_truth(n_group):
+    # construct design matrix with 2-level and 3-level factor
+    df =  pa.dmatrix("a*b", pa.balanced(a = 2, b = 3, repeat = n_group), 
+                    return_type="dataframe")
+    # save in correct format
+    d_final = tf.cast(df, dtype = tf.float32)
+    return d_final

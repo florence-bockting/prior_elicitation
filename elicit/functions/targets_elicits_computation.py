@@ -14,8 +14,7 @@ def use_custom_functions(custom_function, model_simulations):
     # create a dict with arguments from model simulations and custom args for custom func 
     args_dict = model_simulations
     if custom_function["additional_args"] is not None:
-        argument = custom_function["additional_args"]
-        args_dict[argument["name"]] = argument["value"] 
+        args_dict.update({f"{key}": custom_function["additional_args"][key] for key in list(custom_function["additional_args"].keys())})
     # select only relevant keys from args_dict
     custom_args_keys = inspect.getfullargspec(custom_func)[0]
     # check that all args needed for custom function were detected

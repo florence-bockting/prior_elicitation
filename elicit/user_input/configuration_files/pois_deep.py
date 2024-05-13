@@ -56,8 +56,7 @@ def target_quantities():
                quantiles_specs = (10, 20, 30, 40, 50, 60, 70, 80, 90),
                custom_target_function = {
                    "function": custom_group_means,
-                   "additional_args": {"name": "design_matrix", 
-                                       "value": design_matrix}
+                   "additional_args": {"design_matrix": design_matrix}
                    },
                loss_components = "by-group"
                )

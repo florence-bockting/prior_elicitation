@@ -58,8 +58,8 @@ def plot_convergence(global_dict, save_fig = False):
     
     _, axs = plt.subplots(1,2, constrained_layout = True, figsize = (6,3), sharex=True)
     # learned values
-    [axs[0].plot(range(hyperparams_prep.shape[0]), hyperparams_prep[:,i], lw = 2, label = fr"$\lambda_{{{i}}}$") for i in range(int(num_params/2))]
-    [axs[1].plot(range(hyperparams_prep.shape[0]), hyperparams_prep[:,i], lw = 2, label = fr"$\lambda_{{{i}}}$") for i in range(int(num_params/2),num_params)]
+    [axs[0].plot(range(hyperparams_prep.shape[0]), hyperparams_prep[:,i], lw = 2, label = fr"$\lambda_{{{i}}}$") for i in range(int(num_params/2-1))]
+    [axs[1].plot(range(hyperparams_prep.shape[0]), hyperparams_prep[:,i], lw = 2, label = fr"$\lambda_{{{i}}}$") for i in range(int(num_params/2),int(num_params-1))]
     # expert
     [axs[0].axhline(true_means[i], linestyle = "dashed", color = "black", lw = 1) for i in range(int(num_params/2))]
     [axs[1].axhline(true_sds[i], linestyle = "dashed", color = "black", lw = 1) for i in range(int(num_params/2))]
@@ -86,9 +86,9 @@ def plot_marginal_priors(global_dict, sims = 100, save_fig = False):
     _, axs = plt.subplots(1,1, constrained_layout = True, figsize = (4,3))
     for b in range(sims):
         [sns.kdeplot(learned[b,:,i], lw = 2, alpha = 0.2, color = "orange", 
-                     ax = axs) for i in range(truth.shape[-1])]
+                     ax = axs) for i in range(truth.shape[-1]-1)]
     [sns.kdeplot(truth[0,:,i], lw = 2, color = "black", linestyle = "dashed", 
-                 ax = axs) for i in range(truth.shape[-1])]
+                 ax = axs) for i in range(truth.shape[-1]-1)]
     axs.set_xlabel(r"model parameters $\beta$")
     axs.set_ylabel("density")
     plt.suptitle("learned prior distributions", ha = "left", x = 0.15)
@@ -149,15 +149,23 @@ def plot_elicited_statistics(global_dict, sims = 100, selected_obs = None,
                 plt.suptitle("elicited statistics - histogram", size = "medium")
              
             else:
-                groups = training_data.shape[-1]
-                _, ax = plt.subplots(1,groups, constrained_layout = True, figsize = (int(groups*2),3))
+                if training_data.shape[-1] == global_dict["rep"]:
+                    _, ax = plt.subplots(1,1, constrained_layout = True, figsize = (3,3))
+                    [sns.histplot(training_data[b,...], bins = 20, color = "orange", stat="density",
+                                alpha = 0.2, ax = ax, edgecolor = None) for b in range(sims)]
+                    sns.kdeplot(expert_data[0,...], ax = ax, color = "black")
+                    plt.suptitle("elicited statistics - histogram")
                 
-                for gr in range(groups):
-                    [sns.histplot(training_data[b,...,gr], bins = 20, color = "orange", stat="density",
-                                alpha = 0.2, ax = ax[gr], edgecolor = None) for b in range(sims)]
-                    sns.kdeplot(expert_data[0,...,gr], ax = ax[gr], color = "black")
-                [ax[i].set_title(f"y_pred {i}") for i in range(groups)]
-                plt.suptitle("elicited statistics - histogram")
+                else:
+                    groups = training_data.shape[-1]
+                    _, ax = plt.subplots(1,groups, constrained_layout = True, figsize = (int(groups*2),3))
+                    
+                    for gr in range(groups):
+                        [sns.histplot(training_data[b,...,gr], bins = 20, color = "orange", stat="density",
+                                    alpha = 0.2, ax = ax[gr], edgecolor = None) for b in range(sims)]
+                        sns.kdeplot(expert_data[0,...,gr], ax = ax[gr], color = "black")
+                    [ax[i].set_title(f"y_pred {i}") for i in range(groups)]
+                    plt.suptitle("elicited statistics - histogram")
                 
             if save_fig:
                 path_to_file = global_dict["output_path"]["plots"]+'/elicited_statistics_hist.png'
@@ -183,7 +191,7 @@ def plot_elicited_statistics(global_dict, sims = 100, selected_obs = None,
             [axs[x].set_yticklabels([]) for x in range(groups)]
             axs[0].set_xlabel("training data")
             axs[0].set_ylabel("expert data")
-            [axs[i].set_title(fr"$y_{{n,{obs}}}$") for i, obs in enumerate(selected_obs)]
+            #[axs[i].set_title(fr"$y_{{n,{obs}}}$") for i, obs in enumerate(selected_obs)]
             plt.suptitle("elicited statistics - quantile-based")
             if save_fig:
                 path_to_file = global_dict["output_path"]["plots"]+'/elicited_statistics_quant.png'

@@ -63,10 +63,11 @@ def model(model: callable,
                                                 "upper_threshold": None}
           ) -> dict:
   
-    softmax_gumble_specs_default = {"temperature": 1.,
-                                    "upper_threshold": None}
-    
-    softmax_gumble_specs_default.update(softmax_gumble_specs)
+    if softmax_gumble_specs is not None:
+        softmax_gumble_specs_default = {"temperature": 1.,
+                                        "upper_threshold": None}
+        
+        softmax_gumble_specs_default.update(softmax_gumble_specs)
     
     model_dict = {
         "model_function": model,
@@ -75,9 +76,10 @@ def model(model: callable,
         }
     
     # provide a warning if the upper_threshold argument is not specified
-    assert discrete_likelihood is True and "upper_threshold" in softmax_gumble_specs, "The upper_threshold argument in the softmax-gumble specifications is None."
-    if discrete_likelihood is True and "temperature" not in softmax_gumble_specs:
-        warnings.warn(f"The Softmax-Gumble method with default temperature: {softmax_gumble_specs_default['temperature']} is used.")
+    if discrete_likelihood:
+        assert "upper_threshold" in softmax_gumble_specs, "The upper_threshold argument in the softmax-gumble specifications is None."
+        if "temperature" not in softmax_gumble_specs:
+            warnings.warn(f"The Softmax-Gumble method with default temperature: {softmax_gumble_specs_default['temperature']} is used.")
     # get model arguments
     get_model_args = set(inspect.getfullargspec(model())[0]).difference({"self","prior_samples"})
     # check that all model arguments have been passed as input in the model_args section
@@ -113,9 +115,7 @@ def target(name: str,
                 pass
             else:
                 if default_custom_function["additional_args"] is not None:
-                    assert type(default_custom_function["additional_args"]) is dict, "additional_args must be a dictionary with keys: 'name' (str) and 'value'"
-                    assert {"name","value"}.issubset(set(default_custom_function["additional_args"].keys())), "additional_args must be a dictionary with keys: 'name' (str) and 'value'"
-            
+                    assert type(default_custom_function["additional_args"]) is dict, "additional_args must be a dictionary keys are the name of the argument and value the corresponding value of the argument to be passed"
             custom_function = default_custom_function    
         return custom_function
     
