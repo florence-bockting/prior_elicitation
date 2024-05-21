@@ -33,7 +33,8 @@ def load_design_matrix_haberman(scaling, selected_obs):
     if scaling is None:
         d_final = data_reordered
     # select only relevant observations
-    d_final = tf.gather(d_final, selected_obs, axis = 0)
+    if selected_obs is not None:
+        d_final = tf.gather(d_final, selected_obs, axis = 0)
     # convert pandas data frame to tensor
     array = tf.cast(d_final, tf.float32)
     return array
@@ -46,16 +47,14 @@ def load_design_matrix_equality(scaling, selected_obs):
     df_filtered = df.loc[df["state"] != "california"]
     # select predictors
     df_prep = df_filtered.loc[:, ["historical", "percent_urban"]]
-    # get groups of cat. predictor
-    groups = pd.DataFrame(np.asarray(pa.dmatrix("historical:percent_urban", df_prep)))
-    # create design matrix of factor 
-    design_matrix = pd.DataFrame(np.where(groups != 0, 1, 0), 
-                                 columns = ["intercept","dem","gop","swing"])
-    # use level=dem as baseline level
-    design_matrix = design_matrix.loc[:,["intercept","gop","swing"]]
-    # add continuous predictor to design matrix
-    data_reordered = design_matrix.assign(percent_urban=df_prep.loc[:, "percent_urban"]
-                                          ).sort_values(by=["gop","swing","percent_urban"]).dropna()
+    # reorder historical predictor
+    df_reordered = df_prep.sort_values(["historical", "percent_urban"])
+    # add dummy coded predictors
+    df_reordered["gop"] = np.where(df_reordered["historical"] == "gop", 1, 0)
+    df_reordered["swing"] = np.where(df_reordered["historical"] == "swing", 1, 0)
+    df_reordered["intercept"] = 1
+    # select only required columns
+    data_reordered = df_reordered[["intercept", "percent_urban", "gop","swing"]]
     # scale predictor if specified
     if scaling == "divide_by_std":
         sd = np.std(np.array(data_reordered["percent_urban"]))
@@ -68,8 +67,9 @@ def load_design_matrix_equality(scaling, selected_obs):
         d_final = d_scaled.loc[:, ["intercept", "percent_urban_scaled", "gop","swing"]]
     if scaling is None:
         d_final = data_reordered
-    # select only relevant observations
-    d_final = tf.gather(d_final, selected_obs, axis = 0)
+    if selected_obs is not None:
+        # select only relevant observations
+        d_final = tf.gather(d_final, selected_obs, axis = 0)
     # convert pandas data frame to tensor
     array = tf.cast(d_final, tf.float32)
     return array

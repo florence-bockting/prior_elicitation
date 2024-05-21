@@ -56,7 +56,7 @@ def target_quantities():
                ),
         target(name = "group_means",
                elicitation_method = "quantiles",
-               quantiles_specs = (5, 25, 50, 75,95),
+               quantiles_specs = (5,25, 50, 75,95),
                custom_target_function = {
                    "function": custom_group_means,
                    "additional_args": {"design_matrix": design_matrix,
@@ -112,7 +112,7 @@ prior_elicitation(
     rep = 300,
     seed = 345,
     burnin = 10,
-    epochs = 150,
+    epochs = 100,
     output_path = "results",
     model_params = model_params,
     expert_input = expert_input,

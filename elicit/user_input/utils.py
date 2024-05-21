@@ -12,7 +12,11 @@ def save_hyperparameters(generator, epoch, global_dict):
         for d in hyperparams:
             hyp_list.update(d)
         # create a dict with empty list for each hyperparameter
-        res_dict = {f"{key}": [] for key in hyp_list.keys()}
+        res_dict = dict()
+        for key in hyp_list.keys():
+            if key.startswith("log_"):
+                key = key.removeprefix("log_")
+            res_dict[f"{key}"] = [] 
     else:
         path_res_dict = saving_path+'/res_dict.pkl'
         res_dict = pd.read_pickle(rf"{path_res_dict}")

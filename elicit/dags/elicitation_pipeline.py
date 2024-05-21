@@ -1,11 +1,11 @@
 import tensorflow as tf
 
-from elicit.functions.prior_simulation import intialize_priors, sample_from_priors
-from elicit.functions.helper_functions import LogsInfo
-from elicit.functions.model_simulation import simulate_from_generator
-from elicit.functions.targets_elicits_computation import computation_target_quantities, computation_elicited_statistics
-from elicit.functions.loss_computation import compute_loss_components, compute_discrepancy, dynamic_weight_averaging
-from elicit.functions.training import training_loop
+from functions.prior_simulation import intialize_priors, sample_from_priors
+from functions.helper_functions import LogsInfo
+from functions.model_simulation import simulate_from_generator
+from functions.targets_elicits_computation import computation_target_quantities, computation_elicited_statistics
+from functions.loss_computation import compute_loss_components, compute_discrepancy, dynamic_weight_averaging
+from functions.training import training_loop
 
 
 def prior_elicitation_dag(global_dict: dict):
@@ -80,7 +80,43 @@ def prior_elicitation_dag(global_dict: dict):
         weighted_total_loss = compute_total_loss(epoch, loss_per_component, global_dict)
 
         return weighted_total_loss
-
-    training_loop(load_expert_data, priors, one_forward_simulation, 
+        
+    def burnin_phase(expert_elicited_statistics, priors,
+                      one_forward_simulation, compute_loss, global_dict):
+        
+        loss_list = []
+        init_var_list = []
+        if global_dict["print_info"]:
+            print("burnin phase")
+        for i in range(global_dict["burnin"]):
+            if global_dict["print_info"]:
+                print("|", end='')
+            # prepare generative model
+            prior_model = priors(global_dict)
+            # generate simulations from model
+            training_elicited_statistics = one_forward_simulation(prior_model, global_dict)
+            # comput loss
+            weighted_total_loss = compute_loss(training_elicited_statistics, 
+                                               expert_elicited_statistics, 
+                                               global_dict, epoch = 0)
+            
+            init_var_list.append(prior_model)
+            loss_list.append(weighted_total_loss.numpy())
+        if global_dict["print_info"]:
+            print(" ")
+        return loss_list, init_var_list
+    
+    # get expert data
+    expert_elicited_statistics = load_expert_data(global_dict)
+    
+    loss_list, init_prior =  burnin_phase(
+        expert_elicited_statistics, priors, one_forward_simulation, compute_loss, 
+        global_dict)
+    
+    min_index = tf.argmin(loss_list)
+    init_prior_model = init_prior[min_index]
+    
+    training_loop(expert_elicited_statistics, init_prior_model, 
+                  one_forward_simulation, 
                   compute_loss, global_dict)
     

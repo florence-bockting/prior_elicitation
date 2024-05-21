@@ -41,57 +41,84 @@ def plot_gradients(global_dict, save_fig = False):
         plt.savefig(path_to_file)
     else:
         plt.show()
-
-def plot_convergence(global_dict, save_fig = False):
+  
+def plot_convergence(true_hyperparams, names_hyperparams, global_dict, file_name,
+                     pos_only = False, save_fig = False):    
+    # prepare hyperparameter values
     res_dict = pd.read_pickle(global_dict["output_path"]["data"]+"/final_results.pkl")
-    num_params = len(global_dict["model_params"]["name"])*2
-    ## % hyperparameter values
-    truth = pd.read_pickle(global_dict["output_path"]["data"]+"/expert/prior_samples.pkl")
-    true_means = tf.reduce_mean(truth, (0,1))
-    true_sds = tf.reduce_mean(tf.math.reduce_std(truth, 1), 0)
-
-    hyperparams = tf.stack(list(res_dict["hyperparameter"].values()), -1)
-    if global_dict["method"] == "deep_prior":
-        hyperparams_prep = tf.concat([hyperparams[:,:,0], hyperparams[:,:,1]],-1)
-    else:
-        hyperparams_prep = tf.concat([hyperparams[:,0::2], abs(hyperparams[:,1::2])], -1)
+    selected_hyppar = {key: res_dict["hyperparameter"][key] for key in names_hyperparams}  
+    learned_hyperparams = tf.stack(list(selected_hyppar.values()), -1)
     
-    _, axs = plt.subplots(1,2, constrained_layout = True, figsize = (6,3), sharex=True)
+    _, axs = plt.subplots(1,1, constrained_layout = True, figsize = (4,3))
+    if pos_only:
+        learned_hyperparams = tf.exp(learned_hyperparams)
+        
     # learned values
-    [axs[0].plot(range(hyperparams_prep.shape[0]), hyperparams_prep[:,i], lw = 2, label = fr"$\lambda_{{{i}}}$") for i in range(int(num_params/2-1))]
-    [axs[1].plot(range(hyperparams_prep.shape[0]), hyperparams_prep[:,i], lw = 2, label = fr"$\lambda_{{{i}}}$") for i in range(int(num_params/2),int(num_params-1))]
+    [axs.plot(range(learned_hyperparams.shape[0]), learned_hyperparams[:,i], lw = 2, 
+              label = names_hyperparams[i]) for i in range(learned_hyperparams.shape[1])]
     # expert
-    [axs[0].axhline(true_means[i], linestyle = "dashed", color = "black", lw = 1) for i in range(int(num_params/2))]
-    [axs[1].axhline(true_sds[i], linestyle = "dashed", color = "black", lw = 1) for i in range(int(num_params/2))]
+    [axs.axhline(true_hyperparams[i], linestyle = "dashed", color = "black", 
+                 lw = 1) for i in range(learned_hyperparams.shape[1])]
     # legend and axes
-    [axs[i].legend(labelspacing = 0.2, columnspacing = 1, ncols = 2, handletextpad = 0.3, 
-                fontsize = "small", handlelength = 0.5) for i in range(2)]
-    [axs[i].set_xlabel("epochs") for i in range(2)]
-    axs[0].set_ylabel(r"$\lambda$")
-    plt.suptitle("convergence of hyperparameters", ha = "left", x = 0.1)
+    axs.legend(labelspacing = 0.2, columnspacing = 1, ncols = 2, handletextpad = 0.3, 
+                fontsize = "small", handlelength = 0.5)
+    axs.set_xlabel("epochs") 
+    axs.set_ylabel(r"$\lambda$")
+    plt.suptitle("convergence of hyperparameters")
     if save_fig:
-        path_to_file = global_dict["output_path"]["plots"]+'/convergence.png'
+        path_to_file = global_dict["output_path"]["plots"]+f'/{file_name}.png'
+        os.makedirs(os.path.dirname(path_to_file), exist_ok=True)
+        plt.savefig(path_to_file)
+    else:
+        plt.show()
+
+def plot_convergence_deep(true_hyperparams, moment, global_dict, file_name,
+                          save_fig = False):    
+    # prepare hyperparameter values
+    res_dict = pd.read_pickle(global_dict["output_path"]["data"]+"/final_results.pkl")
+    selected_hyppar = res_dict["hyperparameter"][moment] 
+    learned_hyperparams = tf.stack(selected_hyppar, 0)
+    
+    _, axs = plt.subplots(1,1, constrained_layout = True, figsize = (4,3))
+    # learned values
+    [axs.plot(range(learned_hyperparams.shape[0]), learned_hyperparams[:,i], lw = 2, 
+              label = f"{moment}{i}") for i in range(learned_hyperparams.shape[1])]
+    # expert
+    [axs.axhline(true_hyperparams[i], linestyle = "dashed", color = "black", 
+                 lw = 1) for i in range(learned_hyperparams.shape[1])]
+    # legend and axes
+    axs.legend(labelspacing = 0.2, columnspacing = 1, ncols = 2, handletextpad = 0.3, 
+                fontsize = "small", handlelength = 0.5)
+    axs.set_xlabel("epochs") 
+    axs.set_ylabel(r"$\lambda$")
+    plt.suptitle("convergence of hyperparameters")
+    if save_fig:
+        path_to_file = global_dict["output_path"]["plots"]+f'/{file_name}.png'
         os.makedirs(os.path.dirname(path_to_file), exist_ok=True)
         plt.savefig(path_to_file)
     else:
         plt.show()
 
 
-
 ########### Learned prior distributions: Marginals ###########
 def plot_marginal_priors(global_dict, sims = 100, save_fig = False):
     truth = pd.read_pickle(global_dict["output_path"]["data"]+"/expert/prior_samples.pkl")
     learned = pd.read_pickle(global_dict["output_path"]["data"]+"/prior_samples.pkl")
-
-    _, axs = plt.subplots(1,1, constrained_layout = True, figsize = (4,3))
+    
+    name_params = global_dict["model_params"]["name"]
+    num_params = len(name_params)
+    
+    _, axs = plt.subplots(1,num_params, constrained_layout = True, 
+                          figsize = (int(num_params*2),3))
     for b in range(sims):
         [sns.kdeplot(learned[b,:,i], lw = 2, alpha = 0.2, color = "orange", 
-                     ax = axs) for i in range(truth.shape[-1]-1)]
+                     ax = axs[i]) for i in range(truth.shape[-1])]
     [sns.kdeplot(truth[0,:,i], lw = 2, color = "black", linestyle = "dashed", 
-                 ax = axs) for i in range(truth.shape[-1]-1)]
-    axs.set_xlabel(r"model parameters $\beta$")
-    axs.set_ylabel("density")
-    plt.suptitle("learned prior distributions", ha = "left", x = 0.15)
+                 ax = axs[i]) for i in range(truth.shape[-1])]
+    axs[0].set_xlabel(r"model parameters $\beta$")
+    axs[0].set_ylabel("density")
+    [axs[i].set_title(name_params[i]) for i in range(num_params)]
+    plt.suptitle("learned prior distributions")
     if save_fig:
         path_to_file = global_dict["output_path"]["plots"]+'/marginal_prior.png'
         os.makedirs(os.path.dirname(path_to_file), exist_ok=True)
@@ -136,12 +163,12 @@ def plot_elicited_statistics(global_dict, sims = 100, selected_obs = None,
 
     keys_elicit = list(learned_elicits.keys())
     methods = [keys_elicit[i].split(sep="_")[0] for i in range(len(keys_elicit))]
-    for key, meth in zip(keys_elicit, methods):
+    for i, (key, meth) in enumerate(zip(keys_elicit, methods)):
         training_data = learned_elicits[key]
         expert_data = true_elicits[key]
 
         if meth == "histogram":
-            if tf.rank(training_data) == 1:
+            if tf.rank(tf.squeeze(training_data)) == 1:
                 _, ax = plt.subplots(1,1, constrained_layout = True, figsize = (3,3))
                 sns.histplot(training_data, bins = 20, color = "orange", stat="density",
                             ax = ax, edgecolor = None) 
@@ -156,7 +183,7 @@ def plot_elicited_statistics(global_dict, sims = 100, selected_obs = None,
                     sns.kdeplot(expert_data[0,...], ax = ax, color = "black")
                     plt.suptitle("elicited statistics - histogram")
                 
-                else:
+                if (training_data.shape[-1] != global_dict["rep"]) and tf.rank(training_data) == 3:
                     groups = training_data.shape[-1]
                     _, ax = plt.subplots(1,groups, constrained_layout = True, figsize = (int(groups*2),3))
                     
@@ -167,8 +194,21 @@ def plot_elicited_statistics(global_dict, sims = 100, selected_obs = None,
                     [ax[i].set_title(f"y_pred {i}") for i in range(groups)]
                     plt.suptitle("elicited statistics - histogram")
                 
+                if (training_data.shape[-1] != global_dict["rep"]) and tf.rank(training_data) == 2:
+                     groups = training_data.shape[-1]
+                     _, ax = plt.subplots(1,groups, constrained_layout = True, figsize = (int(groups*2),3))
+                     
+                     for gr in range(groups):
+                         sns.histplot(training_data[:,gr], bins = 20, 
+                                      color = "orange", stat="density", 
+                                      ax = ax[gr], edgecolor = None) 
+                         ax[gr].axvline(expert_data[0,gr], color = "black", 
+                                        linestyle = "dashed", lw = 3)
+                     [ax[i].set_title(f"y_pred {i}") for i in range(groups)]
+                     plt.suptitle("elicited statistics - histogram")
+                     
             if save_fig:
-                path_to_file = global_dict["output_path"]["plots"]+'/elicited_statistics_hist.png'
+                path_to_file = global_dict["output_path"]["plots"]+f'/elicited_statistics_hist{i}.png'
                 os.makedirs(os.path.dirname(path_to_file), exist_ok=True)
                 plt.savefig(path_to_file)
             else:
@@ -194,7 +234,7 @@ def plot_elicited_statistics(global_dict, sims = 100, selected_obs = None,
             #[axs[i].set_title(fr"$y_{{n,{obs}}}$") for i, obs in enumerate(selected_obs)]
             plt.suptitle("elicited statistics - quantile-based")
             if save_fig:
-                path_to_file = global_dict["output_path"]["plots"]+'/elicited_statistics_quant.png'
+                path_to_file = global_dict["output_path"]["plots"]+f'/elicited_statistics_quant{i}.png'
                 os.makedirs(os.path.dirname(path_to_file), exist_ok=True)
                 plt.savefig(path_to_file)
             else:

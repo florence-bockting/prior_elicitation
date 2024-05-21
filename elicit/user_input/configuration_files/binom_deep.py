@@ -79,7 +79,7 @@ def optimization_settings():
                     optimizer = keras.optimizers.legacy.Adam,
                     optimizer_specs = {
                         "learning_rate": tf.keras.optimizers.schedules.ExponentialDecay(
-                            initial_learning_rate = 0.0001, decay_steps = 5,
+                            initial_learning_rate = 0.0001, decay_steps = 10,
                             decay_rate = 0.9, staircase = True),
                         "clipnorm": 1.0
                         }
@@ -92,7 +92,8 @@ prior_elicitation(
     B = 128,
     rep = 200,
     seed = 125,
-    epochs = 200,
+    burnin = 10,
+    epochs = 150,
     output_path = "results",
     model_params = model_params,
     expert_input = expert_input,
@@ -106,17 +107,25 @@ prior_elicitation(
 
 
 import pandas as pd
-from elicit.validation.diagnostic_plots import plot_loss, plot_convergence, plot_marginal_priors, plot_joint_prior, plot_elicited_statistics
+from elicit.validation.diagnostic_plots import plot_loss, plot_convergence_deep, plot_marginal_priors, plot_joint_prior, plot_elicited_statistics
 
 global_dict = pd.read_pickle("results/data/deep_prior/binom_01/global_dict.pkl")
 
 plot_loss(global_dict, save_fig = True)
-plot_convergence(global_dict, save_fig = True)
 plot_marginal_priors(global_dict, sims = 100, save_fig = True)
 plot_joint_prior(global_dict, save_fig = True)
 plot_elicited_statistics(global_dict, sims = 100, 
                          selected_obs = [0, 5, 10, 15, 20, 25, 30], 
                          save_fig = True)
 
+true_samples = pd.read_pickle("results/data/deep_prior/binom_01/expert/prior_samples.pkl")
+truth = tf.reduce_mean(true_samples, (0,1))
+plot_convergence_deep(truth, "means", global_dict, 
+                 file_name = "convergence_loc", save_fig = True)
+
+true_samples = pd.read_pickle("results/data/deep_prior/binom_01/expert/prior_samples.pkl")
+truth = tf.reduce_mean(tf.math.reduce_std(true_samples,1),0)
+plot_convergence_deep(truth, "stds", global_dict, 
+                 file_name = "convergence_scale", save_fig = True)
 
 

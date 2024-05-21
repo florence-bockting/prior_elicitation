@@ -41,7 +41,7 @@ def compute_loss_components(elicited_statistics, global_dict, expert):
         else:
             if global_dict["target_quantities"]["loss_components"][i_target] == "all":
                 assert tf.rank(loss_component) <= 2, f"the elicited statistic {name} has more than 2 dimensions; combine_loss = all is therefore not possible. Consider using combine_loss = 'by-group'"
-                loss_component_res[f"{name}_loss_{i_target}"] = final_loss_component
+                loss_component_res[f"{name}_loss_{i_target}"] = loss_component
             
             if global_dict["target_quantities"]["loss_components"][i_target] == "by-stats":
                 assert global_dict["target_quantities"]["elicitation_method"][i_target] == "quantiles", "loss combination method 'by-stats' is currently only possible for elicitation techniques: 'quantiles'."

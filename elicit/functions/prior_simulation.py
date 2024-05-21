@@ -41,9 +41,9 @@ def intialize_priors(global_dict):
             get_hyp_dict = global_dict["model_params"]["hyperparams_dict"]
             initialized_hyperparam = dict()
             for name, init_val in zip(get_hyp_dict[model_param].keys(), 
-                                      get_hyp_dict[model_param].values()):
+                                      get_hyp_dict[model_param].values()):  
                 # check whether initial value is a distributions
-                # TODO currently we silently assume that we have either a value or a tdf.distribution object
+                # TODO currently we silently assume that we have either a value or a tfd.distribution object
                 try:
                     init_val.reparameterization_type
                 except:
@@ -51,6 +51,10 @@ def intialize_priors(global_dict):
                 else:
                     initial_value = init_val.sample()
                 
+                # if value was initialized on the log level apply exp. transf.
+                if name.startswith("log_"):
+                    name = name.removeprefix("log_")
+                    
                 # initialize hyperparameter
                 initialized_hyperparam[f"{name}"] = tf.Variable(
                     initial_value = initial_value,
@@ -120,24 +124,26 @@ def sample_from_priors(initialized_priors, ground_truth, global_dict):
         # apply transformation function to samples from base distr.
         prior_samples, _ = initialized_priors(u, condition = None, inverse = False)
 
-    # create results dictionary
-    prior_samples_dict = {
-        "prior_samples": prior_samples
-    }
-
-    ## scaling of prior distributions, default is no scaling (value = 1.)
-    logs("...scale samples from prior distributions", 4)
-    # scale prior samples
-    scaled_prior_samples = tf.stack([prior_samples[:,:,i]*scaling_factor for i, scaling_factor in enumerate(global_dict["model_params"]["scaling_value"])], -1)
-    # save results in dict
-    prior_samples_dict["scaled_prior_samples"] = scaled_prior_samples
+        # create results dictionary
+        prior_samples_dict = {
+            "prior_samples": prior_samples
+        }
     
+        ## scaling of prior distributions, default is no scaling (value = 1.)
+        logs("...scale samples from prior distributions", 4)
+        # scale prior samples
+        prior_samples = tf.stack([prior_samples[:,:,i]*scaling_factor for i, scaling_factor in enumerate(scale_prior_samples)], -1)
+        # save results in dict
+        prior_samples_dict["scaled_prior_samples"] = prior_samples
+        # save results in path
+        saving_path = global_dict["output_path"]["data"]
+        path_prior_samples_dict = saving_path+'/prior_samples_dict.pkl'
+        save_as_pkl(prior_samples_dict, path_prior_samples_dict)
+        
     # save results in path
     saving_path = global_dict["output_path"]["data"]
     if ground_truth:
         saving_path = saving_path+"/expert"
-    path_prior_samples_dict = saving_path+'/prior_samples_dict.pkl'
     path_prior_samples = saving_path+'/prior_samples.pkl'
-    save_as_pkl(prior_samples_dict, path_prior_samples_dict)
     save_as_pkl(prior_samples, path_prior_samples)
     return prior_samples

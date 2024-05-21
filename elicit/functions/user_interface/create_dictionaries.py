@@ -24,9 +24,9 @@ def create_dict(user_input: callable) -> dict:
 
 # Create necessary config files
 def create_global_dict(
-        method, sim_id, epochs, B, rep, seed, model_params, expert_input, 
+        method, sim_id, epochs, B, rep, seed, burnin, model_params, expert_input, 
         generative_model, target_quantities, loss_function, 
-        optimization_settings, output_path, log_info, view_ep) -> dict:
+        optimization_settings, output_path, log_info, print_info, view_ep) -> dict:
     
     global_dict = dict()
     
@@ -36,6 +36,7 @@ def create_global_dict(
     global_dict["B"] = B
     global_dict["rep"] = rep
     global_dict["seed"] = seed
+    global_dict["burnin"] = burnin
     global_dict["model_params"] = create_dict(model_params)
     global_dict["expert_input"] = expert_input()
     global_dict["generative_model"] = generative_model()
@@ -43,10 +44,12 @@ def create_global_dict(
     global_dict["loss_function"] = loss_function()
     global_dict["optimization_settings"] = optimization_settings()
     global_dict["output_path"] = {
-        "data": os.path.join(os.path.dirname(__name__), output_path, "data", method, sim_id),
+        "data": f"elicit/simulations/results/{method}/{sim_id}",
+       # "data": os.path.join(os.path.dirname(__name__), output_path, "data", method, sim_id),
         "plots": os.path.join(os.path.dirname(__name__), output_path, "plots", method, sim_id)
         }
     global_dict["log_info"] = log_info
+    global_dict["print_info"] = print_info
     global_dict["view_ep"] = view_ep
     
     # save global dict

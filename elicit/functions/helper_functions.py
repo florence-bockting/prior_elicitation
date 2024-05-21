@@ -21,6 +21,5 @@ class LogsInfo:
 def get_lower_triangular(matrix):
     mask = tf.cast(tf.experimental.numpy.tri(matrix.shape[-1], matrix.shape[-1], k=-1), 
                    tf.bool)
-    mask_broadcasted = tf.broadcast_to(mask, tuple(matrix.shape))
-    lower_triangular = tf.boolean_mask(matrix, mask_broadcasted)
+    lower_triangular = tf.boolean_mask(matrix, mask, 1)
     return lower_triangular

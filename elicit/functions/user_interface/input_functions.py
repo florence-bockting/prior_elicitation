@@ -5,6 +5,7 @@ import warnings
 from functions.loss_functions import MmdEnergy
 from functions.user_interface.create_dictionaries import create_global_dict
 from dags.elicitation_pipeline import prior_elicitation_dag
+from functions.user_interface.write_results import write_results
 
 def normalizing_flow_specs(
         num_coupling_layers: int = 7,
@@ -181,7 +182,7 @@ def loss(loss_function: str or callable = "mmd-energy",
         }
     return loss_dict
 
-def optimization(optimizer: callable = keras.optimizers.legacy.Adam,
+def optimization(optimizer: callable = tf.keras.optimizers.Adam,
                  optimizer_specs: dict = {
                      "learning_rate": callable or float,
                      "clipnorm": 1.0
@@ -202,6 +203,7 @@ def prior_elicitation(
         B: int,
         rep: int,
         seed: int,
+        burnin: int,
         model_params: callable,
         expert_input: callable,
         generative_model: callable,
@@ -210,15 +212,18 @@ def prior_elicitation(
         optimization_settings: callable,
         output_path: str = "results",
         log_info: int = 0,
+        print_info: bool = True,
         view_ep: int = 1
         ) -> dict:
     
     # create global dict.
     global_dict = create_global_dict(
-        method, sim_id, epochs, B, rep, seed, model_params, expert_input, 
+        method, sim_id, epochs, B, rep, seed, burnin, model_params, expert_input, 
         generative_model, target_quantities, loss_function, 
-        optimization_settings, output_path, log_info, view_ep)
+        optimization_settings, output_path, log_info, print_info, view_ep)
     
     # run workflow
     prior_elicitation_dag(global_dict)
     
+    # save overview of input as txt file
+    write_results(global_dict)

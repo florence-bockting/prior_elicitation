@@ -15,3 +15,17 @@ packages = [
     { include = "validation", from = "elicit" },
     { include = "dags", from = "elicit" },
 ]
+
+[tool.poetry.dependencies]
+tensorflow = "2.14.0"
+tensorflow-probability = "0.22.1"
+pandas = "^2.2.2"
+signac = "^2.2.0"
+polars = "^0.20.25"
+numpy = "^1.26.4"
+patsy = "^0.5.6"
+ucimlrepo = "^0.0.6"
+seaborn = "^0.13.2"
+matplotlib = "^3.8.4"
+bayesflow = "^1.1.4"
+configs = "^3.0.3"
