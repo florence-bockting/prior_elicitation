@@ -30,11 +30,14 @@ def expert_input():
 
 #%% Generative model
 from user_input.generative_models import GenerativePoissonModel
-from user_input.design_matrices import load_design_matrix_equality
 
-design_matrix = pd.read_pickle("elicit/simulations/data/design_matrix_pois.pkl")
+# you can either import the design matrix by calling a function 
+# which will downlaod the dataset from internet (which takes a while)
+#from user_input.design_matrices import load_design_matrix_equality
 #design_matrix = load_design_matrix_equality("standardize", [0, 13, 14, 35, 37, 48])
-                                        
+
+# or you use the saved version from path
+design_matrix = pd.read_pickle("elicit/simulations/data/design_matrix_pois.pkl")
 
 def generative_model():
     return model(GenerativePoissonModel,
@@ -129,7 +132,7 @@ prior_elicitation(
 import pandas as pd
 from elicit.validation.diagnostic_plots import plot_loss, plot_convergence_deep, plot_marginal_priors, plot_joint_prior, plot_elicited_statistics
 
-global_dict = pd.read_pickle("elicit/simulations/results/deep_prior/pois_01/global_dict.pkl")
+global_dict = pd.read_pickle("elicit/simulations/results/data/deep_prior/pois_01/global_dict.pkl")
 
 plot_loss(global_dict, save_fig = True)
 plot_marginal_priors(global_dict, sims = 100, save_fig = True)

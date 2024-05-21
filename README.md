@@ -18,7 +18,7 @@ pip install -e .
 Multiple case studies that demonstrate usage of this method are implemented in the directory `elicit\user_input\configuration_files`
 
 + open one case study implementation, e.g., `binom_deep.py` and run the file
-+ results are saved in a newly created directory `results\data` and `results\plots`
++ results are saved in a newly created directory `elicit\simulations\results\data` and `results\plots`
 
 ## Notes
 This project is under development. Documentation and in-depth examples will follow.

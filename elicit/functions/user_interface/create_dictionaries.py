@@ -44,9 +44,10 @@ def create_global_dict(
     global_dict["loss_function"] = loss_function()
     global_dict["optimization_settings"] = optimization_settings()
     global_dict["output_path"] = {
-        "data": f"elicit/simulations/results/{method}/{sim_id}",
+        "data": f"elicit/simulations/results/data/{method}/{sim_id}",
+        "plots": f"elicit/simulations/results/plots/{method}/{sim_id}",
        # "data": os.path.join(os.path.dirname(__name__), output_path, "data", method, sim_id),
-        "plots": os.path.join(os.path.dirname(__name__), output_path, "plots", method, sim_id)
+       # "plots": os.path.join(os.path.dirname(__name__), output_path, "plots", method, sim_id)
         }
     global_dict["log_info"] = log_info
     global_dict["print_info"] = print_info
