@@ -109,7 +109,7 @@ prior_elicitation(
 import pandas as pd
 from elicit.validation.diagnostic_plots import plot_loss, plot_convergence_deep, plot_marginal_priors, plot_joint_prior, plot_elicited_statistics
 
-global_dict = pd.read_pickle("results/data/deep_prior/binom_01/global_dict.pkl")
+global_dict = pd.read_pickle("elicit/simulations/results/data/deep_prior/binom_01/global_dict.pkl")
 
 plot_loss(global_dict, save_fig = True)
 plot_marginal_priors(global_dict, sims = 100, save_fig = True)
@@ -118,12 +118,12 @@ plot_elicited_statistics(global_dict, sims = 100,
                          selected_obs = [0, 5, 10, 15, 20, 25, 30], 
                          save_fig = True)
 
-true_samples = pd.read_pickle("results/data/deep_prior/binom_01/expert/prior_samples.pkl")
+true_samples = pd.read_pickle("elicit/simulations/results/data/deep_prior/binom_01/expert/prior_samples.pkl")
 truth = tf.reduce_mean(true_samples, (0,1))
 plot_convergence_deep(truth, "means", global_dict, 
                  file_name = "convergence_loc", save_fig = True)
 
-true_samples = pd.read_pickle("results/data/deep_prior/binom_01/expert/prior_samples.pkl")
+true_samples = pd.read_pickle("elicit/simulations/results/data/deep_prior/binom_01/expert/prior_samples.pkl")
 truth = tf.reduce_mean(tf.math.reduce_std(true_samples,1),0)
 plot_convergence_deep(truth, "stds", global_dict, 
                  file_name = "convergence_scale", save_fig = True)

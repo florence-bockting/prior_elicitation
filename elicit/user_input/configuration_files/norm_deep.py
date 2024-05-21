@@ -8,13 +8,13 @@ from functions.user_interface.input_functions import param, model, target, loss,
 #%% Model parameters
 def model_params():  
     return (
-        param(name = "b0", scaling_value= 10.),
-        param(name = "b1", scaling_value= 10.),
-        param(name = "b2", scaling_value= 1.),
-        param(name = "b3", scaling_value= 1.),
-        param(name = "b4", scaling_value= 1.),
-        param(name = "b5", scaling_value= 1.),
-        param(name = "sigma", scaling_value= 100.),
+        param(name = "b0"),
+        param(name = "b1"),
+        param(name = "b2"),
+        param(name = "b3"),
+        param(name = "b4"),
+        param(name = "b5"),
+        param(name = "sigma"),
         normalizing_flow_specs()
         )
 
@@ -86,10 +86,6 @@ def loss_function():
                 )
 
 #%% Training settings
-
-# tf.keras.optimizers.schedules.CosineDecay(
-# 0.01, 200),
-
 def optimization_settings():
     return optimization(
                     optimizer = keras.optimizers.legacy.Adam,
@@ -110,6 +106,7 @@ prior_elicitation(
     seed = 124,
     epochs = 200,
     output_path = "results",
+    burnin = 10,
     model_params = model_params,
     expert_input = expert_input,
     generative_model = generative_model,
@@ -121,8 +118,9 @@ prior_elicitation(
     )
 
 import pandas as pd
+import matplotlib.pyplot as plt
 from elicit.validation.diagnostic_plots import plot_loss, plot_convergence_deep, plot_marginal_priors, plot_joint_prior, plot_elicited_statistics
-global_dict = pd.read_pickle("results/data/deep_prior/norm_01/global_dict.pkl")
+global_dict = pd.read_pickle("elicit/simulations/results/data/deep_prior/norm_01/global_dict.pkl")
 
 plot_loss(global_dict, save_fig = True)
 plot_marginal_priors(global_dict, sims = 100, save_fig = True)
@@ -142,10 +140,11 @@ true_hyperparams = tf.reduce_mean(tf.math.reduce_std(true_selection, 1), 0)
 plot_convergence_deep(true_hyperparams, "stds", global_dict, 
                  file_name = "convergence_scale", save_fig = True)
 # sigma parameter
-names_hyperparams = ["loc", "scale"]
-true_sigma = [300., 300.*9.]
-plot_convergence(true_sigma, names_hyperparams, global_dict, 
-                 file_name = "convergence_sigma", save_fig = True)
-
-
-
+gamma1 = tf.stack(pd.read_pickle(global_dict["output_path"]["data"]+"/final_results.pkl")["hyperparameter"]["means"], 0)[:,-1]
+gamma2 = tf.stack(pd.read_pickle(global_dict["output_path"]["data"]+"/final_results.pkl")["hyperparameter"]["stds"], 0)[:,-1]
+plt.axhline(tf.reduce_mean(truth[:,:,-1], (0,1)), linestyle = "dashed", color = "black")
+plt.axhline(tf.math.reduce_std(truth[:,:,-1], 1), linestyle = "dashed", color = "black")
+plt.plot(tf.range(len(gamma1)), gamma1, label = "gamma1")
+plt.plot(tf.range(len(gamma2)), gamma2, label = "gamma2")
+plt.legend()
+plt.savefig(global_dict["output_path"]["plots"]+"/convergence_sigma.png")
