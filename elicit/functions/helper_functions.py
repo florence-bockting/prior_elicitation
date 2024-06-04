@@ -1,25 +1,24 @@
 import pickle
 import os
-import tensorflow as tf
-import tensorflow_probability as tfp
-tfd = tfp.distributions
 
 def save_as_pkl(variable, path_to_file): 
+    """
+    Helper functions to save a file as pickle.
+
+    Parameters
+    ----------
+    variable : any
+        file that needs to be saved.
+    path_to_file : str
+        path indicating the file location.
+
+    Returns
+    -------
+    None.
+
+    """
+    # if directory does not exists, create it
     os.makedirs(os.path.dirname(path_to_file), exist_ok=True)
+    # save file to location as pickle
     with open(path_to_file, 'wb') as df_file:
         pickle.dump(variable, file = df_file) 
-
-class LogsInfo:
-    def __init__(self, max_depth):
-        self.max_depth = max_depth
-    def __call__(self, message, depth):
-        if self.max_depth < depth:
-            pass
-        else: 
-            print(message)
-
-def get_lower_triangular(matrix):
-    mask = tf.cast(tf.experimental.numpy.tri(matrix.shape[-1], matrix.shape[-1], k=-1), 
-                   tf.bool)
-    lower_triangular = tf.boolean_mask(matrix, mask, 1)
-    return lower_triangular

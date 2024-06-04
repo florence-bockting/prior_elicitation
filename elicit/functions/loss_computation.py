@@ -7,7 +7,40 @@ bfn = bf.networks
 
 from functions.helper_functions import save_as_pkl
 
+
 def compute_loss_components(elicited_statistics, global_dict, expert):
+    """
+    Computes the single loss components used for computing the discrepancy
+    between the elicited statistics. This computation depends on the
+    method as specified in the 'combine-loss' argument.
+
+    Parameters
+    ----------
+    elicited_statistics : dict
+        dictionary including the elicited statistics.
+    global_dict : dict
+        dictionary including all user-input settings.
+    expert : bool
+        if workflow is run to simulate a pre-specified ground truth; expert is
+        set as 'True'. As consequence the files are saved in a special 'expert'
+        folder.
+
+    Returns
+    -------
+    loss_component_res : dict
+        dictionary including all loss components which will be used to compute
+        the discrepancy.
+
+    """
+    # check whether the simulated ground truth has a different dict of the 
+    # target quantities. If yes select the correct target quantity dict
+    try: 
+        global_dict["target_quantities"]['name']
+    except:
+        sub_global_dict = global_dict["target_quantities"]["learning"]
+    else:
+        sub_global_dict = global_dict["target_quantities"]
+    
     # extract names from elicited statistics
     name_elicits = list(elicited_statistics.keys())
     # prepare dictionary for storing results
@@ -30,34 +63,39 @@ def compute_loss_components(elicited_statistics, global_dict, expert):
             i_target += 1
         # extract loss component 
         loss_component = elicited_statistics[name]
-        
+       
         if tf.rank(loss_component) == 1:
-            assert global_dict["target_quantities"]["loss_components"][i_target] == "all", f"the elicited statistic {name} has rank=1 and can therefore support only combine_loss = 'all'"
+            assert sub_global_dict["loss_components"][i_target] == "all", f"the elicited statistic {name} has rank=1 and can therefore support only combine_loss = 'all'"
             # add a last axis for loss computation
             final_loss_component = tf.expand_dims(loss_component, axis = -1)
             # store result
             loss_component_res[f"{name}_loss"] = final_loss_component
         
         else:
-            if global_dict["target_quantities"]["loss_components"][i_target] == "all":
-                assert tf.rank(loss_component) <= 2, f"the elicited statistic {name} has more than 2 dimensions; combine_loss = all is therefore not possible. Consider using combine_loss = 'by-group'"
-                loss_component_res[f"{name}_loss_{i_target}"] = loss_component
+            if sub_global_dict["loss_components"][i_target] == "all":
+                assert tf.rank(loss_component) <= 3, f"the elicited statistic {name} has more than 3 dimensions; combine_loss = all is therefore not possible. Consider using combine_loss = 'by-group'"
+                if tf.rank(loss_component) == 3:
+                    loss_component_res[f"{name}_loss_{i_target}"] =  tf.reshape(loss_component, (loss_component.shape[0], loss_component.shape[1]*loss_component.shape[2]))
+                if tf.rank(loss_component) <= 2:
+                    loss_component_res[f"{name}_loss_{i_target}"] = loss_component
+                
             
-            if global_dict["target_quantities"]["loss_components"][i_target] == "by-stats":
-                assert global_dict["target_quantities"]["elicitation_method"][i_target] == "quantiles", "loss combination method 'by-stats' is currently only possible for elicitation techniques: 'quantiles'."
+            if sub_global_dict["loss_components"][i_target] == "by-stats":
+                assert sub_global_dict["elicitation_method"][i_target] == "quantiles", "loss combination method 'by-stats' is currently only possible for elicitation techniques: 'quantiles'."
                 for j in range(loss_component.shape[1]):
                     if tf.rank(loss_component) == 2:
                         loss_component_res[f"{name}_loss_{j}"] = loss_component[:,j]
                     if tf.rank(loss_component) == 3:
                         loss_component_res[f"{name}_loss_{j}"] = loss_component[:,j,:]
                         
-            if global_dict["target_quantities"]["loss_components"][i_target] == "by-group":
+            if sub_global_dict["loss_components"][i_target] == "by-group":
                 for j in range(loss_component.shape[-1]):
                     final_loss_component = loss_component[...,j]
                     if tf.rank(final_loss_component) == 1:
                         final_loss_component = tf.expand_dims(final_loss_component, axis = -1)
 
                     loss_component_res[f"{name}_loss_{j}"] = final_loss_component
+                    
     # save file in object
     saving_path = global_dict["output_path"]["data"]
     if expert:
@@ -66,6 +104,7 @@ def compute_loss_components(elicited_statistics, global_dict, expert):
     save_as_pkl(loss_component_res, path)
     # return results                
     return loss_component_res
+
 
 def dynamic_weight_averaging(epoch, loss_per_component_current, 
                              loss_per_component_initial, 
@@ -133,7 +172,29 @@ def dynamic_weight_averaging(epoch, loss_per_component_current,
     return weighted_total_loss
 
 
-def compute_discrepancy(loss_components_expert, loss_components_training, global_dict):
+def compute_discrepancy(loss_components_expert, loss_components_training,
+                        global_dict):
+    """
+    Computes the discrepancy between all loss components using a specified
+    discrepancy measure and returns a list with all loss values.
+
+    Parameters
+    ----------
+    loss_components_expert : dict
+        dictionary including all loss components derived from the expert-elicited
+        statistics.
+    loss_components_training : dict
+        dictionary including all loss components derived from the model 
+        simulations. (The names (keys) between loss_components_expert and loss_components_training must match)
+    global_dict : dict
+        dictionary including all user-input settings.
+
+    Returns
+    -------
+    loss_per_component : list
+        list of loss value for each loss component
+
+    """
     # import loss function 
     loss_function = global_dict["loss_function"]["loss_function"]
     # create dictionary for storing results
@@ -145,8 +206,8 @@ def compute_discrepancy(loss_components_expert, loss_components_training, global
                                            shape=loss_components_training[name].shape)
         # compute loss
         loss_per_component.append(loss_function(loss_comp_expert, 
-                                                loss_components_training[name], 
-                                                global_dict["B"]))
+                                                loss_components_training[name]))
+    
     # save file in object
     saving_path = global_dict["output_path"]["data"]
     path = saving_path+'/loss_per_component.pkl'

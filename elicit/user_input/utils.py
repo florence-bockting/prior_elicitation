@@ -30,6 +30,7 @@ def save_hyperparameters(generator, epoch, global_dict):
     save_as_pkl(res_dict, path_res_dict)
     return res_dict
 
+
 def marginal_prior_moments(prior_samples, epoch, global_dict):
     saving_path = global_dict["output_path"]["data"]
     if epoch == 0:

@@ -4,7 +4,6 @@ import pandas as pd
 tfd = tfp.distributions
 tfb = tfp.bijectors
 
-# define generative model
 class GenerativeBinomialModel(tf.Module):
     def __call__(self, 
                 prior_samples,        
@@ -12,6 +11,31 @@ class GenerativeBinomialModel(tf.Module):
                 total_count,       
                 **kwargs        
                 ):  
+        """
+        Binomial model with one continuous predictor.
+
+        Parameters
+        ----------
+        prior_samples : dict
+            samples from prior distributions.
+        design_matrix : tf.Tensor
+            design matrix.
+        total_count : int
+            total counts of Binomial model.
+        **kwargs : keyword argument, optional
+            additional keyword arguments
+
+        Returns
+        -------
+        dictionary with the following keys:
+            
+        - likelihood: model likelihood
+        - ypred: model predictions; for discrete likelihoods ypred=None as it
+          will be approximated via the softmax-gumble trick
+        - epred: predictions of linear predictor
+        - prior samples: samples from prior distributions
+
+        """
 
         # linear predictor
         theta = design_matrix @ tf.expand_dims(prior_samples, axis=-1)
@@ -30,16 +54,37 @@ class GenerativeBinomialModel(tf.Module):
                     epred = epred,
                     prior_samples = prior_samples                 
                     )
-        
-   # define generative model
+
 class GenerativePoissonModel(tf.Module):
     def __call__(self, 
                 prior_samples,        
-                design_matrix,           
-                total_count,       
+                design_matrix,      
                 **kwargs        
                 ):  
-        
+        """
+        Poisson model with one continuous predictor and one categorical 
+        predictor with three levels.
+
+        Parameters
+        ----------
+        prior_samples : dict
+            samples from prior distributions.
+        design_matrix : tf.Tensor
+            design matrix.
+        **kwargs : keyword argument, optional
+            additional keyword arguments
+
+        Returns
+        -------
+        dictionary with the following keys:
+            
+        - likelihood: model likelihood
+        - ypred: model predictions; for discrete likelihoods ypred=None as it
+          will be approximated via the softmax-gumble trick 
+        - epred: predictions of linear predictor
+        - prior samples: samples from prior distributions
+
+        """
         # linear predictor
         theta = design_matrix @ tf.expand_dims(prior_samples, -1)
         
@@ -63,7 +108,112 @@ class GenerativeNormalModel(tf.Module):
                 design_matrix,       
                 **kwargs        
                 ):  
+        # compute linear predictor term
+        epred = prior_samples[:,:,0:6] @ tf.transpose(design_matrix)
         
+        # define likelihood
+        likelihood = tfd.Normal(
+            loc = epred, 
+            scale = tf.expand_dims(tf.math.softplus(prior_samples[:,:,-1]), -1)
+            )
+        
+        # sample prior predictive data
+        ypred = likelihood.sample()
+        
+        # create contrast matrix
+        cmatrix = tf.cast(pd.DataFrame(design_matrix).drop_duplicates(), tf.float32)
+        
+        # compute custom target quantity (here: group-differences)
+        samples_grouped = tf.stack(
+            [
+                tf.boolean_mask(ypred, 
+                                tf.math.reduce_all(cmatrix[i,:] == design_matrix, axis = 1),
+                                    axis = 2) for i in range(cmatrix.shape[0])
+            ], axis = -1)
+
+        # compute mean difference between groups
+        effect_list = []
+        diffs = [(0,3), (1,4), (2,5)]
+        
+        for i in range(len(diffs)):
+            # compute group difference
+            diff = tf.math.subtract(
+                samples_grouped[:, :, :, diffs[i][0]],
+                samples_grouped[:, :, :, diffs[i][1]]
+            )
+            # average over individual obs within each group
+            diff_mean = tf.reduce_mean(diff, axis=2)
+            # collect all mean group differences
+            effect_list.append(diff_mean)
+
+        mean_effects = tf.stack(effect_list, axis=-1)
+
+        # compute marginals
+        ## factor repetition: new, repeated
+        marg_ReP = tf.reduce_mean(
+            tf.stack([tf.math.add_n([samples_grouped[:, :, :, i] for i in j]) for j in [range(3),range(3,6)]], 
+                     axis = -1), 
+            axis = 2)
+     
+        ## factor Encoding depth: deep, standard, shallow
+        marg_EnC = tf.reduce_mean(
+            tf.stack([tf.math.add_n([samples_grouped[:, :, :, i] for i in j]) for j in [[0,3],[1,4],[2,5]]], 
+                     axis = -1), 
+            axis = 2)
+        
+        # compute R2
+        R2 = tf.divide(tf.math.reduce_variance(epred, -1), 
+                       tf.math.reduce_variance(ypred, -1))
+        
+        # prior samples on correct scale
+        prior_samples2 = tf.concat([prior_samples[:,:,:-1], 
+                                   tf.math.softplus(prior_samples[:,:,-1])[:,:,None]],
+                                   2)
+     
+        return dict(likelihood = likelihood,     
+                    ypred = ypred,   
+                    epred = epred,
+                    prior_samples = prior_samples2,
+                    mean_effects = mean_effects,
+                    marginal_ReP = marg_ReP,
+                    marginal_EnC = marg_EnC,
+                    R2 = R2,
+                    sigma = prior_samples2[:,:,-1]
+                    )
+
+class GenerativeNormalModel_param(tf.Module):
+    def __call__(self, 
+                prior_samples,        
+                design_matrix,       
+                **kwargs        
+                ):  
+        """
+        Normal model for a 2 x 3 factorial design.
+
+        Parameters
+        ----------
+        prior_samples : dict
+            samples from prior distributions.
+        design_matrix : tf.Tensor
+            design matrix.
+        **kwargs : keyword argument, optional
+            additional keyword arguments
+
+        Returns
+        -------
+        dictionary with the following keys:
+            
+        - likelihood: model likelihood
+        - ypred: model predictions; for discrete likelihoods ypred=None as it
+          will be approximated via the softmax-gumble trick 
+        - epred: predictions of linear predictor
+        - prior samples: samples from prior distributions
+        - mean_effects: Difference between both factors for each level of factor 2
+        - marginal_ReP: marginal distribution of factor 1
+        - marginal_EnC: marginal distribution of factor 2
+        - R2: variance explained
+        - sigma: samples from the noise parameter of the normal likelihood
+        """
         # compute linear predictor term
         epred = prior_samples[:,:,0:6] @ tf.transpose(design_matrix)
         
@@ -121,6 +271,8 @@ class GenerativeNormalModel(tf.Module):
         R2 = tf.divide(tf.math.reduce_variance(epred, -1), 
                        tf.math.reduce_variance(ypred, -1))
         
+        # prior samples on correct scale
+     
         return dict(likelihood = likelihood,     
                     ypred = ypred,   
                     epred = epred,
@@ -132,6 +284,7 @@ class GenerativeNormalModel(tf.Module):
                     sigma = prior_samples[:,:,-1]
                     )
 
+
 class GenerativeMultilevelModel(tf.Module):
     def __call__(self, 
                 prior_samples,        
@@ -140,16 +293,49 @@ class GenerativeMultilevelModel(tf.Module):
                 alpha_lkj,
                 N_subj,
                 N_days,
-                model,
-                global_dict,
                 **kwargs        
                 ):
-        if model == "expert":
-            B = 1
-        else:
-            B = global_dict["B"]
+        """
+        Multilevel model with normal likelihood, one continuous predictor and
+        one by-subject random-intercept and random-slope
+
+        Parameters
+        ----------
+        prior_samples : dict
+            samples from prior distributions.
+        design_matrix : tf.Tensor
+            design matrix.
+        selected_days : list of integers
+            days for which expert should be queried.
+        alpha_lkj : float
+            parameter of the LKJ prior on the correlation which will be fixed to 1.
+        N_subj : int
+            number of participants.
+        N_days : int
+            number of days (selected days for elicitation).
+        **kwargs : keyword argument, optional
+            additional keyword arguments.
+
+        Returns
+        -------
+        dictionary with the following keys:
             
-        rep = global_dict["rep"]
+        - likelihood: model likelihood
+        - ypred: prior predictions (if likelihood is discrete `ypred=None` as it will be approximated using the Softmax-Gumble method)
+        - epred: linear predictor
+        - prior_samples: we use it here again as output for easier follow-up computations
+        - meanperday: distribution of mean reaction time per selected day
+        - R2day0: R2 for day 0 (incl. only variation of the random intercept (individual differences in RT without considering the treatment)
+        - R2day9: R2 for day 9 (incl. variation of the random intercept and slope (individual differences in RT considering treatment effect)
+        - mu0sdcomp:  standard deviation of linear predictor at day 0
+        - mu9sdcomp:  standard deviation of linear predictor at day 9
+        - sigma: random noise parameter
+
+        """
+
+        B = prior_samples.shape[0]
+        rep = prior_samples.shape[1]
+        
         # correlation matrix
         corr_matrix = tfd.LKJ(2, alpha_lkj).sample((B, rep))
         
@@ -219,11 +405,11 @@ class GenerativeMultilevelModel(tf.Module):
                               axis = -1)
         mean_per_day = tf.reduce_mean(epred_days, axis=2)
         
-        ## R2 for initial day
+        # R2 for initial day
         R2_day0 = tf.divide(tf.math.reduce_variance(epred[:,:,selected_days[0]::N_days], -1),
                             tf.math.reduce_variance(ypred[:,:,selected_days[0]::N_days], -1))
         
-        ## R2 for last day
+        # R2 for last day
         R2_day9 = tf.divide(tf.math.reduce_variance(epred[:,:,selected_days[-1]::N_days], -1),
                             tf.math.reduce_variance(ypred[:,:,selected_days[-1]::N_days], -1))
         
@@ -237,11 +423,11 @@ class GenerativeMultilevelModel(tf.Module):
                     ypred = ypred,   
                     epred = epred,
                     prior_samples = prior_samples,
-                    mean_per_day = mean_per_day,
-                    R2_day0 = R2_day0,
-                    R2_day9 = R2_day9,
-                    mu0_sd_comp = mu0_sd_comp,
-                    mu9_sd_comp = mu9_sd_comp
+                    meanperday = mean_per_day,
+                    R2day0 = R2_day0,
+                    R2day9 = R2_day9,
+                    mu0sdcomp = mu0_sd_comp,
+                    mu9sdcomp = mu9_sd_comp,
+                    sigma = prior_samples[:,:,-1]
                     )
-    
 

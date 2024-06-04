@@ -5,30 +5,63 @@ import bayesflow as bf
 tfd = tfp.distributions
 bfn = bf.networks
 
-from functions.helper_functions import save_as_pkl, LogsInfo
+from functions.helper_functions import save_as_pkl
 
 def priors(global_dict, ground_truth=False):
+    """
+    Creates a class instantiation which initializes and samples from prior 
+    distributions
+
+    Parameters
+    ----------
+    global_dict : dict
+        dictionary including all user-input settings..
+    ground_truth : bool
+        whether simulation is based on a pre-specified ground truth 
+        (for method validation). The default is False.
+
+    Returns
+    -------
+    prior_model : class instance
+        class instance for initializing and sampling from prior distributions.
+
+    """
     # initalize generator model
     class Priors(tf.Module):
         def __init__(self, ground_truth, global_dict):
             self.global_dict = global_dict
             self.ground_truth = ground_truth
+            # initialize hyperparameter for learning (if true hyperparameter
+            # are given, no initialization is needed)
             if not self.ground_truth:
                 self.init_priors = intialize_priors(self.global_dict)
             else:
                 self.init_priors = None
 
         def __call__(self):
-            prior_samples = sample_from_priors(self.init_priors, self.ground_truth, self.global_dict)
+            prior_samples = sample_from_priors(self.init_priors, 
+                                               self.ground_truth, 
+                                               self.global_dict)
             return prior_samples
-
+    # create a class instance
     prior_model = Priors(ground_truth, global_dict)
     return prior_model
 
 def intialize_priors(global_dict):
-    # initialize feedback behavior
-    logs = LogsInfo(global_dict["log_info"])
-    logs("...initialize prior distributions", 4)
+    """
+    Initialize prior distributions.
+
+    Parameters
+    ----------
+    global_dict : dict
+        dictionary including all user-input settings..
+
+    Returns
+    -------
+    init_prior : dict
+        returns initialized prior distributions ready for sampling.
+
+    """
     # number parameters
     no_param = len(global_dict["model_params"]["name"])
 
@@ -82,13 +115,30 @@ def intialize_priors(global_dict):
     return init_prior
 
 def sample_from_priors(initialized_priors, ground_truth, global_dict):
+    """
+    Samples from initialized prior distributions.
+
+    Parameters
+    ----------
+    initialized_priors : dict
+        initialized prior distributions ready for sampling.
+    ground_truth : bool
+        whether simulations are based on ground truth (then sampling is performed
+                                                       from true distribution).
+    global_dict : dict
+        dictionary including all user-input settings..
+
+    Returns
+    -------
+    prior_samples : dict
+        Samples from prior distributions.
+
+    """
     # extract variables from dict
     rep = global_dict["rep"]
     B = global_dict["B"]
     method = global_dict["method"]
     scale_prior_samples = global_dict["model_params"]["scaling_value"]
-    # initialize feedback behavior
-    logs = LogsInfo(global_dict["log_info"])
     # number parameters
     no_param = len(global_dict["model_params"]["name"])
 
@@ -130,9 +180,9 @@ def sample_from_priors(initialized_priors, ground_truth, global_dict):
         }
     
         ## scaling of prior distributions, default is no scaling (value = 1.)
-        logs("...scale samples from prior distributions", 4)
         # scale prior samples
-        prior_samples = tf.stack([prior_samples[:,:,i]*scaling_factor for i, scaling_factor in enumerate(scale_prior_samples)], -1)
+        prior_samples = tf.stack([prior_samples[:,:,i]*scaling_factor for i, 
+                                  scaling_factor in enumerate(scale_prior_samples)], -1)
         # save results in dict
         prior_samples_dict["scaled_prior_samples"] = prior_samples
         # save results in path

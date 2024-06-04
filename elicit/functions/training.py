@@ -6,18 +6,35 @@ import pandas as pd
 
 tfd = tfp.distributions
 
-from functions.helper_functions import LogsInfo, save_as_pkl
+from functions.helper_functions import save_as_pkl
 from user_input.utils import save_hyperparameters, marginal_prior_moments
 
 def training_loop(expert_elicited_statistics, prior_model_init,
                   one_forward_simulation, compute_loss, global_dict):
-    
-    # initialize feedback behavior
-    logs = LogsInfo(global_dict["log_info"])
+    """
+    Wrapper that runs the optimization algorithms for E epochs.
+
+    Parameters
+    ----------
+    expert_elicited_statistics : dict
+        expert data or simulated data representing a prespecified ground truth.
+    prior_model_init : class instance
+        instance of a class that initializes and samples from the prior distributions.
+    one_forward_simulation : callable
+        one forward simulation cycle including: sampling from priors, simulating model
+        predictions, computing target quantities and elicited statistics.
+    compute_loss : callable
+        sub-dag to compute the loss value including: compute loss components of
+        model simulations and expert data, compute loss per component, compute total loss.
+    global_dict : dict
+        dictionary including all user-input settings.
+
+    """
     # prepare generative model
     prior_model = prior_model_init
 
     total_loss = []
+    component_losses = []
     gradients_ep = []
     time_per_epoch = []
     for epoch in tf.range(global_dict["epochs"]):
@@ -32,8 +49,9 @@ def training_loop(expert_elicited_statistics, prior_model_init,
             # generate simulations from model
             training_elicited_statistics = one_forward_simulation(prior_model, global_dict)
             # comput loss
-            weighted_total_loss = compute_loss(training_elicited_statistics, expert_elicited_statistics, global_dict, epoch)
-            logs("## compute gradients and update hyperparameters", 2)
+            weighted_total_loss = compute_loss(training_elicited_statistics, 
+                                               expert_elicited_statistics, 
+                                               global_dict, epoch)
             # compute gradient of loss wrt trainable_variables
             gradients = tape.gradient(weighted_total_loss, prior_model.trainable_variables)
             # update trainable_variables using gradient info with adam optimizer
@@ -77,19 +95,20 @@ def training_loop(expert_elicited_statistics, prior_model_init,
         # savings per epoch
         time_per_epoch.append(epoch_time)
         total_loss.append(weighted_total_loss)
+        component_losses.append(pd.read_pickle(saving_path+"/loss_per_component.pkl"))
   
         if global_dict["method"] == "parametric_prior":
             res_dict = save_hyperparameters(prior_model, epoch, global_dict)
         else:
-            res_dict = marginal_prior_moments(pd.read_pickle(saving_path+"/prior_samples.pkl"), epoch, global_dict)
+            res_dict = marginal_prior_moments(pd.read_pickle(saving_path+"/model_simulations.pkl")["prior_samples"], epoch, global_dict)
         
         
     # save final results in file
-    res = {"loss": total_loss, "hyperparameter": res_dict, 
+    res = {"loss": total_loss, "loss_component":component_losses,
+           "hyperparameter": res_dict, 
            "time_epoch": time_per_epoch, "seed": global_dict["seed"]}
     
     if global_dict["method"] == "parametric_prior":
         res["gradients"] = gradients_ep
     path = saving_path+'/final_results.pkl'
     save_as_pkl(res, path)
-    

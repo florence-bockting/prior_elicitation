@@ -1,18 +1,43 @@
-import pandas as pd
 import tensorflow as tf
 import tensorflow_probability as tfp
-import inspect
 
 tfd = tfp.distributions
 
-from functions.helper_functions import save_as_pkl, LogsInfo
+from functions.helper_functions import save_as_pkl
 
-def softmax_gumbel_trick(model_simulations, global_dict, ground_truth):
-    # set batch size to 1 if simulating expert
-    if ground_truth:
-        B = 1
-    else:
-        B = global_dict["B"]
+def softmax_gumbel_trick(model_simulations, global_dict):
+    """
+    The softmax-gumbel trick computes a continuous approximation of ypred from a
+    discrete likelihood and thus allows for the computation of gradients for
+    discrete random variables.
+    
+    Corresponding literature:
+        
+    - Maddison, C. J., Mnih, A. & Teh, Y. W. The concrete distribution: A continuous relaxation of
+      discrete random variables in International Conference on Learning Representations (2017).
+      https://doi.org/10.48550/arXiv.1611.00712
+    - Jang, E., Gu, S. & Poole, B. Categorical reparameterization with gumbel-softmax in 
+      International Conference on Learning Representations (2017). 
+      https://openreview.net/forum?id=rkE3y85ee.
+    - Joo, W., Kim, D., Shin, S. & Moon, I.-C. Generalized gumbel-softmax gradient estimator for
+      generic discrete random variables. 
+      Preprint at https://doi.org/10.48550/arXiv.2003.01847 (2020).
+
+    Parameters
+    ----------
+    model_simulations : dict
+        dictionary containing all simulated output variables from the generative model.
+    global_dict : dict
+        dictionary including all user-input settings.
+
+    Returns
+    -------
+    ypred : tf.Tensor
+        continuously approximated ypred from the discrete likelihood.
+
+    """
+    # get batch size
+    B = model_simulations["epred"].shape[0]
     # initialize counter
     number_obs = 0
     # get number of observations
@@ -39,10 +64,27 @@ def softmax_gumbel_trick(model_simulations, global_dict, ground_truth):
     # reparameterization/linear transformation
     ypred = tf.reduce_sum(tf.multiply(w, c), axis=-1)
     return ypred    
- 
+
 def simulate_from_generator(prior_samples, ground_truth, global_dict): 
-    # initialize feedback behavior
-    logs = LogsInfo(global_dict["log_info"])   
+    """
+    Simulates data from the specified generative model.
+
+    Parameters
+    ----------
+    prior_samples : dict
+        samples from prior distributions.
+    ground_truth : bool
+        if simulation is based on true hyperparameter vector. Mainly for saving
+        results in a specific "expert" folder for later analysis.
+    global_dict : dict
+        dictionary including all user-input settings.
+
+    Returns
+    -------
+    model_simulations : dict
+        simulated data from generative model.
+
+    """
     # get model and initialize generative model
     # TODO: I silently assume that the given model_function is an "uninitialized class"
     GenerativeModel = global_dict["generative_model"]["model_function"]
@@ -53,8 +95,7 @@ def simulate_from_generator(prior_samples, ground_truth, global_dict):
     model_simulations = generative_model(prior_samples, **add_model_args)
     # estimate gradients for discrete likelihood if necessary
     if model_simulations["likelihood"].reparameterization_type != tfd.FULLY_REPARAMETERIZED:
-        logs("...apply softmax-gumbel trick for discrete likelihood", 3)
-        model_simulations["ypred"] = softmax_gumbel_trick(model_simulations, global_dict, ground_truth)
+        model_simulations["ypred"] = softmax_gumbel_trick(model_simulations, global_dict)
     # save file in object
     saving_path = global_dict["output_path"]["data"]
     if ground_truth:
