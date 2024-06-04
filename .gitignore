@@ -7,4 +7,10 @@ prior_elicitation/
 airflow.cfg
 airflow.db
 dags/dags_airflow/
+elicit/simulations/deep_prior
+elicit/simulations/parametric_prior
+elicit/simulations/results/
+elicit/validation/misc_plotting/
+elicit/user_input/configuration_files/
+elicit/user_input/config_files/
 webserver_config.py
