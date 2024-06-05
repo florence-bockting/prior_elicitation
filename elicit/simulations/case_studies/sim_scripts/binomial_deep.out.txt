@@ -1,0 +1,253 @@
+2024-06-05 08:56:41.526890: I tensorflow/tsl/cuda/cudart_stub.cc:28] Could not find cuda drivers on your machine, GPU will not be used.
+2024-06-05 08:56:41.571525: E tensorflow/compiler/xla/stream_executor/cuda/cuda_dnn.cc:9342] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+2024-06-05 08:56:41.571732: E tensorflow/compiler/xla/stream_executor/cuda/cuda_fft.cc:609] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+2024-06-05 08:56:41.571945: E tensorflow/compiler/xla/stream_executor/cuda/cuda_blas.cc:1518] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2024-06-05 08:56:41.581879: I tensorflow/tsl/cuda/cudart_stub.cc:28] Could not find cuda drivers on your machine, GPU will not be used.
+2024-06-05 08:56:41.582317: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2024-06-05 08:56:43.183804: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+2024-06-05 08:56:47.205836: E tensorflow/compiler/xla/stream_executor/cuda/cuda_driver.cc:268] failed call to cuInit: CUDA_ERROR_NO_DEVICE: no CUDA-capable device is detected
+2024-06-05 08:56:47.206091: I tensorflow/compiler/xla/stream_executor/cuda/cuda_diagnostics.cc:168] retrieving CUDA diagnostic information for host: cgpu02-001
+2024-06-05 08:56:47.206267: I tensorflow/compiler/xla/stream_executor/cuda/cuda_diagnostics.cc:175] hostname: cgpu02-001
+2024-06-05 08:56:47.206519: I tensorflow/compiler/xla/stream_executor/cuda/cuda_diagnostics.cc:199] libcuda reported version is: 525.147.5
+2024-06-05 08:56:47.206724: I tensorflow/compiler/xla/stream_executor/cuda/cuda_diagnostics.cc:203] kernel reported version is: 525.147.5
+2024-06-05 08:56:47.206896: I tensorflow/compiler/xla/stream_executor/cuda/cuda_diagnostics.cc:309] kernel version seems to match DSO: 525.147.5
+| 
+epoch_time: 3.546 sec
+Epoch: 0, loss: 16.81216, lr: 0.001000
+epoch_time: 3.052 sec
+Epoch: 1, loss: 16.29641, lr: 0.000996
+Estimated time until completion: 00:29:29
+epoch_time: 3.486 sec
+Epoch: 2, loss: 16.24966, lr: 0.000984
+Estimated time until completion: 00:27:22
+epoch_time: 3.035 sec
+Epoch: 3, loss: 15.83468, lr: 0.000965
+Estimated time until completion: 00:27:50
+epoch_time: 3.001 sec
+Epoch: 4, loss: 15.62981, lr: 0.000938
+Estimated time until completion: 00:27:06
+epoch_time: 3.067 sec
+Epoch: 5, loss: 15.42538, lr: 0.000905
+Estimated time until completion: 00:26:35
+epoch_time: 3.482 sec
+Epoch: 6, loss: 15.37430, lr: 0.000864
+Estimated time until completion: 00:26:19
+epoch_time: 3.014 sec
+Epoch: 7, loss: 14.86656, lr: 0.000819
+Estimated time until completion: 00:26:36
+epoch_time: 3.004 sec
+Epoch: 8, loss: 14.49857, lr: 0.000768
+Estimated time until completion: 00:26:19
+epoch_time: 2.990 sec
+Epoch: 9, loss: 14.59410, lr: 0.000713
+Estimated time until completion: 00:26:05
+epoch_time: 3.052 sec
+Epoch: 10, loss: 13.95272, lr: 0.000655
+Estimated time until completion: 00:25:52
+epoch_time: 3.466 sec
+Epoch: 11, loss: 13.74736, lr: 0.000594
+Estimated time until completion: 00:25:43
+epoch_time: 2.987 sec
+Epoch: 12, loss: 13.62292, lr: 0.000531
+Estimated time until completion: 00:25:53
+epoch_time: 2.976 sec
+Epoch: 13, loss: 13.29104, lr: 0.000469
+Estimated time until completion: 00:25:42
+epoch_time: 3.037 sec
+Epoch: 14, loss: 12.89976, lr: 0.000406
+Estimated time until completion: 00:25:32
+epoch_time: 3.082 sec
+Epoch: 15, loss: 12.68341, lr: 0.000345
+Estimated time until completion: 00:25:26
+epoch_time: 3.460 sec
+Epoch: 16, loss: 12.47457, lr: 0.000287
+Estimated time until completion: 00:25:20
+epoch_time: 2.948 sec
+Epoch: 17, loss: 12.20151, lr: 0.000232
+Estimated time until completion: 00:25:26
+epoch_time: 3.009 sec
+Epoch: 18, loss: 11.97091, lr: 0.000181
+Estimated time until completion: 00:25:17
+epoch_time: 2.993 sec
+Epoch: 19, loss: 11.92439, lr: 0.000136
+Estimated time until completion: 00:25:11
+epoch_time: 3.056 sec
+Epoch: 20, loss: 11.40743, lr: 0.000095
+Estimated time until completion: 00:25:04
+epoch_time: 3.483 sec
+Epoch: 21, loss: 11.15485, lr: 0.000062
+Estimated time until completion: 00:24:59
+epoch_time: 3.010 sec
+Epoch: 22, loss: 11.17086, lr: 0.000035
+Estimated time until completion: 00:25:04
+epoch_time: 2.977 sec
+Epoch: 23, loss: 10.82643, lr: 0.000016
+Estimated time until completion: 00:24:58
+epoch_time: 2.972 sec
+Epoch: 24, loss: 10.56270, lr: 0.000004
+Estimated time until completion: 00:24:51
+epoch_time: 3.044 sec
+Epoch: 25, loss: 10.43434, lr: 0.001000
+Estimated time until completion: 00:24:45
+epoch_time: 3.478 sec
+Epoch: 26, loss: 10.15362, lr: 0.000999
+Estimated time until completion: 00:24:40
+epoch_time: 2.976 sec
+Epoch: 27, loss: 9.90557, lr: 0.000996
+Estimated time until completion: 00:24:43
+epoch_time: 2.976 sec
+Epoch: 28, loss: 9.66749, lr: 0.000991
+Estimated time until completion: 00:24:38
+epoch_time: 3.006 sec
+Epoch: 29, loss: 9.61660, lr: 0.000984
+Estimated time until completion: 00:24:32
+epoch_time: 3.577 sec
+Epoch: 30, loss: 9.29578, lr: 0.000976
+Estimated time until completion: 00:24:27
+epoch_time: 2.981 sec
+Epoch: 31, loss: 9.10583, lr: 0.000965
+Estimated time until completion: 00:24:31
+epoch_time: 3.022 sec
+Epoch: 32, loss: 8.83493, lr: 0.000952
+Estimated time until completion: 00:24:25
+epoch_time: 3.002 sec
+Epoch: 33, loss: 8.60764, lr: 0.000938
+Estimated time until completion: 00:24:21
+epoch_time: 3.050 sec
+Epoch: 34, loss: 8.47986, lr: 0.000922
+Estimated time until completion: 00:24:16
+epoch_time: 3.458 sec
+Epoch: 35, loss: 8.19228, lr: 0.000905
+Estimated time until completion: 00:24:12
+epoch_time: 2.957 sec
+Epoch: 36, loss: 8.15528, lr: 0.000885
+Estimated time until completion: 00:24:13
+epoch_time: 2.945 sec
+Epoch: 37, loss: 7.95158, lr: 0.000864
+Estimated time until completion: 00:24:07
+epoch_time: 3.027 sec
+Epoch: 38, loss: 7.82106, lr: 0.000842
+Estimated time until completion: 00:24:02
+epoch_time: 3.066 sec
+Epoch: 39, loss: 7.62159, lr: 0.000819
+Estimated time until completion: 00:23:58
+epoch_time: 3.477 sec
+Epoch: 40, loss: 7.40786, lr: 0.000794
+Estimated time until completion: 00:23:54
+epoch_time: 2.987 sec
+Epoch: 41, loss: 7.23697, lr: 0.000768
+Estimated time until completion: 00:23:55
+epoch_time: 2.958 sec
+Epoch: 42, loss: 7.00664, lr: 0.000741
+Estimated time until completion: 00:23:50
+epoch_time: 2.967 sec
+Epoch: 43, loss: 6.91488, lr: 0.000713
+Estimated time until completion: 00:23:46
+epoch_time: 3.039 sec
+Epoch: 44, loss: 6.79863, lr: 0.000684
+Estimated time until completion: 00:23:41
+epoch_time: 3.471 sec
+Epoch: 45, loss: 6.58877, lr: 0.000655
+Estimated time until completion: 00:23:37
+epoch_time: 2.978 sec
+Epoch: 46, loss: 6.41984, lr: 0.000624
+Estimated time until completion: 00:23:37
+epoch_time: 2.982 sec
+Epoch: 47, loss: 6.33067, lr: 0.000594
+Estimated time until completion: 00:23:33
+epoch_time: 2.994 sec
+Epoch: 48, loss: 6.07321, lr: 0.000563
+Estimated time until completion: 00:23:28
+epoch_time: 3.025 sec
+Epoch: 49, loss: 6.05586, lr: 0.000531
+Estimated time until completion: 00:23:24
+epoch_time: 3.444 sec
+Epoch: 50, loss: 5.86757, lr: 0.000500
+Estimated time until completion: 00:23:20
+epoch_time: 2.959 sec
+Epoch: 51, loss: 5.72585, lr: 0.000469
+Estimated time until completion: 00:23:20
+epoch_time: 2.951 sec
+Epoch: 52, loss: 5.61303, lr: 0.000437
+Estimated time until completion: 00:23:15
+epoch_time: 3.006 sec
+Epoch: 53, loss: 5.41444, lr: 0.000406
+Estimated time until completion: 00:23:11
+epoch_time: 3.455 sec
+Epoch: 54, loss: 5.26179, lr: 0.000376
+Estimated time until completion: 00:23:07
+epoch_time: 2.972 sec
+Epoch: 55, loss: 5.19438, lr: 0.000345
+Estimated time until completion: 00:23:07
+epoch_time: 3.001 sec
+Epoch: 56, loss: 5.06078, lr: 0.000316
+Estimated time until completion: 00:23:02
+epoch_time: 2.918 sec
+Epoch: 57, loss: 4.90894, lr: 0.000287
+Estimated time until completion: 00:22:58
+epoch_time: 3.034 sec
+Epoch: 58, loss: 4.78325, lr: 0.000259
+Estimated time until completion: 00:22:54
+epoch_time: 3.467 sec
+Epoch: 59, loss: 4.76304, lr: 0.000232
+Estimated time until completion: 00:22:50
+epoch_time: 3.007 sec
+Epoch: 60, loss: 4.63764, lr: 0.000206
+Estimated time until completion: 00:22:50
+epoch_time: 2.971 sec
+Epoch: 61, loss: 4.50282, lr: 0.000181
+Estimated time until completion: 00:22:46
+epoch_time: 2.971 sec
+Epoch: 62, loss: 4.40270, lr: 0.000158
+Estimated time until completion: 00:22:42
+epoch_time: 3.038 sec
+Epoch: 63, loss: 4.31019, lr: 0.000136
+Estimated time until completion: 00:22:38
+epoch_time: 3.585 sec
+Epoch: 64, loss: 4.24334, lr: 0.000115
+Estimated time until completion: 00:22:34
+epoch_time: 2.962 sec
+Epoch: 65, loss: 4.14041, lr: 0.000095
+Estimated time until completion: 00:22:34
+epoch_time: 3.029 sec
+Epoch: 66, loss: 4.02909, lr: 0.000078
+Estimated time until completion: 00:22:30
+epoch_time: 2.977 sec
+Epoch: 67, loss: 3.97074, lr: 0.000062
+Estimated time until completion: 00:22:26
+epoch_time: 3.019 sec
+Epoch: 68, loss: 3.88527, lr: 0.000048
+Estimated time until completion: 00:22:22
+epoch_time: 3.451 sec
+Epoch: 69, loss: 3.81267, lr: 0.000035
+Estimated time until completion: 00:22:19
+epoch_time: 2.960 sec
+Epoch: 70, loss: 3.72122, lr: 0.000024
+Estimated time until completion: 00:22:18
+epoch_time: 2.963 sec
+Epoch: 71, loss: 3.64693, lr: 0.000016
+Estimated time until completion: 00:22:14
+epoch_time: 2.929 sec
+Epoch: 72, loss: 3.64344, lr: 0.000009
+Estimated time until completion: 00:22:10
+epoch_time: 3.049 sec
+Epoch: 73, loss: 3.48987, lr: 0.000004
+Estimated time until completion: 00:22:06
+epoch_time: 3.454 sec
+Epoch: 74, loss: 3.46509, lr: 0.000001
+Estimated time until completion: 00:22:02
+epoch_time: 2.993 sec
+Epoch: 75, loss: 3.38295, lr: 0.001000
+Estimated time until completion: 00:22:01
+epoch_time: 2.980 sec
+Epoch: 76, loss: 3.35619, lr: 0.001000
+Estimated time until completion: 00:21:57
+epoch_time: 3.013 sec
+Epoch: 77, loss: 3.26481, lr: 0.000999
+Estimated time until completion: 00:21:53
+epoch_time: 3.451 sec
+Epoch: 78, loss: 3.19340, lr: 0.000998
+Estimated time until completion: 00:21:50
+epoch_time: 2.962 sec
+Epoch: 79, loss: 3.10549, lr: 0.000996

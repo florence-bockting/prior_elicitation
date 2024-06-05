@@ -109,9 +109,9 @@ class Gamma_log():
                          rate=tf.exp(rate))
 
 
-class _InvSoftplus(tfb.Bijector):
+class InvSoftplus(tfb.Bijector):
     def __init__(self, validate_args=False, name='inv_softplus'):
-      super(_InvSoftplus, self).__init__(
+      super(InvSoftplus, self).__init__(
           validate_args=validate_args,
           forward_min_event_ndims=0,
           name=name)
@@ -119,7 +119,7 @@ class _InvSoftplus(tfb.Bijector):
     def _forward(self, x):
       return tfp.math.softplus_inverse(x)
 
-class _Gamma_inv_softplus():
+class Gamma_inv_softplus():
     def __init__(self):
         self.name = "Gamma_inv_softplus"
         self.parameters = ["concentration_softplus","rate_softplus"]
@@ -127,7 +127,7 @@ class _Gamma_inv_softplus():
     def __call__(self, concentration, rate):
         transformed_dist = tfd.TransformedDistribution(
             distribution=tfd.Gamma(concentration, rate),
-            bijector = _InvSoftplus())
+            bijector = InvSoftplus())
         return transformed_dist
 
 #%% custom target quantities
