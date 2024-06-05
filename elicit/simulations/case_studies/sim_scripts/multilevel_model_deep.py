@@ -137,7 +137,7 @@ def run_simulation(seed):
                         optimizer = tf.keras.optimizers.Adam,
                         optimizer_specs = {
                             "learning_rate": tf.keras.optimizers.schedules.CosineDecayRestarts(
-                                0.0001, 100),
+                                0.001, 100),
                             "clipnorm": 1.0
                             }
                         )
@@ -145,11 +145,11 @@ def run_simulation(seed):
     ##% global method function
     prior_elicitation(
         method = "deep_prior",
-        sim_id = f"mlm_norm_{seed}",
+        sim_id = f"multilevel_deep_{seed}",
         B = 128,
         rep = 200,
         seed = seed,
-        epochs = 500,
+        epochs = 1000,
         output_path = "results",
         burnin = 1,
         model_params = model_params,
@@ -167,11 +167,11 @@ if __name__ == "__main__":
     
     run_simulation(seed)
 
-# run_simulation(123)
+# # run_simulation(123)
 
 # from validation.misc_plotting.plot_mlm_res import plot_results_overview
-# path = "elicit/simulations/results/data/deep_prior/"
-# file = "mlm_norm_123"
+# path = "elicit/simulations/case_studies/sim_results/deep_prior/"
+# file = "mlm_norm_34803858"
 
 # title = "Multilevel model - deep prior"
 # plot_results_overview(path, file, title)
