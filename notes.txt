@@ -1,2 +1,0 @@
-+ create possibility to save intermediate results (e.g. in different folders)
-+ create sampling from "true prior distributions" if "validation is True"
