@@ -6,7 +6,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Binomial Regression Model &#8212; Prior Learning</title>
   
@@ -28,7 +28,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=87e54e7c" />
@@ -195,14 +195,12 @@
 <li class="toctree-l4"><a class="reference internal" href="../api/user_input/user_input.custom_functions.html">user_input.custom_functions module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../api/user_input/user_input.design_matrices.html">user_input.design_matrices module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../api/user_input/user_input.generative_models.html">user_input.generative_models module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../api/user_input/user_input.utils.html">user_input.utils module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../case_studies.html">Case Studies</a></li>
 </ul>
 
     </div>
@@ -404,12 +402,6 @@ document.write(`
 <span class="n">tfd</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">distributions</span> 
 
 <span class="kn">import</span> <span class="nn">setup.input_functions</span> <span class="k">as</span> <span class="nn">setfun</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\flobo\anaconda3\envs\elicit_env\lib\site-packages\bayesflow\trainers.py:27: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
-  from tqdm.autonotebook import tqdm
 </pre></div>
 </div>
 </div>
@@ -733,7 +725,6 @@ For implementation purposes a particular <em>input-output</em> structure is requ
         <span class="n">target_quantities</span> <span class="o">=</span> <span class="n">target_quantities</span><span class="p">,</span>
         <span class="n">loss_function</span> <span class="o">=</span> <span class="n">loss_function</span><span class="p">,</span>
         <span class="n">optimization_settings</span> <span class="o">=</span> <span class="n">optimization_settings</span><span class="p">,</span>
-        <span class="n">log_info</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
         <span class="n">print_info</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">view_ep</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="p">)</span>
@@ -747,11 +738,10 @@ For implementation purposes a particular <em>input-output</em> structure is requ
 <h2>Evaluating method performance<a class="headerlink" href="#evaluating-method-performance" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">validation.plotting</span> <span class="k">as</span> <span class="nn">vp</span> 
-<span class="kn">from</span> <span class="nn">vp.plot_learned_prior</span> <span class="kn">import</span> <span class="n">learned_prior_binom</span>
-<span class="kn">from</span> <span class="nn">vp.plot_diagnostics</span> <span class="kn">import</span> <span class="n">diagnostics_binom</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">validation.plotting.plot_learned_prior</span> <span class="kn">import</span> <span class="n">learned_prior_binom</span>
+<span class="kn">from</span> <span class="nn">validation.plotting.plot_diagnostics</span> <span class="kn">import</span> <span class="n">diagnostics_binom</span>
 
-<span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;../sim_results/&quot;</span>
+<span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;../../../elicit/simulations/case_studies/sim_results/&quot;</span>
 <span class="n">file</span> <span class="o">=</span> <span class="s2">&quot;binom_34764831&quot;</span>
 <span class="n">selected_obs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">30</span><span class="p">]</span>
 <span class="n">true_values</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.51</span><span class="p">,</span> <span class="mf">0.06</span><span class="p">,</span> <span class="mf">0.26</span><span class="p">,</span> <span class="mf">0.04</span><span class="p">]</span>
@@ -812,7 +802,7 @@ rep=300
 epochs=1000
 wall time=28:85 (min:sec)
 optimizer=&lt;class &#39;keras.src.optimizers.adam.Adam&#39;&gt;
-learning rate={&#39;lr_scheduler&#39;: &lt;keras.src.optimizers.schedules.learning_rate_schedule.CosineDecayRestarts object at 0x000001BE7014ED00&gt;, &#39;init_lr&#39;: 0.01, &#39;decay_steps&#39;: 50}
+learning rate={&#39;lr_scheduler&#39;: &lt;keras.src.optimizers.schedules.learning_rate_schedule.CosineDecayRestarts object at 0x000001EF473D2A00&gt;, &#39;init_lr&#39;: 0.01, &#39;decay_steps&#39;: 50}
 
 Model info
 ---------------- 

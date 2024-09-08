@@ -6,7 +6,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Case Studies &#8212; Prior Learning</title>
   
@@ -28,7 +28,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=87e54e7c" />
@@ -49,7 +49,6 @@
     <link rel="icon" href="_static/favicon-light.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="user_input.utils module" href="api/user_input/user_input.utils.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -112,6 +111,8 @@
       
       
       
+        
+      
       <div class="bd-sidebar-primary bd-sidebar">
         
 
@@ -157,7 +158,7 @@
  </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        <ul class="current nav bd-sidenav">
+        <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="api_overview.html">API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="api/dags/modules.html">DAG</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -194,14 +195,12 @@
 <li class="toctree-l4"><a class="reference internal" href="api/user_input/user_input.custom_functions.html">user_input.custom_functions module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/user_input/user_input.design_matrices.html">user_input.design_matrices module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/user_input/user_input.generative_models.html">user_input.generative_models module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/user_input/user_input.utils.html">user_input.utils module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Case Studies</a></li>
 </ul>
 
     </div>
@@ -384,8 +383,7 @@ document.write(`
 <h1>Case Studies<a class="headerlink" href="#case-studies" title="Link to this heading">#</a></h1>
 <section id="normal-regression-model">
 <h2>Normal regression model<a class="headerlink" href="#normal-regression-model" title="Link to this heading">#</a></h2>
-<a class="reference internal image-reference" href="_images/icon_cs_normal.png"><img alt="Normal regression model" src="_images/icon_cs_normal.png" style="width: 400px;" />
-</a>
+<a class="reference internal image-reference" href="_images/icon_cs_normal.png"><img alt="Normal regression model" src="_images/icon_cs_normal.png" style="width: 400px;" /></a>
 <p>Normal regression model with a <span class="math notranslate nohighlight">\(2 \times 3\)</span> between-participant factorial design.
 In this case study, a total of 13 hyperparameters, <span class="math notranslate nohighlight">\(\lambda = (\mu_k, \sigma_k, \nu)\)</span>, is learned through expert knowledge.
 Case study is inspired by the experimental design of truth-effect studies in the field of social cognition.</p>
@@ -397,8 +395,7 @@ Case study is inspired by the experimental design of truth-effect studies in the
 </section>
 <section id="binomial-regression-model">
 <h2>Binomial regression model<a class="headerlink" href="#binomial-regression-model" title="Link to this heading">#</a></h2>
-<a class="reference internal image-reference" href="_images/icon_cs_binomial.png"><img alt="Binomial regression model" src="_images/icon_cs_binomial.png" style="width: 400px;" />
-</a>
+<a class="reference internal image-reference" href="_images/icon_cs_binomial.png"><img alt="Binomial regression model" src="_images/icon_cs_binomial.png" style="width: 400px;" /></a>
 <p>Binomial regression model with logit link and one continuous predictor. The goal is to learn 4 hyperparameter values.
 Case study uses the Haberman’s survival dataset which contains cases from a study on the survival
 of patients who had undergone surgery for breast cancer.</p>
@@ -410,8 +407,7 @@ of patients who had undergone surgery for breast cancer.</p>
 </section>
 <section id="poisson-regression-model">
 <h2>Poisson regression model<a class="headerlink" href="#poisson-regression-model" title="Link to this heading">#</a></h2>
-<a class="reference internal image-reference" href="_images/icon_cs_poisson.png"><img alt="Poisson regression model" src="_images/icon_cs_poisson.png" style="width: 400px;" />
-</a>
+<a class="reference internal image-reference" href="_images/icon_cs_poisson.png"><img alt="Poisson regression model" src="_images/icon_cs_poisson.png" style="width: 400px;" /></a>
 <p>Poisson regression model with log link and one continuous and one categorical predictor with three levels. The goal is to learn 8 hyperparameter values.
 Case study uses a data set of a study which investigates the number of LGBTQ+ anti-discrimination laws in each US state.</p>
 <ul class="simple">
@@ -422,8 +418,7 @@ Case study uses a data set of a study which investigates the number of LGBTQ+ an
 </section>
 <section id="multilevel-model-with-normal-likelihood">
 <h2>Multilevel model with normal likelihood<a class="headerlink" href="#multilevel-model-with-normal-likelihood" title="Link to this heading">#</a></h2>
-<a class="reference internal image-reference" href="_images/icon_cs_mlm.png"><img alt="Multilevel model with normal likelihood" src="_images/icon_cs_mlm.png" style="width: 400px;" />
-</a>
+<a class="reference internal image-reference" href="_images/icon_cs_mlm.png"><img alt="Multilevel model with normal likelihood" src="_images/icon_cs_mlm.png" style="width: 400px;" /></a>
 <p>Multilevel model with normal likelihood and one continuous predictor. The goal is to learn 7 hyperparameter values.
 The case study draws inspiration from the <em>sleepstudy</em> dataset that comes along with the R-package <em>lme4</em>.</p>
 <ul class="simple">
@@ -445,15 +440,6 @@ The case study draws inspiration from the <em>sleepstudy</em> dataset that comes
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="api/user_input/user_input.utils.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">user_input.utils module</p>
-      </div>
-    </a>
 </div>
                 </footer>
               

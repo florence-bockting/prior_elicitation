@@ -27,7 +27,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
@@ -192,14 +192,12 @@
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.custom_functions.html">user_input.custom_functions module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.design_matrices.html">user_input.design_matrices module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.generative_models.html">user_input.generative_models module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.utils.html">user_input.utils module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../../case_studies.html">Case Studies</a></li>
 </ul>
 
     </div>
@@ -326,6 +324,7 @@ document.write(`
 <span class="n">tfb</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">bijectors</span>
 
 <span class="c1">#%% custom distribution families</span>
+
 <div class="viewcode-block" id="Normal_log">
 <a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.Normal_log">[docs]</a>
 <span class="k">class</span> <span class="nc">Normal_log</span><span class="p">():</span>
@@ -391,7 +390,7 @@ document.write(`
         <span class="k">return</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">loc</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">scale</span><span class="p">))</span></div>
 </div>
 
-    
+
 <div class="viewcode-block" id="TruncNormal_log">
 <a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.TruncNormal_log">[docs]</a>
 <span class="k">class</span> <span class="nc">TruncNormal_log</span><span class="p">():</span>
@@ -462,27 +461,144 @@ document.write(`
                          <span class="n">rate</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">rate</span><span class="p">))</span></div>
 </div>
 
-        
-<span class="k">class</span> <span class="nc">_InvSoftplus</span><span class="p">(</span><span class="n">tfb</span><span class="o">.</span><span class="n">Bijector</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Beta_log">
+<a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.Beta_log">[docs]</a>
+<span class="k">class</span> <span class="nc">Beta_log</span><span class="p">():</span>
+<div class="viewcode-block" id="Beta_log.__init__">
+<a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.Beta_log.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Beta_log&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;log_concentration1&quot;</span><span class="p">,</span><span class="s2">&quot;log_concentration0&quot;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Beta_log.__call__">
+<a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.Beta_log.__call__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">concentration1</span><span class="p">,</span> <span class="n">concentration0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Instantiation of Beta distribution with both concentration1 and </span>
+<span class="sd">        concentration2 being learned on the log scale. </span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        concentration1 : int</span>
+<span class="sd">            concentration1 parameter of beta distribution on the original scale.</span>
+<span class="sd">        concentration0 : int</span>
+<span class="sd">            concentration0 parameter of beta distribution on the original scale.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tfp.distribution object</span>
+<span class="sd">            beta distribution with both concentration1 and concentration2 being </span>
+<span class="sd">            learned on the log scale.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Beta</span><span class="p">(</span><span class="n">concentration1</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">concentration1</span><span class="p">),</span> 
+                        <span class="n">concentration0</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">concentration0</span><span class="p">))</span></div>
+</div>
+
+
+<div class="viewcode-block" id="Normal0_log">
+<a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.Normal0_log">[docs]</a>
+<span class="k">class</span> <span class="nc">Normal0_log</span><span class="p">():</span>
+<div class="viewcode-block" id="Normal0_log.__init__">
+<a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.Normal0_log.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Normal_log_scale_loc0&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;log_scale&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loc</span> <span class="o">=</span> <span class="mf">0.</span></div>
+
+<div class="viewcode-block" id="Normal0_log.__call__">
+<a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.Normal0_log.__call__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">scale</span><span class="p">))</span></div>
+</div>
+
+
+<div class="viewcode-block" id="HalfNormal_log">
+<a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.HalfNormal_log">[docs]</a>
+<span class="k">class</span> <span class="nc">HalfNormal_log</span><span class="p">():</span>
+<div class="viewcode-block" id="HalfNormal_log.__init__">
+<a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.HalfNormal_log.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;HalfNormal_log_scale&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;log_scale&quot;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="HalfNormal_log.__call__">
+<a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.HalfNormal_log.__call__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">tfd</span><span class="o">.</span><span class="n">HalfNormal</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">scale</span><span class="p">))</span></div>
+</div>
+
+
+<div class="viewcode-block" id="InvGamma_log">
+<a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.InvGamma_log">[docs]</a>
+<span class="k">class</span> <span class="nc">InvGamma_log</span><span class="p">():</span>
+<div class="viewcode-block" id="InvGamma_log.__init__">
+<a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.InvGamma_log.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;InvGamma_log_nuslab&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;log_nuslab&quot;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="InvGamma_log.__call__">
+<a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.InvGamma_log.__call__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nu_slab</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">tfd</span><span class="o">.</span><span class="n">InverseGamma</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">nu_slab</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">nu_slab</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span></div>
+</div>
+
+
+<div class="viewcode-block" id="Student0">
+<a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.Student0">[docs]</a>
+<span class="k">class</span> <span class="nc">Student0</span><span class="p">():</span>
+<div class="viewcode-block" id="Student0.__init__">
+<a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.Student0.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">nu_global</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Student_0&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span> <span class="o">=</span> <span class="n">sigma</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nu_global</span> <span class="o">=</span> <span class="n">nu_global</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;log_sigmaglobal&quot;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Student0.__call__">
+<a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.Student0.__call__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigma_global</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">tfd</span><span class="o">.</span><span class="n">HalfStudentT</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nu_global</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">sigma_global</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">)</span></div>
+</div>
+
+
+<div class="viewcode-block" id="InvSoftplus">
+<a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.InvSoftplus">[docs]</a>
+<span class="k">class</span> <span class="nc">InvSoftplus</span><span class="p">(</span><span class="n">tfb</span><span class="o">.</span><span class="n">Bijector</span><span class="p">):</span>
+<div class="viewcode-block" id="InvSoftplus.__init__">
+<a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.InvSoftplus.__init__">[docs]</a>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">validate_args</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;inv_softplus&#39;</span><span class="p">):</span>
-      <span class="nb">super</span><span class="p">(</span><span class="n">_InvSoftplus</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+      <span class="nb">super</span><span class="p">(</span><span class="n">InvSoftplus</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
           <span class="n">validate_args</span><span class="o">=</span><span class="n">validate_args</span><span class="p">,</span>
           <span class="n">forward_min_event_ndims</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-          <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+          <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span></div>
+
 
     <span class="k">def</span> <span class="nf">_forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-      <span class="k">return</span> <span class="n">tfp</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">softplus_inverse</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">tfp</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">softplus_inverse</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
 
-<span class="k">class</span> <span class="nc">_Gamma_inv_softplus</span><span class="p">():</span>
+
+<div class="viewcode-block" id="Gamma_inv_softplus">
+<a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.Gamma_inv_softplus">[docs]</a>
+<span class="k">class</span> <span class="nc">Gamma_inv_softplus</span><span class="p">():</span>
+<div class="viewcode-block" id="Gamma_inv_softplus.__init__">
+<a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.Gamma_inv_softplus.__init__">[docs]</a>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Gamma_inv_softplus&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;concentration_softplus&quot;</span><span class="p">,</span><span class="s2">&quot;rate_softplus&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;concentration_softplus&quot;</span><span class="p">,</span><span class="s2">&quot;rate_softplus&quot;</span><span class="p">]</span></div>
+
         
+<div class="viewcode-block" id="Gamma_inv_softplus.__call__">
+<a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.Gamma_inv_softplus.__call__">[docs]</a>
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">concentration</span><span class="p">,</span> <span class="n">rate</span><span class="p">):</span>
         <span class="n">transformed_dist</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">TransformedDistribution</span><span class="p">(</span>
             <span class="n">distribution</span><span class="o">=</span><span class="n">tfd</span><span class="o">.</span><span class="n">Gamma</span><span class="p">(</span><span class="n">concentration</span><span class="p">,</span> <span class="n">rate</span><span class="p">),</span>
-            <span class="n">bijector</span> <span class="o">=</span> <span class="n">_InvSoftplus</span><span class="p">())</span>
-        <span class="k">return</span> <span class="n">transformed_dist</span>
+            <span class="n">bijector</span> <span class="o">=</span> <span class="n">InvSoftplus</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">transformed_dist</span></div>
+</div>
+
 
 <span class="c1">#%% custom target quantities</span>
 <div class="viewcode-block" id="custom_R2">
@@ -509,6 +625,36 @@ document.write(`
     <span class="n">var_epred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">epred</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> 
     <span class="c1"># variance of difference between ypred and epred</span>
     <span class="n">var_diff</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">ypred</span><span class="p">,</span> <span class="n">epred</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># variance of linear predictor divided by total variance</span>
+    <span class="n">r2</span> <span class="o">=</span> <span class="n">var_epred</span><span class="o">/</span><span class="p">(</span><span class="n">var_epred</span> <span class="o">+</span> <span class="n">var_diff</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">r2</span></div>
+
+
+
+<div class="viewcode-block" id="custom_R2_beta">
+<a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.custom_R2_beta">[docs]</a>
+<span class="k">def</span> <span class="nf">custom_R2_beta</span><span class="p">(</span><span class="n">ypred</span><span class="p">,</span> <span class="n">epred</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines R2 such that it is guaranteed to lie within zero and one.</span>
+<span class="sd">    https://avehtari.github.io/bayes_R2/bayes_R2.html#2_Functions_for_Bayesian_R-squared_for_stan_glm_models</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ypred : tf.Tensor</span>
+<span class="sd">        simulated prior predictions from generative model.</span>
+<span class="sd">    epred : tf.Tensor</span>
+<span class="sd">        simulated linear predictor from generative model.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    r2 : tf.Tensor</span>
+<span class="sd">        computed R2 value.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># variance of linear predictor </span>
+    <span class="n">var_epred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">epred</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> 
+    <span class="c1"># variance of difference between ypred and epred</span>
+    <span class="n">var_diff</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">ypred</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">epred</span><span class="p">)),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
     <span class="c1"># variance of linear predictor divided by total variance</span>
     <span class="n">r2</span> <span class="o">=</span> <span class="n">var_epred</span><span class="o">/</span><span class="p">(</span><span class="n">var_epred</span> <span class="o">+</span> <span class="n">var_diff</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">r2</span></div>
@@ -544,6 +690,50 @@ document.write(`
                               <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_all</span><span class="p">(</span><span class="n">cmatrix</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">==</span> <span class="n">dmatrix_fct</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">),</span>
                               <span class="n">axis</span> <span class="o">=</span> <span class="mi">2</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cmatrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">group_means</span></div>
+
+
+<div class="viewcode-block" id="custom_group">
+<a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.custom_group">[docs]</a>
+<span class="k">def</span> <span class="nf">custom_group</span><span class="p">(</span><span class="n">ypred</span><span class="p">,</span> <span class="n">design_matrix</span><span class="p">,</span> <span class="n">factor_indices</span><span class="p">):</span>
+    <span class="c1"># exclude cont. predictor</span>
+    <span class="n">dmatrix_fct</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">design_matrix</span><span class="p">,</span> <span class="n">factor_indices</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># create contrast matrix</span>
+    <span class="n">cmatrix</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dmatrix_fct</span><span class="p">)</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(),</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="c1"># compute group means (shape = B,rep,N_obs,N_gr)</span>
+    <span class="n">groups</span> <span class="o">=</span> <span class="p">[</span><span class="n">tf</span><span class="o">.</span><span class="n">boolean_mask</span><span class="p">(</span><span class="n">ypred</span><span class="p">,</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_all</span><span class="p">(</span><span class="n">cmatrix</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">==</span> <span class="n">dmatrix_fct</span><span class="p">,</span> 
+                                                       <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">),</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cmatrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+    <span class="n">groups_reshaped</span> <span class="o">=</span> <span class="p">[</span><span class="n">groups</span><span class="p">[</span><span class="n">i</span><span class="p">][:,:,</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">groups</span><span class="p">))]</span>
+    <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">groups_reshaped</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="custom_std_comparison">
+<a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.custom_std_comparison">[docs]</a>
+<span class="k">def</span> <span class="nf">custom_std_comparison</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">):</span>
+    <span class="n">sd_b0</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_std</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">sd_sigma</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_std</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">[:,:,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+    
+    <span class="n">log_diff</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">sd_b0</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">sd_sigma</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">log_diff</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="custom_group_range">
+<a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.custom_group_range">[docs]</a>
+<span class="k">def</span> <span class="nf">custom_group_range</span><span class="p">(</span><span class="n">ypred</span><span class="p">,</span> <span class="n">design_matrix</span><span class="p">,</span> <span class="n">factor_indices</span><span class="p">):</span>
+    <span class="c1"># exclude cont. predictor</span>
+    <span class="n">dmatrix_fct</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">design_matrix</span><span class="p">,</span> <span class="n">factor_indices</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># create contrast matrix</span>
+    <span class="n">cmatrix</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dmatrix_fct</span><span class="p">)</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(),</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="c1"># compute group means (shape = B,rep,N_obs,N_gr)</span>
+    <span class="n">groups</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">tf</span><span class="o">.</span><span class="n">boolean_mask</span><span class="p">(</span><span class="n">ypred</span><span class="p">,</span>
+                              <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_all</span><span class="p">(</span><span class="n">cmatrix</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">==</span> <span class="n">dmatrix_fct</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">),</span>
+                              <span class="n">axis</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cmatrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">groups_reshaped</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">groups</span><span class="p">,</span> <span class="p">(</span><span class="n">groups</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">groups</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">groups</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">groups</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
+
+    <span class="n">group_ranges</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;ij...-&gt;ji...&quot;</span><span class="p">,</span> <span class="n">tfp</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">groups_reshaped</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">99.</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="n">group_ranges</span></div>
 
 
 <div class="viewcode-block" id="custom_mu0_sd">
@@ -612,6 +802,60 @@ document.write(`
                                    <span class="n">ypred</span><span class="p">[:,:,</span><span class="n">day</span><span class="p">::</span><span class="n">len_days</span><span class="p">],</span> 
                                    <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)))</span>
     <span class="k">return</span> <span class="n">sdmu</span></div>
+
+
+<div class="viewcode-block" id="custom_avg_obs">
+<a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.custom_avg_obs">[docs]</a>
+<span class="k">def</span> <span class="nf">custom_avg_obs</span><span class="p">(</span><span class="n">ypred</span><span class="p">):</span>
+    <span class="n">y_mean</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">ypred</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">y_mean</span></div>
+
+
+<div class="viewcode-block" id="CustomMixture">
+<a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.CustomMixture">[docs]</a>
+<span class="k">def</span> <span class="nf">CustomMixture</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Mixture</span><span class="p">(</span>
+        <span class="n">cat</span><span class="o">=</span><span class="n">tfd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">(</span><span class="n">probs</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]),</span>
+        <span class="n">components</span><span class="o">=</span><span class="p">[</span>
+          <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=-</span><span class="mf">4.</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.3</span><span class="p">),</span>
+          <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=+</span><span class="mf">4.</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.3</span><span class="p">),</span>
+      <span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="custom_correlation">
+<a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.custom_correlation">[docs]</a>
+<span class="k">def</span> <span class="nf">custom_correlation</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">):</span>
+    <span class="n">corM</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">correlation</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">,</span> <span class="n">sample_axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">event_axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">tensor</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">experimental</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">corM</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">tensor_mask</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">experimental</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">corM</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">!=</span> <span class="mf">0.</span>
+
+    <span class="n">cor</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">boolean_mask</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span> <span class="n">tensor_mask</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">diag_elements</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">cor</span><span class="p">,(</span><span class="n">prior_samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">diag_elements</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="group_quantiles">
+<a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.group_quantiles">[docs]</a>
+<span class="k">def</span> <span class="nf">group_quantiles</span><span class="p">(</span><span class="n">y_group</span><span class="p">):</span>
+   <span class="n">quants</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">y_group</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">75</span><span class="p">,</span><span class="mi">95</span><span class="p">],</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+   <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">quants</span><span class="p">,</span><span class="n">perm</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="custom_target_R2">
+<a class="viewcode-back" href="../../api/user_input/user_input.custom_functions.html#user_input.custom_functions.custom_target_R2">[docs]</a>
+<span class="k">def</span> <span class="nf">custom_target_R2</span><span class="p">(</span><span class="n">ypred</span><span class="p">,</span> <span class="n">epred</span><span class="p">):</span>
+    <span class="n">epred_reshaped</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">epred</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">epred</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">epred</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+    <span class="n">ypred_reshaped</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ypred</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">ypred</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">ypred</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+    
+    <span class="c1"># variance of linear predictor </span>
+    <span class="n">var_epred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">epred_reshaped</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> 
+    <span class="c1"># variance of difference between ypred and epred</span>
+    <span class="n">var_diff</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">ypred_reshaped</span><span class="p">,</span> <span class="n">epred_reshaped</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">var_total</span> <span class="o">=</span> <span class="n">var_epred</span> <span class="o">+</span> <span class="n">var_diff</span>
+    <span class="c1"># variance of linear predictor divided by total variance</span>
+    <span class="n">log_R2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">var_epred</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">var_total</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="n">log_R2</span></div>
 
 </pre></div>
 

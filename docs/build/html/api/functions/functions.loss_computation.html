@@ -6,7 +6,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>functions.loss_computation module &#8212; Prior Learning</title>
   
@@ -28,7 +28,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
@@ -193,14 +193,12 @@
 <li class="toctree-l4"><a class="reference internal" href="../user_input/user_input.custom_functions.html">user_input.custom_functions module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../user_input/user_input.design_matrices.html">user_input.design_matrices module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../user_input/user_input.generative_models.html">user_input.generative_models module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../user_input/user_input.utils.html">user_input.utils module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../../case_studies.html">Case Studies</a></li>
 </ul>
 
     </div>
@@ -413,10 +411,10 @@ the discrepancy.</p>
 <dt class="sig sig-object py" id="functions.loss_computation.dynamic_weight_averaging">
 <span class="sig-prename descclassname"><span class="pre">functions.loss_computation.</span></span><span class="sig-name descname"><span class="pre">dynamic_weight_averaging</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_per_component_current</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_per_component_initial</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_balance_factor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">saving_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/functions/loss_computation.html#dynamic_weight_averaging"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.loss_computation.dynamic_weight_averaging" title="Link to this definition">#</a></dt>
 <dd><p>DWA determines the weights based on the learning speed of each component</p>
-<p>The Dynamic Weight Averaging (DWA) method proposed by 
-Liu, Johns, &amp; Davison (2019) determines the weights based on the learning 
-speed of each component, aiming to achieve a more balanced learning process. 
-Specifically, the weight of a component exhibiting a slower learning speed 
+<p>The Dynamic Weight Averaging (DWA) method proposed by
+Liu, Johns, &amp; Davison (2019) determines the weights based on the learning
+speed of each component, aiming to achieve a more balanced learning process.
+Specifically, the weight of a component exhibiting a slower learning speed
 is increased, while it is decreased for faster learning components.</p>
 <p>Liu, S., Johns, E., &amp; Davison, A. J. (2019). End-To-End Multi-Task Learning With Attention. In
 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) (pp. 1871–1880).
@@ -430,8 +428,8 @@ doi: <a class="reference external" href="https://doi.org/10.1109/CVPR.2019.00197
 </dd>
 <dt><strong>loss_per_component_initial</strong><span class="classifier">list of floats</span></dt><dd><p>List of loss values per loss component for the initial epoch (epoch = 0).</p>
 </dd>
-<dt><strong>task_balance_factor</strong><span class="classifier">float</span></dt><dd><p>temperature parameter that controls the softness of the loss weighting 
-in the softmax operator. Setting the temperature 𝑎 to a large value 
+<dt><strong>task_balance_factor</strong><span class="classifier">float</span></dt><dd><p>temperature parameter that controls the softness of the loss weighting
+in the softmax operator. Setting the temperature 𝑎 to a large value
 results in the weights approaching unity.</p>
 </dd>
 </dl>
@@ -458,7 +456,7 @@ discrepancy measure and returns a list with all loss values.</p>
 <dt><strong>loss_components_expert</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all loss components derived from the expert-elicited
 statistics.</p>
 </dd>
-<dt><strong>loss_components_training</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all loss components derived from the model 
+<dt><strong>loss_components_training</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all loss components derived from the model
 simulations. (The names (keys) between loss_components_expert and loss_components_training must match)</p>
 </dd>
 <dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all user-input settings.</p>

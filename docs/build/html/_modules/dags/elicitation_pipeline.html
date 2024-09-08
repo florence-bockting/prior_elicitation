@@ -27,7 +27,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
@@ -192,14 +192,12 @@
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.custom_functions.html">user_input.custom_functions module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.design_matrices.html">user_input.design_matrices module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.generative_models.html">user_input.generative_models module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.utils.html">user_input.utils module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../../case_studies.html">Case Studies</a></li>
 </ul>
 
     </div>
@@ -319,19 +317,28 @@ document.write(`
                   
   <h1>Source code for dags.elicitation_pipeline</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
-<span class="kn">from</span> <span class="nn">functions.prior_simulation</span> <span class="kn">import</span> <span class="n">intialize_priors</span><span class="p">,</span> <span class="n">sample_from_priors</span>
+<span class="kn">from</span> <span class="nn">functions.prior_simulation</span> <span class="kn">import</span> <span class="n">Priors</span>
 <span class="kn">from</span> <span class="nn">functions.model_simulation</span> <span class="kn">import</span> <span class="n">simulate_from_generator</span>
-<span class="kn">from</span> <span class="nn">functions.targets_elicits_computation</span> <span class="kn">import</span> <span class="n">computation_target_quantities</span><span class="p">,</span> <span class="n">computation_elicited_statistics</span>
-<span class="kn">from</span> <span class="nn">functions.loss_computation</span> <span class="kn">import</span> <span class="n">compute_loss_components</span><span class="p">,</span> <span class="n">compute_discrepancy</span><span class="p">,</span> <span class="n">dynamic_weight_averaging</span>
+<span class="kn">from</span> <span class="nn">functions.targets_elicits_computation</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">computation_target_quantities</span><span class="p">,</span>
+    <span class="n">computation_elicited_statistics</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">functions.loss_computation</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">compute_loss_components</span><span class="p">,</span>
+    <span class="n">compute_discrepancy</span><span class="p">,</span>
+    <span class="n">dynamic_weight_averaging</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">functions.training</span> <span class="kn">import</span> <span class="n">training_loop</span>
+<span class="kn">from</span> <span class="nn">functions.helper_functions</span> <span class="kn">import</span> <span class="n">save_as_pkl</span>
 
 
 <div class="viewcode-block" id="prior_elicitation_dag">
 <a class="viewcode-back" href="../../api/dags/dags.elicitation_pipeline.html#dags.elicitation_pipeline.prior_elicitation_dag">[docs]</a>
 <span class="k">def</span> <span class="nf">prior_elicitation_dag</span><span class="p">(</span><span class="n">global_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Defines the prior elicitation workflow and runs the workflow for the </span>
+<span class="sd">    Defines the prior elicitation workflow and runs the workflow for the</span>
 <span class="sd">    current setup as indicated by the user.</span>
 
 <span class="sd">    Parameters</span>
@@ -341,46 +348,11 @@ document.write(`
 <span class="sd">        quantities, elicitation techniques, optimization settings etc.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    
+
     <span class="c1"># set seed</span>
     <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">])</span>
+    <span class="n">regularizer_term</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="k">def</span> <span class="nf">priors</span><span class="p">(</span><span class="n">global_dict</span><span class="p">,</span> <span class="n">ground_truth</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Wrapper which returns an instance of a Priors object, i.e., an initialized</span>
-<span class="sd">        prior distribution from which can be sampled</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        global_dict : dict</span>
-<span class="sd">            global dictionary with all user input specifications.</span>
-<span class="sd">        ground_truth : bool, optional</span>
-<span class="sd">            Is true if model should be learned with simulated data that</span>
-<span class="sd">            represent a pre-defined ground truth. The default is False.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        prior_samples : instance of a priors class object </span>
-<span class="sd">            initialized prior distributions from which can be sampled.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># initalize generator model</span>
-        <span class="k">class</span> <span class="nc">Priors</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-            <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">global_dict</span> <span class="o">=</span> <span class="n">global_dict</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ground_truth</span> <span class="o">=</span> <span class="n">ground_truth</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">ground_truth</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">init_priors</span> <span class="o">=</span> <span class="n">intialize_priors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_dict</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">init_priors</span> <span class="o">=</span> <span class="kc">None</span>
-
-            <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-                <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">sample_from_priors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">init_priors</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ground_truth</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_dict</span><span class="p">)</span>
-                <span class="k">return</span> <span class="n">prior_samples</span>
-
-        <span class="n">prior_model</span> <span class="o">=</span> <span class="n">Priors</span><span class="p">(</span><span class="n">ground_truth</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">prior_model</span>
-    
     <span class="k">def</span> <span class="nf">one_forward_simulation</span><span class="p">(</span><span class="n">prior_model</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">,</span> <span class="n">ground_truth</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        One forward simulation from prior samples to elicited statistics.</span>
@@ -403,14 +375,20 @@ document.write(`
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">prior_model</span><span class="p">()</span>
-        <span class="n">model_simulations</span> <span class="o">=</span> <span class="n">simulate_from_generator</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">)</span>
-        <span class="n">target_quantities</span> <span class="o">=</span> <span class="n">computation_target_quantities</span><span class="p">(</span><span class="n">model_simulations</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">)</span>
-        <span class="n">elicited_statistics</span> <span class="o">=</span> <span class="n">computation_elicited_statistics</span><span class="p">(</span><span class="n">target_quantities</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">)</span>
+        <span class="n">model_simulations</span> <span class="o">=</span> <span class="n">simulate_from_generator</span><span class="p">(</span>
+            <span class="n">prior_samples</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">global_dict</span>
+        <span class="p">)</span>
+        <span class="n">target_quantities</span> <span class="o">=</span> <span class="n">computation_target_quantities</span><span class="p">(</span>
+            <span class="n">model_simulations</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">global_dict</span>
+        <span class="p">)</span>
+        <span class="n">elicited_statistics</span> <span class="o">=</span> <span class="n">computation_elicited_statistics</span><span class="p">(</span>
+            <span class="n">target_quantities</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">global_dict</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="n">elicited_statistics</span>
 
     <span class="k">def</span> <span class="nf">load_expert_data</span><span class="p">(</span><span class="n">global_dict</span><span class="p">,</span> <span class="n">path_to_expert_data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Wrapper for loading the training data which can be expert data or </span>
+<span class="sd">        Wrapper for loading the training data which can be expert data or</span>
 <span class="sd">        data simulations using a pre-defined ground truth.</span>
 
 <span class="sd">        Parameters</span>
@@ -428,18 +406,22 @@ document.write(`
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;expert_input&quot;</span><span class="p">][</span><span class="s2">&quot;simulate_data&quot;</span><span class="p">]:</span>
-            <span class="n">prior_model</span> <span class="o">=</span> <span class="n">priors</span><span class="p">(</span><span class="n">global_dict</span><span class="p">,</span> <span class="n">ground_truth</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">prior_model</span> <span class="o">=</span> <span class="n">Priors</span><span class="p">(</span><span class="n">global_dict</span><span class="p">,</span> <span class="n">ground_truth</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="n">expert_data</span> <span class="o">=</span> <span class="n">one_forward_simulation</span><span class="p">(</span>
-                <span class="n">prior_model</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">,</span> <span class="n">ground_truth</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">prior_model</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">,</span> <span class="n">ground_truth</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># TODO: Checking: Must have the same shape/form as elicited statistics from model</span>
-            <span class="k">assert</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;expert_input&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;path to expert data has to provided&quot;</span>
+            <span class="k">assert</span> <span class="p">(</span>
+                <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;expert_input&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="p">),</span> <span class="s2">&quot;path to expert data has to provided&quot;</span>
             <span class="c1"># load expert data from file</span>
             <span class="n">expert_data</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;expert_input&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">expert_data</span>
 
-    <span class="k">def</span> <span class="nf">compute_loss</span><span class="p">(</span><span class="n">training_elicited_statistics</span><span class="p">,</span> <span class="n">expert_elicited_statistics</span><span class="p">,</span> 
-                     <span class="n">global_dict</span><span class="p">,</span> <span class="n">epoch</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">compute_loss</span><span class="p">(</span>
+        <span class="n">training_elicited_statistics</span><span class="p">,</span> <span class="n">expert_elicited_statistics</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">,</span> <span class="n">epoch</span>
+    <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Wrapper around the loss computation from elicited statistics to final</span>
 <span class="sd">        loss value.</span>
@@ -461,6 +443,14 @@ document.write(`
 <span class="sd">            total loss value.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># regularization term for preventing degenerated solutions in var collapse to zero</span>
+        <span class="c1"># used from Manderson and Goudie (2024)</span>
+        <span class="k">def</span> <span class="nf">regulariser</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">):</span>
+            <span class="n">log_sd</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_std</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="n">mean_log_sd</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">log_sd</span><span class="p">)</span>
+            <span class="k">return</span> <span class="o">-</span><span class="n">mean_log_sd</span>
+
         <span class="k">def</span> <span class="nf">compute_total_loss</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">loss_per_component</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            applies dynamic weight averaging for multi-objective loss function</span>
@@ -483,34 +473,67 @@ document.write(`
 
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="n">loss_per_component_current</span> <span class="o">=</span> <span class="n">loss_per_component</span>
+            <span class="c1"># TODO: check whether indicated loss weighting input is implemented</span>
+
             <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;loss_function&quot;</span><span class="p">][</span><span class="s2">&quot;loss_weighting&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">total_loss</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">loss_per_component</span><span class="p">)</span> 
+                <span class="n">total_loss</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">loss_per_component</span><span class="p">)</span>
+                <span class="n">priorsamples</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span>
+                    <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/model_simulations.pkl&quot;</span>
+                <span class="p">)[</span><span class="s2">&quot;prior_samples&quot;</span><span class="p">]</span>
+                <span class="n">regul_term</span> <span class="o">=</span> <span class="n">regulariser</span><span class="p">(</span><span class="n">priorsamples</span><span class="p">)</span>
+                <span class="n">regularizer_term</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">regul_term</span><span class="p">)</span>
+
+                <span class="n">path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/regularizer.pkl&quot;</span>
+                <span class="n">save_as_pkl</span><span class="p">(</span><span class="n">regularizer_term</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+
+                <span class="n">total_loss</span> <span class="o">=</span> <span class="n">total_loss</span> <span class="o">+</span> <span class="n">regul_term</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># check whether selected method is implemented</span>
-                <span class="k">assert</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;loss_function&quot;</span><span class="p">][</span><span class="s2">&quot;loss_weighting&quot;</span><span class="p">][</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;dwa&quot;</span><span class="p">,</span> <span class="s2">&quot;Currently implemented loss weighting methods are: &#39;dwa&#39;&quot;</span>
                 <span class="c1"># apply selected loss weighting method</span>
                 <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;loss_function&quot;</span><span class="p">][</span><span class="s2">&quot;loss_weighting&quot;</span><span class="p">][</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;dwa&quot;</span><span class="p">:</span>
                     <span class="c1"># dwa needs information about the initial loss per component</span>
                     <span class="k">if</span> <span class="n">epoch</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                        <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;loss_function&quot;</span><span class="p">][</span><span class="s2">&quot;loss_weighting&quot;</span><span class="p">][</span><span class="s2">&quot;method_specs&quot;</span><span class="p">][</span><span class="s2">&quot;loss_per_component_initial&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">loss_per_component</span>
+                        <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;loss_function&quot;</span><span class="p">][</span><span class="s2">&quot;loss_weighting&quot;</span><span class="p">][</span><span class="s2">&quot;method_specs&quot;</span><span class="p">][</span>
+                            <span class="s2">&quot;loss_per_component_initial&quot;</span>
+                        <span class="p">]</span> <span class="o">=</span> <span class="n">loss_per_component</span>
                     <span class="c1"># apply method</span>
                     <span class="n">total_loss</span> <span class="o">=</span> <span class="n">dynamic_weight_averaging</span><span class="p">(</span>
-                        <span class="n">epoch</span><span class="p">,</span> <span class="n">loss_per_component_current</span><span class="p">,</span> 
-                        <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;loss_function&quot;</span><span class="p">][</span><span class="s2">&quot;loss_weighting&quot;</span><span class="p">][</span><span class="s2">&quot;method_specs&quot;</span><span class="p">][</span><span class="s2">&quot;loss_per_component_initial&quot;</span><span class="p">],</span>
-                        <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;loss_function&quot;</span><span class="p">][</span><span class="s2">&quot;loss_weighting&quot;</span><span class="p">][</span><span class="s2">&quot;method_specs&quot;</span><span class="p">][</span><span class="s2">&quot;temperature&quot;</span><span class="p">],</span>
-                        <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
-                
+                        <span class="n">epoch</span><span class="p">,</span>
+                        <span class="n">loss_per_component_current</span><span class="p">,</span>
+                        <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;loss_function&quot;</span><span class="p">][</span><span class="s2">&quot;loss_weighting&quot;</span><span class="p">][</span><span class="s2">&quot;method_specs&quot;</span><span class="p">][</span>
+                            <span class="s2">&quot;loss_per_component_initial&quot;</span>
+                        <span class="p">],</span>
+                        <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;loss_function&quot;</span><span class="p">][</span><span class="s2">&quot;loss_weighting&quot;</span><span class="p">][</span><span class="s2">&quot;method_specs&quot;</span><span class="p">][</span>
+                            <span class="s2">&quot;temperature&quot;</span>
+                        <span class="p">],</span>
+                        <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">],</span>
+                    <span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;loss_function&quot;</span><span class="p">][</span><span class="s2">&quot;loss_weighting&quot;</span><span class="p">][</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;custom&quot;</span><span class="p">:</span>
+                    <span class="n">total_loss</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_sum</span><span class="p">(</span>
+                        <span class="n">tf</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span>
+                            <span class="n">loss_per_component</span><span class="p">,</span>
+                            <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;loss_function&quot;</span><span class="p">][</span><span class="s2">&quot;loss_weighting&quot;</span><span class="p">][</span><span class="s2">&quot;weights&quot;</span><span class="p">],</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+
             <span class="k">return</span> <span class="n">total_loss</span>
 
-        <span class="n">loss_components_expert</span> <span class="o">=</span> <span class="n">compute_loss_components</span><span class="p">(</span><span class="n">expert_elicited_statistics</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">,</span> <span class="n">expert</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">loss_components_training</span> <span class="o">=</span> <span class="n">compute_loss_components</span><span class="p">(</span><span class="n">training_elicited_statistics</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">,</span> <span class="n">expert</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">loss_per_component</span> <span class="o">=</span> <span class="n">compute_discrepancy</span><span class="p">(</span><span class="n">loss_components_expert</span><span class="p">,</span> <span class="n">loss_components_training</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">)</span>
+        <span class="n">loss_components_expert</span> <span class="o">=</span> <span class="n">compute_loss_components</span><span class="p">(</span>
+            <span class="n">expert_elicited_statistics</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">,</span> <span class="n">expert</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="n">loss_components_training</span> <span class="o">=</span> <span class="n">compute_loss_components</span><span class="p">(</span>
+            <span class="n">training_elicited_statistics</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">,</span> <span class="n">expert</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="n">loss_per_component</span> <span class="o">=</span> <span class="n">compute_discrepancy</span><span class="p">(</span>
+            <span class="n">loss_components_expert</span><span class="p">,</span> <span class="n">loss_components_training</span><span class="p">,</span> <span class="n">global_dict</span>
+        <span class="p">)</span>
         <span class="n">weighted_total_loss</span> <span class="o">=</span> <span class="n">compute_total_loss</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">loss_per_component</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">weighted_total_loss</span>
-        
-    <span class="k">def</span> <span class="nf">burnin_phase</span><span class="p">(</span><span class="n">expert_elicited_statistics</span><span class="p">,</span> <span class="n">priors</span><span class="p">,</span>
-                      <span class="n">one_forward_simulation</span><span class="p">,</span> <span class="n">compute_loss</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">burnin_phase</span><span class="p">(</span>
+        <span class="n">expert_elicited_statistics</span><span class="p">,</span> <span class="n">one_forward_simulation</span><span class="p">,</span> <span class="n">compute_loss</span><span class="p">,</span> <span class="n">global_dict</span>
+    <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        For the method &quot;parametric_prior&quot; it might be helpful to run different initializations</span>
 <span class="sd">        before the actual training starts in order to find a &#39;good&#39; set of initial values.</span>
@@ -522,8 +545,6 @@ document.write(`
 <span class="sd">        ----------</span>
 <span class="sd">        expert_elicited_statistics : dict</span>
 <span class="sd">            dictionary with expert elicited statistics.</span>
-<span class="sd">        priors : instance of the Priors class</span>
-<span class="sd">            initialized prior distributions ready for sampling</span>
 <span class="sd">        one_forward_simulation : callable</span>
 <span class="sd">            one forward simulation from prior samples to model-simulated elicited</span>
 <span class="sd">            statistics.</span>
@@ -542,40 +563,54 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">loss_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">init_var_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">save_prior</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;burnin&quot;</span><span class="p">]):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
             <span class="c1"># prepare generative model</span>
-            <span class="n">prior_model</span> <span class="o">=</span> <span class="n">priors</span><span class="p">(</span><span class="n">global_dict</span><span class="p">)</span>
+            <span class="n">prior_model</span> <span class="o">=</span> <span class="n">Priors</span><span class="p">(</span><span class="n">global_dict</span><span class="p">,</span> <span class="n">ground_truth</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
             <span class="c1"># generate simulations from model</span>
-            <span class="n">training_elicited_statistics</span> <span class="o">=</span> <span class="n">one_forward_simulation</span><span class="p">(</span><span class="n">prior_model</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">)</span>
+            <span class="n">training_elicited_statistics</span> <span class="o">=</span> <span class="n">one_forward_simulation</span><span class="p">(</span>
+                <span class="n">prior_model</span><span class="p">,</span> <span class="n">global_dict</span>
+            <span class="p">)</span>
             <span class="c1"># comput loss</span>
-            <span class="n">weighted_total_loss</span> <span class="o">=</span> <span class="n">compute_loss</span><span class="p">(</span><span class="n">training_elicited_statistics</span><span class="p">,</span> 
-                                               <span class="n">expert_elicited_statistics</span><span class="p">,</span>
-                                               <span class="n">global_dict</span><span class="p">,</span> <span class="n">epoch</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
-            
+            <span class="n">weighted_total_loss</span> <span class="o">=</span> <span class="n">compute_loss</span><span class="p">(</span>
+                <span class="n">training_elicited_statistics</span><span class="p">,</span>
+                <span class="n">expert_elicited_statistics</span><span class="p">,</span>
+                <span class="n">global_dict</span><span class="p">,</span>
+                <span class="n">epoch</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="p">)</span>
+
             <span class="n">init_var_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prior_model</span><span class="p">)</span>
+            <span class="n">save_prior</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prior_model</span><span class="o">.</span><span class="n">trainable_variables</span><span class="p">)</span>
             <span class="n">loss_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">weighted_total_loss</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+
+        <span class="n">path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/burnin_phase.pkl&quot;</span>
+        <span class="n">save_as_pkl</span><span class="p">((</span><span class="n">loss_list</span><span class="p">,</span> <span class="n">save_prior</span><span class="p">),</span> <span class="n">path</span><span class="p">)</span>
+
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">loss_list</span><span class="p">,</span> <span class="n">init_var_list</span>
-    
+
     <span class="c1"># get expert data</span>
     <span class="n">expert_elicited_statistics</span> <span class="o">=</span> <span class="n">load_expert_data</span><span class="p">(</span><span class="n">global_dict</span><span class="p">)</span>
-    
+
     <span class="c1"># compute loss for each set of initial values</span>
     <span class="n">loss_list</span><span class="p">,</span> <span class="n">init_prior</span> <span class="o">=</span> <span class="n">burnin_phase</span><span class="p">(</span>
-        <span class="n">expert_elicited_statistics</span><span class="p">,</span> <span class="n">priors</span><span class="p">,</span> <span class="n">one_forward_simulation</span><span class="p">,</span> <span class="n">compute_loss</span><span class="p">,</span> 
-        <span class="n">global_dict</span><span class="p">)</span>
-    
+        <span class="n">expert_elicited_statistics</span><span class="p">,</span> <span class="n">one_forward_simulation</span><span class="p">,</span> <span class="n">compute_loss</span><span class="p">,</span> <span class="n">global_dict</span>
+    <span class="p">)</span>
+
     <span class="c1"># extract minimum loss out of all runs and corresponding set of initial values</span>
     <span class="n">min_index</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">loss_list</span><span class="p">)</span>
     <span class="n">init_prior_model</span> <span class="o">=</span> <span class="n">init_prior</span><span class="p">[</span><span class="n">min_index</span><span class="p">]</span>
-    
-    <span class="c1"># run training with optimal set of initial values</span>
-    <span class="n">training_loop</span><span class="p">(</span><span class="n">expert_elicited_statistics</span><span class="p">,</span> <span class="n">init_prior_model</span><span class="p">,</span> 
-                  <span class="n">one_forward_simulation</span><span class="p">,</span> 
-                  <span class="n">compute_loss</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">)</span></div>
 
-    
+    <span class="c1"># run training with optimal set of initial values</span>
+    <span class="n">training_loop</span><span class="p">(</span>
+        <span class="n">expert_elicited_statistics</span><span class="p">,</span>
+        <span class="n">init_prior_model</span><span class="p">,</span>
+        <span class="n">one_forward_simulation</span><span class="p">,</span>
+        <span class="n">compute_loss</span><span class="p">,</span>
+        <span class="n">global_dict</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
 </pre></div>
 
                 </article>

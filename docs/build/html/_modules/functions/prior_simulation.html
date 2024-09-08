@@ -27,7 +27,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
@@ -192,14 +192,12 @@
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.custom_functions.html">user_input.custom_functions module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.design_matrices.html">user_input.design_matrices module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.generative_models.html">user_input.generative_models module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.utils.html">user_input.utils module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../../case_studies.html">Case Studies</a></li>
 </ul>
 
     </div>
@@ -321,53 +319,44 @@ document.write(`
 <span></span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
 <span class="kn">import</span> <span class="nn">tensorflow_probability</span> <span class="k">as</span> <span class="nn">tfp</span>
 <span class="kn">import</span> <span class="nn">bayesflow</span> <span class="k">as</span> <span class="nn">bf</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
 
 <span class="n">tfd</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">distributions</span>
 <span class="n">bfn</span> <span class="o">=</span> <span class="n">bf</span><span class="o">.</span><span class="n">networks</span>
 
 <span class="kn">from</span> <span class="nn">functions.helper_functions</span> <span class="kn">import</span> <span class="n">save_as_pkl</span>
 
-<div class="viewcode-block" id="priors">
-<a class="viewcode-back" href="../../api/functions/functions.prior_simulation.html#functions.prior_simulation.priors">[docs]</a>
-<span class="k">def</span> <span class="nf">priors</span><span class="p">(</span><span class="n">global_dict</span><span class="p">,</span> <span class="n">ground_truth</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+<span class="c1"># initalize generator model</span>
+<div class="viewcode-block" id="Priors">
+<a class="viewcode-back" href="../../api/functions/functions.prior_simulation.html#functions.prior_simulation.Priors">[docs]</a>
+<span class="k">class</span> <span class="nc">Priors</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Creates a class instantiation which initializes and samples from prior </span>
-<span class="sd">    distributions</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    global_dict : dict</span>
-<span class="sd">        dictionary including all user-input settings..</span>
-<span class="sd">    ground_truth : bool</span>
-<span class="sd">        whether simulation is based on a pre-specified ground truth </span>
-<span class="sd">        (for method validation). The default is False.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    prior_model : class instance</span>
-<span class="sd">        class instance for initializing and sampling from prior distributions.</span>
-
+<span class="sd">    Initializes the hyperparameters of the prior distributions.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># initalize generator model</span>
-    <span class="k">class</span> <span class="nc">Priors</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">global_dict</span> <span class="o">=</span> <span class="n">global_dict</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ground_truth</span> <span class="o">=</span> <span class="n">ground_truth</span>
-            <span class="c1"># initialize hyperparameter for learning (if true hyperparameter</span>
-            <span class="c1"># are given, no initialization is needed)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">ground_truth</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">init_priors</span> <span class="o">=</span> <span class="n">intialize_priors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_dict</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">init_priors</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">sample_from_priors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">init_priors</span><span class="p">,</span> 
-                                               <span class="bp">self</span><span class="o">.</span><span class="n">ground_truth</span><span class="p">,</span> 
-                                               <span class="bp">self</span><span class="o">.</span><span class="n">global_dict</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">prior_samples</span>
-    <span class="c1"># create a class instance</span>
-    <span class="n">prior_model</span> <span class="o">=</span> <span class="n">Priors</span><span class="p">(</span><span class="n">ground_truth</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">prior_model</span></div>
+<div class="viewcode-block" id="Priors.__init__">
+<a class="viewcode-back" href="../../api/functions/functions.prior_simulation.html#functions.prior_simulation.Priors.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">global_dict</span> <span class="o">=</span> <span class="n">global_dict</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ground_truth</span> <span class="o">=</span> <span class="n">ground_truth</span>
+        <span class="c1"># initialize hyperparameter for learning (if true hyperparameter</span>
+        <span class="c1"># are given, no initialization is needed)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">ground_truth</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">init_priors</span> <span class="o">=</span> <span class="n">intialize_priors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_dict</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">init_priors</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Priors.__call__">
+<a class="viewcode-back" href="../../api/functions/functions.prior_simulation.html#functions.prior_simulation.Priors.__call__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">sample_from_priors</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">init_priors</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ground_truth</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_dict</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">prior_samples</span></div>
+</div>
+
 
 
 <div class="viewcode-block" id="intialize_priors">
@@ -393,13 +382,14 @@ document.write(`
     <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;parametric_prior&quot;</span><span class="p">:</span>
         <span class="c1"># list for saving initialize hyperparameter values</span>
         <span class="n">init_hyperparam_list</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c1"># loop over model parameter and initialize each hyperparameter </span>
+        <span class="c1"># loop over model parameter and initialize each hyperparameter</span>
         <span class="c1"># given the user specified initialization</span>
         <span class="k">for</span> <span class="n">model_param</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">no_param</span><span class="p">):</span>
             <span class="n">get_hyp_dict</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;model_params&quot;</span><span class="p">][</span><span class="s2">&quot;hyperparams_dict&quot;</span><span class="p">]</span>
             <span class="n">initialized_hyperparam</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">init_val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">get_hyp_dict</span><span class="p">[</span><span class="n">model_param</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> 
-                                      <span class="n">get_hyp_dict</span><span class="p">[</span><span class="n">model_param</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>  
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">init_val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                <span class="n">get_hyp_dict</span><span class="p">[</span><span class="n">model_param</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">get_hyp_dict</span><span class="p">[</span><span class="n">model_param</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+            <span class="p">):</span>
                 <span class="c1"># check whether initial value is a distributions</span>
                 <span class="c1"># TODO currently we silently assume that we have either a value or a tfd.distribution object</span>
                 <span class="k">try</span><span class="p">:</span>
@@ -408,36 +398,40 @@ document.write(`
                     <span class="n">initial_value</span> <span class="o">=</span> <span class="n">init_val</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">initial_value</span> <span class="o">=</span> <span class="n">init_val</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
-                
+
                 <span class="c1"># if value was initialized on the log level apply exp. transf.</span>
                 <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;log_&quot;</span><span class="p">):</span>
                     <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="s2">&quot;log_&quot;</span><span class="p">)</span>
-                    
+
                 <span class="c1"># initialize hyperparameter</span>
                 <span class="n">initialized_hyperparam</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span>
-                    <span class="n">initial_value</span> <span class="o">=</span> <span class="n">initial_value</span><span class="p">,</span>
-                    <span class="n">trainable</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-                    <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">initial_value</span><span class="o">=</span><span class="n">initial_value</span><span class="p">,</span>
+                    <span class="n">trainable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="p">)</span>
-            <span class="n">init_hyperparam_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">initialized_hyperparam</span><span class="p">)</span>    
+            <span class="n">init_hyperparam_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">initialized_hyperparam</span><span class="p">)</span>
         <span class="c1"># save initialized priors</span>
         <span class="n">init_prior</span> <span class="o">=</span> <span class="n">init_hyperparam_list</span>
         <span class="c1"># save file in object</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;/init_prior.pkl&#39;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/init_prior.pkl&quot;</span>
         <span class="n">save_as_pkl</span><span class="p">(</span><span class="n">init_prior</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;deep_prior&quot;</span><span class="p">:</span>
         <span class="c1"># for more information see BayesFlow documentation</span>
         <span class="c1"># https://bayesflow.org/api/bayesflow.inference_networks.html</span>
-            
+        <span class="k">assert</span> <span class="n">no_param</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;minimum number of parameters must be 2.&quot;</span>
+
+        <span class="n">inn_param_dict</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;model_params&quot;</span><span class="p">][</span><span class="s2">&quot;normalizing_flow_specs&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">inn_param_dict</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;base_distribution&quot;</span><span class="p">)</span>
+
         <span class="n">invertible_neural_network</span> <span class="o">=</span> <span class="n">bfn</span><span class="o">.</span><span class="n">InvertibleNetwork</span><span class="p">(</span>
-            <span class="n">num_params</span> <span class="o">=</span> <span class="n">no_param</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;model_params&quot;</span><span class="p">][</span><span class="s1">&#39;normalizing_flow_specs&#39;</span><span class="p">]</span>
+            <span class="n">num_params</span><span class="o">=</span><span class="n">no_param</span><span class="p">,</span> <span class="o">**</span><span class="n">inn_param_dict</span>
         <span class="p">)</span>
         <span class="c1"># save initialized priors</span>
         <span class="n">init_prior</span> <span class="o">=</span> <span class="n">invertible_neural_network</span>
-        
+
     <span class="k">return</span> <span class="n">init_prior</span></div>
+
 
 
 <div class="viewcode-block" id="sample_from_priors">
@@ -471,12 +465,18 @@ document.write(`
     <span class="n">no_param</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;model_params&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
 
     <span class="k">if</span> <span class="n">ground_truth</span><span class="p">:</span>
+        <span class="c1"># number of samples for ground truth</span>
+        <span class="n">rep_true</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;expert_input&quot;</span><span class="p">][</span><span class="s2">&quot;rep&quot;</span><span class="p">]</span>
         <span class="n">priors</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="c1"># TODO: check what happens if you specify one multivariate distribution: How does the code has to be changed?</span>
-        <span class="k">for</span> <span class="n">prior</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;expert_input&quot;</span><span class="p">][</span><span class="s1">&#39;simulator_specs&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
-            <span class="c1"># sample from the prior distribution </span>
-            <span class="n">priors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prior</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">rep</span><span class="p">)))</span>
-        <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">priors</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">prior</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;expert_input&quot;</span><span class="p">][</span><span class="s2">&quot;simulator_specs&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+            <span class="c1"># sample from the prior distribution</span>
+            <span class="n">priors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prior</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">rep_true</span><span class="p">)))</span>  <span class="c1">#</span>
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">priors</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+            <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">priors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">priors</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;parametric_prior&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">ground_truth</span><span class="p">:</span>
         <span class="n">initialized_hyperparameters</span> <span class="o">=</span> <span class="n">initialized_priors</span>
@@ -485,44 +485,74 @@ document.write(`
             <span class="c1"># get the prior distribution family as specified by the user</span>
             <span class="n">prior_family</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;model_params&quot;</span><span class="p">][</span><span class="s2">&quot;family&quot;</span><span class="p">][</span><span class="n">model_param</span><span class="p">]</span>
             <span class="c1"># save hyperparameter values in list</span>
-            <span class="n">hyperparams</span> <span class="o">=</span> <span class="p">[</span><span class="n">initialized_hyperparameters</span><span class="p">[</span><span class="n">model_param</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> 
-                           <span class="ow">in</span> <span class="n">initialized_hyperparameters</span><span class="p">[</span><span class="n">model_param</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
-            <span class="c1"># sample from the prior distribution </span>
-            <span class="n">priors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prior_family</span><span class="p">(</span><span class="o">*</span><span class="n">hyperparams</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">B</span><span class="p">,</span> <span class="n">rep</span><span class="p">)))</span>
+            <span class="n">hyperparams</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">initialized_hyperparameters</span><span class="p">[</span><span class="n">model_param</span><span class="p">][</span><span class="n">key</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">initialized_hyperparameters</span><span class="p">[</span><span class="n">model_param</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+            <span class="p">]</span>
+            <span class="c1"># sample from the prior distribution</span>
+            <span class="n">priors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prior_family</span><span class="p">(</span><span class="o">*</span><span class="n">hyperparams</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">B</span><span class="p">,</span> <span class="n">rep</span><span class="p">)))</span>  <span class="c1">#</span>
         <span class="c1"># stack all prior distributions into one tf.Tensor of</span>
         <span class="c1"># shape (B, rep, num_parameters)</span>
         <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">priors</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;deep_prior&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">ground_truth</span><span class="p">:</span>
         <span class="c1"># initialize base distribution</span>
-        <span class="n">base_distribution</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">no_param</span><span class="p">),</span> 
-                                       <span class="n">scale</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">no_param</span><span class="p">))</span>
+        <span class="n">base_dist_family</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;model_params&quot;</span><span class="p">][</span><span class="s2">&quot;normalizing_flow_specs&quot;</span><span class="p">][</span>
+            <span class="s2">&quot;base_distribution&quot;</span>
+        <span class="p">][</span><span class="s2">&quot;family&quot;</span><span class="p">]</span>
+        <span class="n">base_dist_args</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;model_params&quot;</span><span class="p">][</span><span class="s2">&quot;normalizing_flow_specs&quot;</span><span class="p">][</span>
+            <span class="s2">&quot;base_distribution&quot;</span>
+        <span class="p">][</span><span class="s2">&quot;family_args&quot;</span><span class="p">]</span>
+        <span class="c1"># get params of distribution family</span>
+        <span class="n">family_params</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getfullargspec</span><span class="p">(</span><span class="n">base_dist_family</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span>
+            <span class="nb">set</span><span class="p">([</span><span class="s2">&quot;self&quot;</span><span class="p">,</span> <span class="s2">&quot;validate_args&quot;</span><span class="p">,</span> <span class="s2">&quot;allow_nan_stats&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">])</span>
+        <span class="p">)</span>
+        <span class="c1"># check whether arguments are named correctly</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">set</span><span class="p">(</span><span class="n">base_dist_args</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">family_params</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;family_args of base distribution must match with parameter names of function provided in family. Got </span><span class="si">{</span><span class="nb">set</span><span class="p">(</span><span class="n">base_dist_args</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2"> but require </span><span class="si">{</span><span class="n">family_params</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">base_dist</span> <span class="o">=</span> <span class="n">base_dist_family</span><span class="p">(</span><span class="o">**</span><span class="n">base_dist_args</span><span class="p">)</span>
+        <span class="c1"># check whether distribution has correct shape</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">list</span><span class="p">(</span><span class="n">base_dist</span><span class="o">.</span><span class="n">event_shape</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">no_param</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;shape of base distribution does not match with number of model parameters. Got </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">base_dist</span><span class="o">.</span><span class="n">event_shape</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> but require </span><span class="si">{</span><span class="n">no_param</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
         <span class="c1"># sample from base distribution</span>
-        <span class="n">u</span> <span class="o">=</span> <span class="n">base_distribution</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">B</span><span class="p">,</span> <span class="n">rep</span><span class="p">))</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">base_dist</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">B</span><span class="p">,</span> <span class="n">rep</span><span class="p">))</span>  <span class="c1">#</span>
         <span class="c1"># apply transformation function to samples from base distr.</span>
-        <span class="n">prior_samples</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">initialized_priors</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">condition</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">inverse</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">prior_samples</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">initialized_priors</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">condition</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="c1"># create results dictionary</span>
-        <span class="n">prior_samples_dict</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;prior_samples&quot;</span><span class="p">:</span> <span class="n">prior_samples</span>
-        <span class="p">}</span>
-    
-        <span class="c1">## scaling of prior distributions, default is no scaling (value = 1.)</span>
-        <span class="c1"># scale prior samples</span>
-        <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">prior_samples</span><span class="p">[:,:,</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">scaling_factor</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> 
-                                  <span class="n">scaling_factor</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">scale_prior_samples</span><span class="p">)],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">prior_samples_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;prior_samples&quot;</span><span class="p">:</span> <span class="n">prior_samples</span><span class="p">}</span>
+
+        <span class="c1"># scaling of prior distributions, default is no scaling (value = 1.)</span>
+        <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">prior_samples</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">scaling_factor</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">scaling_factor</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">scale_prior_samples</span><span class="p">)</span>
+            <span class="p">],</span>
+            <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+
         <span class="c1"># save results in dict</span>
         <span class="n">prior_samples_dict</span><span class="p">[</span><span class="s2">&quot;scaled_prior_samples&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prior_samples</span>
         <span class="c1"># save results in path</span>
         <span class="n">saving_path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-        <span class="n">path_prior_samples_dict</span> <span class="o">=</span> <span class="n">saving_path</span><span class="o">+</span><span class="s1">&#39;/prior_samples_dict.pkl&#39;</span>
+        <span class="n">path_prior_samples_dict</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/prior_samples_dict.pkl&quot;</span>
         <span class="n">save_as_pkl</span><span class="p">(</span><span class="n">prior_samples_dict</span><span class="p">,</span> <span class="n">path_prior_samples_dict</span><span class="p">)</span>
-        
+
     <span class="c1"># save results in path</span>
     <span class="n">saving_path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">ground_truth</span><span class="p">:</span>
-        <span class="n">saving_path</span> <span class="o">=</span> <span class="n">saving_path</span><span class="o">+</span><span class="s2">&quot;/expert&quot;</span>
-    <span class="n">path_prior_samples</span> <span class="o">=</span> <span class="n">saving_path</span><span class="o">+</span><span class="s1">&#39;/prior_samples.pkl&#39;</span>
+        <span class="n">saving_path</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/expert&quot;</span>
+    <span class="n">path_prior_samples</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/prior_samples.pkl&quot;</span>
     <span class="n">save_as_pkl</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">,</span> <span class="n">path_prior_samples</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">prior_samples</span></div>
 

@@ -27,7 +27,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
@@ -192,14 +192,12 @@
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.custom_functions.html">user_input.custom_functions module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.design_matrices.html">user_input.design_matrices module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.generative_models.html">user_input.generative_models module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.utils.html">user_input.utils module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../../case_studies.html">Case Studies</a></li>
 </ul>
 
     </div>
@@ -320,10 +318,13 @@ document.write(`
   <h1>Source code for functions.helper_functions</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+
 
 <div class="viewcode-block" id="save_as_pkl">
 <a class="viewcode-back" href="../../api/functions/functions.helper_functions.html#functions.helper_functions.save_as_pkl">[docs]</a>
-<span class="k">def</span> <span class="nf">save_as_pkl</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="n">path_to_file</span><span class="p">):</span> 
+<span class="k">def</span> <span class="nf">save_as_pkl</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="n">path_to_file</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Helper functions to save a file as pickle.</span>
 
@@ -342,8 +343,102 @@ document.write(`
     <span class="c1"># if directory does not exists, create it</span>
     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path_to_file</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="c1"># save file to location as pickle</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path_to_file</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">df_file</span><span class="p">:</span>
-        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="n">file</span> <span class="o">=</span> <span class="n">df_file</span><span class="p">)</span> </div>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path_to_file</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">df_file</span><span class="p">:</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">df_file</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="save_hyperparameters">
+<a class="viewcode-back" href="../../api/functions/functions.helper_functions.html#functions.helper_functions.save_hyperparameters">[docs]</a>
+<span class="k">def</span> <span class="nf">save_hyperparameters</span><span class="p">(</span><span class="n">generator</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    extracts the learnable hyperparameter values from the model and saves them</span>
+<span class="sd">    in appropriate form for post-analysis</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    generator : trainable tf.model</span>
+<span class="sd">        initialized prior model used for training.</span>
+<span class="sd">    epoch : int</span>
+<span class="sd">        Current epoch.</span>
+<span class="sd">    global_dict : dict</span>
+<span class="sd">        dictionary including all user-input settings.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    res_dict : dict</span>
+<span class="sd">        learned values for each hyperparameter and epoch.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">saving_path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">epoch</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># prepare list for saving hyperparameter values</span>
+        <span class="n">hyperparams</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;model_params&quot;</span><span class="p">][</span><span class="s2">&quot;hyperparams_dict&quot;</span><span class="p">]</span>
+        <span class="n">hyp_list</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">hyperparams</span><span class="p">:</span>
+            <span class="n">hyp_list</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="c1"># create a dict with empty list for each hyperparameter</span>
+        <span class="n">res_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">hyp_list</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;log_&quot;</span><span class="p">):</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="s2">&quot;log_&quot;</span><span class="p">)</span>
+            <span class="n">res_dict</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">path_res_dict</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/res_dict.pkl&quot;</span>
+        <span class="n">res_dict</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="sa">rf</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">path_res_dict</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># extract learned hyperparameter values</span>
+    <span class="n">hyperparams</span> <span class="o">=</span> <span class="n">generator</span><span class="o">.</span><span class="n">trainable_variables</span>
+    <span class="c1"># save names and values of hyperparameters</span>
+    <span class="n">vars_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">hyperparams</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hyperparams</span><span class="p">))]</span>
+    <span class="n">vars_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">hyperparams</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hyperparams</span><span class="p">))]</span>
+    <span class="c1"># create a final dict of hyperparameter values</span>
+    <span class="k">for</span> <span class="n">val</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">vars_values</span><span class="p">,</span> <span class="n">vars_names</span><span class="p">):</span>
+        <span class="n">res_dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+    <span class="c1"># save result dictionary</span>
+    <span class="n">path_res_dict</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/res_dict.pkl&quot;</span>
+    <span class="n">save_as_pkl</span><span class="p">(</span><span class="n">res_dict</span><span class="p">,</span> <span class="n">path_res_dict</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res_dict</span></div>
+
+
+
+<div class="viewcode-block" id="marginal_prior_moments">
+<a class="viewcode-back" href="../../api/functions/functions.helper_functions.html#functions.helper_functions.marginal_prior_moments">[docs]</a>
+<span class="k">def</span> <span class="nf">marginal_prior_moments</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Used for summarizing learned prior distributions in the case of method=&#39;deep_prior&#39;.</span>
+<span class="sd">    Computes mean and standard deviation of the sampled marginal prior distributions for each epoch.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    prior_samples : dict</span>
+<span class="sd">        Samples from prior distributions.</span>
+<span class="sd">    epoch : int</span>
+<span class="sd">        current epoch.</span>
+<span class="sd">    global_dict : dict</span>
+<span class="sd">        dictionary including all user-input settings.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    res_dict : dict</span>
+<span class="sd">        returns mean (key:&#39;means&#39;) and standard deviation (key:&#39;stds&#39;) for each sampled</span>
+<span class="sd">        marginal prior distribution; for each epoch.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">saving_path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">epoch</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">res_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;means&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;stds&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">path_res_dict</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/res_dict.pkl&quot;</span>
+        <span class="n">res_dict</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="sa">rf</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">path_res_dict</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">means</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">sds</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_std</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">val</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">means</span><span class="p">,</span> <span class="n">sds</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;means&quot;</span><span class="p">,</span> <span class="s2">&quot;stds&quot;</span><span class="p">]):</span>
+        <span class="n">res_dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+    <span class="c1"># save result dictionary</span>
+    <span class="n">path_res_dict</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/res_dict.pkl&quot;</span>
+    <span class="n">save_as_pkl</span><span class="p">(</span><span class="n">res_dict</span><span class="p">,</span> <span class="n">path_res_dict</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res_dict</span></div>
 
 </pre></div>
 

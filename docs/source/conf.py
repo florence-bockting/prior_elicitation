@@ -73,11 +73,4 @@ nb_execution_mode = "off"
 # download notebooks as .ipynb and not as .ipynb.txt
 html_sourcelink_suffix = ""
 
-import os
-suppress_warnings = [
-    f"autosectionlabel._examples/{filename.split('.')[0]}"
-    for filename in os.listdir("../../elicit/simulations/case_studies/notebooks")
-    if os.path.isfile(os.path.join("notebooks/", filename))
-]  # Avoid duplicate label warnings for Jupyter notebooks.
-
 remove_from_toctrees = ["_autosummary/*"]

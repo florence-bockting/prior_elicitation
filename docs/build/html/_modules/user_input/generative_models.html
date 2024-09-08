@@ -27,7 +27,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
@@ -192,14 +192,12 @@
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.custom_functions.html">user_input.custom_functions module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.design_matrices.html">user_input.design_matrices module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.generative_models.html">user_input.generative_models module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.utils.html">user_input.utils module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../../case_studies.html">Case Studies</a></li>
 </ul>
 
     </div>
@@ -324,7 +322,6 @@ document.write(`
 <span class="n">tfd</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">distributions</span>
 <span class="n">tfb</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">bijectors</span>
 
-<span class="c1"># define generative model</span>
 <div class="viewcode-block" id="GenerativeBinomialModel">
 <a class="viewcode-back" href="../../api/user_input/user_input.generative_models.html#user_input.generative_models.GenerativeBinomialModel">[docs]</a>
 <span class="k">class</span> <span class="nc">GenerativeBinomialModel</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -381,8 +378,66 @@ document.write(`
                     <span class="p">)</span></div>
 </div>
 
+
+<div class="viewcode-block" id="GenerativeBinomialModelVariant">
+<a class="viewcode-back" href="../../api/user_input/user_input.generative_models.html#user_input.generative_models.GenerativeBinomialModelVariant">[docs]</a>
+<span class="k">class</span> <span class="nc">GenerativeBinomialModelVariant</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="GenerativeBinomialModelVariant.__call__">
+<a class="viewcode-back" href="../../api/user_input/user_input.generative_models.html#user_input.generative_models.GenerativeBinomialModelVariant.__call__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                <span class="n">prior_samples</span><span class="p">,</span>        
+                <span class="n">design_matrix</span><span class="p">,</span>      
+                <span class="o">**</span><span class="n">kwargs</span>        
+                <span class="p">):</span>  
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Binomial model with one continuous predictor.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        prior_samples : dict</span>
+<span class="sd">            samples from prior distributions.</span>
+<span class="sd">        design_matrix : tf.Tensor</span>
+<span class="sd">            design matrix.</span>
+<span class="sd">        total_count : int</span>
+<span class="sd">            total counts of Binomial model.</span>
+<span class="sd">        **kwargs : keyword argument, optional</span>
+<span class="sd">            additional keyword arguments</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dictionary with the following keys:</span>
+<span class="sd">            </span>
+<span class="sd">        - likelihood: model likelihood</span>
+<span class="sd">        - ypred: model predictions; for discrete likelihoods ypred=None as it</span>
+<span class="sd">          will be approximated via the softmax-gumble trick</span>
+<span class="sd">        - epred: predictions of linear predictor</span>
+<span class="sd">        - prior samples: samples from prior distributions</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># linear predictor</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">design_matrix</span> <span class="o">@</span> <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># map linear predictor to theta</span>
+        <span class="n">epred</span> <span class="o">=</span> <span class="n">theta</span><span class="p">[:,:,:,</span><span class="mi">0</span><span class="p">]</span>
         
-   <span class="c1"># define generative model</span>
+        <span class="c1"># define likelihood</span>
+        <span class="n">likelihood</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span>
+            <span class="n">loc</span> <span class="o">=</span> <span class="n">epred</span><span class="p">,</span> 
+            <span class="n">scale</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">epred</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="p">)</span>
+        
+        <span class="c1"># sample prior predictions</span>
+        <span class="n">ypred</span> <span class="o">=</span> <span class="n">likelihood</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+        
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">likelihood</span> <span class="o">=</span> <span class="n">likelihood</span><span class="p">,</span>     
+                    <span class="n">ypred</span> <span class="o">=</span> <span class="n">ypred</span><span class="p">,</span>                 
+                    <span class="n">epred</span> <span class="o">=</span> <span class="n">epred</span><span class="p">,</span>
+                    <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">prior_samples</span>                 
+                    <span class="p">)</span></div>
+</div>
+
+
 <div class="viewcode-block" id="GenerativePoissonModel">
 <a class="viewcode-back" href="../../api/user_input/user_input.generative_models.html#user_input.generative_models.GenerativePoissonModel">[docs]</a>
 <span class="k">class</span> <span class="nc">GenerativePoissonModel</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -442,6 +497,7 @@ document.write(`
 <div class="viewcode-block" id="GenerativeNormalModel.__call__">
 <a class="viewcode-back" href="../../api/user_input/user_input.generative_models.html#user_input.generative_models.GenerativeNormalModel.__call__">[docs]</a>
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                <span class="n">ground_truth</span><span class="p">,</span> 
                 <span class="n">prior_samples</span><span class="p">,</span>        
                 <span class="n">design_matrix</span><span class="p">,</span>       
                 <span class="o">**</span><span class="n">kwargs</span>        
@@ -449,10 +505,15 @@ document.write(`
         <span class="c1"># compute linear predictor term</span>
         <span class="n">epred</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span> <span class="o">@</span> <span class="n">tf</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">design_matrix</span><span class="p">)</span>
         
+        <span class="k">if</span> <span class="n">ground_truth</span><span class="p">:</span>
+            <span class="n">sigma</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">[:,:,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sigma</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">[:,:,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        
         <span class="c1"># define likelihood</span>
         <span class="n">likelihood</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span>
             <span class="n">loc</span> <span class="o">=</span> <span class="n">epred</span><span class="p">,</span> 
-            <span class="n">scale</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">softplus</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">[:,:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">scale</span> <span class="o">=</span> <span class="n">sigma</span> <span class="c1">#tf.ones(epred.shape)*0.11</span>
             <span class="p">)</span>
         
         <span class="c1"># sample prior predictive data</span>
@@ -500,23 +561,22 @@ document.write(`
             <span class="n">axis</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
         
         <span class="c1"># compute R2</span>
-        <span class="n">R2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">epred</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> 
-                       <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">ypred</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
-        
-        <span class="c1"># prior samples on correct scale</span>
-        <span class="n">prior_samples2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">prior_samples</span><span class="p">[:,:,:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> 
-                                   <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">softplus</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">[:,:,</span><span class="o">-</span><span class="mi">1</span><span class="p">])[:,:,</span><span class="kc">None</span><span class="p">]],</span>
-                                   <span class="mi">2</span><span class="p">)</span>
+        <span class="n">log_R2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">epred</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)),</span>
+                                <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">ypred</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)))</span>
      
+        <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">prior_samples</span><span class="p">[:,:,:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                   <span class="n">prior_samples</span><span class="p">[:,:,</span><span class="o">-</span><span class="mi">1</span><span class="p">][:,:,</span><span class="kc">None</span><span class="p">]],</span>
+                                  <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">likelihood</span> <span class="o">=</span> <span class="n">likelihood</span><span class="p">,</span>     
                     <span class="n">ypred</span> <span class="o">=</span> <span class="n">ypred</span><span class="p">,</span>   
                     <span class="n">epred</span> <span class="o">=</span> <span class="n">epred</span><span class="p">,</span>
-                    <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">prior_samples2</span><span class="p">,</span>
+                    <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="p">,</span>
                     <span class="n">mean_effects</span> <span class="o">=</span> <span class="n">mean_effects</span><span class="p">,</span>
                     <span class="n">marginal_ReP</span> <span class="o">=</span> <span class="n">marg_ReP</span><span class="p">,</span>
                     <span class="n">marginal_EnC</span> <span class="o">=</span> <span class="n">marg_EnC</span><span class="p">,</span>
-                    <span class="n">R2</span> <span class="o">=</span> <span class="n">R2</span><span class="p">,</span>
-                    <span class="n">sigma</span> <span class="o">=</span> <span class="n">prior_samples2</span><span class="p">[:,:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">log_R2</span> <span class="o">=</span> <span class="n">log_R2</span><span class="p">,</span>
+                    <span class="n">sigma</span> <span class="o">=</span> <span class="n">sigma</span>
                     <span class="p">)</span></div>
 </div>
 
@@ -527,6 +587,7 @@ document.write(`
 <div class="viewcode-block" id="GenerativeNormalModel_param.__call__">
 <a class="viewcode-back" href="../../api/user_input/user_input.generative_models.html#user_input.generative_models.GenerativeNormalModel_param.__call__">[docs]</a>
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                <span class="n">ground_truth</span><span class="p">,</span>
                 <span class="n">prior_samples</span><span class="p">,</span>        
                 <span class="n">design_matrix</span><span class="p">,</span>       
                 <span class="o">**</span><span class="n">kwargs</span>        
@@ -612,8 +673,8 @@ document.write(`
             <span class="n">axis</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
         
         <span class="c1"># compute R2</span>
-        <span class="n">R2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">epred</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> 
-                       <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">ypred</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">log_R2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">epred</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)),</span>
+                                <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">ypred</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)))</span>
         
         <span class="c1"># prior samples on correct scale</span>
      
@@ -624,10 +685,11 @@ document.write(`
                     <span class="n">mean_effects</span> <span class="o">=</span> <span class="n">mean_effects</span><span class="p">,</span>
                     <span class="n">marginal_ReP</span> <span class="o">=</span> <span class="n">marg_ReP</span><span class="p">,</span>
                     <span class="n">marginal_EnC</span> <span class="o">=</span> <span class="n">marg_EnC</span><span class="p">,</span>
-                    <span class="n">R2</span> <span class="o">=</span> <span class="n">R2</span><span class="p">,</span>
+                    <span class="n">log_R2</span> <span class="o">=</span> <span class="n">log_R2</span><span class="p">,</span>
                     <span class="n">sigma</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="p">[:,:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
                     <span class="p">)</span></div>
 </div>
+
 
 
 <div class="viewcode-block" id="GenerativeMultilevelModel">
@@ -781,7 +843,374 @@ document.write(`
                     <span class="p">)</span></div>
 </div>
 
+
+<span class="c1"># generative model</span>
+<div class="viewcode-block" id="GenerativeToyModel">
+<a class="viewcode-back" href="../../api/user_input/user_input.generative_models.html#user_input.generative_models.GenerativeToyModel">[docs]</a>
+<span class="k">class</span> <span class="nc">GenerativeToyModel</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="GenerativeToyModel.__call__">
+<a class="viewcode-back" href="../../api/user_input/user_input.generative_models.html#user_input.generative_models.GenerativeToyModel.__call__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                 <span class="n">ground_truth</span><span class="p">,</span>
+                 <span class="n">prior_samples</span><span class="p">,</span> 
+                 <span class="n">design_matrix</span>
+                 <span class="p">):</span>  
+        
+        <span class="c1"># compute linear predictor term</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">@</span> <span class="n">tf</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">design_matrix</span><span class="p">)</span>
+
+        <span class="c1"># link function</span>
+        <span class="n">epred</span> <span class="o">=</span> <span class="n">theta</span>
+        
+        <span class="c1"># define likelihood</span>
+        <span class="n">likelihood</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span>
+            <span class="n">loc</span> <span class="o">=</span> <span class="n">epred</span><span class="p">,</span> 
+            <span class="n">scale</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">[:,:,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">)</span>
+        
+        <span class="c1"># sample prior predictive data</span>
+        <span class="n">ypred</span> <span class="o">=</span> <span class="n">likelihood</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+        
+        <span class="n">log_R2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">epred</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)),</span>
+                                  <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">ypred</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)))</span>
+        
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">likelihood</span> <span class="o">=</span> <span class="n">likelihood</span><span class="p">,</span>          <span class="c1"># obligatory: likelihood; callable</span>
+                    <span class="n">ypred</span> <span class="o">=</span> <span class="n">ypred</span><span class="p">,</span>                    <span class="c1"># obligatory: prior predictive data</span>
+                    <span class="n">epred</span> <span class="o">=</span> <span class="n">epred</span><span class="p">,</span>                    <span class="c1"># obligatory: samples from linear predictor</span>
+                    <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="p">,</span>
+                    <span class="n">sigma</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="p">[:,:,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="n">log_R2</span> <span class="o">=</span> <span class="n">log_R2</span>
+                    <span class="p">)</span></div>
+</div>
+
+
+<div class="viewcode-block" id="SkewnessModel">
+<a class="viewcode-back" href="../../api/user_input/user_input.generative_models.html#user_input.generative_models.SkewnessModel">[docs]</a>
+<span class="k">class</span> <span class="nc">SkewnessModel</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="SkewnessModel.__call__">
+<a class="viewcode-back" href="../../api/user_input/user_input.generative_models.html#user_input.generative_models.SkewnessModel.__call__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                 <span class="n">ground_truth</span><span class="p">,</span>
+                 <span class="n">prior_samples</span><span class="p">,</span>
+                 <span class="n">N</span><span class="p">):</span>  
+        <span class="n">X</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">]</span><span class="o">*</span><span class="nb">int</span><span class="p">(</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="p">[</span><span class="mf">1.</span><span class="p">]</span><span class="o">*</span><span class="nb">int</span><span class="p">(</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+        
+        <span class="n">mu</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">][:,:,</span><span class="kc">None</span><span class="p">]</span><span class="o">+</span><span class="n">prior_samples</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">][:,:,</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1">#p = tf.sigmoid(mu)</span>
+        <span class="n">epred</span> <span class="o">=</span> <span class="n">mu</span> <span class="c1">#tf.expand_dims(p, -1)</span>
+        <span class="c1"># if ground_truth:</span>
+        <span class="c1">#     sigma = prior_samples[:,:,2][:,:,None]</span>
+        <span class="c1"># else:</span>
+        <span class="c1">#     sigma = tf.exp(prior_samples[:,:,2][:,:,None])</span>
+        
+        <span class="n">likelihood</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="n">epred</span><span class="p">,</span> <span class="mf">.1</span><span class="p">)</span>
+        <span class="c1">#likelihood = tfd.Binomial(total_count=size, </span>
+        <span class="c1">#                          probs=epred)</span>
+        <span class="n">ypred</span> <span class="o">=</span> <span class="n">likelihood</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+        
+        <span class="n">R2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">epred</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+                       <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">ypred</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+       
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">likelihood</span> <span class="o">=</span> <span class="n">likelihood</span><span class="p">,</span>     
+                    <span class="n">ypred</span> <span class="o">=</span> <span class="n">ypred</span><span class="p">,</span>                 
+                    <span class="n">epred</span> <span class="o">=</span> <span class="n">epred</span><span class="p">,</span>
+                    <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="p">,</span>
+                  <span class="c1">#  sigma = sigma,</span>
+                    <span class="n">R2</span> <span class="o">=</span> <span class="n">R2</span>
+                    <span class="p">)</span></div>
+</div>
+
     
+<div class="viewcode-block" id="Horseshoe">
+<a class="viewcode-back" href="../../api/user_input/user_input.generative_models.html#user_input.generative_models.Horseshoe">[docs]</a>
+<span class="k">class</span> <span class="nc">Horseshoe</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="Horseshoe.__call__">
+<a class="viewcode-back" href="../../api/user_input/user_input.generative_models.html#user_input.generative_models.Horseshoe.__call__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">,</span> <span class="n">design_matrix</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">ground_truth</span><span class="p">:</span>
+            <span class="n">B</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">B</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="n">rep</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">N</span><span class="p">,</span><span class="n">D</span> <span class="o">=</span> <span class="n">design_matrix</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="n">D</span><span class="o">-</span><span class="mi">1</span>
+        
+        <span class="n">beta_0</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">][:,:,</span><span class="kc">None</span><span class="p">]</span>
+        <span class="n">tau</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">][:,:,</span><span class="kc">None</span><span class="p">]</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="p">[:,:,</span><span class="mi">2</span><span class="p">][:,:,</span><span class="kc">None</span><span class="p">]</span>
+        
+        <span class="n">lambda_j</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">HalfCauchy</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">B</span><span class="p">,</span><span class="n">rep</span><span class="p">,</span><span class="n">D</span><span class="p">))</span>
+        
+        <span class="n">beta_1j</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span><span class="n">scale</span><span class="o">=</span><span class="n">lambda_j</span><span class="o">*</span><span class="n">tau</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+        
+        <span class="c1"># linear predictor term</span>
+        <span class="n">epred</span> <span class="o">=</span> <span class="n">beta_0</span> <span class="o">+</span> <span class="n">beta_1j</span> <span class="o">@</span> <span class="n">tf</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">design_matrix</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:])</span>
+        
+        <span class="c1"># Normal likelihood</span>
+        <span class="n">likelihood</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="n">epred</span><span class="p">,</span> <span class="n">sigma</span><span class="p">)</span>
+        
+        <span class="n">ypred</span> <span class="o">=</span> <span class="n">likelihood</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+        
+        <span class="c1"># shrinkage factor</span>
+        <span class="n">k_j</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mi">1</span><span class="o">+</span><span class="p">(</span><span class="n">N</span><span class="o">/</span><span class="n">tf</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">sigma</span><span class="p">))</span><span class="o">*</span><span class="n">tf</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">tau</span><span class="p">)</span><span class="o">*</span><span class="n">tf</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">lambda_j</span><span class="p">))</span>
+        
+        <span class="c1"># effective number of nonzero coefficients</span>
+        <span class="n">m_eff</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">k_j</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="n">log_R2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">epred</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)),</span>
+                                  <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">ypred</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)))</span>
+        
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">likelihood</span> <span class="o">=</span> <span class="n">likelihood</span><span class="p">,</span>     
+                    <span class="n">ypred</span> <span class="o">=</span> <span class="n">ypred</span><span class="p">,</span>                 
+                    <span class="n">epred</span> <span class="o">=</span> <span class="n">epred</span><span class="p">,</span>
+                    <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="p">,</span>
+                    <span class="n">k_j</span> <span class="o">=</span> <span class="n">k_j</span><span class="p">,</span>
+                    <span class="n">m_eff</span> <span class="o">=</span> <span class="n">m_eff</span><span class="p">,</span>
+                    <span class="n">beta_1j</span> <span class="o">=</span> <span class="n">beta_1j</span><span class="p">,</span>
+                    <span class="n">log_R2</span> <span class="o">=</span> <span class="n">log_R2</span>
+                    <span class="p">)</span></div>
+</div>
+
+    
+<div class="viewcode-block" id="RegularizedHorseshoe">
+<a class="viewcode-back" href="../../api/user_input/user_input.generative_models.html#user_input.generative_models.RegularizedHorseshoe">[docs]</a>
+<span class="k">class</span> <span class="nc">RegularizedHorseshoe</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="RegularizedHorseshoe.__call__">
+<a class="viewcode-back" href="../../api/user_input/user_input.generative_models.html#user_input.generative_models.RegularizedHorseshoe.__call__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">,</span> <span class="n">design_matrix</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">nu_local</span><span class="p">,</span> 
+                 <span class="n">sigma_slab</span><span class="p">,</span> <span class="n">nu_slab</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">ground_truth</span><span class="p">:</span>
+            <span class="n">B</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">B</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="n">rep</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">N</span><span class="p">,</span><span class="n">D</span> <span class="o">=</span> <span class="n">design_matrix</span><span class="o">.</span><span class="n">shape</span>
+        
+       
+        <span class="n">tau</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">][:,:,</span><span class="kc">None</span><span class="p">]</span>
+        
+        <span class="n">c2_aux</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">InverseGamma</span><span class="p">(</span><span class="n">nu_slab</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">nu_slab</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">B</span><span class="p">,</span><span class="n">rep</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+        
+        <span class="n">lambda_j</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">HalfStudentT</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">nu_local</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">B</span><span class="p">,</span><span class="n">rep</span><span class="p">,</span><span class="n">D</span><span class="p">))</span>
+        
+        <span class="n">c</span> <span class="o">=</span> <span class="n">sigma_slab</span><span class="o">*</span><span class="n">tf</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">c2_aux</span><span class="p">)</span>
+        
+        <span class="n">lambda_tilde_j</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="o">*</span><span class="n">tf</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">lambda_j</span><span class="p">),</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="o">+</span><span class="n">tf</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">lambda_j</span><span class="p">)</span><span class="o">*</span><span class="n">tf</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">tau</span><span class="p">))</span>
+            <span class="p">)</span>
+        
+        <span class="n">z_j</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span><span class="mf">1.</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">B</span><span class="p">,</span><span class="n">rep</span><span class="p">,</span><span class="n">D</span><span class="p">))</span>
+        
+        <span class="c1"># non-intercept coefficients get shrinkage prior</span>
+        <span class="n">beta_1j</span> <span class="o">=</span> <span class="n">z_j</span><span class="o">*</span><span class="n">lambda_tilde_j</span><span class="o">*</span><span class="n">tau</span>
+        
+        <span class="c1"># intercept gets a wider prior (no shrinkage desired)</span>
+        <span class="n">beta_0</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">][:,:,</span><span class="kc">None</span><span class="p">]</span>
+        
+        <span class="c1"># linear predictor term</span>
+        <span class="n">epred</span> <span class="o">=</span> <span class="n">beta_0</span> <span class="o">+</span> <span class="n">beta_1j</span> <span class="o">@</span> <span class="n">tf</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">design_matrix</span><span class="p">)</span>
+        
+        <span class="c1"># Normal likelihood</span>
+        <span class="n">likelihood</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="n">epred</span><span class="p">,</span> <span class="n">sigma</span><span class="p">)</span>
+        
+        <span class="n">ypred</span> <span class="o">=</span> <span class="n">likelihood</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+        
+        <span class="n">k_j</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mi">1</span><span class="o">+</span><span class="p">(</span><span class="n">N</span><span class="o">/</span><span class="n">tf</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">sigma</span><span class="p">))</span><span class="o">*</span><span class="n">tf</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">tau</span><span class="p">)</span><span class="o">*</span><span class="n">tf</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">lambda_j</span><span class="p">))</span>
+        
+        <span class="n">m_eff</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">k_j</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">likelihood</span> <span class="o">=</span> <span class="n">likelihood</span><span class="p">,</span>     
+                    <span class="n">ypred</span> <span class="o">=</span> <span class="n">ypred</span><span class="p">,</span>                 
+                    <span class="n">epred</span> <span class="o">=</span> <span class="n">epred</span><span class="p">,</span>
+                    <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="p">,</span>
+                    <span class="n">k_j</span> <span class="o">=</span> <span class="n">k_j</span><span class="p">,</span>
+                    <span class="n">m_eff</span> <span class="o">=</span> <span class="n">m_eff</span><span class="p">,</span>
+                    <span class="n">beta_1j</span> <span class="o">=</span> <span class="n">beta_1j</span>
+                    <span class="p">)</span></div>
+</div>
+
+    
+<div class="viewcode-block" id="SkewnessModel2">
+<a class="viewcode-back" href="../../api/user_input/user_input.generative_models.html#user_input.generative_models.SkewnessModel2">[docs]</a>
+<span class="k">class</span> <span class="nc">SkewnessModel2</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="SkewnessModel2.__call__">
+<a class="viewcode-back" href="../../api/user_input/user_input.generative_models.html#user_input.generative_models.SkewnessModel2.__call__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                 <span class="n">ground_truth</span><span class="p">,</span>
+                <span class="n">prior_samples</span><span class="p">,</span>
+                <span class="n">N</span>
+                <span class="p">):</span>  
+       <span class="n">mu</span> <span class="o">=</span> <span class="n">prior_samples</span>
+       <span class="n">likelihood</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>
+       <span class="n">ypred</span> <span class="o">=</span> <span class="n">likelihood</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+       
+       <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">likelihood</span> <span class="o">=</span> <span class="n">likelihood</span><span class="p">,</span>     
+                    <span class="n">ypred</span> <span class="o">=</span> <span class="n">ypred</span><span class="p">,</span>                 
+                    <span class="n">epred</span> <span class="o">=</span> <span class="n">mu</span><span class="p">,</span>
+                    <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">prior_samples</span>                 
+                    <span class="p">)</span></div>
+</div>
+
+   
+<div class="viewcode-block" id="Model0">
+<a class="viewcode-back" href="../../api/user_input/user_input.generative_models.html#user_input.generative_models.Model0">[docs]</a>
+<span class="k">class</span> <span class="nc">Model0</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="Model0.__call__">
+<a class="viewcode-back" href="../../api/user_input/user_input.generative_models.html#user_input.generative_models.Model0.__call__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                 <span class="n">ground_truth</span><span class="p">,</span>
+                 <span class="n">prior_samples</span><span class="p">,</span>
+                 <span class="n">design_matrix</span><span class="p">,</span>
+                 <span class="n">total_count</span><span class="p">):</span>  
+        
+        <span class="n">epred</span> <span class="o">=</span> <span class="n">prior_samples</span> <span class="o">@</span> <span class="n">tf</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">design_matrix</span><span class="p">)</span>
+        
+        <span class="n">probs</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">epred</span><span class="p">)</span>
+        
+        <span class="n">likelihood</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Binomial</span><span class="p">(</span><span class="n">total_count</span> <span class="o">=</span> <span class="n">total_count</span><span class="p">,</span> 
+                                  <span class="n">probs</span> <span class="o">=</span> <span class="n">probs</span><span class="p">[:,:,:,</span><span class="kc">None</span><span class="p">])</span>
+        
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">likelihood</span> <span class="o">=</span> <span class="n">likelihood</span><span class="p">,</span>     
+                    <span class="n">ypred</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>                 
+                    <span class="n">epred</span> <span class="o">=</span> <span class="n">epred</span><span class="p">,</span>
+                    <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">prior_samples</span>
+                    <span class="p">)</span></div>
+</div>
+
+<span class="kn">from</span> <span class="nn">user_input.custom_functions</span> <span class="kn">import</span> <span class="n">group_quantiles</span>
+<div class="viewcode-block" id="Model1">
+<a class="viewcode-back" href="../../api/user_input/user_input.generative_models.html#user_input.generative_models.Model1">[docs]</a>
+<span class="k">class</span> <span class="nc">Model1</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="Model1.__call__">
+<a class="viewcode-back" href="../../api/user_input/user_input.generative_models.html#user_input.generative_models.Model1.__call__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                 <span class="n">ground_truth</span><span class="p">,</span>
+                 <span class="n">prior_samples</span><span class="p">,</span>
+                 <span class="n">design_matrix</span><span class="p">):</span>  
+            
+        <span class="n">epred</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="p">[:,:,:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">@</span> <span class="n">tf</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">design_matrix</span><span class="p">)</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">[:,:,</span><span class="o">-</span><span class="mi">1</span><span class="p">][:,:,</span><span class="kc">None</span><span class="p">])</span>
+        
+        <span class="n">likelihood</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="n">loc</span> <span class="o">=</span> <span class="n">epred</span><span class="p">,</span> 
+                                <span class="n">scale</span> <span class="o">=</span> <span class="n">sigma</span><span class="p">)</span>
+        
+        <span class="n">ypred</span> <span class="o">=</span> <span class="n">likelihood</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+        
+        <span class="n">group1</span> <span class="o">=</span> <span class="n">ypred</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">::</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">group2</span> <span class="o">=</span> <span class="n">ypred</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">::</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">group3</span> <span class="o">=</span> <span class="n">ypred</span><span class="p">[:,:,</span><span class="mi">2</span><span class="p">::</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">var_ypred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">ypred</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># R2</span>
+        <span class="n">var_epred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">epred</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> 
+        <span class="c1"># variance of difference between ypred and epred</span>
+        <span class="n">var_diff</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">ypred</span><span class="p">,</span> <span class="n">epred</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">var_total</span> <span class="o">=</span> <span class="n">var_epred</span> <span class="o">+</span> <span class="n">var_diff</span>
+        <span class="c1"># variance of linear predictor divided by total variance</span>
+        <span class="n">log_R2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">var_epred</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">var_total</span><span class="p">))</span>
+        
+        <span class="k">if</span> <span class="n">ground_truth</span><span class="p">:</span>
+            <span class="n">log_R2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">tfd</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">log_R2</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+        
+        <span class="c1"># computation of log R2</span>
+        <span class="c1"># log_R2 = tf.math.subtract(tf.math.log(tf.math.reduce_variance(epred, -1)),</span>
+        <span class="c1">#                           tf.math.log(tf.math.reduce_variance(ypred, -1)))</span>
+        
+        <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">prior_samples</span><span class="p">[:,:,:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> 
+                                   <span class="n">tf</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">[:,:,</span><span class="o">-</span><span class="mi">1</span><span class="p">][:,:,</span><span class="kc">None</span><span class="p">])],</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">likelihood</span> <span class="o">=</span> <span class="n">likelihood</span><span class="p">,</span>     
+                    <span class="n">ypred</span> <span class="o">=</span> <span class="n">ypred</span><span class="p">,</span>                 
+                    <span class="n">epred</span> <span class="o">=</span> <span class="n">epred</span><span class="p">,</span>
+                    <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="p">,</span>
+                    <span class="n">log_R2</span> <span class="o">=</span> <span class="n">log_R2</span><span class="p">,</span>
+                    <span class="n">group1</span> <span class="o">=</span> <span class="n">group1</span><span class="p">,</span>
+                    <span class="n">group2</span> <span class="o">=</span> <span class="n">group2</span><span class="p">,</span>
+                    <span class="n">group3</span> <span class="o">=</span> <span class="n">group3</span><span class="p">,</span>
+                    <span class="n">var_epred</span> <span class="o">=</span> <span class="n">var_epred</span><span class="p">,</span>
+                    <span class="n">var_ypred</span> <span class="o">=</span> <span class="n">var_ypred</span>
+                    <span class="p">)</span></div>
+</div>
+
+    
+<div class="viewcode-block" id="Model2">
+<a class="viewcode-back" href="../../api/user_input/user_input.generative_models.html#user_input.generative_models.Model2">[docs]</a>
+<span class="k">class</span> <span class="nc">Model2</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="Model2.__call__">
+<a class="viewcode-back" href="../../api/user_input/user_input.generative_models.html#user_input.generative_models.Model2.__call__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                 <span class="n">ground_truth</span><span class="p">,</span>
+                 <span class="n">prior_samples</span><span class="p">,</span>
+                 <span class="n">design_matrix</span><span class="p">):</span>  
+        
+        <span class="k">if</span> <span class="n">ground_truth</span><span class="p">:</span>
+            <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">,:]</span>
+        
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">prior_samples</span> <span class="o">@</span> <span class="n">tf</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">design_matrix</span><span class="p">)</span>
+        
+        <span class="n">epred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">theta</span><span class="p">[:,:,:,</span><span class="kc">None</span><span class="p">])</span>
+        
+        <span class="n">likelihood</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Poisson</span><span class="p">(</span><span class="n">epred</span><span class="p">)</span>
+ 
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">likelihood</span> <span class="o">=</span> <span class="n">likelihood</span><span class="p">,</span>     
+                    <span class="n">ypred</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>                 
+                    <span class="n">epred</span> <span class="o">=</span> <span class="n">epred</span><span class="p">[:,:,:,</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">prior_samples</span>
+                    <span class="p">)</span></div>
+</div>
+
+
+<div class="viewcode-block" id="Model3">
+<a class="viewcode-back" href="../../api/user_input/user_input.generative_models.html#user_input.generative_models.Model3">[docs]</a>
+<span class="k">class</span> <span class="nc">Model3</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="Model3.__call__">
+<a class="viewcode-back" href="../../api/user_input/user_input.generative_models.html#user_input.generative_models.Model3.__call__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                 <span class="n">ground_truth</span><span class="p">,</span>
+                 <span class="n">prior_samples</span><span class="p">,</span>
+                 <span class="n">design_matrix</span><span class="p">):</span>  
+        
+        <span class="n">epred</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="p">[:,:,:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">@</span> <span class="n">tf</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">design_matrix</span><span class="p">)</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">[:,:,</span><span class="o">-</span><span class="mi">1</span><span class="p">][:,:,</span><span class="kc">None</span><span class="p">])</span>
+        
+        <span class="n">likelihood</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="n">loc</span> <span class="o">=</span> <span class="n">epred</span><span class="p">,</span> 
+                                <span class="n">scale</span> <span class="o">=</span> <span class="n">sigma</span><span class="p">)</span>
+        
+        <span class="n">ypred</span> <span class="o">=</span> <span class="n">likelihood</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="n">ground_truth</span><span class="p">:</span>
+            <span class="c1"># variance of linear predictor </span>
+            <span class="n">var_epred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">epred</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> 
+            <span class="c1"># variance of difference between ypred and epred</span>
+            <span class="n">var_diff</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">ypred</span><span class="p">,</span> <span class="n">epred</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">var_total</span> <span class="o">=</span> <span class="n">var_epred</span> <span class="o">+</span> <span class="n">var_diff</span>
+            <span class="c1"># variance of linear predictor divided by total variance</span>
+            <span class="n">log_R2_true</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">var_epred</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">var_total</span><span class="p">))</span>
+            
+            <span class="n">log_R2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">tfd</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">log_R2_true</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">log_R2_true</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="c1"># variance of linear predictor </span>
+            <span class="n">var_epred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">epred</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> 
+            <span class="c1"># variance of difference between ypred and epred</span>
+            <span class="n">var_diff</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">ypred</span><span class="p">,</span> <span class="n">epred</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">var_total</span> <span class="o">=</span> <span class="n">var_epred</span> <span class="o">+</span> <span class="n">var_diff</span>
+            <span class="c1"># variance of linear predictor divided by total variance</span>
+            <span class="n">log_R2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">var_epred</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">var_total</span><span class="p">))</span>
+            
+        <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">prior_samples</span><span class="p">[:,:,:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> 
+                                   <span class="n">tf</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">[:,:,</span><span class="o">-</span><span class="mi">1</span><span class="p">][:,:,</span><span class="kc">None</span><span class="p">])],</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">likelihood</span> <span class="o">=</span> <span class="n">likelihood</span><span class="p">,</span>     
+                    <span class="n">ypred</span> <span class="o">=</span> <span class="n">ypred</span><span class="p">,</span>                 
+                    <span class="n">epred</span> <span class="o">=</span> <span class="n">epred</span><span class="p">,</span>
+                    <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="p">,</span>
+                    <span class="n">log_R2</span> <span class="o">=</span> <span class="n">log_R2</span><span class="p">,</span>
+                    <span class="n">log_R2_true</span> <span class="o">=</span> <span class="n">log_R2_true</span>
+                    <span class="p">)</span></div>
+</div>
 
 </pre></div>
 

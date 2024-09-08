@@ -27,7 +27,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
@@ -192,14 +192,12 @@
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.custom_functions.html">user_input.custom_functions module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.design_matrices.html">user_input.design_matrices module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.generative_models.html">user_input.generative_models module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.utils.html">user_input.utils module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../../case_studies.html">Case Studies</a></li>
 </ul>
 
     </div>
@@ -320,19 +318,28 @@ document.write(`
   <h1>Source code for functions.training</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
 <span class="kn">import</span> <span class="nn">tensorflow_probability</span> <span class="k">as</span> <span class="nn">tfp</span>
-<span class="kn">import</span> <span class="nn">time</span> 
+<span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="n">tfd</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">distributions</span>
 
-<span class="kn">from</span> <span class="nn">functions.helper_functions</span> <span class="kn">import</span> <span class="n">save_as_pkl</span>
-<span class="kn">from</span> <span class="nn">user_input.utils</span> <span class="kn">import</span> <span class="n">save_hyperparameters</span><span class="p">,</span> <span class="n">marginal_prior_moments</span>
+<span class="kn">from</span> <span class="nn">functions.helper_functions</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">save_as_pkl</span><span class="p">,</span>
+    <span class="n">save_hyperparameters</span><span class="p">,</span>
+    <span class="n">marginal_prior_moments</span><span class="p">,</span>
+<span class="p">)</span>
+
 
 <div class="viewcode-block" id="training_loop">
 <a class="viewcode-back" href="../../api/functions/functions.training.html#functions.training.training_loop">[docs]</a>
-<span class="k">def</span> <span class="nf">training_loop</span><span class="p">(</span><span class="n">expert_elicited_statistics</span><span class="p">,</span> <span class="n">prior_model_init</span><span class="p">,</span>
-                  <span class="n">one_forward_simulation</span><span class="p">,</span> <span class="n">compute_loss</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">training_loop</span><span class="p">(</span>
+    <span class="n">expert_elicited_statistics</span><span class="p">,</span>
+    <span class="n">prior_model_init</span><span class="p">,</span>
+    <span class="n">one_forward_simulation</span><span class="p">,</span>
+    <span class="n">compute_loss</span><span class="p">,</span>
+    <span class="n">global_dict</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Wrapper that runs the optimization algorithms for E epochs.</span>
 
@@ -366,22 +373,29 @@ document.write(`
         <span class="n">get_optimizer</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;optimization_settings&quot;</span><span class="p">][</span><span class="s2">&quot;optimizer&quot;</span><span class="p">]</span>
         <span class="n">args_optimizer</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;optimization_settings&quot;</span><span class="p">][</span><span class="s2">&quot;optimizer_specs&quot;</span><span class="p">]</span>
         <span class="n">optimizer</span> <span class="o">=</span> <span class="n">get_optimizer</span><span class="p">(</span><span class="o">**</span><span class="n">args_optimizer</span><span class="p">)</span>
-        
-        <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">GradientTape</span><span class="p">()</span> <span class="k">as</span> <span class="n">tape</span><span class="p">:</span> 
+
+        <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">GradientTape</span><span class="p">()</span> <span class="k">as</span> <span class="n">tape</span><span class="p">:</span>
             <span class="c1"># generate simulations from model</span>
-            <span class="n">training_elicited_statistics</span> <span class="o">=</span> <span class="n">one_forward_simulation</span><span class="p">(</span><span class="n">prior_model</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">)</span>
+            <span class="n">training_elicited_statistics</span> <span class="o">=</span> <span class="n">one_forward_simulation</span><span class="p">(</span>
+                <span class="n">prior_model</span><span class="p">,</span> <span class="n">global_dict</span>
+            <span class="p">)</span>
             <span class="c1"># comput loss</span>
-            <span class="n">weighted_total_loss</span> <span class="o">=</span> <span class="n">compute_loss</span><span class="p">(</span><span class="n">training_elicited_statistics</span><span class="p">,</span> 
-                                               <span class="n">expert_elicited_statistics</span><span class="p">,</span> 
-                                               <span class="n">global_dict</span><span class="p">,</span> <span class="n">epoch</span><span class="p">)</span>
+            <span class="n">weighted_total_loss</span> <span class="o">=</span> <span class="n">compute_loss</span><span class="p">(</span>
+                <span class="n">training_elicited_statistics</span><span class="p">,</span>
+                <span class="n">expert_elicited_statistics</span><span class="p">,</span>
+                <span class="n">global_dict</span><span class="p">,</span>
+                <span class="n">epoch</span><span class="p">,</span>
+            <span class="p">)</span>
             <span class="c1"># compute gradient of loss wrt trainable_variables</span>
-            <span class="n">gradients</span> <span class="o">=</span> <span class="n">tape</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">weighted_total_loss</span><span class="p">,</span> <span class="n">prior_model</span><span class="o">.</span><span class="n">trainable_variables</span><span class="p">)</span>
+            <span class="n">gradients</span> <span class="o">=</span> <span class="n">tape</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span>
+                <span class="n">weighted_total_loss</span><span class="p">,</span> <span class="n">prior_model</span><span class="o">.</span><span class="n">trainable_variables</span>
+            <span class="p">)</span>
             <span class="c1"># update trainable_variables using gradient info with adam optimizer</span>
             <span class="n">optimizer</span><span class="o">.</span><span class="n">apply_gradients</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">gradients</span><span class="p">,</span> <span class="n">prior_model</span><span class="o">.</span><span class="n">trainable_variables</span><span class="p">))</span>
 
         <span class="c1"># time end of epoch</span>
         <span class="n">epoch_time_end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-        <span class="n">epoch_time</span> <span class="o">=</span> <span class="n">epoch_time_end</span><span class="o">-</span><span class="n">epoch_time_start</span>
+        <span class="n">epoch_time</span> <span class="o">=</span> <span class="n">epoch_time_end</span> <span class="o">-</span> <span class="n">epoch_time_start</span>
 
         <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;print_info&quot;</span><span class="p">]:</span>
             <span class="c1"># print information for user during training</span>
@@ -391,25 +405,38 @@ document.write(`
                 <span class="k">break</span>
             <span class="c1"># inform about epoch time, total loss and learning rate</span>
             <span class="k">if</span> <span class="n">epoch</span> <span class="o">%</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;view_ep&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;optimization_settings&quot;</span><span class="p">][</span><span class="s2">&quot;optimizer_specs&quot;</span><span class="p">][</span><span class="s2">&quot;learning_rate&quot;</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">float</span><span class="p">:</span>
-                    <span class="n">lr</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;optimization_settings&quot;</span><span class="p">][</span><span class="s2">&quot;optimizer_specs&quot;</span><span class="p">][</span><span class="s2">&quot;learning_rate&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="nb">type</span><span class="p">(</span>
+                        <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;optimization_settings&quot;</span><span class="p">][</span><span class="s2">&quot;optimizer_specs&quot;</span><span class="p">][</span>
+                            <span class="s2">&quot;learning_rate&quot;</span>
+                        <span class="p">]</span>
+                    <span class="p">)</span>
+                    <span class="ow">is</span> <span class="nb">float</span>
+                <span class="p">):</span>
+                    <span class="n">lr</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;optimization_settings&quot;</span><span class="p">][</span><span class="s2">&quot;optimizer_specs&quot;</span><span class="p">][</span>
+                        <span class="s2">&quot;learning_rate&quot;</span>
+                    <span class="p">]</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">lr</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;optimization_settings&quot;</span><span class="p">][</span><span class="s2">&quot;optimizer_specs&quot;</span><span class="p">][</span><span class="s2">&quot;learning_rate&quot;</span><span class="p">](</span><span class="n">epoch</span><span class="p">)</span>
+                    <span class="n">lr</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;optimization_settings&quot;</span><span class="p">][</span><span class="s2">&quot;optimizer_specs&quot;</span><span class="p">][</span>
+                        <span class="s2">&quot;learning_rate&quot;</span>
+                    <span class="p">](</span><span class="n">epoch</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;epoch_time: </span><span class="si">{</span><span class="n">epoch_time</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> sec&quot;</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Epoch: </span><span class="si">{</span><span class="n">epoch</span><span class="si">}</span><span class="s2">, loss: </span><span class="si">{</span><span class="n">weighted_total_loss</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2">, lr: </span><span class="si">{</span><span class="n">lr</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="c1"># inform about estimated time until completion</span>
             <span class="k">if</span> <span class="n">epoch</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">epoch</span> <span class="o">%</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;view_ep&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">avg_ep_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">time_per_epoch</span><span class="p">)</span>
                 <span class="n">remaining_eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;epochs&quot;</span><span class="p">],</span> <span class="n">epoch</span><span class="p">)</span>
-                <span class="n">estimated_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">remaining_eps</span><span class="p">,</span><span class="n">avg_ep_time</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated time until completion: </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%H:%M:%S&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">time</span><span class="o">.</span><span class="n">gmtime</span><span class="p">(</span><span class="n">estimated_time</span><span class="p">))</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">estimated_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">remaining_eps</span><span class="p">,</span> <span class="n">avg_ep_time</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Estimated time until completion: </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%H:%M:%S&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">time</span><span class="o">.</span><span class="n">gmtime</span><span class="p">(</span><span class="n">estimated_time</span><span class="p">))</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
             <span class="k">if</span> <span class="n">epoch</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;epochs&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">):</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done :)&quot;</span><span class="p">)</span>
 
         <span class="c1"># save gradients in file</span>
         <span class="n">saving_path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;parametric_prior&quot;</span><span class="p">:</span>
-            <span class="n">path</span> <span class="o">=</span> <span class="n">saving_path</span><span class="o">+</span><span class="s1">&#39;/gradients.pkl&#39;</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/gradients.pkl&quot;</span>
             <span class="n">save_as_pkl</span><span class="p">(</span><span class="n">gradients</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
             <span class="c1"># save for each epoch</span>
             <span class="n">gradients_ep</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gradients</span><span class="p">)</span>
@@ -417,25 +444,33 @@ document.write(`
         <span class="c1"># savings per epoch</span>
         <span class="n">time_per_epoch</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">epoch_time</span><span class="p">)</span>
         <span class="n">total_loss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">weighted_total_loss</span><span class="p">)</span>
-        <span class="n">component_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">saving_path</span><span class="o">+</span><span class="s2">&quot;/loss_per_component.pkl&quot;</span><span class="p">))</span>
-  
+        <span class="n">component_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/loss_per_component.pkl&quot;</span><span class="p">))</span>
+
         <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;parametric_prior&quot;</span><span class="p">:</span>
+            <span class="c1"># save single learned hyperparameter values for each prior and epoch</span>
             <span class="n">res_dict</span> <span class="o">=</span> <span class="n">save_hyperparameters</span><span class="p">(</span><span class="n">prior_model</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">res_dict</span> <span class="o">=</span> <span class="n">marginal_prior_moments</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">saving_path</span><span class="o">+</span><span class="s2">&quot;/model_simulations.pkl&quot;</span><span class="p">)[</span><span class="s2">&quot;prior_samples&quot;</span><span class="p">],</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">)</span>
-        
-        
+            <span class="c1"># save mean and std for each sampled marginal prior; for each epoch</span>
+            <span class="n">res_dict</span> <span class="o">=</span> <span class="n">marginal_prior_moments</span><span class="p">(</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/model_simulations.pkl&quot;</span><span class="p">)[</span><span class="s2">&quot;prior_samples&quot;</span><span class="p">],</span>
+                <span class="n">epoch</span><span class="p">,</span>
+                <span class="n">global_dict</span><span class="p">,</span>
+            <span class="p">)</span>
+
     <span class="c1"># save final results in file</span>
-    <span class="n">res</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;loss&quot;</span><span class="p">:</span> <span class="n">total_loss</span><span class="p">,</span> <span class="s2">&quot;loss_component&quot;</span><span class="p">:</span><span class="n">component_losses</span><span class="p">,</span>
-           <span class="s2">&quot;hyperparameter&quot;</span><span class="p">:</span> <span class="n">res_dict</span><span class="p">,</span> 
-           <span class="s2">&quot;time_epoch&quot;</span><span class="p">:</span> <span class="n">time_per_epoch</span><span class="p">,</span> <span class="s2">&quot;seed&quot;</span><span class="p">:</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">]}</span>
-    
+    <span class="n">res</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;loss&quot;</span><span class="p">:</span> <span class="n">total_loss</span><span class="p">,</span>
+        <span class="s2">&quot;loss_component&quot;</span><span class="p">:</span> <span class="n">component_losses</span><span class="p">,</span>
+        <span class="s2">&quot;hyperparameter&quot;</span><span class="p">:</span> <span class="n">res_dict</span><span class="p">,</span>
+        <span class="s2">&quot;time_epoch&quot;</span><span class="p">:</span> <span class="n">time_per_epoch</span><span class="p">,</span>
+        <span class="s2">&quot;seed&quot;</span><span class="p">:</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">],</span>
+    <span class="p">}</span>
+
     <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;parametric_prior&quot;</span><span class="p">:</span>
         <span class="n">res</span><span class="p">[</span><span class="s2">&quot;gradients&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gradients_ep</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="n">saving_path</span><span class="o">+</span><span class="s1">&#39;/final_results.pkl&#39;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/final_results.pkl&quot;</span>
     <span class="n">save_as_pkl</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span></div>
 
-    
 </pre></div>
 
                 </article>

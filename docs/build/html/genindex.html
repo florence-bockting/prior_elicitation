@@ -27,7 +27,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=87e54e7c" />
@@ -192,14 +192,12 @@
 <li class="toctree-l4"><a class="reference internal" href="api/user_input/user_input.custom_functions.html">user_input.custom_functions module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/user_input/user_input.design_matrices.html">user_input.design_matrices module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/user_input/user_input.generative_models.html">user_input.generative_models module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/user_input/user_input.utils.html">user_input.utils module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="case_studies.html">Case Studies</a></li>
 </ul>
 
     </div>
@@ -322,11 +320,13 @@ document.write(`
 
 <div class="genindex-jumpbox">
  <a href="#_"><strong>_</strong></a>
+ | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#K"><strong>K</strong></a>
  | <a href="#L"><strong>L</strong></a>
@@ -334,6 +334,7 @@ document.write(`
  | <a href="#N"><strong>N</strong></a>
  | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
+ | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
  | <a href="#U"><strong>U</strong></a>
@@ -346,15 +347,31 @@ document.write(`
       <li><a href="api/functions/functions.loss_functions.html#functions.loss_functions.MmdEnergy.__call__">__call__() (functions.loss_functions.MmdEnergy method)</a>
 
       <ul>
+        <li><a href="api/functions/functions.prior_simulation.html#functions.prior_simulation.Priors.__call__">(functions.prior_simulation.Priors method)</a>
+</li>
+        <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.Beta_log.__call__">(user_input.custom_functions.Beta_log method)</a>
+</li>
+        <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.Gamma_inv_softplus.__call__">(user_input.custom_functions.Gamma_inv_softplus method)</a>
+</li>
         <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.Gamma_log.__call__">(user_input.custom_functions.Gamma_log method)</a>
+</li>
+        <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.HalfNormal_log.__call__">(user_input.custom_functions.HalfNormal_log method)</a>
+</li>
+        <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.InvGamma_log.__call__">(user_input.custom_functions.InvGamma_log method)</a>
+</li>
+        <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.Normal0_log.__call__">(user_input.custom_functions.Normal0_log method)</a>
 </li>
         <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.Normal_log.__call__">(user_input.custom_functions.Normal_log method)</a>
 </li>
         <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.Normal_log_log.__call__">(user_input.custom_functions.Normal_log_log method)</a>
 </li>
+        <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.Student0.__call__">(user_input.custom_functions.Student0 method)</a>
+</li>
         <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.TruncNormal_log.__call__">(user_input.custom_functions.TruncNormal_log method)</a>
 </li>
         <li><a href="api/user_input/user_input.generative_models.html#user_input.generative_models.GenerativeBinomialModel.__call__">(user_input.generative_models.GenerativeBinomialModel method)</a>
+</li>
+        <li><a href="api/user_input/user_input.generative_models.html#user_input.generative_models.GenerativeBinomialModelVariant.__call__">(user_input.generative_models.GenerativeBinomialModelVariant method)</a>
 </li>
         <li><a href="api/user_input/user_input.generative_models.html#user_input.generative_models.GenerativeMultilevelModel.__call__">(user_input.generative_models.GenerativeMultilevelModel method)</a>
 </li>
@@ -364,19 +381,61 @@ document.write(`
 </li>
         <li><a href="api/user_input/user_input.generative_models.html#user_input.generative_models.GenerativePoissonModel.__call__">(user_input.generative_models.GenerativePoissonModel method)</a>
 </li>
+        <li><a href="api/user_input/user_input.generative_models.html#user_input.generative_models.GenerativeToyModel.__call__">(user_input.generative_models.GenerativeToyModel method)</a>
+</li>
+        <li><a href="api/user_input/user_input.generative_models.html#user_input.generative_models.Horseshoe.__call__">(user_input.generative_models.Horseshoe method)</a>
+</li>
+        <li><a href="api/user_input/user_input.generative_models.html#user_input.generative_models.Model0.__call__">(user_input.generative_models.Model0 method)</a>
+</li>
+        <li><a href="api/user_input/user_input.generative_models.html#user_input.generative_models.Model1.__call__">(user_input.generative_models.Model1 method)</a>
+</li>
+        <li><a href="api/user_input/user_input.generative_models.html#user_input.generative_models.Model2.__call__">(user_input.generative_models.Model2 method)</a>
+</li>
+        <li><a href="api/user_input/user_input.generative_models.html#user_input.generative_models.Model3.__call__">(user_input.generative_models.Model3 method)</a>
+</li>
+        <li><a href="api/user_input/user_input.generative_models.html#user_input.generative_models.RegularizedHorseshoe.__call__">(user_input.generative_models.RegularizedHorseshoe method)</a>
+</li>
+        <li><a href="api/user_input/user_input.generative_models.html#user_input.generative_models.SkewnessModel.__call__">(user_input.generative_models.SkewnessModel method)</a>
+</li>
+        <li><a href="api/user_input/user_input.generative_models.html#user_input.generative_models.SkewnessModel2.__call__">(user_input.generative_models.SkewnessModel2 method)</a>
+</li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.Gamma_log.__init__">__init__() (user_input.custom_functions.Gamma_log method)</a>
+      <li><a href="api/functions/functions.prior_simulation.html#functions.prior_simulation.Priors.__init__">__init__() (functions.prior_simulation.Priors method)</a>
 
       <ul>
+        <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.Beta_log.__init__">(user_input.custom_functions.Beta_log method)</a>
+</li>
+        <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.Gamma_inv_softplus.__init__">(user_input.custom_functions.Gamma_inv_softplus method)</a>
+</li>
+        <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.Gamma_log.__init__">(user_input.custom_functions.Gamma_log method)</a>
+</li>
+        <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.HalfNormal_log.__init__">(user_input.custom_functions.HalfNormal_log method)</a>
+</li>
+        <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.InvGamma_log.__init__">(user_input.custom_functions.InvGamma_log method)</a>
+</li>
+        <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.InvSoftplus.__init__">(user_input.custom_functions.InvSoftplus method)</a>
+</li>
+        <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.Normal0_log.__init__">(user_input.custom_functions.Normal0_log method)</a>
+</li>
         <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.Normal_log.__init__">(user_input.custom_functions.Normal_log method)</a>
 </li>
         <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.Normal_log_log.__init__">(user_input.custom_functions.Normal_log_log method)</a>
 </li>
+        <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.Student0.__init__">(user_input.custom_functions.Student0 method)</a>
+</li>
         <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.TruncNormal_log.__init__">(user_input.custom_functions.TruncNormal_log method)</a>
 </li>
       </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="B">B</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.Beta_log">Beta_log (class in user_input.custom_functions)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -393,19 +452,35 @@ document.write(`
 </li>
       <li><a href="api/setup/setup.create_dictionaries.html#setup.create_dictionaries.create_dict">create_dict() (in module setup.create_dictionaries)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/setup/setup.create_dictionaries.html#setup.create_dictionaries.create_global_dict">create_global_dict() (in module setup.create_dictionaries)</a>
 </li>
       <li><a href="api/setup/setup.write_results.html#setup.write_results.create_output_summary">create_output_summary() (in module setup.write_results)</a>
 </li>
+      <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.custom_avg_obs">custom_avg_obs() (in module user_input.custom_functions)</a>
+</li>
+      <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.custom_correlation">custom_correlation() (in module user_input.custom_functions)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.custom_group">custom_group() (in module user_input.custom_functions)</a>
+</li>
       <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.custom_group_means">custom_group_means() (in module user_input.custom_functions)</a>
+</li>
+      <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.custom_group_range">custom_group_range() (in module user_input.custom_functions)</a>
 </li>
       <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.custom_mu0_sd">custom_mu0_sd() (in module user_input.custom_functions)</a>
 </li>
       <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.custom_mu9_sd">custom_mu9_sd() (in module user_input.custom_functions)</a>
 </li>
       <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.custom_R2">custom_R2() (in module user_input.custom_functions)</a>
+</li>
+      <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.custom_R2_beta">custom_R2_beta() (in module user_input.custom_functions)</a>
+</li>
+      <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.custom_std_comparison">custom_std_comparison() (in module user_input.custom_functions)</a>
+</li>
+      <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.custom_target_R2">custom_target_R2() (in module user_input.custom_functions)</a>
+</li>
+      <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.CustomMixture">CustomMixture() (in module user_input.custom_functions)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -511,11 +586,15 @@ document.write(`
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.Gamma_inv_softplus">Gamma_inv_softplus (class in user_input.custom_functions)</a>
+</li>
       <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.Gamma_log">Gamma_log (class in user_input.custom_functions)</a>
 </li>
       <li><a href="api/functions/functions.loss_functions.html#functions.loss_functions.MmdEnergy.generate_weights">generate_weights() (functions.loss_functions.MmdEnergy method)</a>
 </li>
       <li><a href="api/user_input/user_input.generative_models.html#user_input.generative_models.GenerativeBinomialModel">GenerativeBinomialModel (class in user_input.generative_models)</a>
+</li>
+      <li><a href="api/user_input/user_input.generative_models.html#user_input.generative_models.GenerativeBinomialModelVariant">GenerativeBinomialModelVariant (class in user_input.generative_models)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -527,6 +606,22 @@ document.write(`
 </li>
       <li><a href="api/user_input/user_input.generative_models.html#user_input.generative_models.GenerativePoissonModel">GenerativePoissonModel (class in user_input.generative_models)</a>
 </li>
+      <li><a href="api/user_input/user_input.generative_models.html#user_input.generative_models.GenerativeToyModel">GenerativeToyModel (class in user_input.generative_models)</a>
+</li>
+      <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.group_quantiles">group_quantiles() (in module user_input.custom_functions)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.HalfNormal_log">HalfNormal_log (class in user_input.custom_functions)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/user_input/user_input.generative_models.html#user_input.generative_models.Horseshoe">Horseshoe (class in user_input.generative_models)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -534,6 +629,12 @@ document.write(`
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/functions/functions.prior_simulation.html#functions.prior_simulation.intialize_priors">intialize_priors() (in module functions.prior_simulation)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.InvGamma_log">InvGamma_log (class in user_input.custom_functions)</a>
+</li>
+      <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.InvSoftplus">InvSoftplus (class in user_input.custom_functions)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -553,8 +654,18 @@ document.write(`
 </li>
       <li><a href="api/user_input/user_input.design_matrices.html#user_input.design_matrices.load_design_matrix_haberman">load_design_matrix_haberman() (in module user_input.design_matrices)</a>
 </li>
+      <li><a href="api/user_input/user_input.design_matrices.html#user_input.design_matrices.load_design_matrix_m0">load_design_matrix_m0() (in module user_input.design_matrices)</a>
+</li>
+      <li><a href="api/user_input/user_input.design_matrices.html#user_input.design_matrices.load_design_matrix_m1">load_design_matrix_m1() (in module user_input.design_matrices)</a>
+</li>
+      <li><a href="api/user_input/user_input.design_matrices.html#user_input.design_matrices.load_design_matrix_m2">load_design_matrix_m2() (in module user_input.design_matrices)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/user_input/user_input.design_matrices.html#user_input.design_matrices.load_design_matrix_m21">load_design_matrix_m21() (in module user_input.design_matrices)</a>
+</li>
+      <li><a href="api/user_input/user_input.design_matrices.html#user_input.design_matrices.load_design_matrix_m22">load_design_matrix_m22() (in module user_input.design_matrices)</a>
+</li>
       <li><a href="api/user_input/user_input.design_matrices.html#user_input.design_matrices.load_design_matrix_sleep">load_design_matrix_sleep() (in module user_input.design_matrices)</a>
 </li>
       <li><a href="api/user_input/user_input.design_matrices.html#user_input.design_matrices.load_design_matrix_truth">load_design_matrix_truth() (in module user_input.design_matrices)</a>
@@ -567,13 +678,19 @@ document.write(`
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/user_input/user_input.utils.html#user_input.utils.marginal_prior_moments">marginal_prior_moments() (in module user_input.utils)</a>
+      <li><a href="api/functions/functions.helper_functions.html#functions.helper_functions.marginal_prior_moments">marginal_prior_moments() (in module functions.helper_functions)</a>
 </li>
       <li><a href="api/functions/functions.loss_functions.html#functions.loss_functions.MmdEnergy">MmdEnergy (class in functions.loss_functions)</a>
 </li>
       <li><a href="api/setup/setup.input_functions.html#setup.input_functions.model">model() (in module setup.input_functions)</a>
 </li>
-      <li><a href="api/setup/setup.write_results.html#setup.write_results.model_summary">model_summary() (in module setup.write_results)</a>
+      <li><a href="api/user_input/user_input.generative_models.html#user_input.generative_models.Model0">Model0 (class in user_input.generative_models)</a>
+</li>
+      <li><a href="api/user_input/user_input.generative_models.html#user_input.generative_models.Model1">Model1 (class in user_input.generative_models)</a>
+</li>
+      <li><a href="api/user_input/user_input.generative_models.html#user_input.generative_models.Model2">Model2 (class in user_input.generative_models)</a>
+</li>
+      <li><a href="api/user_input/user_input.generative_models.html#user_input.generative_models.Model3">Model3 (class in user_input.generative_models)</a>
 </li>
       <li>
     module
@@ -615,8 +732,6 @@ document.write(`
 </li>
         <li><a href="api/user_input/user_input.generative_models.html#module-user_input.generative_models">user_input.generative_models</a>
 </li>
-        <li><a href="api/user_input/user_input.utils.html#module-user_input.utils">user_input.utils</a>
-</li>
       </ul></li>
   </ul></td>
 </tr></table>
@@ -624,10 +739,14 @@ document.write(`
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.Normal_log">Normal_log (class in user_input.custom_functions)</a>
+      <li><a href="api/functions/functions.loss_functions.html#functions.loss_functions.norm_diff">norm_diff() (in module functions.loss_functions)</a>
+</li>
+      <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.Normal0_log">Normal0_log (class in user_input.custom_functions)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.Normal_log">Normal_log (class in user_input.custom_functions)</a>
+</li>
       <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.Normal_log_log">Normal_log_log (class in user_input.custom_functions)</a>
 </li>
       <li><a href="api/setup/setup.input_functions.html#setup.input_functions.normalizing_flow_specs">normalizing_flow_specs() (in module setup.input_functions)</a>
@@ -648,13 +767,23 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/setup/setup.input_functions.html#setup.input_functions.param">param() (in module setup.input_functions)</a>
 </li>
-      <li><a href="api/setup/setup.input_functions.html#setup.input_functions.prior_elicitation">prior_elicitation() (in module setup.input_functions)</a>
+      <li><a href="api/setup/setup.write_results.html#setup.write_results.print_res_summary">print_res_summary() (in module setup.write_results)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/setup/setup.input_functions.html#setup.input_functions.prior_elicitation">prior_elicitation() (in module setup.input_functions)</a>
+</li>
       <li><a href="api/dags/dags.elicitation_pipeline.html#dags.elicitation_pipeline.prior_elicitation_dag">prior_elicitation_dag() (in module dags.elicitation_pipeline)</a>
 </li>
-      <li><a href="api/functions/functions.prior_simulation.html#functions.prior_simulation.priors">priors() (in module functions.prior_simulation)</a>
+      <li><a href="api/functions/functions.prior_simulation.html#functions.prior_simulation.Priors">Priors (class in functions.prior_simulation)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/user_input/user_input.generative_models.html#user_input.generative_models.RegularizedHorseshoe">RegularizedHorseshoe (class in user_input.generative_models)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -666,7 +795,7 @@ document.write(`
 </li>
       <li><a href="api/functions/functions.helper_functions.html#functions.helper_functions.save_as_pkl">save_as_pkl() (in module functions.helper_functions)</a>
 </li>
-      <li><a href="api/user_input/user_input.utils.html#user_input.utils.save_hyperparameters">save_hyperparameters() (in module user_input.utils)</a>
+      <li><a href="api/functions/functions.helper_functions.html#functions.helper_functions.save_hyperparameters">save_hyperparameters() (in module functions.helper_functions)</a>
 </li>
       <li><a href="api/functions/functions.loss_functions.html#functions.loss_functions.MmdEnergy.scal">scal() (functions.loss_functions.MmdEnergy method)</a>
 </li>
@@ -684,8 +813,6 @@ document.write(`
         <li><a href="api/setup/setup.create_dictionaries.html#module-setup.create_dictionaries">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     setup.input_functions
 
@@ -693,6 +820,8 @@ document.write(`
         <li><a href="api/setup/setup.input_functions.html#module-setup.input_functions">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     setup.write_results
 
@@ -702,9 +831,15 @@ document.write(`
       </ul></li>
       <li><a href="api/functions/functions.model_simulation.html#functions.model_simulation.simulate_from_generator">simulate_from_generator() (in module functions.model_simulation)</a>
 </li>
+      <li><a href="api/user_input/user_input.generative_models.html#user_input.generative_models.SkewnessModel">SkewnessModel (class in user_input.generative_models)</a>
+</li>
+      <li><a href="api/user_input/user_input.generative_models.html#user_input.generative_models.SkewnessModel2">SkewnessModel2 (class in user_input.generative_models)</a>
+</li>
       <li><a href="api/functions/functions.model_simulation.html#functions.model_simulation.softmax_gumbel_trick">softmax_gumbel_trick() (in module functions.model_simulation)</a>
 </li>
       <li><a href="api/functions/functions.loss_functions.html#functions.loss_functions.MmdEnergy.squared_distances">squared_distances() (functions.loss_functions.MmdEnergy method)</a>
+</li>
+      <li><a href="api/user_input/user_input.custom_functions.html#user_input.custom_functions.Student0">Student0 (class in user_input.custom_functions)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -758,20 +893,13 @@ document.write(`
         <li><a href="api/user_input/user_input.generative_models.html#module-user_input.generative_models">module</a>
 </li>
       </ul></li>
-      <li>
-    user_input.utils
-
-      <ul>
-        <li><a href="api/user_input/user_input.utils.html#module-user_input.utils">module</a>
-</li>
-      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/setup/setup.write_results.html#setup.write_results.write_results">write_results() (in module setup.write_results)</a>
+      <li><a href="api/setup/setup.write_results.html#setup.write_results.write_res_summary">write_res_summary() (in module setup.write_results)</a>
 </li>
   </ul></td>
 </tr></table>

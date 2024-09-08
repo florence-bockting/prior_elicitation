@@ -27,7 +27,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
@@ -192,14 +192,12 @@
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.custom_functions.html">user_input.custom_functions module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.design_matrices.html">user_input.design_matrices module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.generative_models.html">user_input.generative_models module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.utils.html">user_input.utils module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../../case_studies.html">Case Studies</a></li>
 </ul>
 
     </div>
@@ -326,6 +324,8 @@ document.write(`
 <span class="n">bfn</span> <span class="o">=</span> <span class="n">bf</span><span class="o">.</span><span class="n">networks</span>
 
 <span class="kn">from</span> <span class="nn">functions.helper_functions</span> <span class="kn">import</span> <span class="n">save_as_pkl</span>
+<span class="kn">from</span> <span class="nn">functions.loss_functions</span> <span class="kn">import</span> <span class="n">norm_diff</span>
+
 
 <div class="viewcode-block" id="compute_loss_components">
 <a class="viewcode-back" href="../../api/functions/functions.loss_computation.html#functions.loss_computation.compute_loss_components">[docs]</a>
@@ -353,17 +353,17 @@ document.write(`
 <span class="sd">        the discrepancy.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># check whether the simulated ground truth has a different dict of the </span>
-    <span class="c1"># target quantities. If yes select the correct target quantity dict</span>
-    <span class="k">try</span><span class="p">:</span> 
-        <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;target_quantities&quot;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="n">sub_global_dict</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;target_quantities&quot;</span><span class="p">][</span><span class="s2">&quot;learning&quot;</span><span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">sub_global_dict</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;target_quantities&quot;</span><span class="p">]</span>
-    
+    <span class="c1"># extract the target quantities section from the global dict</span>
+    <span class="n">targets_global_dict</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;target_quantities&quot;</span><span class="p">]</span>
+
     <span class="c1"># extract names from elicited statistics</span>
     <span class="n">name_elicits</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">elicited_statistics</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="c1"># for later check in if statement</span>
+    <span class="n">name_elicits_copy</span> <span class="o">=</span> <span class="n">name_elicits</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;param_independence&quot;</span><span class="p">][</span><span class="s2">&quot;independent&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="s2">&quot;correlation&quot;</span> <span class="ow">in</span> <span class="n">name_elicits</span><span class="p">:</span>
+            <span class="n">name_elicits</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;correlation&quot;</span><span class="p">)</span>
     <span class="c1"># prepare dictionary for storing results</span>
     <span class="n">loss_component_res</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="c1"># initialize some helpers for keeping track of target quantity</span>
@@ -373,7 +373,7 @@ document.write(`
     <span class="c1"># loop over elicited statistics</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">name_elicits</span><span class="p">):</span>
         <span class="c1"># get name of target quantity</span>
-        <span class="n">target</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">sep</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">sep</span><span class="o">=</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="c1"># check whether elicited statistic correspond to same target quantity</span>
             <span class="n">eval_target</span> <span class="o">=</span> <span class="n">target_control</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span>
@@ -382,65 +382,93 @@ document.write(`
         <span class="c1"># if target quantity changes go with index one up</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">eval_target</span><span class="p">:</span>
             <span class="n">i_target</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="c1"># extract loss component </span>
+        <span class="c1"># extract loss component</span>
         <span class="n">loss_component</span> <span class="o">=</span> <span class="n">elicited_statistics</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
-       
+
         <span class="k">if</span> <span class="n">tf</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">loss_component</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="n">sub_global_dict</span><span class="p">[</span><span class="s2">&quot;loss_components&quot;</span><span class="p">][</span><span class="n">i_target</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;the elicited statistic </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> has rank=1 and can therefore support only combine_loss = &#39;all&#39;&quot;</span>
+            <span class="k">assert</span> <span class="p">(</span>
+                <span class="n">targets_global_dict</span><span class="p">[</span><span class="s2">&quot;loss_components&quot;</span><span class="p">][</span><span class="n">i_target</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span>
+            <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;the elicited statistic </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> has rank=1 and can therefore support only combine_loss = &#39;all&#39;&quot;</span>
             <span class="c1"># add a last axis for loss computation</span>
-            <span class="n">final_loss_component</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">loss_component</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">final_loss_component</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">loss_component</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
             <span class="c1"># store result</span>
             <span class="n">loss_component_res</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_loss&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">final_loss_component</span>
-        
+
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">sub_global_dict</span><span class="p">[</span><span class="s2">&quot;loss_components&quot;</span><span class="p">][</span><span class="n">i_target</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
-                <span class="k">assert</span> <span class="n">tf</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">loss_component</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;the elicited statistic </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> has more than 3 dimensions; combine_loss = all is therefore not possible. Consider using combine_loss = &#39;by-group&#39;&quot;</span>
+            <span class="k">if</span> <span class="n">targets_global_dict</span><span class="p">[</span><span class="s2">&quot;loss_components&quot;</span><span class="p">][</span><span class="n">i_target</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="p">(</span>
+                    <span class="n">tf</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">loss_component</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">3</span>
+                <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;the elicited statistic </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> has more than 3 dimensions; combine_loss = all is therefore not possible. Consider using combine_loss = &#39;by-group&#39;&quot;</span>
                 <span class="k">if</span> <span class="n">tf</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">loss_component</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-                    <span class="n">loss_component_res</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_loss_</span><span class="si">{</span><span class="n">i_target</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span>  <span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">loss_component</span><span class="p">,</span> <span class="p">(</span><span class="n">loss_component</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">loss_component</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">loss_component</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+                    <span class="n">loss_component_res</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_loss_</span><span class="si">{</span><span class="n">i_target</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+                        <span class="n">loss_component</span><span class="p">,</span>
+                        <span class="p">(</span>
+                            <span class="n">loss_component</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                            <span class="n">loss_component</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">loss_component</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                        <span class="p">),</span>
+                    <span class="p">)</span>
                 <span class="k">if</span> <span class="n">tf</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">loss_component</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">:</span>
                     <span class="n">loss_component_res</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_loss_</span><span class="si">{</span><span class="n">i_target</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">loss_component</span>
-                
-            
-            <span class="k">if</span> <span class="n">sub_global_dict</span><span class="p">[</span><span class="s2">&quot;loss_components&quot;</span><span class="p">][</span><span class="n">i_target</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;by-stats&quot;</span><span class="p">:</span>
-                <span class="k">assert</span> <span class="n">sub_global_dict</span><span class="p">[</span><span class="s2">&quot;elicitation_method&quot;</span><span class="p">][</span><span class="n">i_target</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;quantiles&quot;</span><span class="p">,</span> <span class="s2">&quot;loss combination method &#39;by-stats&#39; is currently only possible for elicitation techniques: &#39;quantiles&#39;.&quot;</span>
+
+            <span class="k">if</span> <span class="n">targets_global_dict</span><span class="p">[</span><span class="s2">&quot;loss_components&quot;</span><span class="p">][</span><span class="n">i_target</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;by-stats&quot;</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="p">(</span>
+                    <span class="n">targets_global_dict</span><span class="p">[</span><span class="s2">&quot;elicitation_method&quot;</span><span class="p">][</span><span class="n">i_target</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;quantiles&quot;</span>
+                <span class="p">),</span> <span class="s2">&quot;loss combination method &#39;by-stats&#39; is currently only possible for elicitation techniques: &#39;quantiles&#39;.&quot;</span>
                 <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">loss_component</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
                     <span class="k">if</span> <span class="n">tf</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">loss_component</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-                        <span class="n">loss_component_res</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_loss_</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">loss_component</span><span class="p">[:,</span><span class="n">j</span><span class="p">]</span>
+                        <span class="n">loss_component_res</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_loss_</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">loss_component</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span>
                     <span class="k">if</span> <span class="n">tf</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">loss_component</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-                        <span class="n">loss_component_res</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_loss_</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">loss_component</span><span class="p">[:,</span><span class="n">j</span><span class="p">,:]</span>
-                        
-            <span class="k">if</span> <span class="n">sub_global_dict</span><span class="p">[</span><span class="s2">&quot;loss_components&quot;</span><span class="p">][</span><span class="n">i_target</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;by-group&quot;</span><span class="p">:</span>
+                        <span class="n">loss_component_res</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_loss_</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">loss_component</span><span class="p">[:,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
+
+            <span class="k">if</span> <span class="n">targets_global_dict</span><span class="p">[</span><span class="s2">&quot;loss_components&quot;</span><span class="p">][</span><span class="n">i_target</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;by-group&quot;</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">loss_component</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
-                    <span class="n">final_loss_component</span> <span class="o">=</span> <span class="n">loss_component</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">j</span><span class="p">]</span>
+                    <span class="n">final_loss_component</span> <span class="o">=</span> <span class="n">loss_component</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
                     <span class="k">if</span> <span class="n">tf</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">final_loss_component</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                        <span class="n">final_loss_component</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">final_loss_component</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                        <span class="n">final_loss_component</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span>
+                            <span class="n">final_loss_component</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span>
+                        <span class="p">)</span>
 
                     <span class="n">loss_component_res</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_loss_</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">final_loss_component</span>
-                    
+
+    <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;param_independence&quot;</span><span class="p">][</span><span class="s2">&quot;independent&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="s2">&quot;correlation&quot;</span> <span class="ow">in</span> <span class="n">name_elicits_copy</span><span class="p">:</span>
+            <span class="n">loss_component</span> <span class="o">=</span> <span class="n">elicited_statistics</span><span class="p">[</span><span class="s2">&quot;correlation&quot;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">loss_component</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+                <span class="n">correl_loss_component</span> <span class="o">=</span> <span class="n">loss_component</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">tf</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">correl_loss_component</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">correl_loss_component</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span>
+                        <span class="n">correl_loss_component</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span>
+                    <span class="p">)</span>
+                <span class="n">loss_component_res</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;correlation_loss_</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">correl_loss_component</span>
+
     <span class="c1"># save file in object</span>
     <span class="n">saving_path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">expert</span><span class="p">:</span>
-        <span class="n">saving_path</span> <span class="o">=</span> <span class="n">saving_path</span><span class="o">+</span><span class="s2">&quot;/expert&quot;</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="n">saving_path</span><span class="o">+</span><span class="s1">&#39;/loss_components.pkl&#39;</span>
+        <span class="n">saving_path</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/expert&quot;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/loss_components.pkl&quot;</span>
     <span class="n">save_as_pkl</span><span class="p">(</span><span class="n">loss_component_res</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
-    <span class="c1"># return results                </span>
+    <span class="c1"># return results</span>
     <span class="k">return</span> <span class="n">loss_component_res</span></div>
+
 
 
 <div class="viewcode-block" id="dynamic_weight_averaging">
 <a class="viewcode-back" href="../../api/functions/functions.loss_computation.html#functions.loss_computation.dynamic_weight_averaging">[docs]</a>
-<span class="k">def</span> <span class="nf">dynamic_weight_averaging</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">loss_per_component_current</span><span class="p">,</span> 
-                             <span class="n">loss_per_component_initial</span><span class="p">,</span> 
-                             <span class="n">task_balance_factor</span><span class="p">,</span>
-                             <span class="n">saving_path</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">dynamic_weight_averaging</span><span class="p">(</span>
+    <span class="n">epoch</span><span class="p">,</span>
+    <span class="n">loss_per_component_current</span><span class="p">,</span>
+    <span class="n">loss_per_component_initial</span><span class="p">,</span>
+    <span class="n">task_balance_factor</span><span class="p">,</span>
+    <span class="n">saving_path</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;DWA determines the weights based on the learning speed of each component</span>
-<span class="sd">    </span>
-<span class="sd">    The Dynamic Weight Averaging (DWA) method proposed by </span>
-<span class="sd">    Liu, Johns, &amp; Davison (2019) determines the weights based on the learning </span>
-<span class="sd">    speed of each component, aiming to achieve a more balanced learning process. </span>
-<span class="sd">    Specifically, the weight of a component exhibiting a slower learning speed </span>
+
+<span class="sd">    The Dynamic Weight Averaging (DWA) method proposed by</span>
+<span class="sd">    Liu, Johns, &amp; Davison (2019) determines the weights based on the learning</span>
+<span class="sd">    speed of each component, aiming to achieve a more balanced learning process.</span>
+<span class="sd">    Specifically, the weight of a component exhibiting a slower learning speed</span>
 <span class="sd">    is increased, while it is decreased for faster learning components.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Liu, S., Johns, E., &amp; Davison, A. J. (2019). End-To-End Multi-Task Learning With Attention. In</span>
 <span class="sd">    IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) (pp. 1871–1880).</span>
 <span class="sd">    doi: https://doi.org/10.1109/CVPR.2019.00197</span>
@@ -454,8 +482,8 @@ document.write(`
 <span class="sd">    loss_per_component_initial : list of floats</span>
 <span class="sd">        List of loss values per loss component for the initial epoch (epoch = 0).</span>
 <span class="sd">    task_balance_factor : float</span>
-<span class="sd">        temperature parameter that controls the softness of the loss weighting </span>
-<span class="sd">        in the softmax operator. Setting the temperature 𝑎 to a large value </span>
+<span class="sd">        temperature parameter that controls the softness of the loss weighting</span>
+<span class="sd">        in the softmax operator. Setting the temperature 𝑎 to a large value</span>
 <span class="sd">        results in the weights approaching unity.</span>
 
 <span class="sd">    Returns</span>
@@ -474,23 +502,25 @@ document.write(`
         <span class="n">rel_weight_descent</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">num_loss_components</span><span class="p">)</span>
     <span class="c1"># w_t (epoch-1) = L_t (epoch-1) / L_t (epoch_0)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">rel_weight_descent</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">loss_per_component_current</span><span class="p">,</span> 
-                                            <span class="n">loss_per_component_initial</span><span class="p">)</span>
-    
+        <span class="n">rel_weight_descent</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span>
+            <span class="n">loss_per_component_current</span><span class="p">,</span> <span class="n">loss_per_component_initial</span>
+        <span class="p">)</span>
+
     <span class="c1"># T*exp(w_t(epoch-1)/a)</span>
     <span class="n">numerator</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span>
-        <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">num_loss_components</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span> 
-        <span class="n">tf</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">rel_weight_descent</span><span class="p">,</span> <span class="n">task_balance_factor</span><span class="p">)))</span>
+        <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">num_loss_components</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
+        <span class="n">tf</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">rel_weight_descent</span><span class="p">,</span> <span class="n">task_balance_factor</span><span class="p">)),</span>
+    <span class="p">)</span>
 
     <span class="c1"># softmax operator</span>
-    <span class="n">weight_loss_component</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">numerator</span><span class="p">,</span> 
-                                           <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">numerator</span><span class="p">))</span>
-    
+    <span class="n">weight_loss_component</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">numerator</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">numerator</span><span class="p">))</span>
+
     <span class="c1"># total loss: L = sum_t lambda_t*L_t</span>
-    <span class="n">weighted_total_loss</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">weight_loss_component</span><span class="p">,</span> 
-                                                              <span class="n">loss_per_component_current</span><span class="p">))</span> 
+    <span class="n">weighted_total_loss</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_sum</span><span class="p">(</span>
+        <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">weight_loss_component</span><span class="p">,</span> <span class="n">loss_per_component_current</span><span class="p">)</span>
+    <span class="p">)</span>
     <span class="c1"># save file in object</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="n">saving_path</span><span class="o">+</span><span class="s1">&#39;/weighted_total_loss.pkl&#39;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/weighted_total_loss.pkl&quot;</span>
     <span class="n">save_as_pkl</span><span class="p">(</span><span class="n">weighted_total_loss</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">weighted_total_loss</span></div>
 
@@ -498,8 +528,7 @@ document.write(`
 
 <div class="viewcode-block" id="compute_discrepancy">
 <a class="viewcode-back" href="../../api/functions/functions.loss_computation.html#functions.loss_computation.compute_discrepancy">[docs]</a>
-<span class="k">def</span> <span class="nf">compute_discrepancy</span><span class="p">(</span><span class="n">loss_components_expert</span><span class="p">,</span> <span class="n">loss_components_training</span><span class="p">,</span>
-                        <span class="n">global_dict</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">compute_discrepancy</span><span class="p">(</span><span class="n">loss_components_expert</span><span class="p">,</span> <span class="n">loss_components_training</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the discrepancy between all loss components using a specified</span>
 <span class="sd">    discrepancy measure and returns a list with all loss values.</span>
@@ -510,7 +539,7 @@ document.write(`
 <span class="sd">        dictionary including all loss components derived from the expert-elicited</span>
 <span class="sd">        statistics.</span>
 <span class="sd">    loss_components_training : dict</span>
-<span class="sd">        dictionary including all loss components derived from the model </span>
+<span class="sd">        dictionary including all loss components derived from the model</span>
 <span class="sd">        simulations. (The names (keys) between loss_components_expert and loss_components_training must match)</span>
 <span class="sd">    global_dict : dict</span>
 <span class="sd">        dictionary including all user-input settings.</span>
@@ -521,22 +550,46 @@ document.write(`
 <span class="sd">        list of loss value for each loss component</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># import loss function </span>
+    <span class="c1"># import loss function</span>
     <span class="n">loss_function</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;loss_function&quot;</span><span class="p">][</span><span class="s2">&quot;loss_function&quot;</span><span class="p">]</span>
     <span class="c1"># create dictionary for storing results</span>
     <span class="n">loss_per_component</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="c1"># compute discrepancy </span>
-    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">loss_components_expert</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+    <span class="c1"># extract expert loss components by name</span>
+    <span class="n">keys_loss_components</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">loss_components_expert</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;param_independence&quot;</span><span class="p">][</span><span class="s2">&quot;independent&quot;</span><span class="p">]:</span>
+        <span class="n">keys_loss_components</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">keys_loss_components</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">x</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;correlation_loss&quot;</span><span class="p">)</span>
+        <span class="p">]</span>
+    <span class="c1"># compute discrepancy</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">keys_loss_components</span><span class="p">:</span>
         <span class="c1"># broadcast expert loss to training-shape</span>
-        <span class="n">loss_comp_expert</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">loss_components_expert</span><span class="p">[</span><span class="n">name</span><span class="p">],</span> 
-                                           <span class="n">shape</span><span class="o">=</span><span class="n">loss_components_training</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">loss_comp_expert</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span>
+            <span class="n">loss_components_expert</span><span class="p">[</span><span class="n">name</span><span class="p">],</span>
+            <span class="n">shape</span><span class="o">=</span><span class="p">(</span>
+                <span class="n">loss_components_training</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">loss_components_expert</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
         <span class="c1"># compute loss</span>
-        <span class="n">loss_per_component</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">loss_function</span><span class="p">(</span><span class="n">loss_comp_expert</span><span class="p">,</span> 
-                                                <span class="n">loss_components_training</span><span class="p">[</span><span class="n">name</span><span class="p">]))</span>
-    
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_function</span><span class="p">(</span><span class="n">loss_comp_expert</span><span class="p">,</span> <span class="n">loss_components_training</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
+        <span class="n">loss_per_component</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;param_independence&quot;</span><span class="p">][</span><span class="s2">&quot;independent&quot;</span><span class="p">]:</span>
+        <span class="n">keys_loss_components</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">x</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">loss_components_training</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;correlation_loss&quot;</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">key_loss</span> <span class="ow">in</span> <span class="n">keys_loss_components</span><span class="p">:</span>
+            <span class="n">loss_per_component</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">norm_diff</span><span class="p">(</span><span class="n">loss_components_training</span><span class="p">[</span><span class="n">key_loss</span><span class="p">])</span>
+                <span class="o">*</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;param_independence&quot;</span><span class="p">][</span><span class="s2">&quot;loss-scaling&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
+
     <span class="c1"># save file in object</span>
     <span class="n">saving_path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="n">saving_path</span><span class="o">+</span><span class="s1">&#39;/loss_per_component.pkl&#39;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/loss_per_component.pkl&quot;</span>
     <span class="n">save_as_pkl</span><span class="p">(</span><span class="n">loss_per_component</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">loss_per_component</span></div>
 

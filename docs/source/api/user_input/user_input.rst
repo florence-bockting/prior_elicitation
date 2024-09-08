@@ -10,7 +10,6 @@ Submodules
    user_input.custom_functions
    user_input.design_matrices
    user_input.generative_models
-   user_input.utils
 
 Module contents
 ---------------

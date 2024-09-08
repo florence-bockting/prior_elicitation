@@ -6,7 +6,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>functions.prior_simulation module &#8212; Prior Learning</title>
   
@@ -28,7 +28,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
@@ -193,14 +193,12 @@
 <li class="toctree-l4"><a class="reference internal" href="../user_input/user_input.custom_functions.html">user_input.custom_functions module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../user_input/user_input.design_matrices.html">user_input.design_matrices module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../user_input/user_input.generative_models.html">user_input.generative_models module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../user_input/user_input.utils.html">user_input.utils module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../../case_studies.html">Case Studies</a></li>
 </ul>
 
     </div>
@@ -364,7 +362,11 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions.prior_simulation.priors"><code class="docutils literal notranslate"><span class="pre">priors()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions.prior_simulation.Priors"><code class="docutils literal notranslate"><span class="pre">Priors</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#functions.prior_simulation.Priors.__init__"><code class="docutils literal notranslate"><span class="pre">Priors.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#functions.prior_simulation.Priors.__call__"><code class="docutils literal notranslate"><span class="pre">Priors.__call__()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions.prior_simulation.intialize_priors"><code class="docutils literal notranslate"><span class="pre">intialize_priors()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions.prior_simulation.sample_from_priors"><code class="docutils literal notranslate"><span class="pre">sample_from_priors()</span></code></a></li>
 </ul>
@@ -380,28 +382,22 @@ document.write(`
                   
   <section id="module-functions.prior_simulation">
 <span id="functions-prior-simulation-module"></span><h1>functions.prior_simulation module<a class="headerlink" href="#module-functions.prior_simulation" title="Link to this heading">#</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="functions.prior_simulation.priors">
-<span class="sig-prename descclassname"><span class="pre">functions.prior_simulation.</span></span><span class="sig-name descname"><span class="pre">priors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">global_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/functions/prior_simulation.html#priors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.prior_simulation.priors" title="Link to this definition">#</a></dt>
-<dd><p>Creates a class instantiation which initializes and samples from prior 
-distributions</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all user-input settings..</p>
-</dd>
-<dt><strong>ground_truth</strong><span class="classifier">bool</span></dt><dd><p>whether simulation is based on a pre-specified ground truth 
-(for method validation). The default is False.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>prior_model</strong><span class="classifier">class instance</span></dt><dd><p>class instance for initializing and sampling from prior distributions.</p>
-</dd>
-</dl>
-</dd>
-</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="functions.prior_simulation.Priors">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">functions.prior_simulation.</span></span><span class="sig-name descname"><span class="pre">Priors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/functions/prior_simulation.html#Priors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.prior_simulation.Priors" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Initializes the hyperparameters of the prior distributions.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="functions.prior_simulation.Priors.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/functions/prior_simulation.html#Priors.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.prior_simulation.Priors.__init__" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="functions.prior_simulation.Priors.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/functions/prior_simulation.html#Priors.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.prior_simulation.Priors.__call__" title="Link to this definition">#</a></dt>
+<dd><p>Call self as a function.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py function">
@@ -498,7 +494,11 @@ distributions</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions.prior_simulation.priors"><code class="docutils literal notranslate"><span class="pre">priors()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions.prior_simulation.Priors"><code class="docutils literal notranslate"><span class="pre">Priors</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#functions.prior_simulation.Priors.__init__"><code class="docutils literal notranslate"><span class="pre">Priors.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#functions.prior_simulation.Priors.__call__"><code class="docutils literal notranslate"><span class="pre">Priors.__call__()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions.prior_simulation.intialize_priors"><code class="docutils literal notranslate"><span class="pre">intialize_priors()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions.prior_simulation.sample_from_priors"><code class="docutils literal notranslate"><span class="pre">sample_from_priors()</span></code></a></li>
 </ul>

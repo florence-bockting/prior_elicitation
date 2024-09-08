@@ -6,7 +6,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Learn Prior distributions from expert knowledge &#8212; Prior Learning</title>
   
@@ -28,7 +28,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=87e54e7c" />
@@ -196,14 +196,12 @@
 <li class="toctree-l4"><a class="reference internal" href="api/user_input/user_input.custom_functions.html">user_input.custom_functions module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/user_input/user_input.design_matrices.html">user_input.design_matrices module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/user_input/user_input.generative_models.html">user_input.generative_models module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/user_input/user_input.utils.html">user_input.utils module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="case_studies.html">Case Studies</a></li>
 </ul>
 
     </div>
@@ -396,8 +394,7 @@ Their key commonality is the development of (more or less) model-agnostic method
 Thus, the objective is to determine the optimal hyperparameters that minimize the discrepancy between model-implied and expert-elicited statistics.
 We also adopt this perspective and introduce a novel elicitation method that supports expert feedback in both the space of parameters and observable quantities (i.e., a hybrid approach)
 and minimizes human effort. The key ideas underlying our method are visualized in the following figure and outlined below.</p>
-<a class="reference internal image-reference" href="_images/conceptTemplate.png"><img alt="Visual representation workflow" src="_images/conceptTemplate.png" style="width: 800px;" />
-</a>
+<a class="reference internal image-reference" href="_images/conceptTemplate.png"><img alt="Visual representation workflow" src="_images/conceptTemplate.png" style="width: 800px;" /></a>
 <ol class="arabic simple">
 <li><p>The analyst defines a generative model comprising a likelihood function <span class="math notranslate nohighlight">\(p(y \mid \theta)\)</span> and a parametric prior distribution <span class="math notranslate nohighlight">\(p(\theta \mid \lambda)\)</span> for the model parameters, where <span class="math notranslate nohighlight">\(\lambda\)</span> represents the prior hyperparameters to be inferred from expert knowledge.</p></li>
 <li><p>The analyst selects a set of target quantities, which may involve queries related to observable quantities (data), model parameters, or anything else in between.</p></li>
@@ -425,13 +422,6 @@ and minimizes human effort. The key ideas underlying our method are visualized i
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_overview.html">API</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="api_overview.html#submodules">Submodules</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="case_studies.html">Case Studies</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="case_studies.html#normal-regression-model">Normal regression model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="case_studies.html#binomial-regression-model">Binomial regression model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="case_studies.html#poisson-regression-model">Poisson regression model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="case_studies.html#multilevel-model-with-normal-likelihood">Multilevel model with normal likelihood</a></li>
 </ul>
 </li>
 </ul>

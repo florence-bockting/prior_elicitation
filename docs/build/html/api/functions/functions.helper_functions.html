@@ -6,7 +6,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>functions.helper_functions module &#8212; Prior Learning</title>
   
@@ -28,7 +28,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
@@ -193,14 +193,12 @@
 <li class="toctree-l4"><a class="reference internal" href="../user_input/user_input.custom_functions.html">user_input.custom_functions module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../user_input/user_input.design_matrices.html">user_input.design_matrices module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../user_input/user_input.generative_models.html">user_input.generative_models module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../user_input/user_input.utils.html">user_input.utils module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../../case_studies.html">Case Studies</a></li>
 </ul>
 
     </div>
@@ -365,6 +363,8 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions.helper_functions.save_as_pkl"><code class="docutils literal notranslate"><span class="pre">save_as_pkl()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions.helper_functions.save_hyperparameters"><code class="docutils literal notranslate"><span class="pre">save_hyperparameters()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions.helper_functions.marginal_prior_moments"><code class="docutils literal notranslate"><span class="pre">marginal_prior_moments()</span></code></a></li>
 </ul>
             </nav>
         </div>
@@ -394,6 +394,57 @@ document.write(`
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>None.</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="functions.helper_functions.save_hyperparameters">
+<span class="sig-prename descclassname"><span class="pre">functions.helper_functions.</span></span><span class="sig-name descname"><span class="pre">save_hyperparameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">generator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/functions/helper_functions.html#save_hyperparameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.helper_functions.save_hyperparameters" title="Link to this definition">#</a></dt>
+<dd><p>extracts the learnable hyperparameter values from the model and saves them
+in appropriate form for post-analysis</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>generator</strong><span class="classifier">trainable tf.model</span></dt><dd><p>initialized prior model used for training.</p>
+</dd>
+<dt><strong>epoch</strong><span class="classifier">int</span></dt><dd><p>Current epoch.</p>
+</dd>
+<dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all user-input settings.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>res_dict</strong><span class="classifier">dict</span></dt><dd><p>learned values for each hyperparameter and epoch.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="functions.helper_functions.marginal_prior_moments">
+<span class="sig-prename descclassname"><span class="pre">functions.helper_functions.</span></span><span class="sig-name descname"><span class="pre">marginal_prior_moments</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/functions/helper_functions.html#marginal_prior_moments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.helper_functions.marginal_prior_moments" title="Link to this definition">#</a></dt>
+<dd><p>Used for summarizing learned prior distributions in the case of method=’deep_prior’.
+Computes mean and standard deviation of the sampled marginal prior distributions for each epoch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>prior_samples</strong><span class="classifier">dict</span></dt><dd><p>Samples from prior distributions.</p>
+</dd>
+<dt><strong>epoch</strong><span class="classifier">int</span></dt><dd><p>current epoch.</p>
+</dd>
+<dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all user-input settings.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>res_dict</strong><span class="classifier">dict</span></dt><dd><p>returns mean (key:’means’) and standard deviation (key:’stds’) for each sampled
+marginal prior distribution; for each epoch.</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -447,6 +498,8 @@ document.write(`
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions.helper_functions.save_as_pkl"><code class="docutils literal notranslate"><span class="pre">save_as_pkl()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions.helper_functions.save_hyperparameters"><code class="docutils literal notranslate"><span class="pre">save_hyperparameters()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions.helper_functions.marginal_prior_moments"><code class="docutils literal notranslate"><span class="pre">marginal_prior_moments()</span></code></a></li>
 </ul>
   </nav></div>
 

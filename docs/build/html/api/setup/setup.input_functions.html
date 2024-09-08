@@ -6,7 +6,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>setup.input_functions module &#8212; Prior Learning</title>
   
@@ -28,7 +28,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
@@ -193,14 +193,12 @@
 <li class="toctree-l4"><a class="reference internal" href="../user_input/user_input.custom_functions.html">user_input.custom_functions module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../user_input/user_input.design_matrices.html">user_input.design_matrices module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../user_input/user_input.generative_models.html">user_input.generative_models module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../user_input/user_input.utils.html">user_input.utils module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../../case_studies.html">Case Studies</a></li>
 </ul>
 
     </div>
@@ -387,7 +385,7 @@ document.write(`
 <span id="setup-input-functions-module"></span><h1>setup.input_functions module<a class="headerlink" href="#module-setup.input_functions" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="setup.input_functions.normalizing_flow_specs">
-<span class="sig-prename descclassname"><span class="pre">setup.input_functions.</span></span><span class="sig-name descname"><span class="pre">normalizing_flow_specs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_coupling_layers:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupling_design:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'affine'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupling_settings:</span> <span class="pre">dict</span> <span class="pre">=</span> <span class="pre">{'dense_args':</span> <span class="pre">{'activation':</span> <span class="pre">'softplus'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'kernel_regularizer':</span> <span class="pre">&lt;keras.src.regularizers.L2</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'units':</span> <span class="pre">128}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'dropout':</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'num_dense':</span> <span class="pre">2}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">permutation:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'fixed'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../_modules/setup/input_functions.html#normalizing_flow_specs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#setup.input_functions.normalizing_flow_specs" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">setup.input_functions.</span></span><span class="sig-name descname"><span class="pre">normalizing_flow_specs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_coupling_layers:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupling_design:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'affine'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupling_settings:</span> <span class="pre">dict</span> <span class="pre">=</span> <span class="pre">{'dense_args':</span> <span class="pre">{'activation':</span> <span class="pre">'softplus'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'kernel_regularizer':</span> <span class="pre">&lt;keras.src.regularizers.L2</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'units':</span> <span class="pre">128}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'dropout':</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'num_dense':</span> <span class="pre">2}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">permutation:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'fixed'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_distribution:</span> <span class="pre">dict</span> <span class="pre">=</span> <span class="pre">{'family':</span> <span class="pre">&lt;class</span> <span class="pre">'tensorflow_probability.python.distributions.normal.Normal'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'family_args':</span> <span class="pre">{'loc':</span> <span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'scale':</span> <span class="pre">1.0}}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../_modules/setup/input_functions.html#normalizing_flow_specs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#setup.input_functions.normalizing_flow_specs" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -444,9 +442,9 @@ b0 by b0/100.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
-<dt><strong>model</strong><span class="classifier">callable</span></dt><dd><p>class object that specifies the generative model. 
-The class object requires a specific input-output structure which is presented in the following 
-example. Additional input and output arguments can be added but the here presented input and 
+<dt><strong>model</strong><span class="classifier">callable</span></dt><dd><p>class object that specifies the generative model.
+The class object requires a specific input-output structure which is presented in the following
+example. Additional input and output arguments can be added but the here presented input and
 output arguments are necessary.</p>
 <dl class="field-list">
 <dt class="field-odd">Example<span class="colon">:</span></dt>
@@ -474,7 +472,7 @@ output arguments are necessary.</p>
 </dd>
 <dt class="field-even">Note<span class="colon">:</span></dt>
 <dd class="field-even"><p>For discrete likelihoods “ypred” is not sampled within the generative model
-but rather a continuous approximation will be used (see softmax-gumble-specs). 
+but rather a continuous approximation will be used (see softmax-gumble-specs).
 Thus, for discrete likelihoods: “ypred”=None</p>
 </dd>
 </dl>
@@ -493,7 +491,7 @@ Important is that the key name is equal to the input argument name.</p>
 </dd>
 <dt><strong>discrete_likelihood</strong><span class="classifier">bool</span></dt><dd><p>True if the likelihood is a discrete random variable otherwise False</p>
 </dd>
-<dt><strong>softmax_gumble_specs</strong><span class="classifier">dict or None, optional</span></dt><dd><p>Only required if the likelihood is a discrete random variable. 
+<dt><strong>softmax_gumble_specs</strong><span class="classifier">dict or None, optional</span></dt><dd><p>Only required if the likelihood is a discrete random variable.
 In this case the output argument “ypred” is computed as a continuous approximation using the
 softmax-gumble trick. If the softmax-gumble trick is used further hyperparameters need to be set as
 shown by the following example.</p>
@@ -506,10 +504,10 @@ shown by the following example.</p>
 </dd>
 </dl>
 <ul class="simple">
-<li><p>The <cite>temperature</cite> argument specifies how strong the continuous approx. should be. 
+<li><p>The <cite>temperature</cite> argument specifies how strong the continuous approx. should be.
 Values tending towards zero lead to a categorical distribution.</p></li>
-<li><p>The <cite>upper_threshold</cite> argument defines the upper truncation of a categorical distribution. 
-For double-bounded distribution as the Binomial distribution is simple the total_count value. 
+<li><p>The <cite>upper_threshold</cite> argument defines the upper truncation of a categorical distribution.
+For double-bounded distribution as the Binomial distribution is simple the total_count value.
 For lower-bounded distribution a reasonable threshold value needs to be chosen. Note that it is not
 reasonable to be too conservative and set the upper value too high, as higher values will lead to longer
 computation time.</p></li>
@@ -535,7 +533,7 @@ corresponding elicitation techniques.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
 <dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>name of the target quantity. If a specific output argument from the generative
-model shall be used as target quantity, then the exact name should be indicated here. 
+model shall be used as target quantity, then the exact name should be indicated here.
 It is not allowed to have multiple target quantities with the same name.</p>
 </dd>
 <dt><strong>elicitation_method</strong><span class="classifier">str</span></dt><dd><p>currently implemented are ‘histogram’ (histogram-based elicitation),
@@ -555,12 +553,12 @@ have the shape (B,5,3).</p>
 </ul>
 </dd>
 </dl>
-<p>The decision for one of the methods should be guided by the dependency structure. 
-If I want to learn the distribution of a target quantity based on quantiles, 
-the quantiles should be together in one loss component, thus in this case 
+<p>The decision for one of the methods should be guided by the dependency structure.
+If I want to learn the distribution of a target quantity based on quantiles,
+the quantiles should be together in one loss component, thus in this case
 the method ‘by-group’ should be preferrable.</p>
 </dd>
-<dt><strong>select_obs</strong><span class="classifier">list or None, optional</span></dt><dd><p>Only needed if “ypred” is used as target quantity but only specific design 
+<dt><strong>select_obs</strong><span class="classifier">list or None, optional</span></dt><dd><p>Only needed if “ypred” is used as target quantity but only specific design
 points should be used. Then a list with integers referring to the index of
 each design point in the design matrix is required.</p>
 </dd>
@@ -568,7 +566,7 @@ each design point in the design matrix is required.</p>
 be elicited.</p>
 <dl class="field-list">
 <dt class="field-odd">Example<span class="colon">:</span></dt>
-<dd class="field-odd"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">)</span>          <span class="c1"># or </span>
+<dd class="field-odd"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">)</span>          <span class="c1"># or</span>
 <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">95</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -577,11 +575,11 @@ be elicited.</p>
 <p>It is not recommended to use the maximum or minimum value (i.e., 0 and 100)
 as it leads generally to worse learning results.</p>
 </dd>
-<dt><strong>moments_specs</strong><span class="classifier">tuple or None, optional</span></dt><dd><p>Only needed if elicitation_method = ‘moments’. Tuple of strings indicating which moments 
+<dt><strong>moments_specs</strong><span class="classifier">tuple or None, optional</span></dt><dd><p>Only needed if elicitation_method = ‘moments’. Tuple of strings indicating which moments
 should be elicited. Currently only “mean” and “sd” are implemented</p>
 <dl class="field-list">
 <dt class="field-odd">Example<span class="colon">:</span></dt>
-<dd class="field-odd"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;sd&quot;</span><span class="p">)</span>    <span class="c1"># or </span>
+<dd class="field-odd"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;sd&quot;</span><span class="p">)</span>    <span class="c1"># or</span>
 <span class="p">(</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="p">)</span>
 </pre></div>
 </div>
@@ -589,7 +587,7 @@ should be elicited. Currently only “mean” and “sd” are implemented</p>
 </dl>
 </dd>
 <dt><strong>custom_target_function</strong><span class="classifier">dict or None, optional</span></dt><dd><p>It is possible to specify a custom function for deriving any desired target quantity. It can take
-output arguments from the generative model as input arguments as well as additional user-specified 
+output arguments from the generative model as input arguments as well as additional user-specified
 arguments. The following example shows the basic structure.</p>
 <dl class="field-list">
 <dt class="field-odd">Example<span class="colon">:</span></dt>
@@ -624,7 +622,7 @@ This function has not yet been tested.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="setup.input_functions.expert">
-<span class="sig-prename descclassname"><span class="pre">setup.input_functions.</span></span><span class="sig-name descname"><span class="pre">expert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simulate_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simulator_specs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../_modules/setup/input_functions.html#expert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#setup.input_functions.expert" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">setup.input_functions.</span></span><span class="sig-name descname"><span class="pre">expert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simulate_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simulator_specs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../_modules/setup/input_functions.html#expert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#setup.input_functions.expert" title="Link to this definition">#</a></dt>
 <dd><p>Creates a dictionary including user information about the expert data which should be
 used for training the simulation model. It is possible to provide expert
 information from a file or to simulate expert information based on a pre-defined ground truth
@@ -639,8 +637,8 @@ as the model-simulated elicited statistics (more information will follow)</p>
 might be usefull to check method validity and performance in general.</p>
 </dd>
 <dt><strong>simulator_specs</strong><span class="classifier">dict or None</span></dt><dd><p>Only needed if simulate_data=True. If data should be simulated the true prior distribution
-for each model parameter needs to be specified. The following example shows a situation 
-in which two model parameters b0 and b1 with normal prior distribution family had been 
+for each model parameter needs to be specified. The following example shows a situation
+in which two model parameters b0 and b1 with normal prior distribution family had been
 specified in the <cite>param()</cite> object.</p>
 <dl class="field-list">
 <dt class="field-odd">Example<span class="colon">:</span></dt>
@@ -656,7 +654,7 @@ specified in the <cite>param()</cite> object.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>dict</dt><dd><p>Returns a dictionary including user information about expert data or simulated data given a 
+<dt>dict</dt><dd><p>Returns a dictionary including user information about expert data or simulated data given a
 pre-defined ground truth.</p>
 </dd>
 </dl>
@@ -676,16 +674,16 @@ pre-defined ground truth.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
-<dt><strong>optimizer</strong><span class="classifier">callable</span></dt><dd><p>Optimizer used for batch-stochastic gradient descent in form of a tf.keras.optimizers object. 
+<dt><strong>optimizer</strong><span class="classifier">callable</span></dt><dd><p>Optimizer used for batch-stochastic gradient descent in form of a tf.keras.optimizers object.
 The default is tf.keras.optimizers.Adam.</p>
 </dd>
 <dt><strong>optimizer_specs</strong><span class="classifier">dict, optional</span></dt><dd><p>Specifications of input arguments for the optimizer. This includes for example
-the initial learning rate which can be provided as float or in form of a learning rate schedule. 
+the initial learning rate which can be provided as float or in form of a learning rate schedule.
 The default is shown in the following example.</p>
 <dl class="field-list">
 <dt class="field-odd">Example<span class="colon">:</span></dt>
 <dd class="field-odd"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;learning_rate&quot;</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">schedules</span><span class="o">.</span><span class="n">CosineDecayRestarts</span><span class="p">(</span>
-                  <span class="mf">0.005</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>                    
+                  <span class="mf">0.005</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
  <span class="s2">&quot;clipnorm&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">}</span>
 </pre></div>
 </div>
@@ -705,9 +703,9 @@ The default is shown in the following example.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="setup.input_functions.prior_elicitation">
-<span class="sig-prename descclassname"><span class="pre">setup.input_functions.</span></span><span class="sig-name descname"><span class="pre">prior_elicitation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">burnin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expert_input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generative_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_quantities</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_function</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimization_settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'results'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">view_ep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../_modules/setup/input_functions.html#prior_elicitation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#setup.input_functions.prior_elicitation" title="Link to this definition">#</a></dt>
-<dd><p>wrapper around the optimization process, when called a global dictionary will be 
-created including all information about the user specifications and the 
+<span class="sig-prename descclassname"><span class="pre">setup.input_functions.</span></span><span class="sig-name descname"><span class="pre">prior_elicitation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">burnin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_independence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expert_input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generative_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_quantities</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_function</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimization_settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'results'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">view_ep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../_modules/setup/input_functions.html#prior_elicitation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#setup.input_functions.prior_elicitation" title="Link to this definition">#</a></dt>
+<dd><p>wrapper around the optimization process, when called a global dictionary will be
+created including all information about the user specifications and the
 learning process starts.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -725,9 +723,12 @@ the corresponding name.</p>
 </dd>
 <dt><strong>seed</strong><span class="classifier">int</span></dt><dd><p>seed for reproducibility.</p>
 </dd>
-<dt><strong>burnin</strong><span class="classifier">int</span></dt><dd><p>number of initializations that are tried out before learning starts. 
+<dt><strong>burnin</strong><span class="classifier">int</span></dt><dd><p>number of initializations that are tried out before learning starts.
 The initialization setting leading to the smallest loss is used for running the learning algorithm.
 Method is only reasonable for ‘parametric_prior’ method.</p>
+</dd>
+<dt><strong>param_independence</strong><span class="classifier">bool</span></dt><dd><p>whether model parameters should be treated as independent. If True, correlation between model parameters is
+incorporated in the loss function.</p>
 </dd>
 <dt><strong>model_params</strong><span class="classifier">callable</span></dt><dd><p>user information on model parameters using the <cite>param()</cite> object</p>
 </dd>

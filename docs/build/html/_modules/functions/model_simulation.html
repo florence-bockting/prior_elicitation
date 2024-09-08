@@ -27,7 +27,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
@@ -192,14 +192,12 @@
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.custom_functions.html">user_input.custom_functions module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.design_matrices.html">user_input.design_matrices module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.generative_models.html">user_input.generative_models module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.utils.html">user_input.utils module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../../case_studies.html">Case Studies</a></li>
 </ul>
 
     </div>
@@ -325,6 +323,7 @@ document.write(`
 
 <span class="kn">from</span> <span class="nn">functions.helper_functions</span> <span class="kn">import</span> <span class="n">save_as_pkl</span>
 
+
 <div class="viewcode-block" id="softmax_gumbel_trick">
 <a class="viewcode-back" href="../../api/functions/functions.model_simulation.html#functions.model_simulation.softmax_gumbel_trick">[docs]</a>
 <span class="k">def</span> <span class="nf">softmax_gumbel_trick</span><span class="p">(</span><span class="n">model_simulations</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">):</span>
@@ -332,17 +331,19 @@ document.write(`
 <span class="sd">    The softmax-gumbel trick computes a continuous approximation of ypred from a</span>
 <span class="sd">    discrete likelihood and thus allows for the computation of gradients for</span>
 <span class="sd">    discrete random variables.</span>
-<span class="sd">    </span>
+
+<span class="sd">    Currently this approach is only implemented for models without upper boundary (e.g., Poisson model).</span>
+
 <span class="sd">    Corresponding literature:</span>
-<span class="sd">        </span>
+
 <span class="sd">    - Maddison, C. J., Mnih, A. &amp; Teh, Y. W. The concrete distribution: A continuous relaxation of</span>
 <span class="sd">      discrete random variables in International Conference on Learning Representations (2017).</span>
 <span class="sd">      https://doi.org/10.48550/arXiv.1611.00712</span>
-<span class="sd">    - Jang, E., Gu, S. &amp; Poole, B. Categorical reparameterization with gumbel-softmax in </span>
-<span class="sd">      International Conference on Learning Representations (2017). </span>
+<span class="sd">    - Jang, E., Gu, S. &amp; Poole, B. Categorical reparameterization with gumbel-softmax in</span>
+<span class="sd">      International Conference on Learning Representations (2017).</span>
 <span class="sd">      https://openreview.net/forum?id=rkE3y85ee.</span>
 <span class="sd">    - Joo, W., Kim, D., Shin, S. &amp; Moon, I.-C. Generalized gumbel-softmax gradient estimator for</span>
-<span class="sd">      generic discrete random variables. </span>
+<span class="sd">      generic discrete random variables.</span>
 <span class="sd">      Preprint at https://doi.org/10.48550/arXiv.2003.01847 (2020).</span>
 
 <span class="sd">    Parameters</span>
@@ -360,37 +361,42 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># get batch size</span>
     <span class="n">B</span> <span class="o">=</span> <span class="n">model_simulations</span><span class="p">[</span><span class="s2">&quot;epred&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="c1"># initialize counter</span>
-    <span class="n">number_obs</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># get number of simulations from priors</span>
+    <span class="n">rep</span> <span class="o">=</span> <span class="n">model_simulations</span><span class="p">[</span><span class="s2">&quot;epred&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="c1"># get number of observations</span>
     <span class="n">number_obs</span> <span class="o">=</span> <span class="n">model_simulations</span><span class="p">[</span><span class="s2">&quot;epred&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
     <span class="c1"># constant outcome vector (including zero outcome)</span>
-    <span class="n">c</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;generative_model&quot;</span><span class="p">][</span><span class="s2">&quot;softmax_gumble_specs&quot;</span><span class="p">][</span><span class="s2">&quot;upper_threshold&quot;</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> 
-                 <span class="n">delta</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">range</span><span class="p">(</span>
+        <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;generative_model&quot;</span><span class="p">][</span><span class="s2">&quot;softmax_gumble_specs&quot;</span><span class="p">][</span><span class="s2">&quot;upper_threshold&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">delta</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="c1"># broadcast to shape (B, rep, outcome-length)</span>
-    <span class="n">c_brct</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:],</span> 
-                             <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;rep&quot;</span><span class="p">],</span> <span class="n">number_obs</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)))</span>
+    <span class="n">c_brct</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:],</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">number_obs</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)))</span>
     <span class="c1"># compute pmf value</span>
     <span class="n">pi</span> <span class="o">=</span> <span class="n">model_simulations</span><span class="p">[</span><span class="s2">&quot;likelihood&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">prob</span><span class="p">(</span><span class="n">c_brct</span><span class="p">)</span>
     <span class="c1"># prevent underflow</span>
     <span class="n">pi</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pi</span> <span class="o">&lt;</span> <span class="mf">1.8</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">),</span> <span class="mf">1.8</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">),</span> <span class="n">pi</span><span class="p">)</span>
     <span class="c1"># sample from uniform</span>
-    <span class="n">u</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">B</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;rep&quot;</span><span class="p">],</span> <span class="n">number_obs</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)))</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">B</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">number_obs</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)))</span>
     <span class="c1"># generate a gumbel sample from uniform sample</span>
     <span class="n">g</span> <span class="o">=</span> <span class="o">-</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="o">-</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">u</span><span class="p">))</span>
     <span class="c1"># softmax gumbel trick</span>
     <span class="n">w</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span>
-        <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">pi</span><span class="p">),</span> <span class="n">g</span><span class="p">),</span> 
-                       <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;generative_model&quot;</span><span class="p">][</span><span class="s2">&quot;softmax_gumble_specs&quot;</span><span class="p">][</span><span class="s2">&quot;temperature&quot;</span><span class="p">])</span>
+        <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">pi</span><span class="p">),</span> <span class="n">g</span><span class="p">),</span>
+            <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;generative_model&quot;</span><span class="p">][</span><span class="s2">&quot;softmax_gumble_specs&quot;</span><span class="p">][</span><span class="s2">&quot;temperature&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
     <span class="p">)</span>
     <span class="c1"># reparameterization/linear transformation</span>
     <span class="n">ypred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">c</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">ypred</span>    </div>
+    <span class="k">return</span> <span class="n">ypred</span></div>
 
- 
+
+
 <div class="viewcode-block" id="simulate_from_generator">
 <a class="viewcode-back" href="../../api/functions/functions.model_simulation.html#functions.model_simulation.simulate_from_generator">[docs]</a>
-<span class="k">def</span> <span class="nf">simulate_from_generator</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">):</span> 
+<span class="k">def</span> <span class="nf">simulate_from_generator</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Simulates data from the specified generative model.</span>
 
@@ -413,20 +419,29 @@ document.write(`
     <span class="c1"># get model and initialize generative model</span>
     <span class="c1"># TODO: I silently assume that the given model_function is an &quot;uninitialized class&quot;</span>
     <span class="n">GenerativeModel</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;generative_model&quot;</span><span class="p">][</span><span class="s2">&quot;model_function&quot;</span><span class="p">]</span>
-    <span class="n">generative_model</span> <span class="o">=</span> <span class="n">GenerativeModel</span><span class="p">()</span> 
-    <span class="c1"># get model specific arguments (that are not prior samples) </span>
+    <span class="n">generative_model</span> <span class="o">=</span> <span class="n">GenerativeModel</span><span class="p">()</span>
+    <span class="c1"># get model specific arguments (that are not prior samples)</span>
     <span class="n">add_model_args</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;generative_model&quot;</span><span class="p">][</span><span class="s2">&quot;additional_model_args&quot;</span><span class="p">]</span>
     <span class="c1"># simulate from generator</span>
-    <span class="n">model_simulations</span> <span class="o">=</span> <span class="n">generative_model</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">,</span> <span class="o">**</span><span class="n">add_model_args</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">add_model_args</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">model_simulations</span> <span class="o">=</span> <span class="n">generative_model</span><span class="p">(</span>
+            <span class="n">ground_truth</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">,</span> <span class="o">**</span><span class="n">add_model_args</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">model_simulations</span> <span class="o">=</span> <span class="n">generative_model</span><span class="p">(</span><span class="n">ground_truth</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">)</span>
+
     <span class="c1"># estimate gradients for discrete likelihood if necessary</span>
-    <span class="k">if</span> <span class="n">model_simulations</span><span class="p">[</span><span class="s2">&quot;likelihood&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">reparameterization_type</span> <span class="o">!=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">FULLY_REPARAMETERIZED</span><span class="p">:</span>
-        <span class="n">model_simulations</span><span class="p">[</span><span class="s2">&quot;ypred&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">softmax_gumbel_trick</span><span class="p">(</span><span class="n">model_simulations</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;generative_model&quot;</span><span class="p">][</span><span class="s2">&quot;discrete_likelihood&quot;</span><span class="p">]:</span>
+        <span class="n">model_simulations</span><span class="p">[</span><span class="s2">&quot;ypred&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">softmax_gumbel_trick</span><span class="p">(</span>
+            <span class="n">model_simulations</span><span class="p">,</span> <span class="n">global_dict</span>
+        <span class="p">)</span>
     <span class="c1"># save file in object</span>
     <span class="n">saving_path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">ground_truth</span><span class="p">:</span>
-        <span class="n">saving_path</span> <span class="o">=</span> <span class="n">saving_path</span><span class="o">+</span><span class="s2">&quot;/expert&quot;</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span><span class="s1">&#39;/model_simulations.pkl&#39;</span>
+        <span class="n">saving_path</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/expert&quot;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/model_simulations.pkl&quot;</span>
     <span class="n">save_as_pkl</span><span class="p">(</span><span class="n">model_simulations</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">model_simulations</span></div>
 
 </pre></div>

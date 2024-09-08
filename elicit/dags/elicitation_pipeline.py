@@ -1,16 +1,24 @@
 import tensorflow as tf
 import pandas as pd
 
-from functions.prior_simulation import intialize_priors, sample_from_priors
+from functions.prior_simulation import Priors
 from functions.model_simulation import simulate_from_generator
-from functions.targets_elicits_computation import computation_target_quantities, computation_elicited_statistics
-from functions.loss_computation import compute_loss_components, compute_discrepancy, dynamic_weight_averaging
+from functions.targets_elicits_computation import (
+    computation_target_quantities,
+    computation_elicited_statistics,
+)
+from functions.loss_computation import (
+    compute_loss_components,
+    compute_discrepancy,
+    dynamic_weight_averaging,
+)
 from functions.training import training_loop
 from functions.helper_functions import save_as_pkl
 
+
 def prior_elicitation_dag(global_dict: dict):
     """
-    Defines the prior elicitation workflow and runs the workflow for the 
+    Defines the prior elicitation workflow and runs the workflow for the
     current setup as indicated by the user.
 
     Parameters
@@ -20,47 +28,11 @@ def prior_elicitation_dag(global_dict: dict):
         quantities, elicitation techniques, optimization settings etc.
 
     """
-    
+
     # set seed
     tf.random.set_seed(global_dict["seed"])
     regularizer_term = []
-    
-    def priors(global_dict, ground_truth=False):
-        """
-        Wrapper which returns an instance of a Priors object, i.e., an initialized
-        prior distribution from which can be sampled
 
-        Parameters
-        ----------
-        global_dict : dict
-            global dictionary with all user input specifications.
-        ground_truth : bool, optional
-            Is true if model should be learned with simulated data that
-            represent a pre-defined ground truth. The default is False.
-
-        Returns
-        -------
-        prior_samples : instance of a priors class object 
-            initialized prior distributions from which can be sampled.
-
-        """
-        # initalize generator model
-        class Priors(tf.Module):
-            def __init__(self, ground_truth, global_dict):
-                self.global_dict = global_dict
-                self.ground_truth = ground_truth
-                if not self.ground_truth:
-                    self.init_priors = intialize_priors(self.global_dict)
-                else:
-                    self.init_priors = None
-
-            def __call__(self):
-                prior_samples = sample_from_priors(self.init_priors, self.ground_truth, self.global_dict)
-                return prior_samples
-
-        prior_model = Priors(ground_truth, global_dict)
-        return prior_model
-    
     def one_forward_simulation(prior_model, global_dict, ground_truth=False):
         """
         One forward simulation from prior samples to elicited statistics.
@@ -83,14 +55,20 @@ def prior_elicitation_dag(global_dict: dict):
 
         """
         prior_samples = prior_model()
-        model_simulations = simulate_from_generator(prior_samples, ground_truth, global_dict)
-        target_quantities = computation_target_quantities(model_simulations, ground_truth, global_dict)
-        elicited_statistics = computation_elicited_statistics(target_quantities, ground_truth, global_dict)
+        model_simulations = simulate_from_generator(
+            prior_samples, ground_truth, global_dict
+        )
+        target_quantities = computation_target_quantities(
+            model_simulations, ground_truth, global_dict
+        )
+        elicited_statistics = computation_elicited_statistics(
+            target_quantities, ground_truth, global_dict
+        )
         return elicited_statistics
 
     def load_expert_data(global_dict, path_to_expert_data=None):
         """
-        Wrapper for loading the training data which can be expert data or 
+        Wrapper for loading the training data which can be expert data or
         data simulations using a pre-defined ground truth.
 
         Parameters
@@ -108,18 +86,22 @@ def prior_elicitation_dag(global_dict: dict):
 
         """
         if global_dict["expert_input"]["simulate_data"]:
-            prior_model = priors(global_dict, ground_truth=True)
+            prior_model = Priors(global_dict, ground_truth=True)
             expert_data = one_forward_simulation(
-                prior_model, global_dict, ground_truth=True)
+                prior_model, global_dict, ground_truth=True
+            )
         else:
             # TODO: Checking: Must have the same shape/form as elicited statistics from model
-            assert global_dict["expert_input"]["data"] is not None, "path to expert data has to provided"
+            assert (
+                global_dict["expert_input"]["data"] is not None
+            ), "path to expert data has to provided"
             # load expert data from file
             expert_data = global_dict["expert_input"]["data"]
         return expert_data
 
-    def compute_loss(training_elicited_statistics, expert_elicited_statistics, 
-                     global_dict, epoch):
+    def compute_loss(
+        training_elicited_statistics, expert_elicited_statistics, global_dict, epoch
+    ):
         """
         Wrapper around the loss computation from elicited statistics to final
         loss value.
@@ -141,11 +123,14 @@ def prior_elicitation_dag(global_dict: dict):
             total loss value.
 
         """
+
+        # regularization term for preventing degenerated solutions in var collapse to zero
+        # used from Manderson and Goudie (2024)
         def regulariser(prior_samples):
             log_sd = tf.math.log(tf.math.reduce_std(prior_samples, 1))
             mean_log_sd = tf.reduce_mean(log_sd)
-            return - mean_log_sd
-        
+            return -mean_log_sd
+
         def compute_total_loss(epoch, loss_per_component, global_dict):
             """
             applies dynamic weight averaging for multi-objective loss function
@@ -168,49 +153,67 @@ def prior_elicitation_dag(global_dict: dict):
 
             """
             loss_per_component_current = loss_per_component
-            
+            # TODO: check whether indicated loss weighting input is implemented
+
             if global_dict["loss_function"]["loss_weighting"] is None:
-                total_loss = tf.math.reduce_sum(loss_per_component) 
-                priorsamples = pd.read_pickle(global_dict["output_path"]["data"]+"/model_simulations.pkl")["prior_samples"]
+                total_loss = tf.math.reduce_sum(loss_per_component)
+                priorsamples = pd.read_pickle(
+                    global_dict["output_path"]["data"] + "/model_simulations.pkl"
+                )["prior_samples"]
                 regul_term = regulariser(priorsamples)
                 regularizer_term.append(regul_term)
-                
-                path = global_dict["output_path"]["data"] + '/regularizer.pkl'
+
+                path = global_dict["output_path"]["data"] + "/regularizer.pkl"
                 save_as_pkl(regularizer_term, path)
-                
+
                 total_loss = total_loss + regul_term
             else:
-                # check whether selected method is implemented
-                # assert global_dict["loss_function"]["loss_weighting"]["method"] == "dwa", "Currently implemented loss weighting methods are: 'dwa'"
                 # apply selected loss weighting method
                 if global_dict["loss_function"]["loss_weighting"]["method"] == "dwa":
                     # dwa needs information about the initial loss per component
                     if epoch == 0:
-                        global_dict["loss_function"]["loss_weighting"]["method_specs"]["loss_per_component_initial"] = loss_per_component
+                        global_dict["loss_function"]["loss_weighting"]["method_specs"][
+                            "loss_per_component_initial"
+                        ] = loss_per_component
                     # apply method
                     total_loss = dynamic_weight_averaging(
-                        epoch, loss_per_component_current, 
-                        global_dict["loss_function"]["loss_weighting"]["method_specs"]["loss_per_component_initial"],
-                        global_dict["loss_function"]["loss_weighting"]["method_specs"]["temperature"],
-                        global_dict["output_path"]["data"])
-                    
+                        epoch,
+                        loss_per_component_current,
+                        global_dict["loss_function"]["loss_weighting"]["method_specs"][
+                            "loss_per_component_initial"
+                        ],
+                        global_dict["loss_function"]["loss_weighting"]["method_specs"][
+                            "temperature"
+                        ],
+                        global_dict["output_path"]["data"],
+                    )
+
                 if global_dict["loss_function"]["loss_weighting"]["method"] == "custom":
-                    
                     total_loss = tf.math.reduce_sum(
-                        tf.multiply(loss_per_component, global_dict["loss_function"]["loss_weighting"]["weights"]) 
+                        tf.multiply(
+                            loss_per_component,
+                            global_dict["loss_function"]["loss_weighting"]["weights"],
                         )
-            
+                    )
+
             return total_loss
 
-        loss_components_expert = compute_loss_components(expert_elicited_statistics, global_dict, expert=True)
-        loss_components_training = compute_loss_components(training_elicited_statistics, global_dict, expert=False)
-        loss_per_component = compute_discrepancy(loss_components_expert, loss_components_training, global_dict)
+        loss_components_expert = compute_loss_components(
+            expert_elicited_statistics, global_dict, expert=True
+        )
+        loss_components_training = compute_loss_components(
+            training_elicited_statistics, global_dict, expert=False
+        )
+        loss_per_component = compute_discrepancy(
+            loss_components_expert, loss_components_training, global_dict
+        )
         weighted_total_loss = compute_total_loss(epoch, loss_per_component, global_dict)
 
         return weighted_total_loss
-        
-    def burnin_phase(expert_elicited_statistics, priors,
-                      one_forward_simulation, compute_loss, global_dict):
+
+    def burnin_phase(
+        expert_elicited_statistics, one_forward_simulation, compute_loss, global_dict
+    ):
         """
         For the method "parametric_prior" it might be helpful to run different initializations
         before the actual training starts in order to find a 'good' set of initial values.
@@ -222,8 +225,6 @@ def prior_elicitation_dag(global_dict: dict):
         ----------
         expert_elicited_statistics : dict
             dictionary with expert elicited statistics.
-        priors : instance of the Priors class
-            initialized prior distributions ready for sampling
         one_forward_simulation : callable
             one forward simulation from prior samples to model-simulated elicited
             statistics.
@@ -244,39 +245,48 @@ def prior_elicitation_dag(global_dict: dict):
         init_var_list = []
         save_prior = []
         for i in range(global_dict["burnin"]):
-            print("|", end='')
+            print("|", end="")
             # prepare generative model
-            prior_model = priors(global_dict)
+            prior_model = Priors(global_dict, ground_truth=False)
             # generate simulations from model
-            training_elicited_statistics = one_forward_simulation(prior_model, global_dict)
+            training_elicited_statistics = one_forward_simulation(
+                prior_model, global_dict
+            )
             # comput loss
-            weighted_total_loss = compute_loss(training_elicited_statistics, 
-                                               expert_elicited_statistics,
-                                               global_dict, epoch = 0)
-            
+            weighted_total_loss = compute_loss(
+                training_elicited_statistics,
+                expert_elicited_statistics,
+                global_dict,
+                epoch=0,
+            )
+
             init_var_list.append(prior_model)
             save_prior.append(prior_model.trainable_variables)
             loss_list.append(weighted_total_loss.numpy())
-            
-        path = global_dict["output_path"]["data"] + '/burnin_phase.pkl'
+
+        path = global_dict["output_path"]["data"] + "/burnin_phase.pkl"
         save_as_pkl((loss_list, save_prior), path)
-            
+
         print(" ")
         return loss_list, init_var_list
-    
+
     # get expert data
     expert_elicited_statistics = load_expert_data(global_dict)
-    
+
     # compute loss for each set of initial values
     loss_list, init_prior = burnin_phase(
-        expert_elicited_statistics, priors, one_forward_simulation, compute_loss, 
-        global_dict)
-    
+        expert_elicited_statistics, one_forward_simulation, compute_loss, global_dict
+    )
+
     # extract minimum loss out of all runs and corresponding set of initial values
     min_index = tf.argmin(loss_list)
     init_prior_model = init_prior[min_index]
-    
+
     # run training with optimal set of initial values
-    training_loop(expert_elicited_statistics, init_prior_model, 
-                  one_forward_simulation, 
-                  compute_loss, global_dict)
+    training_loop(
+        expert_elicited_statistics,
+        init_prior_model,
+        one_forward_simulation,
+        compute_loss,
+        global_dict,
+    )

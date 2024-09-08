@@ -6,7 +6,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>user_input.generative_models module &#8212; Prior Learning</title>
   
@@ -28,7 +28,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
@@ -47,7 +47,6 @@
     <link rel="icon" href="../../_static/favicon-light.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="user_input.utils module" href="user_input.utils.html" />
     <link rel="prev" title="user_input.design_matrices module" href="user_input.design_matrices.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -193,14 +192,12 @@
 <li class="toctree-l4"><a class="reference internal" href="user_input.custom_functions.html">user_input.custom_functions module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="user_input.design_matrices.html">user_input.design_matrices module</a></li>
 <li class="toctree-l4 current active"><a class="current reference internal" href="#">user_input.generative_models module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="user_input.utils.html">user_input.utils module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../../case_studies.html">Case Studies</a></li>
 </ul>
 
     </div>
@@ -368,6 +365,10 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.GenerativeBinomialModel.__call__"><code class="docutils literal notranslate"><span class="pre">GenerativeBinomialModel.__call__()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.GenerativeBinomialModelVariant"><code class="docutils literal notranslate"><span class="pre">GenerativeBinomialModelVariant</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.GenerativeBinomialModelVariant.__call__"><code class="docutils literal notranslate"><span class="pre">GenerativeBinomialModelVariant.__call__()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.GenerativePoissonModel"><code class="docutils literal notranslate"><span class="pre">GenerativePoissonModel</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.GenerativePoissonModel.__call__"><code class="docutils literal notranslate"><span class="pre">GenerativePoissonModel.__call__()</span></code></a></li>
 </ul>
@@ -382,6 +383,42 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.GenerativeMultilevelModel"><code class="docutils literal notranslate"><span class="pre">GenerativeMultilevelModel</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.GenerativeMultilevelModel.__call__"><code class="docutils literal notranslate"><span class="pre">GenerativeMultilevelModel.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.GenerativeToyModel"><code class="docutils literal notranslate"><span class="pre">GenerativeToyModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.GenerativeToyModel.__call__"><code class="docutils literal notranslate"><span class="pre">GenerativeToyModel.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.SkewnessModel"><code class="docutils literal notranslate"><span class="pre">SkewnessModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.SkewnessModel.__call__"><code class="docutils literal notranslate"><span class="pre">SkewnessModel.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.Horseshoe"><code class="docutils literal notranslate"><span class="pre">Horseshoe</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.Horseshoe.__call__"><code class="docutils literal notranslate"><span class="pre">Horseshoe.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.RegularizedHorseshoe"><code class="docutils literal notranslate"><span class="pre">RegularizedHorseshoe</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.RegularizedHorseshoe.__call__"><code class="docutils literal notranslate"><span class="pre">RegularizedHorseshoe.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.SkewnessModel2"><code class="docutils literal notranslate"><span class="pre">SkewnessModel2</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.SkewnessModel2.__call__"><code class="docutils literal notranslate"><span class="pre">SkewnessModel2.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.Model0"><code class="docutils literal notranslate"><span class="pre">Model0</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.Model0.__call__"><code class="docutils literal notranslate"><span class="pre">Model0.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.Model1"><code class="docutils literal notranslate"><span class="pre">Model1</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.Model1.__call__"><code class="docutils literal notranslate"><span class="pre">Model1.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.Model2"><code class="docutils literal notranslate"><span class="pre">Model2</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.Model2.__call__"><code class="docutils literal notranslate"><span class="pre">Model2.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.Model3"><code class="docutils literal notranslate"><span class="pre">Model3</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.Model3.__call__"><code class="docutils literal notranslate"><span class="pre">Model3.__call__()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -404,6 +441,56 @@ document.write(`
 <dl class="py method">
 <dt class="sig sig-object py" id="user_input.generative_models.GenerativeBinomialModel.__call__">
 <span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_count</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/generative_models.html#GenerativeBinomialModel.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.generative_models.GenerativeBinomialModel.__call__" title="Link to this definition">#</a></dt>
+<dd><p>Binomial model with one continuous predictor.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>prior_samples</strong><span class="classifier">dict</span></dt><dd><p>samples from prior distributions.</p>
+</dd>
+<dt><strong>design_matrix</strong><span class="classifier">tf.Tensor</span></dt><dd><p>design matrix.</p>
+</dd>
+<dt><strong>total_count</strong><span class="classifier">int</span></dt><dd><p>total counts of Binomial model.</p>
+</dd>
+<dt><strong>**kwargs</strong><span class="classifier">keyword argument, optional</span></dt><dd><p>additional keyword arguments</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>dictionary with the following keys:</dt><dd></dd>
+</dl>
+<ul class="simple">
+<li><dl class="simple">
+<dt>likelihood: model likelihood</dt><dd></dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>ypred: model predictions; for discrete likelihoods ypred=None as it</dt><dd><p>will be approximated via the softmax-gumble trick</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>epred: predictions of linear predictor</dt><dd></dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>prior samples: samples from prior distributions</dt><dd></dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="user_input.generative_models.GenerativeBinomialModelVariant">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">user_input.generative_models.</span></span><span class="sig-name descname"><span class="pre">GenerativeBinomialModelVariant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/generative_models.html#GenerativeBinomialModelVariant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.generative_models.GenerativeBinomialModelVariant" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="user_input.generative_models.GenerativeBinomialModelVariant.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_matrix</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/generative_models.html#GenerativeBinomialModelVariant.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.generative_models.GenerativeBinomialModelVariant.__call__" title="Link to this definition">#</a></dt>
 <dd><p>Binomial model with one continuous predictor.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -502,7 +589,7 @@ predictor with three levels.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="user_input.generative_models.GenerativeNormalModel.__call__">
-<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_matrix</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/generative_models.html#GenerativeNormalModel.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.generative_models.GenerativeNormalModel.__call__" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_matrix</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/generative_models.html#GenerativeNormalModel.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.generative_models.GenerativeNormalModel.__call__" title="Link to this definition">#</a></dt>
 <dd><p>Call self as a function.</p>
 </dd></dl>
 
@@ -514,7 +601,7 @@ predictor with three levels.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="user_input.generative_models.GenerativeNormalModel_param.__call__">
-<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_matrix</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/generative_models.html#GenerativeNormalModel_param.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.generative_models.GenerativeNormalModel_param.__call__" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_matrix</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/generative_models.html#GenerativeNormalModel_param.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.generative_models.GenerativeNormalModel_param.__call__" title="Link to this definition">#</a></dt>
 <dd><p>Normal model for a 2 x 3 factorial design.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -656,6 +743,114 @@ one by-subject random-intercept and random-slope</p>
 
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="user_input.generative_models.GenerativeToyModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">user_input.generative_models.</span></span><span class="sig-name descname"><span class="pre">GenerativeToyModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/generative_models.html#GenerativeToyModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.generative_models.GenerativeToyModel" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="user_input.generative_models.GenerativeToyModel.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_matrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/generative_models.html#GenerativeToyModel.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.generative_models.GenerativeToyModel.__call__" title="Link to this definition">#</a></dt>
+<dd><p>Call self as a function.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="user_input.generative_models.SkewnessModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">user_input.generative_models.</span></span><span class="sig-name descname"><span class="pre">SkewnessModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/generative_models.html#SkewnessModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.generative_models.SkewnessModel" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="user_input.generative_models.SkewnessModel.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/generative_models.html#SkewnessModel.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.generative_models.SkewnessModel.__call__" title="Link to this definition">#</a></dt>
+<dd><p>Call self as a function.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="user_input.generative_models.Horseshoe">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">user_input.generative_models.</span></span><span class="sig-name descname"><span class="pre">Horseshoe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/generative_models.html#Horseshoe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.generative_models.Horseshoe" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="user_input.generative_models.Horseshoe.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_matrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/generative_models.html#Horseshoe.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.generative_models.Horseshoe.__call__" title="Link to this definition">#</a></dt>
+<dd><p>Call self as a function.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="user_input.generative_models.RegularizedHorseshoe">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">user_input.generative_models.</span></span><span class="sig-name descname"><span class="pre">RegularizedHorseshoe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/generative_models.html#RegularizedHorseshoe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.generative_models.RegularizedHorseshoe" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="user_input.generative_models.RegularizedHorseshoe.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu_local</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_slab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu_slab</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/generative_models.html#RegularizedHorseshoe.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.generative_models.RegularizedHorseshoe.__call__" title="Link to this definition">#</a></dt>
+<dd><p>Call self as a function.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="user_input.generative_models.SkewnessModel2">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">user_input.generative_models.</span></span><span class="sig-name descname"><span class="pre">SkewnessModel2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/generative_models.html#SkewnessModel2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.generative_models.SkewnessModel2" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="user_input.generative_models.SkewnessModel2.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/generative_models.html#SkewnessModel2.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.generative_models.SkewnessModel2.__call__" title="Link to this definition">#</a></dt>
+<dd><p>Call self as a function.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="user_input.generative_models.Model0">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">user_input.generative_models.</span></span><span class="sig-name descname"><span class="pre">Model0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/generative_models.html#Model0"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.generative_models.Model0" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="user_input.generative_models.Model0.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_count</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/generative_models.html#Model0.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.generative_models.Model0.__call__" title="Link to this definition">#</a></dt>
+<dd><p>Call self as a function.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="user_input.generative_models.Model1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">user_input.generative_models.</span></span><span class="sig-name descname"><span class="pre">Model1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/generative_models.html#Model1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.generative_models.Model1" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="user_input.generative_models.Model1.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_matrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/generative_models.html#Model1.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.generative_models.Model1.__call__" title="Link to this definition">#</a></dt>
+<dd><p>Call self as a function.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="user_input.generative_models.Model2">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">user_input.generative_models.</span></span><span class="sig-name descname"><span class="pre">Model2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/generative_models.html#Model2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.generative_models.Model2" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="user_input.generative_models.Model2.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_matrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/generative_models.html#Model2.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.generative_models.Model2.__call__" title="Link to this definition">#</a></dt>
+<dd><p>Call self as a function.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="user_input.generative_models.Model3">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">user_input.generative_models.</span></span><span class="sig-name descname"><span class="pre">Model3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/generative_models.html#Model3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.generative_models.Model3" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="user_input.generative_models.Model3.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_matrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/generative_models.html#Model3.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.generative_models.Model3.__call__" title="Link to this definition">#</a></dt>
+<dd><p>Call self as a function.</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
@@ -678,15 +873,6 @@ one by-subject random-intercept and random-slope</p>
         <p class="prev-next-title">user_input.design_matrices module</p>
       </div>
     </a>
-    <a class="right-next"
-       href="user_input.utils.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">user_input.utils module</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               
@@ -707,6 +893,10 @@ one by-subject random-intercept and random-slope</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.GenerativeBinomialModel.__call__"><code class="docutils literal notranslate"><span class="pre">GenerativeBinomialModel.__call__()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.GenerativeBinomialModelVariant"><code class="docutils literal notranslate"><span class="pre">GenerativeBinomialModelVariant</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.GenerativeBinomialModelVariant.__call__"><code class="docutils literal notranslate"><span class="pre">GenerativeBinomialModelVariant.__call__()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.GenerativePoissonModel"><code class="docutils literal notranslate"><span class="pre">GenerativePoissonModel</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.GenerativePoissonModel.__call__"><code class="docutils literal notranslate"><span class="pre">GenerativePoissonModel.__call__()</span></code></a></li>
 </ul>
@@ -721,6 +911,42 @@ one by-subject random-intercept and random-slope</p>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.GenerativeMultilevelModel"><code class="docutils literal notranslate"><span class="pre">GenerativeMultilevelModel</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.GenerativeMultilevelModel.__call__"><code class="docutils literal notranslate"><span class="pre">GenerativeMultilevelModel.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.GenerativeToyModel"><code class="docutils literal notranslate"><span class="pre">GenerativeToyModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.GenerativeToyModel.__call__"><code class="docutils literal notranslate"><span class="pre">GenerativeToyModel.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.SkewnessModel"><code class="docutils literal notranslate"><span class="pre">SkewnessModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.SkewnessModel.__call__"><code class="docutils literal notranslate"><span class="pre">SkewnessModel.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.Horseshoe"><code class="docutils literal notranslate"><span class="pre">Horseshoe</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.Horseshoe.__call__"><code class="docutils literal notranslate"><span class="pre">Horseshoe.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.RegularizedHorseshoe"><code class="docutils literal notranslate"><span class="pre">RegularizedHorseshoe</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.RegularizedHorseshoe.__call__"><code class="docutils literal notranslate"><span class="pre">RegularizedHorseshoe.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.SkewnessModel2"><code class="docutils literal notranslate"><span class="pre">SkewnessModel2</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.SkewnessModel2.__call__"><code class="docutils literal notranslate"><span class="pre">SkewnessModel2.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.Model0"><code class="docutils literal notranslate"><span class="pre">Model0</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.Model0.__call__"><code class="docutils literal notranslate"><span class="pre">Model0.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.Model1"><code class="docutils literal notranslate"><span class="pre">Model1</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.Model1.__call__"><code class="docutils literal notranslate"><span class="pre">Model1.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.Model2"><code class="docutils literal notranslate"><span class="pre">Model2</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.Model2.__call__"><code class="docutils literal notranslate"><span class="pre">Model2.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.Model3"><code class="docutils literal notranslate"><span class="pre">Model3</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.generative_models.Model3.__call__"><code class="docutils literal notranslate"><span class="pre">Model3.__call__()</span></code></a></li>
 </ul>
 </li>
 </ul>

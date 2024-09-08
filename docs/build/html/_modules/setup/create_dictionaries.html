@@ -27,7 +27,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
@@ -192,14 +192,12 @@
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.custom_functions.html">user_input.custom_functions module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.design_matrices.html">user_input.design_matrices module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.generative_models.html">user_input.generative_models module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.utils.html">user_input.utils module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../../case_studies.html">Case Studies</a></li>
 </ul>
 
     </div>
@@ -344,12 +342,18 @@ document.write(`
     <span class="c1"># get method name</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getargspec</span><span class="p">(</span><span class="n">user_input</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">method</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getargspec</span><span class="p">(</span><span class="n">user_input</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">assert</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;learning&quot;</span><span class="p">,</span> <span class="s2">&quot;ground_truth&quot;</span><span class="p">]</span> <span class="p">,</span> <span class="s2">&quot;Value for argument &#39;method&#39; in &#39;target_quantities&#39; must be either &#39;learning&#39; or &#39;ground_truth&#39;&quot;</span>
+        <span class="k">assert</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="s2">&quot;learning&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ground_truth&quot;</span><span class="p">,</span>
+        <span class="p">],</span> <span class="s2">&quot;Value for argument &#39;method&#39; in &#39;target_quantities&#39; must be either &#39;learning&#39; or &#39;ground_truth&#39;&quot;</span>
     <span class="c1"># call function</span>
     <span class="n">param_tuple</span> <span class="o">=</span> <span class="n">user_input</span><span class="p">()</span>
     <span class="c1"># initialize output dictionary;  get keys from all input function</span>
-    <span class="n">all_keys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
-        <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">param_tuple</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">param_tuple</span><span class="p">))],</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="n">all_keys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+            <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">param_tuple</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">param_tuple</span><span class="p">))],</span> <span class="mi">0</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
     <span class="n">param_dict</span> <span class="o">=</span> <span class="p">{</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">all_keys</span><span class="p">}</span>
     <span class="c1"># loop over each element in tuple</span>
     <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">param_tuple</span><span class="p">)):</span>
@@ -367,19 +371,32 @@ document.write(`
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">param_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">param_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">+</span> <span class="n">input_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getargspec</span><span class="p">(</span><span class="n">user_input</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">param_dict</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">method</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">param_tuple</span><span class="p">)</span>
+        <span class="n">param_dict</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">method</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">param_tuple</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">param_dict</span></div>
 
-
-<span class="c1"># Create necessary config files</span>
 
 
 <div class="viewcode-block" id="create_global_dict">
 <a class="viewcode-back" href="../../api/setup/setup.create_dictionaries.html#setup.create_dictionaries.create_global_dict">[docs]</a>
 <span class="k">def</span> <span class="nf">create_global_dict</span><span class="p">(</span>
-        <span class="n">method</span><span class="p">,</span> <span class="n">sim_id</span><span class="p">,</span> <span class="n">epochs</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">burnin</span><span class="p">,</span> <span class="n">model_params</span><span class="p">,</span> <span class="n">expert_input</span><span class="p">,</span>
-        <span class="n">generative_model</span><span class="p">,</span> <span class="n">target_quantities</span><span class="p">,</span> <span class="n">loss_function</span><span class="p">,</span>
-        <span class="n">optimization_settings</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">print_info</span><span class="p">,</span> <span class="n">view_ep</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="n">method</span><span class="p">,</span>
+    <span class="n">sim_id</span><span class="p">,</span>
+    <span class="n">epochs</span><span class="p">,</span>
+    <span class="n">B</span><span class="p">,</span>
+    <span class="n">rep</span><span class="p">,</span>
+    <span class="n">seed</span><span class="p">,</span>
+    <span class="n">burnin</span><span class="p">,</span>
+    <span class="n">param_independence</span><span class="p">,</span>
+    <span class="n">model_params</span><span class="p">,</span>
+    <span class="n">expert_input</span><span class="p">,</span>
+    <span class="n">generative_model</span><span class="p">,</span>
+    <span class="n">target_quantities</span><span class="p">,</span>
+    <span class="n">loss_function</span><span class="p">,</span>
+    <span class="n">optimization_settings</span><span class="p">,</span>
+    <span class="n">output_path</span><span class="p">,</span>
+    <span class="n">print_info</span><span class="p">,</span>
+    <span class="n">view_ep</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creates the global dictionary including all input information from the user.</span>
 
@@ -391,7 +408,7 @@ document.write(`
 <span class="sd">        unique identification of simulation used to save result in a folder with</span>
 <span class="sd">        the corresponding name.</span>
 <span class="sd">    epochs : int</span>
-<span class="sd">        number of epochs </span>
+<span class="sd">        number of epochs</span>
 <span class="sd">    B : int</span>
 <span class="sd">        batch size (2^7 or 2^8 should be enough)</span>
 <span class="sd">    rep : int</span>
@@ -399,9 +416,12 @@ document.write(`
 <span class="sd">    seed : int</span>
 <span class="sd">        seed for reproducibility.</span>
 <span class="sd">    burnin : int</span>
-<span class="sd">        number of initializations that are tried out before learning starts. </span>
+<span class="sd">        number of initializations that are tried out before learning starts.</span>
 <span class="sd">        The initialization setting leading to the smallest loss is used for running the learning algorithm.</span>
 <span class="sd">        Method is only reasonable for &#39;parametric_prior&#39; method.</span>
+<span class="sd">    param_independence : bool</span>
+<span class="sd">        whether model parameters should be treated as independent. If True, correlation between model parameters is</span>
+<span class="sd">        incorporated in the loss function.</span>
 <span class="sd">    model_params : callable</span>
 <span class="sd">        user information on model parameters using the `param()` object</span>
 <span class="sd">    expert_input : callable</span>
@@ -438,12 +458,15 @@ document.write(`
     <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;rep&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rep</span>
     <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">seed</span>
     <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;burnin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">burnin</span>
+    <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;param_independence&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">param_independence</span>
     <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;model_params&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">create_dict</span><span class="p">(</span><span class="n">model_params</span><span class="p">)</span>
     <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;expert_input&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">expert_input</span><span class="p">()</span>
     <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;generative_model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">generative_model</span><span class="p">()</span>
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">target_quantities</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">tuple</span><span class="p">:</span>
-         <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;target_quantities&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">target_quantities</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;method&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">target_quantities</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                                             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">target_quantities</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;method&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">target_quantities</span><span class="p">[</span><span class="mi">1</span><span class="p">]}</span>
+        <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;target_quantities&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">target_quantities</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;method&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">target_quantities</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">target_quantities</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;method&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">target_quantities</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="p">}</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;target_quantities&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">create_dict</span><span class="p">(</span><span class="n">target_quantities</span><span class="p">)</span>
     <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;loss_function&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">loss_function</span><span class="p">()</span>
@@ -451,14 +474,12 @@ document.write(`
     <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;elicit/simulations/results/data/</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">sim_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
         <span class="s2">&quot;plots&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;elicit/simulations/results/plots/</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">sim_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-        <span class="c1"># &quot;data&quot;: os.path.join(os.path.dirname(__name__), output_path, &quot;data&quot;, method, sim_id),</span>
-        <span class="c1"># &quot;plots&quot;: os.path.join(os.path.dirname(__name__), output_path, &quot;plots&quot;, method, sim_id)</span>
     <span class="p">}</span>
     <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;print_info&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">print_info</span>
     <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;view_ep&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">view_ep</span>
 
     <span class="c1"># save global dict</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;/global_dict.pkl&#39;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/global_dict.pkl&quot;</span>
     <span class="n">save_as_pkl</span><span class="p">(</span><span class="n">global_dict</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">global_dict</span></div>

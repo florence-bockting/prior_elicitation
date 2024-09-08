@@ -6,7 +6,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>user_input.custom_functions module &#8212; Prior Learning</title>
   
@@ -28,7 +28,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
@@ -193,14 +193,12 @@
 <li class="toctree-l4 current active"><a class="current reference internal" href="#">user_input.custom_functions module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="user_input.design_matrices.html">user_input.design_matrices module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="user_input.generative_models.html">user_input.generative_models module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="user_input.utils.html">user_input.utils module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../../case_studies.html">Case Studies</a></li>
 </ul>
 
     </div>
@@ -384,10 +382,53 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.Gamma_log.__call__"><code class="docutils literal notranslate"><span class="pre">Gamma_log.__call__()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.Beta_log"><code class="docutils literal notranslate"><span class="pre">Beta_log</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.Beta_log.__init__"><code class="docutils literal notranslate"><span class="pre">Beta_log.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.Beta_log.__call__"><code class="docutils literal notranslate"><span class="pre">Beta_log.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.Normal0_log"><code class="docutils literal notranslate"><span class="pre">Normal0_log</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.Normal0_log.__init__"><code class="docutils literal notranslate"><span class="pre">Normal0_log.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.Normal0_log.__call__"><code class="docutils literal notranslate"><span class="pre">Normal0_log.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.HalfNormal_log"><code class="docutils literal notranslate"><span class="pre">HalfNormal_log</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.HalfNormal_log.__init__"><code class="docutils literal notranslate"><span class="pre">HalfNormal_log.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.HalfNormal_log.__call__"><code class="docutils literal notranslate"><span class="pre">HalfNormal_log.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.InvGamma_log"><code class="docutils literal notranslate"><span class="pre">InvGamma_log</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.InvGamma_log.__init__"><code class="docutils literal notranslate"><span class="pre">InvGamma_log.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.InvGamma_log.__call__"><code class="docutils literal notranslate"><span class="pre">InvGamma_log.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.Student0"><code class="docutils literal notranslate"><span class="pre">Student0</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.Student0.__init__"><code class="docutils literal notranslate"><span class="pre">Student0.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.Student0.__call__"><code class="docutils literal notranslate"><span class="pre">Student0.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.InvSoftplus"><code class="docutils literal notranslate"><span class="pre">InvSoftplus</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.InvSoftplus.__init__"><code class="docutils literal notranslate"><span class="pre">InvSoftplus.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.Gamma_inv_softplus"><code class="docutils literal notranslate"><span class="pre">Gamma_inv_softplus</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.Gamma_inv_softplus.__init__"><code class="docutils literal notranslate"><span class="pre">Gamma_inv_softplus.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.Gamma_inv_softplus.__call__"><code class="docutils literal notranslate"><span class="pre">Gamma_inv_softplus.__call__()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.custom_R2"><code class="docutils literal notranslate"><span class="pre">custom_R2()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.custom_R2_beta"><code class="docutils literal notranslate"><span class="pre">custom_R2_beta()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.custom_group_means"><code class="docutils literal notranslate"><span class="pre">custom_group_means()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.custom_group"><code class="docutils literal notranslate"><span class="pre">custom_group()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.custom_std_comparison"><code class="docutils literal notranslate"><span class="pre">custom_std_comparison()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.custom_group_range"><code class="docutils literal notranslate"><span class="pre">custom_group_range()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.custom_mu0_sd"><code class="docutils literal notranslate"><span class="pre">custom_mu0_sd()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.custom_mu9_sd"><code class="docutils literal notranslate"><span class="pre">custom_mu9_sd()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.custom_avg_obs"><code class="docutils literal notranslate"><span class="pre">custom_avg_obs()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.CustomMixture"><code class="docutils literal notranslate"><span class="pre">CustomMixture()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.custom_correlation"><code class="docutils literal notranslate"><span class="pre">custom_correlation()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.group_quantiles"><code class="docutils literal notranslate"><span class="pre">group_quantiles()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.custom_target_R2"><code class="docutils literal notranslate"><span class="pre">custom_target_R2()</span></code></a></li>
 </ul>
             </nav>
         </div>
@@ -537,9 +578,263 @@ on the log scale.</p>
 
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="user_input.custom_functions.Beta_log">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">user_input.custom_functions.</span></span><span class="sig-name descname"><span class="pre">Beta_log</span></span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#Beta_log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.Beta_log" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="user_input.custom_functions.Beta_log.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#Beta_log.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.Beta_log.__init__" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="user_input.custom_functions.Beta_log.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">concentration1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">concentration0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#Beta_log.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.Beta_log.__call__" title="Link to this definition">#</a></dt>
+<dd><p>Instantiation of Beta distribution with both concentration1 and 
+concentration2 being learned on the log scale.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>concentration1</strong><span class="classifier">int</span></dt><dd><p>concentration1 parameter of beta distribution on the original scale.</p>
+</dd>
+<dt><strong>concentration0</strong><span class="classifier">int</span></dt><dd><p>concentration0 parameter of beta distribution on the original scale.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>tfp.distribution object</dt><dd><p>beta distribution with both concentration1 and concentration2 being 
+learned on the log scale.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="user_input.custom_functions.Normal0_log">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">user_input.custom_functions.</span></span><span class="sig-name descname"><span class="pre">Normal0_log</span></span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#Normal0_log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.Normal0_log" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="user_input.custom_functions.Normal0_log.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#Normal0_log.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.Normal0_log.__init__" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="user_input.custom_functions.Normal0_log.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#Normal0_log.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.Normal0_log.__call__" title="Link to this definition">#</a></dt>
+<dd><p>Call self as a function.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="user_input.custom_functions.HalfNormal_log">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">user_input.custom_functions.</span></span><span class="sig-name descname"><span class="pre">HalfNormal_log</span></span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#HalfNormal_log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.HalfNormal_log" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="user_input.custom_functions.HalfNormal_log.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#HalfNormal_log.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.HalfNormal_log.__init__" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="user_input.custom_functions.HalfNormal_log.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#HalfNormal_log.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.HalfNormal_log.__call__" title="Link to this definition">#</a></dt>
+<dd><p>Call self as a function.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="user_input.custom_functions.InvGamma_log">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">user_input.custom_functions.</span></span><span class="sig-name descname"><span class="pre">InvGamma_log</span></span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#InvGamma_log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.InvGamma_log" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="user_input.custom_functions.InvGamma_log.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#InvGamma_log.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.InvGamma_log.__init__" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="user_input.custom_functions.InvGamma_log.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nu_slab</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#InvGamma_log.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.InvGamma_log.__call__" title="Link to this definition">#</a></dt>
+<dd><p>Call self as a function.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="user_input.custom_functions.Student0">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">user_input.custom_functions.</span></span><span class="sig-name descname"><span class="pre">Student0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu_global</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#Student0"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.Student0" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="user_input.custom_functions.Student0.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu_global</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#Student0.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.Student0.__init__" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="user_input.custom_functions.Student0.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sigma_global</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#Student0.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.Student0.__call__" title="Link to this definition">#</a></dt>
+<dd><p>Call self as a function.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="user_input.custom_functions.InvSoftplus">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">user_input.custom_functions.</span></span><span class="sig-name descname"><span class="pre">InvSoftplus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">validate_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'inv_softplus'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#InvSoftplus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.InvSoftplus" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Bijector</span></code></p>
+<p>Constructs Bijector.</p>
+<p>A <cite>Bijector</cite> transforms random variables into new random variables.</p>
+<p>Examples:</p>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>python
+# Create the Y = g(X) = X transform.
+identity = Identity()</p>
+<p># Create the Y = g(X) = exp(X) transform.
+exp = Exp()
+<a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
+<p>See <cite>Bijector</cite> subclass docstring for more details and specific examples.</p>
+<dl>
+<dt>Args:</dt><dd><p>graph_parents: Python list of graph prerequisites of this <cite>Bijector</cite>.
+is_constant_jacobian: Python <cite>bool</cite> indicating that the Jacobian matrix is</p>
+<blockquote>
+<div><p>not a function of the input.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>validate_args: Python <cite>bool</cite>, default <cite>False</cite>. Whether to validate input</dt><dd><p>with asserts. If <cite>validate_args</cite> is <cite>False</cite>, and the inputs are invalid,
+correct behavior is not guaranteed.</p>
+</dd>
+<dt>dtype: <cite>tf.dtype</cite> supported by this <cite>Bijector</cite>. <cite>None</cite> means dtype is not</dt><dd><p>enforced. For multipart bijectors, this value is expected to be the
+same for all elements of the input and output structures.</p>
+</dd>
+<dt>forward_min_event_ndims: Python <cite>integer</cite> (structure) indicating the</dt><dd><p>minimum number of dimensions on which <cite>forward</cite> operates.</p>
+</dd>
+<dt>inverse_min_event_ndims: Python <cite>integer</cite> (structure) indicating the</dt><dd><p>minimum number of dimensions on which <cite>inverse</cite> operates. Will be set to
+<cite>forward_min_event_ndims</cite> by default, if no value is provided.</p>
+</dd>
+<dt>experimental_use_kahan_sum: Python <cite>bool</cite>. When <cite>True</cite>, use Kahan</dt><dd><p>summation to aggregate log-det jacobians from independent underlying
+log-det jacobian values, which improves against the precision of a naive
+float32 sum. This can be noticeable in particular for large dimensions
+in float32. See CPU caveat on <cite>tfp.math.reduce_kahan_sum</cite>.</p>
+</dd>
+<dt>parameters: Python <cite>dict</cite> of parameters used to instantiate this</dt><dd><p><cite>Bijector</cite>. Bijector instances with identical types, names, and
+<cite>parameters</cite> share an input/output cache. <cite>parameters</cite> dicts are
+keyed by strings and are identical if their keys are identical and if
+corresponding values have identical hashes (or object ids, for
+unhashable objects).</p>
+</dd>
+</dl>
+<p>name: The name to give Ops created by the initializer.</p>
+</dd>
+<dt>Raises:</dt><dd><dl class="simple">
+<dt>ValueError:  If neither <cite>forward_min_event_ndims</cite> and</dt><dd><p><cite>inverse_min_event_ndims</cite> are specified, or if either of them is
+negative.</p>
+</dd>
+</dl>
+<p>ValueError:  If a member of <cite>graph_parents</cite> is not a <cite>Tensor</cite>.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="user_input.custom_functions.InvSoftplus.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">validate_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'inv_softplus'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#InvSoftplus.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.InvSoftplus.__init__" title="Link to this definition">#</a></dt>
+<dd><p>Constructs Bijector.</p>
+<p>A <cite>Bijector</cite> transforms random variables into new random variables.</p>
+<p>Examples:</p>
+<p><a href="#id9"><span class="problematic" id="id10">``</span></a><a href="#id11"><span class="problematic" id="id12">`</span></a>python
+# Create the Y = g(X) = X transform.
+identity = Identity()</p>
+<p># Create the Y = g(X) = exp(X) transform.
+exp = Exp()
+<a href="#id13"><span class="problematic" id="id14">``</span></a><a href="#id15"><span class="problematic" id="id16">`</span></a></p>
+<p>See <cite>Bijector</cite> subclass docstring for more details and specific examples.</p>
+<dl>
+<dt>Args:</dt><dd><p>graph_parents: Python list of graph prerequisites of this <cite>Bijector</cite>.
+is_constant_jacobian: Python <cite>bool</cite> indicating that the Jacobian matrix is</p>
+<blockquote>
+<div><p>not a function of the input.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>validate_args: Python <cite>bool</cite>, default <cite>False</cite>. Whether to validate input</dt><dd><p>with asserts. If <cite>validate_args</cite> is <cite>False</cite>, and the inputs are invalid,
+correct behavior is not guaranteed.</p>
+</dd>
+<dt>dtype: <cite>tf.dtype</cite> supported by this <cite>Bijector</cite>. <cite>None</cite> means dtype is not</dt><dd><p>enforced. For multipart bijectors, this value is expected to be the
+same for all elements of the input and output structures.</p>
+</dd>
+<dt>forward_min_event_ndims: Python <cite>integer</cite> (structure) indicating the</dt><dd><p>minimum number of dimensions on which <cite>forward</cite> operates.</p>
+</dd>
+<dt>inverse_min_event_ndims: Python <cite>integer</cite> (structure) indicating the</dt><dd><p>minimum number of dimensions on which <cite>inverse</cite> operates. Will be set to
+<cite>forward_min_event_ndims</cite> by default, if no value is provided.</p>
+</dd>
+<dt>experimental_use_kahan_sum: Python <cite>bool</cite>. When <cite>True</cite>, use Kahan</dt><dd><p>summation to aggregate log-det jacobians from independent underlying
+log-det jacobian values, which improves against the precision of a naive
+float32 sum. This can be noticeable in particular for large dimensions
+in float32. See CPU caveat on <cite>tfp.math.reduce_kahan_sum</cite>.</p>
+</dd>
+<dt>parameters: Python <cite>dict</cite> of parameters used to instantiate this</dt><dd><p><cite>Bijector</cite>. Bijector instances with identical types, names, and
+<cite>parameters</cite> share an input/output cache. <cite>parameters</cite> dicts are
+keyed by strings and are identical if their keys are identical and if
+corresponding values have identical hashes (or object ids, for
+unhashable objects).</p>
+</dd>
+</dl>
+<p>name: The name to give Ops created by the initializer.</p>
+</dd>
+<dt>Raises:</dt><dd><dl class="simple">
+<dt>ValueError:  If neither <cite>forward_min_event_ndims</cite> and</dt><dd><p><cite>inverse_min_event_ndims</cite> are specified, or if either of them is
+negative.</p>
+</dd>
+</dl>
+<p>ValueError:  If a member of <cite>graph_parents</cite> is not a <cite>Tensor</cite>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="user_input.custom_functions.Gamma_inv_softplus">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">user_input.custom_functions.</span></span><span class="sig-name descname"><span class="pre">Gamma_inv_softplus</span></span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#Gamma_inv_softplus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.Gamma_inv_softplus" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="user_input.custom_functions.Gamma_inv_softplus.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#Gamma_inv_softplus.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.Gamma_inv_softplus.__init__" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="user_input.custom_functions.Gamma_inv_softplus.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">concentration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#Gamma_inv_softplus.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.Gamma_inv_softplus.__call__" title="Link to this definition">#</a></dt>
+<dd><p>Call self as a function.</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="user_input.custom_functions.custom_R2">
 <span class="sig-prename descclassname"><span class="pre">user_input.custom_functions.</span></span><span class="sig-name descname"><span class="pre">custom_R2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ypred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epred</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#custom_R2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.custom_R2" title="Link to this definition">#</a></dt>
+<dd><p>Defines R2 such that it is guaranteed to lie within zero and one.
+<a class="reference external" href="https://avehtari.github.io/bayes_R2/bayes_R2.html#2_Functions_for_Bayesian_R-squared_for_stan_glm_models">https://avehtari.github.io/bayes_R2/bayes_R2.html#2_Functions_for_Bayesian_R-squared_for_stan_glm_models</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ypred</strong><span class="classifier">tf.Tensor</span></dt><dd><p>simulated prior predictions from generative model.</p>
+</dd>
+<dt><strong>epred</strong><span class="classifier">tf.Tensor</span></dt><dd><p>simulated linear predictor from generative model.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>r2</strong><span class="classifier">tf.Tensor</span></dt><dd><p>computed R2 value.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="user_input.custom_functions.custom_R2_beta">
+<span class="sig-prename descclassname"><span class="pre">user_input.custom_functions.</span></span><span class="sig-name descname"><span class="pre">custom_R2_beta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ypred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epred</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#custom_R2_beta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.custom_R2_beta" title="Link to this definition">#</a></dt>
 <dd><p>Defines R2 such that it is guaranteed to lie within zero and one.
 <a class="reference external" href="https://avehtari.github.io/bayes_R2/bayes_R2.html#2_Functions_for_Bayesian_R-squared_for_stan_glm_models">https://avehtari.github.io/bayes_R2/bayes_R2.html#2_Functions_for_Bayesian_R-squared_for_stan_glm_models</a></p>
 <dl class="field-list simple">
@@ -583,6 +878,21 @@ on the log scale.</p>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="user_input.custom_functions.custom_group">
+<span class="sig-prename descclassname"><span class="pre">user_input.custom_functions.</span></span><span class="sig-name descname"><span class="pre">custom_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ypred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor_indices</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#custom_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.custom_group" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="user_input.custom_functions.custom_std_comparison">
+<span class="sig-prename descclassname"><span class="pre">user_input.custom_functions.</span></span><span class="sig-name descname"><span class="pre">custom_std_comparison</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#custom_std_comparison"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.custom_std_comparison" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="user_input.custom_functions.custom_group_range">
+<span class="sig-prename descclassname"><span class="pre">user_input.custom_functions.</span></span><span class="sig-name descname"><span class="pre">custom_group_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ypred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor_indices</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#custom_group_range"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.custom_group_range" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="user_input.custom_functions.custom_mu0_sd">
@@ -641,6 +951,31 @@ simulated ground truth (and not searched for in the model simulations).</p>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="user_input.custom_functions.custom_avg_obs">
+<span class="sig-prename descclassname"><span class="pre">user_input.custom_functions.</span></span><span class="sig-name descname"><span class="pre">custom_avg_obs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ypred</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#custom_avg_obs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.custom_avg_obs" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="user_input.custom_functions.CustomMixture">
+<span class="sig-prename descclassname"><span class="pre">user_input.custom_functions.</span></span><span class="sig-name descname"><span class="pre">CustomMixture</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#CustomMixture"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.CustomMixture" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="user_input.custom_functions.custom_correlation">
+<span class="sig-prename descclassname"><span class="pre">user_input.custom_functions.</span></span><span class="sig-name descname"><span class="pre">custom_correlation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#custom_correlation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.custom_correlation" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="user_input.custom_functions.group_quantiles">
+<span class="sig-prename descclassname"><span class="pre">user_input.custom_functions.</span></span><span class="sig-name descname"><span class="pre">group_quantiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_group</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#group_quantiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.group_quantiles" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="user_input.custom_functions.custom_target_R2">
+<span class="sig-prename descclassname"><span class="pre">user_input.custom_functions.</span></span><span class="sig-name descname"><span class="pre">custom_target_R2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ypred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epred</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/user_input/custom_functions.html#custom_target_R2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#user_input.custom_functions.custom_target_R2" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
 
 </section>
 
@@ -709,10 +1044,53 @@ simulated ground truth (and not searched for in the model simulations).</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.Gamma_log.__call__"><code class="docutils literal notranslate"><span class="pre">Gamma_log.__call__()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.Beta_log"><code class="docutils literal notranslate"><span class="pre">Beta_log</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.Beta_log.__init__"><code class="docutils literal notranslate"><span class="pre">Beta_log.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.Beta_log.__call__"><code class="docutils literal notranslate"><span class="pre">Beta_log.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.Normal0_log"><code class="docutils literal notranslate"><span class="pre">Normal0_log</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.Normal0_log.__init__"><code class="docutils literal notranslate"><span class="pre">Normal0_log.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.Normal0_log.__call__"><code class="docutils literal notranslate"><span class="pre">Normal0_log.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.HalfNormal_log"><code class="docutils literal notranslate"><span class="pre">HalfNormal_log</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.HalfNormal_log.__init__"><code class="docutils literal notranslate"><span class="pre">HalfNormal_log.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.HalfNormal_log.__call__"><code class="docutils literal notranslate"><span class="pre">HalfNormal_log.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.InvGamma_log"><code class="docutils literal notranslate"><span class="pre">InvGamma_log</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.InvGamma_log.__init__"><code class="docutils literal notranslate"><span class="pre">InvGamma_log.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.InvGamma_log.__call__"><code class="docutils literal notranslate"><span class="pre">InvGamma_log.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.Student0"><code class="docutils literal notranslate"><span class="pre">Student0</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.Student0.__init__"><code class="docutils literal notranslate"><span class="pre">Student0.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.Student0.__call__"><code class="docutils literal notranslate"><span class="pre">Student0.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.InvSoftplus"><code class="docutils literal notranslate"><span class="pre">InvSoftplus</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.InvSoftplus.__init__"><code class="docutils literal notranslate"><span class="pre">InvSoftplus.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.Gamma_inv_softplus"><code class="docutils literal notranslate"><span class="pre">Gamma_inv_softplus</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.Gamma_inv_softplus.__init__"><code class="docutils literal notranslate"><span class="pre">Gamma_inv_softplus.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.Gamma_inv_softplus.__call__"><code class="docutils literal notranslate"><span class="pre">Gamma_inv_softplus.__call__()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.custom_R2"><code class="docutils literal notranslate"><span class="pre">custom_R2()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.custom_R2_beta"><code class="docutils literal notranslate"><span class="pre">custom_R2_beta()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.custom_group_means"><code class="docutils literal notranslate"><span class="pre">custom_group_means()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.custom_group"><code class="docutils literal notranslate"><span class="pre">custom_group()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.custom_std_comparison"><code class="docutils literal notranslate"><span class="pre">custom_std_comparison()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.custom_group_range"><code class="docutils literal notranslate"><span class="pre">custom_group_range()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.custom_mu0_sd"><code class="docutils literal notranslate"><span class="pre">custom_mu0_sd()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.custom_mu9_sd"><code class="docutils literal notranslate"><span class="pre">custom_mu9_sd()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.custom_avg_obs"><code class="docutils literal notranslate"><span class="pre">custom_avg_obs()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.CustomMixture"><code class="docutils literal notranslate"><span class="pre">CustomMixture()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.custom_correlation"><code class="docutils literal notranslate"><span class="pre">custom_correlation()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.group_quantiles"><code class="docutils literal notranslate"><span class="pre">group_quantiles()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user_input.custom_functions.custom_target_R2"><code class="docutils literal notranslate"><span class="pre">custom_target_R2()</span></code></a></li>
 </ul>
   </nav></div>
 

@@ -51,5 +51,4 @@ Contents
 
    Home <self>
    API <api_overview>
-   Case Studies <case_studies>
 

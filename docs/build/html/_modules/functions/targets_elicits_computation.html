@@ -27,7 +27,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
@@ -192,14 +192,12 @@
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.custom_functions.html">user_input.custom_functions module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.design_matrices.html">user_input.design_matrices module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.generative_models.html">user_input.generative_models module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../api/user_input/user_input.utils.html">user_input.utils module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../../case_studies.html">Case Studies</a></li>
 </ul>
 
     </div>
@@ -328,10 +326,12 @@ document.write(`
 <span class="n">bfn</span> <span class="o">=</span> <span class="n">bf</span><span class="o">.</span><span class="n">networks</span>
 
 <span class="kn">from</span> <span class="nn">functions.helper_functions</span> <span class="kn">import</span> <span class="n">save_as_pkl</span>
+<span class="kn">from</span> <span class="nn">user_input.custom_functions</span> <span class="kn">import</span> <span class="n">custom_correlation</span>
+
 
 <div class="viewcode-block" id="use_custom_functions">
 <a class="viewcode-back" href="../../api/functions/functions.targets_elicits_computation.html#functions.targets_elicits_computation.use_custom_functions">[docs]</a>
-<span class="k">def</span> <span class="nf">use_custom_functions</span><span class="p">(</span><span class="n">custom_function</span><span class="p">,</span> <span class="n">model_simulations</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">):</span>    
+<span class="k">def</span> <span class="nf">use_custom_functions</span><span class="p">(</span><span class="n">custom_function</span><span class="p">,</span> <span class="n">model_simulations</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Helper function that prepares custom functions if specified by checking</span>
 <span class="sd">    all inputs and extracting the argument from different sources.</span>
@@ -353,32 +353,38 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># get function</span>
     <span class="n">custom_func</span> <span class="o">=</span> <span class="n">custom_function</span><span class="p">[</span><span class="s2">&quot;function&quot;</span><span class="p">]</span>
-    <span class="c1"># create a dict with arguments from model simulations and custom args for custom func </span>
-    <span class="c1">#args_dict = model_simulations</span>
+    <span class="c1"># create a dict with arguments from model simulations and custom args for custom func</span>
     <span class="n">args_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">custom_function</span><span class="p">[</span><span class="s2">&quot;additional_args&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">additional_args_dict</span> <span class="o">=</span> <span class="p">{</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">custom_function</span><span class="p">[</span><span class="s2">&quot;additional_args&quot;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">custom_function</span><span class="p">[</span><span class="s2">&quot;additional_args&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())}</span>
+        <span class="n">additional_args_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">custom_function</span><span class="p">[</span><span class="s2">&quot;additional_args&quot;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">custom_function</span><span class="p">[</span><span class="s2">&quot;additional_args&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">additional_args_dict</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="c1"># select only relevant keys from args_dict</span>
     <span class="n">custom_args_keys</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getfullargspec</span><span class="p">(</span><span class="n">custom_func</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="c1"># check whether expert-specific input has been specified</span>
     <span class="k">if</span> <span class="s2">&quot;from_simulated_truth&quot;</span> <span class="ow">in</span> <span class="n">custom_args_keys</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getfullargspec</span><span class="p">(</span><span class="n">custom_func</span><span class="p">)[</span><span class="mi">3</span><span class="p">][</span><span class="mi">0</span><span class="p">])):</span>
             <span class="n">quantity</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getfullargspec</span><span class="p">(</span><span class="n">custom_func</span><span class="p">)[</span><span class="mi">3</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">true_model_simulations</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;/expert/model_simulations.pkl&quot;</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">custom_args_keys</span><span class="p">:</span>  
+            <span class="n">true_model_simulations</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span>
+                <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/expert/model_simulations.pkl&quot;</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">custom_args_keys</span><span class="p">:</span>
                 <span class="k">if</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">==</span> <span class="n">quantity</span><span class="p">:</span>
                     <span class="n">args_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">true_model_simulations</span><span class="p">[</span><span class="n">quantity</span><span class="p">]</span>
                     <span class="n">custom_args_keys</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">quantity</span><span class="p">)</span>
         <span class="n">custom_args_keys</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;from_simulated_truth&quot;</span><span class="p">)</span>
-    <span class="c1"># check that all args needed for custom function were detected</span>
-    <span class="c1">#assert set(custom_args_keys).issubset(set(args_dict.keys())), f&quot;Custom target function takes arguments which were not specified. Required args: {custom_args_keys} but got {list(args_dict.keys())}&quot;</span>
-    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">custom_args_keys</span><span class="p">)</span><span class="o">-</span><span class="nb">set</span><span class="p">(</span><span class="n">additional_args_dict</span><span class="p">)):</span>
+    <span class="c1"># TODO: check that all args needed for custom function were detected</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">custom_args_keys</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">additional_args_dict</span><span class="p">)):</span>
         <span class="n">args_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">model_simulations</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">additional_args_dict</span><span class="p">:</span>
         <span class="n">args_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">additional_args_dict</span><span class="p">)</span>
     <span class="c1"># evaluate custom function</span>
     <span class="n">custom_quantity</span> <span class="o">=</span> <span class="n">custom_func</span><span class="p">(</span><span class="o">**</span><span class="n">args_dict</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">custom_quantity</span></div>
+
 
 
 <div class="viewcode-block" id="computation_target_quantities">
@@ -402,56 +408,55 @@ document.write(`
 <span class="sd">    targets_res : dict</span>
 <span class="sd">        computed target quantities.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># check whether different sets of target quantities have been provided for</span>
-    <span class="c1"># ground truth simulation and model simulation. If yes, select the correct</span>
-    <span class="c1"># set of target quantities.</span>
-    <span class="k">try</span><span class="p">:</span> 
-        <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;target_quantities&quot;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">ground_truth</span><span class="p">:</span> 
-            <span class="n">sub_global_dict</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;target_quantities&quot;</span><span class="p">][</span><span class="s2">&quot;ground_truth&quot;</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">sub_global_dict</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;target_quantities&quot;</span><span class="p">][</span><span class="s2">&quot;learning&quot;</span><span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">sub_global_dict</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;target_quantities&quot;</span><span class="p">]</span>
-    
+    <span class="c1"># extract target quantities section from global dict</span>
+    <span class="n">targets_global_dict</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;target_quantities&quot;</span><span class="p">]</span>
+
     <span class="c1"># names of target quantities</span>
-    <span class="n">name_targets</span> <span class="o">=</span> <span class="n">sub_global_dict</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
-    <span class="c1"># check for duplicate naming </span>
-    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">name_targets</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">name_targets</span><span class="p">)),</span> <span class="s2">&quot;duplicate target quantity name has been detected; target quantities must have unique names.&quot;</span>
+    <span class="n">name_targets</span> <span class="o">=</span> <span class="n">targets_global_dict</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+    <span class="c1"># TODO: check for duplicate naming</span>
     <span class="c1"># initialize dict for storing results</span>
     <span class="n">targets_res</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="c1"># loop over target quantities</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">target</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">name_targets</span><span class="p">):</span>
-                  
-        <span class="c1"># use custom function for target quantity if it has been defined </span>
-        <span class="k">if</span> <span class="n">sub_global_dict</span><span class="p">[</span><span class="s2">&quot;custom_target_function&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="c1"># use custom function for target quantity if it has been defined</span>
+        <span class="k">if</span> <span class="n">targets_global_dict</span><span class="p">[</span><span class="s2">&quot;custom_target_function&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">target_quantity</span> <span class="o">=</span> <span class="n">use_custom_functions</span><span class="p">(</span>
-                <span class="n">sub_global_dict</span><span class="p">[</span><span class="s2">&quot;custom_target_function&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> 
+                <span class="n">targets_global_dict</span><span class="p">[</span><span class="s2">&quot;custom_target_function&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
                 <span class="n">model_simulations</span><span class="p">,</span>
-                <span class="n">global_dict</span><span class="p">)</span>
+                <span class="n">global_dict</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">target_quantity</span> <span class="o">=</span> <span class="n">model_simulations</span><span class="p">[</span><span class="n">target</span><span class="p">]</span>
-            
+
         <span class="c1"># select indicated observations from design matrix</span>
         <span class="c1"># TODO: I suppose that makes only sense for ypred as target quantity; there should be a warning?, error?</span>
-        <span class="k">if</span> <span class="n">sub_global_dict</span><span class="p">[</span><span class="s2">&quot;select_obs&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">target_quantity</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">target_quantity</span><span class="p">,</span> 
-                                        <span class="nb">list</span><span class="p">(</span><span class="n">sub_global_dict</span><span class="p">[</span><span class="s2">&quot;select_obs&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]),</span>
-                                        <span class="n">axis</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">targets_global_dict</span><span class="p">[</span><span class="s2">&quot;select_obs&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">target_quantity</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span>
+                <span class="n">target_quantity</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">targets_global_dict</span><span class="p">[</span><span class="s2">&quot;select_obs&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span>
+            <span class="p">)</span>
         <span class="c1"># save target quantities</span>
         <span class="n">targets_res</span><span class="p">[</span><span class="n">target</span><span class="p">]</span> <span class="o">=</span> <span class="n">target_quantity</span>
-    
+
+    <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;param_independence&quot;</span><span class="p">][</span><span class="s2">&quot;independent&quot;</span><span class="p">]:</span>
+        <span class="n">target_quantity</span> <span class="o">=</span> <span class="n">use_custom_functions</span><span class="p">(</span>
+            <span class="p">{</span><span class="s2">&quot;function&quot;</span><span class="p">:</span> <span class="n">custom_correlation</span><span class="p">,</span> <span class="s2">&quot;additional_args&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>
+            <span class="n">model_simulations</span><span class="p">,</span>
+            <span class="n">global_dict</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">targets_res</span><span class="p">[</span><span class="s2">&quot;correlation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">target_quantity</span>
     <span class="c1"># save file in object</span>
     <span class="n">saving_path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">ground_truth</span><span class="p">:</span>
-        <span class="n">saving_path</span> <span class="o">=</span> <span class="n">saving_path</span><span class="o">+</span><span class="s2">&quot;/expert&quot;</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="n">saving_path</span><span class="o">+</span><span class="s1">&#39;/target_quantities.pkl&#39;</span>
+        <span class="n">saving_path</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/expert&quot;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/target_quantities.pkl&quot;</span>
     <span class="n">save_as_pkl</span><span class="p">(</span><span class="n">targets_res</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
     <span class="c1"># return results</span>
     <span class="k">return</span> <span class="n">targets_res</span></div>
 
-        
+
+
 <div class="viewcode-block" id="computation_elicited_statistics">
 <a class="viewcode-back" href="../../api/functions/functions.targets_elicits_computation.html#functions.targets_elicits_computation.computation_elicited_statistics">[docs]</a>
 <span class="k">def</span> <span class="nf">computation_elicited_statistics</span><span class="p">(</span><span class="n">target_quantities</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">):</span>
@@ -475,78 +480,102 @@ document.write(`
 <span class="sd">        simulated elicited statistics.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># check whether different sets of target quantities have been provided for</span>
-    <span class="c1"># ground truth simulation and model simulation. If yes, select the correct</span>
-    <span class="c1"># set of target quantities.</span>
-    <span class="k">try</span><span class="p">:</span> 
-        <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;target_quantities&quot;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">ground_truth</span><span class="p">:</span> 
-            <span class="n">sub_global_dict</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;target_quantities&quot;</span><span class="p">][</span><span class="s2">&quot;ground_truth&quot;</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">sub_global_dict</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;target_quantities&quot;</span><span class="p">][</span><span class="s2">&quot;learning&quot;</span><span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">sub_global_dict</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;target_quantities&quot;</span><span class="p">]</span>
+    <span class="c1"># extract target quantities section from global dict</span>
+    <span class="n">targets_global_dict</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;target_quantities&quot;</span><span class="p">]</span>
+
     <span class="c1"># names of elicitation techniques</span>
-    <span class="n">name_elicits</span> <span class="o">=</span> <span class="n">sub_global_dict</span><span class="p">[</span><span class="s2">&quot;elicitation_method&quot;</span><span class="p">]</span>
+    <span class="n">name_elicits</span> <span class="o">=</span> <span class="n">targets_global_dict</span><span class="p">[</span><span class="s2">&quot;elicitation_method&quot;</span><span class="p">]</span>
     <span class="c1"># names of target quantities</span>
     <span class="n">name_targets</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">target_quantities</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
     <span class="c1"># initialize dict for storing results</span>
     <span class="n">elicits_res</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="c1"># loop over elicitation techniques</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">elicit</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">name_targets</span><span class="p">,</span> <span class="n">name_elicits</span><span class="p">)):</span>
-        <span class="c1"># check for support of elicitation technique </span>
-        <span class="k">assert</span> <span class="n">elicit</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">([</span><span class="s2">&quot;quantiles&quot;</span><span class="p">,</span> <span class="s2">&quot;histogram&quot;</span><span class="p">,</span> <span class="s2">&quot;moments&quot;</span><span class="p">]),</span> <span class="s2">&quot;Name error of elicitation techniques. Currently supported elicitation techniques are quantiles, histogram, moments.&quot;</span>
-          
-        <span class="c1"># use custom function for target quantity if it has been defined </span>
+        <span class="c1"># check for support of elicitation technique</span>
+        <span class="k">assert</span> <span class="n">elicit</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span>
+            <span class="p">[</span><span class="s2">&quot;quantiles&quot;</span><span class="p">,</span> <span class="s2">&quot;histogram&quot;</span><span class="p">,</span> <span class="s2">&quot;moments&quot;</span><span class="p">,</span> <span class="s2">&quot;identity&quot;</span><span class="p">]</span>
+        <span class="p">),</span> <span class="s2">&quot;Name error of elicitation techniques. Currently supported elicitation techniques are quantiles, histogram, moments.&quot;</span>
+
+        <span class="c1"># use custom function for target quantity if it has been defined</span>
         <span class="c1"># TODO: this functionality has to be checked!</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">sub_global_dict</span><span class="p">[</span><span class="s2">&quot;custom_elicitation_function&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
-        <span class="k">except</span><span class="p">:</span> 
+            <span class="n">targets_global_dict</span><span class="p">[</span><span class="s2">&quot;custom_elicitation_function&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
             <span class="k">pass</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">sub_global_dict</span><span class="p">[</span><span class="s2">&quot;custom_elicitation_function&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">targets_global_dict</span><span class="p">[</span><span class="s2">&quot;custom_elicitation_function&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">elicited_statistic</span> <span class="o">=</span> <span class="n">use_custom_functions</span><span class="p">(</span>
-                    <span class="n">sub_global_dict</span><span class="p">[</span><span class="s2">&quot;custom_elicitation_function&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> 
-                    <span class="n">target_quantities</span><span class="p">)</span>
-            
-        <span class="k">if</span> <span class="n">elicit</span> <span class="o">==</span> <span class="s2">&quot;histogram&quot;</span><span class="p">:</span>
+                    <span class="n">targets_global_dict</span><span class="p">[</span><span class="s2">&quot;custom_elicitation_function&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
+                    <span class="n">target_quantities</span><span class="p">,</span>
+                <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">elicit</span> <span class="o">==</span> <span class="s2">&quot;identity&quot;</span><span class="p">:</span>
             <span class="n">elicited_statistic</span> <span class="o">=</span> <span class="n">target_quantities</span><span class="p">[</span><span class="n">target</span><span class="p">]</span>
-        
+
+        <span class="k">if</span> <span class="n">elicit</span> <span class="o">==</span> <span class="s2">&quot;histogram&quot;</span><span class="p">:</span>
+            <span class="n">quantiles_hist</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="n">target_hist</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span>
+                <span class="n">target_quantities</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">q</span><span class="o">=</span><span class="n">quantiles_hist</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span>
+            <span class="p">)</span>
+            <span class="n">elicited_statistic</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;ij...-&gt;ji...&quot;</span><span class="p">,</span> <span class="n">target_hist</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">elicit</span> <span class="o">==</span> <span class="s2">&quot;quantiles&quot;</span><span class="p">:</span>
-            <span class="n">quantiles</span> <span class="o">=</span> <span class="n">sub_global_dict</span><span class="p">[</span><span class="s2">&quot;quantiles_specs&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
-            <span class="k">assert</span> <span class="n">quantiles</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;quantiles must be specified as values between [0, 100]&quot;</span> 
-            <span class="k">assert</span> <span class="n">quantiles</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;no quantiles in the argument quantiles_specs have been defined&quot;</span>
+            <span class="n">quantiles</span> <span class="o">=</span> <span class="n">targets_global_dict</span><span class="p">[</span><span class="s2">&quot;quantiles_specs&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+            <span class="c1"># check whether user-provided quantiles exist and have the correct format</span>
+            <span class="k">assert</span> <span class="p">(</span>
+                <span class="n">quantiles</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span>
+            <span class="p">),</span> <span class="s2">&quot;quantiles must be specified as values between [0, 100]&quot;</span>
+            <span class="k">assert</span> <span class="p">(</span>
+                <span class="n">quantiles</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="p">),</span> <span class="s2">&quot;no quantiles in the argument quantiles_specs have been defined&quot;</span>
             <span class="c1"># compute quantiles</span>
-            <span class="n">computed_quantiles</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">target_quantities</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">q</span> <span class="o">=</span> <span class="n">quantiles</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">quan</span> <span class="o">=</span> <span class="n">target_quantities</span><span class="p">[</span><span class="n">target</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">tf</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">quan</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">quan_reshaped</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+                    <span class="n">quan</span><span class="p">,</span> <span class="p">(</span><span class="n">quan</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">quan</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">quan</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                <span class="p">)</span>
+            <span class="k">if</span> <span class="n">tf</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">quan</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">quan_reshaped</span> <span class="o">=</span> <span class="n">quan</span>
+            <span class="n">computed_quantiles</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span>
+                <span class="n">quan_reshaped</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">quantiles</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span>
+            <span class="p">)</span>
             <span class="c1"># bring quantiles to the last dimension</span>
             <span class="n">elicited_statistic</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;ij...-&gt;ji...&quot;</span><span class="p">,</span> <span class="n">computed_quantiles</span><span class="p">)</span>
-        
+
         <span class="k">if</span> <span class="n">elicit</span> <span class="o">==</span> <span class="s2">&quot;moments&quot;</span><span class="p">:</span>
-            <span class="n">moments</span> <span class="o">=</span> <span class="n">sub_global_dict</span><span class="p">[</span><span class="s2">&quot;moments_specs&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
-            <span class="k">assert</span> <span class="n">moments</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;no moments in the argument moments_specs have been defined&quot;</span>
+            <span class="n">moments</span> <span class="o">=</span> <span class="n">targets_global_dict</span><span class="p">[</span><span class="s2">&quot;moments_specs&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">assert</span> <span class="p">(</span>
+                <span class="n">moments</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="p">),</span> <span class="s2">&quot;no moments in the argument moments_specs have been defined&quot;</span>
             <span class="c1"># for each moment</span>
             <span class="c1"># TODO: implement feature for custom moment functions</span>
             <span class="k">for</span> <span class="n">moment</span> <span class="ow">in</span> <span class="n">moments</span><span class="p">:</span>
                 <span class="c1"># check whether moment is supported</span>
-                <span class="k">assert</span> <span class="n">moment</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;sd&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">],</span> <span class="s2">&quot;currently only &#39;mean&#39; and &#39;sd&#39; are supported as moments&quot;</span>
-                
+                <span class="k">assert</span> <span class="n">moment</span> <span class="ow">in</span> <span class="p">[</span>
+                    <span class="s2">&quot;sd&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+                <span class="p">],</span> <span class="s2">&quot;currently only &#39;mean&#39; and &#39;sd&#39; are supported as moments&quot;</span>
+
                 <span class="k">if</span> <span class="n">moment</span> <span class="o">==</span> <span class="s2">&quot;mean&quot;</span><span class="p">:</span>
-                    <span class="n">computed_mean</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">target_quantities</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="n">computed_mean</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">target_quantities</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
                     <span class="n">elicited_statistic</span> <span class="o">=</span> <span class="n">computed_mean</span>
                 <span class="k">if</span> <span class="n">moment</span> <span class="o">==</span> <span class="s2">&quot;sd&quot;</span><span class="p">:</span>
-                    <span class="n">computed_sd</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_std</span><span class="p">(</span><span class="n">target_quantities</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> 
+                    <span class="n">computed_sd</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_std</span><span class="p">(</span><span class="n">target_quantities</span><span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
                     <span class="n">elicited_statistic</span> <span class="o">=</span> <span class="n">computed_sd</span>
                 <span class="c1"># save all moments in one tensor</span>
                 <span class="n">elicits_res</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">elicit</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">moment</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elicited_statistic</span>
 
         <span class="k">if</span> <span class="n">elicit</span> <span class="o">!=</span> <span class="s2">&quot;moments&quot;</span><span class="p">:</span>
-            <span class="n">elicits_res</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">elicit</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elicited_statistic</span>     
+            <span class="n">elicits_res</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">elicit</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elicited_statistic</span>
+
+    <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;param_independence&quot;</span><span class="p">][</span><span class="s2">&quot;independent&quot;</span><span class="p">]:</span>
+        <span class="n">elicits_res</span><span class="p">[</span><span class="s2">&quot;correlation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">target_quantities</span><span class="p">[</span><span class="s2">&quot;correlation&quot;</span><span class="p">]</span>
+
     <span class="c1"># save file in object</span>
     <span class="n">saving_path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">ground_truth</span><span class="p">:</span>
-        <span class="n">saving_path</span> <span class="o">=</span> <span class="n">saving_path</span><span class="o">+</span><span class="s2">&quot;/expert&quot;</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="n">saving_path</span><span class="o">+</span><span class="s1">&#39;/elicited_statistics.pkl&#39;</span>
+        <span class="n">saving_path</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/expert&quot;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/elicited_statistics.pkl&quot;</span>
     <span class="n">save_as_pkl</span><span class="p">(</span><span class="n">elicits_res</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
     <span class="c1"># return results</span>
     <span class="k">return</span> <span class="n">elicits_res</span></div>
