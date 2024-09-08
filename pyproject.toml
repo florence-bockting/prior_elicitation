@@ -17,7 +17,6 @@ packages = [
     { include = "functions", from = "elicit"},
     { include = "user_input", from = "elicit" },
     { include = "dags", from = "elicit" },
-    { include = "simulations", from = "elicit" },
     { include = "setup", from = "elicit" },
 ]
 
