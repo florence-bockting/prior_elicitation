@@ -21,7 +21,7 @@ jobs:
         run: pip install -e .
 
       - name: Sphinx clean
-        run: make clean
+        run: sphinx-build -M clean docs/build
           
       - name: Sphinx build
         run: |
@@ -29,7 +29,7 @@ jobs:
           sphinx-apidoc -o docs/source/api/functions elicit/functions --separate
           sphinx-apidoc -o docs/source/api/setup elicit/setup --separate
           sphinx-apidoc -o docs/source/api/user_input elicit/user_input --separate
-          make html
+          sphinx-build docs docs/build/html
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
