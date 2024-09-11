@@ -2,13 +2,15 @@ import inspect
 import tensorflow as tf
 import warnings
 import tensorflow_probability as tfp
+import multiprocessing
 
 tfd = tfp.distributions
 
 from functions.loss_functions import MmdEnergy
+from functions.helper_functions import save_as_pkl
 from dags.elicitation_pipeline import prior_elicitation_dag
 from setup.create_dictionaries import create_global_dict
-
+from joblib import Parallel, delayed
 
 def normalizing_flow_specs(
     num_coupling_layers: int = 7,
@@ -540,7 +542,7 @@ def prior_elicitation(
     epochs: int,
     B: int,
     rep: int,
-    seed: int,
+    seed: int or list,
     burnin: int,
     param_independence: dict,
     model_params: callable,
@@ -552,6 +554,7 @@ def prior_elicitation(
     output_path: str = "results",
     print_info: bool = True,
     view_ep: int = 1,
+    cores: int = 4
 ) -> dict:
     """
     wrapper around the optimization process, when called a global dictionary will be
@@ -606,27 +609,42 @@ def prior_elicitation(
         global dictionary including all user input.
 
     """
+    
+    def wrapper(seed):
+        # create global dict
+        global_dict = create_global_dict(
+            method,
+            sim_id,
+            epochs,
+            B,
+            rep,
+           # seed,
+            burnin,
+            param_independence,
+            model_params,
+            expert_input,
+            generative_model,
+            target_quantities,
+            loss_function,
+            optimization_settings,
+            output_path,
+            print_info,
+            view_ep)
+        
+        global_dict["output_path"]["data"] = f"elicit/simulations/results/data/{method}/{sim_id}_{seed}"
+        # save global dict
+        path = global_dict["output_path"]["data"] + "/global_dict.pkl"
+        save_as_pkl(global_dict, path)
+        
+        # run workflow
+        prior_elicitation_dag(seed, global_dict)
+    
+    # if seed is int use no parallelization 
+    if type(seed) is int:
+        wrapper(seed)
+    if type(seed) is list:
+        print(f"Parallelization is used with {cores} cores.")
+        Parallel(n_jobs=cores, verbose=1)(delayed(wrapper)(i) for i in seed)
 
-    # create global dict.
-    global_dict = create_global_dict(
-        method,
-        sim_id,
-        epochs,
-        B,
-        rep,
-        seed,
-        burnin,
-        param_independence,
-        model_params,
-        expert_input,
-        generative_model,
-        target_quantities,
-        loss_function,
-        optimization_settings,
-        output_path,
-        print_info,
-        view_ep,
-    )
-
-    # run workflow
-    prior_elicitation_dag(global_dict)
+        
+    

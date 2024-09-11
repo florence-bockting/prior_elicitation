@@ -346,14 +346,15 @@ class GenerativeNormalModel_param(tf.Module):
 
 class GenerativeMultilevelModel(tf.Module):
     def __call__(self, 
-                prior_samples,        
-                design_matrix, 
-                selected_days,
-                alpha_lkj,
-                N_subj,
-                N_days,
-                **kwargs        
-                ):
+                 ground_truth,
+                 prior_samples,        
+                 design_matrix, 
+                 selected_days,
+                 alpha_lkj,
+                 N_subj,
+                 N_days,
+                 **kwargs        
+                 ):
         """
         Multilevel model with normal likelihood, one continuous predictor and
         one by-subject random-intercept and random-slope
@@ -458,35 +459,29 @@ class GenerativeMultilevelModel(tf.Module):
         # sample prior predictive data
         ypred = likelihood.sample()
         
-        # custom target quantities 
-        ## epred averaged over individuals
-        epred_days = tf.stack([epred[:,:,i::N_days] for i in range(N_days)], 
-                              axis = -1)
-        mean_per_day = tf.reduce_mean(epred_days, axis=2)
-        
         # R2 for initial day
-        R2_day0 = tf.divide(tf.math.reduce_variance(epred[:,:,selected_days[0]::N_days], -1),
-                            tf.math.reduce_variance(ypred[:,:,selected_days[0]::N_days], -1))
+        def f_R2(epred, ypred):
+            # variance of linear predictor 
+            var_epred = tf.math.reduce_variance(epred, -1) 
+            # variance of difference between ypred and epred
+            var_diff = tf.math.reduce_variance(tf.subtract(ypred, epred), -1)
+            var_total = var_epred + var_diff
+            # variance of linear predictor divided by total variance
+            log_R2 = tf.subtract(tf.math.log(var_epred), tf.math.log(var_total))
+            return log_R2
+        
+        log_R2_day0 = f_R2(epred[:,:,selected_days[0]::N_days], ypred[:,:,selected_days[0]::N_days]) 
         
         # R2 for last day
-        R2_day9 = tf.divide(tf.math.reduce_variance(epred[:,:,selected_days[-1]::N_days], -1),
-                            tf.math.reduce_variance(ypred[:,:,selected_days[-1]::N_days], -1))
-        
-        # compute standard deviation of linear predictor 
-        mu0_sd_comp = tf.math.reduce_std(epred[:,:,selected_days[0]::N_days], 
-                                         axis=-1)
-        mu9_sd_comp = tf.math.reduce_std(epred[:,:,selected_days[-1]::N_days], 
-                                         axis=-1)
+        log_R2_day9 = f_R2(epred[:,:,selected_days[-1]::N_days], ypred[:,:,selected_days[-1]::N_days]) 
+  
         
         return dict(likelihood = likelihood,     
                     ypred = ypred,   
                     epred = epred,
                     prior_samples = prior_samples,
-                    meanperday = mean_per_day,
-                    R2day0 = R2_day0,
-                    R2day9 = R2_day9,
-                    mu0sdcomp = mu0_sd_comp,
-                    mu9sdcomp = mu9_sd_comp,
+                    log_R2day0 = log_R2_day0,
+                    log_R2day9 = log_R2_day9,
                     sigma = prior_samples[:,:,-1]
                     )
 
@@ -803,4 +798,20 @@ class Model3(tf.Module):
                     prior_samples = prior_samples,
                     log_R2 = log_R2,
                     log_R2_true = log_R2_true
+                    )
+    
+    
+class Model:
+    def __call__(self, ground_truth, prior_samples):
+
+        # data-generating model
+        likelihood = tfd.Normal(loc=prior_samples[:,:,0],
+                                scale=prior_samples[:,:,1])
+        # prior predictive distribution
+        ypred = likelihood.sample()
+        
+        return dict(likelihood = likelihood,     
+                    ypred = ypred,                 
+                    epred = None,
+                    prior_samples = prior_samples                 
                     )

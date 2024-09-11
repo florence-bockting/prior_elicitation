@@ -1,6 +1,5 @@
 import numpy as np
 import inspect
-from functions.helper_functions import save_as_pkl
 
 
 def create_dict(user_input: callable) -> dict:
@@ -61,7 +60,7 @@ def create_global_dict(
     epochs,
     B,
     rep,
-    seed,
+   # seed,
     burnin,
     param_independence,
     model_params,
@@ -133,7 +132,7 @@ def create_global_dict(
     global_dict["epochs"] = epochs
     global_dict["B"] = B
     global_dict["rep"] = rep
-    global_dict["seed"] = seed
+   # global_dict["seed"] = seed
     global_dict["burnin"] = burnin
     global_dict["param_independence"] = param_independence
     global_dict["model_params"] = create_dict(model_params)
@@ -154,9 +153,5 @@ def create_global_dict(
     }
     global_dict["print_info"] = print_info
     global_dict["view_ep"] = view_ep
-
-    # save global dict
-    path = global_dict["output_path"]["data"] + "/global_dict.pkl"
-    save_as_pkl(global_dict, path)
 
     return global_dict

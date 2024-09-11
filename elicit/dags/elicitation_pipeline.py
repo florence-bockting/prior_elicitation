@@ -16,7 +16,7 @@ from functions.training import training_loop
 from functions.helper_functions import save_as_pkl
 
 
-def prior_elicitation_dag(global_dict: dict):
+def prior_elicitation_dag(seed, global_dict: dict):
     """
     Defines the prior elicitation workflow and runs the workflow for the
     current setup as indicated by the user.
@@ -30,7 +30,7 @@ def prior_elicitation_dag(global_dict: dict):
     """
 
     # set seed
-    tf.random.set_seed(global_dict["seed"])
+    tf.random.set_seed(seed)
     regularizer_term = []
 
     def one_forward_simulation(prior_model, global_dict, ground_truth=False):
@@ -86,7 +86,7 @@ def prior_elicitation_dag(global_dict: dict):
 
         """
         if global_dict["expert_input"]["simulate_data"]:
-            prior_model = Priors(global_dict, ground_truth=True)
+            prior_model = Priors(global_dict=global_dict, ground_truth=True)
             expert_data = one_forward_simulation(
                 prior_model, global_dict, ground_truth=True
             )
@@ -247,7 +247,7 @@ def prior_elicitation_dag(global_dict: dict):
         for i in range(global_dict["burnin"]):
             print("|", end="")
             # prepare generative model
-            prior_model = Priors(global_dict, ground_truth=False)
+            prior_model = Priors(global_dict=global_dict, ground_truth=False)
             # generate simulations from model
             training_elicited_statistics = one_forward_simulation(
                 prior_model, global_dict
@@ -272,7 +272,7 @@ def prior_elicitation_dag(global_dict: dict):
 
     # get expert data
     expert_elicited_statistics = load_expert_data(global_dict)
-
+    
     # compute loss for each set of initial values
     loss_list, init_prior = burnin_phase(
         expert_elicited_statistics, one_forward_simulation, compute_loss, global_dict
@@ -284,9 +284,10 @@ def prior_elicitation_dag(global_dict: dict):
 
     # run training with optimal set of initial values
     training_loop(
-        expert_elicited_statistics,
-        init_prior_model,
-        one_forward_simulation,
-        compute_loss,
-        global_dict,
-    )
+                expert_elicited_statistics,
+                init_prior_model,
+                one_forward_simulation,
+                compute_loss,
+                global_dict,
+                seed
+            )

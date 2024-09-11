@@ -19,6 +19,7 @@ def training_loop(
     one_forward_simulation,
     compute_loss,
     global_dict,
+    seed
 ):
     """
     Wrapper that runs the optimization algorithms for E epochs.
@@ -143,7 +144,7 @@ def training_loop(
         "loss_component": component_losses,
         "hyperparameter": res_dict,
         "time_epoch": time_per_epoch,
-        "seed": global_dict["seed"],
+        "seed": seed,
     }
 
     if global_dict["method"] == "parametric_prior":
