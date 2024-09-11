@@ -14,6 +14,7 @@ Background and problem formulation
   
 Let’s consider the following example: we plan to conduct a study on the height of people in our neighborhood. We will walk around the neighborhood and record the height, in centimeters, of each person we encounter.  
 To model the height data, we use a normal likelihood as the data-generating model, with average height :math:`\mu` and random variation :math:`\sigma`. Furthermore, to keep the example as simple as possible, we ignore any individual differences. Thus, our model has two parameters :math:`\theta` and can be formalized as follows:
+
 .. math::
 
 	\begin{align*}
@@ -22,10 +23,12 @@ To model the height data, we use a normal likelihood as the data-generating mode
 	\end{align*}
 
 As we have prior knowledge about the expected :math:`height_i`​ and would like to incorporate this information into our model, we choose a Bayesian modeling approach. This approach allows us to include our prior knowledge by specifying prior distributions for the model parameters: 
+
 .. math::
 	\theta \sim p(\theta).
 
 The challenge is that our prior knowledge pertains to :math:`height_i` (i.e., the outcome variable), but we need to specify prior distributions for :math:`\theta` (i.e., the model parameters). 
+
 + :math:`\mathcal Q`: Which prior distributions for the model parameters accurately reflects our prior knowledge on the outcome variable? :math:`[p(\theta) = ??]`
 
 
