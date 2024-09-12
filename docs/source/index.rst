@@ -50,6 +50,6 @@ Contents
    :maxdepth: 2
 
    Home <self>
-   Example <introductory_example>
+   Introductory example <introductory_example>
    API <api_overview>
 
