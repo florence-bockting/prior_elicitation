@@ -72,6 +72,7 @@ def create_global_dict(
     output_path,
     print_info,
     view_ep,
+    use_regularizer
 ) -> dict:
     """
     Creates the global dictionary including all input information from the user.
@@ -153,5 +154,6 @@ def create_global_dict(
     }
     global_dict["print_info"] = print_info
     global_dict["view_ep"] = view_ep
+    global_dict["use_regularizer"] = use_regularizer
 
     return global_dict

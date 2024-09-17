@@ -186,7 +186,14 @@ def load_design_matrix_sleep(scaling, N_days, N_subj, selected_days):
     return dmatrix
 
 
-def load_design_matrix_m0():
+def load_design_matrix_m0(N):
+    X_std = tfd.Normal(0.,1.).sample(N)
+    #X_std = tfd.Normal(0.,1.).quantile([0.05, 0.25, 0.5, 0.75, 0.95])
+    d_final = tf.stack([[1.]*len(X_std), X_std], axis=-1)
+    return d_final
+
+def load_design_matrix_m0v2():
+    #X_std = tfd.Normal(0.,1.).sample(N)
     X_std = tfd.Normal(0.,1.).quantile([0.05, 0.25, 0.5, 0.75, 0.95])
     d_final = tf.stack([[1.]*len(X_std), X_std], axis=-1)
     return d_final

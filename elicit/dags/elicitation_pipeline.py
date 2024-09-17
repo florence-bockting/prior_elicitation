@@ -157,16 +157,18 @@ def prior_elicitation_dag(seed, global_dict: dict):
 
             if global_dict["loss_function"]["loss_weighting"] is None:
                 total_loss = tf.math.reduce_sum(loss_per_component)
-                priorsamples = pd.read_pickle(
-                    global_dict["output_path"]["data"] + "/model_simulations.pkl"
-                )["prior_samples"]
-                regul_term = regulariser(priorsamples)
-                regularizer_term.append(regul_term)
-
-                path = global_dict["output_path"]["data"] + "/regularizer.pkl"
-                save_as_pkl(regularizer_term, path)
-
-                total_loss = total_loss + regul_term
+                
+                if global_dict["use_regularizer"]:
+                    priorsamples = pd.read_pickle(
+                        global_dict["output_path"]["data"] + "/model_simulations.pkl"
+                    )["prior_samples"]
+                    regul_term = regulariser(priorsamples)
+                    regularizer_term.append(regul_term)
+    
+                    path = global_dict["output_path"]["data"] + "/regularizer.pkl"
+                    save_as_pkl(regularizer_term, path)
+    
+                    total_loss = total_loss + regul_term
             else:
                 # apply selected loss weighting method
                 if global_dict["loss_function"]["loss_weighting"]["method"] == "dwa":

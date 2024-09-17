@@ -13,28 +13,36 @@ from setup.create_dictionaries import create_global_dict
 from joblib import Parallel, delayed
 
 def normalizing_flow_specs(
-    num_coupling_layers: int = 7,
+    num_params: int,
+    num_coupling_layers: int = 3,
     coupling_design: str = "affine",
     coupling_settings: dict = {
         "dropout": False,
         "dense_args": {
             "units": 128,
-            "activation": "softplus",
-            "kernel_regularizer": tf.keras.regularizers.l2(1e-4),
+            "activation": "relu",
+            "kernel_regularizer": None,
         },
         "num_dense": 2,
     },
     permutation: str = "fixed",
-    base_distribution: dict = {
-        "family": tfd.Normal,
-        "family_args": {"loc": 0.0, "scale": 1.0},
-    },
+    base_distribution: dict or None = None,
     **kwargs,
 ) -> dict:
     # for more information see BayesFlow documentation
     # https://bayesflow.org/api/bayesflow.inference_networks.html
-
+    
+    if base_distribution is None:
+        base_distribution = {
+            "family": tfd.MultivariateNormalTriL,
+            "family_args": {
+                "loc": tf.zeros(num_params),
+                "scale_tril": tf.linalg.cholesky(tf.eye(num_params)*0.5)
+                }
+            }
+    
     nf_specs_dict = {
+        "num_params": num_params,
         "num_coupling_layers": num_coupling_layers,
         "coupling_design": coupling_design,
         "coupling_settings": coupling_settings,
@@ -411,9 +419,9 @@ def target(
 
 def expert(
     data: str or None,
-    simulate_data: bool,
-    simulator_specs: dict or None,
-    rep: int or None,
+    simulate_data: bool = False,
+    simulator_specs: dict or None = None,
+    rep: int or None = None,
 ) -> dict:
     """
     Creates a dictionary including user information about the expert data which should be
@@ -435,21 +443,31 @@ def expert(
         in which two model parameters b0 and b1 with normal prior distribution family had been
         specified in the `param()` object.
 
-        :Example:
+    :Example:
 
-            .. highlight:: python
-            .. code-block:: python
-
-                {"b0": tfd.Normal(250.4, 7.27),
-                 "b1": tfd.Normal(30.26, 4.82)}
-
-        The true hyperparameter values are consequently (250.4, 7.27, 30.26, 4.82).
+        .. highlight:: python
+        .. code-block:: python
+            
+            # Example 1: Simulating a ground truth
+            expert(
+                data=None,
+                simulate_data=True,
+                simulator_specs={
+                    "b0": tfd.Normal(250.4, 7.27),
+                    "b1": tfd.Normal(30.26, 4.82)
+                    }
+                )
+            
+            # Example 2: Use expert data from external file
+            expert(
+                data="/expert_data/data_file.py"
+                )
 
     Returns
     -------
     dict
-        Returns a dictionary including user information about expert data or simulated data given a
-        pre-defined ground truth.
+        Returns a dictionary including user information about expert data or 
+        simulated data given a pre-defined ground truth.
 
     """
     # either expert data or expert simulator has to be specified
@@ -474,9 +492,41 @@ def expert(
 def loss(
     loss_function: str or callable = "mmd-energy",
     loss_weighting: dict
-    or None = {"method": "dwa", "method_specs": {"temperature": 1.6}},
+    or None = None,
 ) -> dict:
+    """
+    Creates a dictionary with specification about the used discrepancy measure 
+    and whether a specific loss-balancing method is applied 
 
+    Parameters
+    ----------
+    loss_function : str or callable, optional
+        Discrepancy measure used for learning. The default is "mmd-energy" 
+        (Maximum Mean Discrepancy with energy kernel)
+    loss_weighting : dict or None, optional
+        Loss balancing method. The default is None.
+        
+    :Example:
+
+        .. highlight:: python
+        .. code-block:: python
+        
+            loss(
+                loss_function = "mmd-energy",
+                loss_weighting = {
+                    "method" : "dwa", 
+                    "method_specs": {
+                        "temperature": 1.6
+                        }
+                    }
+                )
+
+    Returns
+    -------
+    dict
+        Dictionary with specification about loss function and loss balancing method.
+
+    """
     # check whether user-specified loss function is implemented
     if type(loss_function) is str:
         assert loss_function in [
@@ -500,7 +550,8 @@ def loss(
 
 def optimization(
     optimizer: callable = tf.keras.optimizers.Adam,
-    optimizer_specs: dict = {"learning_rate": callable or float, "clipnorm": 1.0},
+    optimizer_specs: dict = {"learning_rate": 0.001, 
+                             "clipnorm": 1.0},
 ) -> dict:
     """
     Creates a dictionary including user information about the optimizer.
@@ -515,14 +566,18 @@ def optimization(
         the initial learning rate which can be provided as float or in form of a learning rate schedule.
         The default is shown in the following example.
 
-        :Example:
+    :Example:
 
-            .. highlight:: python
-            .. code-block:: python
-
-                {"learning_rate": tf.keras.optimizers.schedules.CosineDecayRestarts(
-                                  0.005, 100),
-                 "clipnorm": 1.0}
+        .. highlight:: python
+        .. code-block:: python
+            # Adam optimizer with Cosine Decay learning rate schedule
+            optimization(
+                opimizer = tf.keras.optimizers.Adam,
+                optimizer_specs = {
+                    "learning_rate": 0.001, # optional: callable lr schedule from keras
+                    "clipnorm": 1.0
+                    }
+                )
 
     Returns
     -------
@@ -531,7 +586,8 @@ def optimization(
 
     """
     # TODO assert that keywords of optimizer are in optimizer_specs
-    optim_dict = {"optimizer": optimizer, "optimizer_specs": optimizer_specs}
+    optim_dict = {"optimizer": optimizer, 
+                  "optimizer_specs": optimizer_specs}
 
     return optim_dict
 
@@ -549,12 +605,13 @@ def prior_elicitation(
     expert_input: callable,
     generative_model: callable,
     target_quantities: callable,
-    loss_function: callable,
-    optimization_settings: callable,
+    loss_function: callable = loss(),
+    optimization_settings: callable = optimization(),
     output_path: str = "results",
     print_info: bool = True,
     view_ep: int = 1,
-    cores: int = 4
+    cores: int = 4,
+    use_regularization: bool = True
 ) -> dict:
     """
     wrapper around the optimization process, when called a global dictionary will be
@@ -629,7 +686,8 @@ def prior_elicitation(
             optimization_settings,
             output_path,
             print_info,
-            view_ep)
+            view_ep,
+            use_regularization)
         
         global_dict["output_path"]["data"] = f"elicit/simulations/results/data/{method}/{sim_id}_{seed}"
         # save global dict
@@ -640,8 +698,9 @@ def prior_elicitation(
         prior_elicitation_dag(seed, global_dict)
     
     # if seed is int use no parallelization 
-    if type(seed) is int:
+    if type(seed) is int:        
         wrapper(seed)
+        
     if type(seed) is list:
         print(f"Parallelization is used with {cores} cores.")
         Parallel(n_jobs=cores, verbose=1)(delayed(wrapper)(i) for i in seed)

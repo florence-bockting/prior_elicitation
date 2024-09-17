@@ -140,7 +140,7 @@ def sample_from_priors(initialized_priors, ground_truth, global_dict):
         for prior in list(global_dict["expert_input"]["simulator_specs"].values()):
             # sample from the prior distribution
             priors.append(prior.sample((1, rep_true)))  #
-
+        
         if type(priors[0]) is list:
             prior_samples = tf.concat(priors[0], axis=-1)
         else:
@@ -185,6 +185,7 @@ def sample_from_priors(initialized_priors, ground_truth, global_dict):
 
         base_dist = base_dist_family(**base_dist_args)
         # check whether distribution has correct shape
+  
         try:
             list(base_dist.event_shape)[0] == no_param
         except:

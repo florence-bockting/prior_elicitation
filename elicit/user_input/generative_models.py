@@ -401,14 +401,19 @@ class GenerativeMultilevelModel(tf.Module):
         
         # SD matrix
         # shape = (B, 2)
-        taus = tf.reduce_mean(
-            tf.math.softplus(
-                tf.gather(prior_samples, indices=[2,3], axis=-1)
-                ), 
-            axis=1)
+        if ground_truth:
+            omegas = tf.reduce_mean(
+                        tf.gather(prior_samples, indices=[2,3], axis=-1), 
+                    axis=1)
+        else:
+            omegas = tf.reduce_mean(
+                tf.math.softplus(
+                    tf.gather(prior_samples, indices=[2,3], axis=-1)
+                    ), 
+                axis=1)
         
         # shape = (B, 2, 2)
-        S = tf.linalg.diag(taus)
+        S = tf.linalg.diag(omegas)
         
         # covariance matrix: Cov=S*R*S
         # shape = (B, 2, 2)
@@ -452,9 +457,14 @@ class GenerativeMultilevelModel(tf.Module):
                        betas[:,:,:,1]*design_matrix[:,1])
         
         # define likelihood
-        likelihood = tfd.Normal(loc = epred,
-                                scale = tf.expand_dims(prior_samples[:,:,-1], -1)
-                                )
+        if ground_truth:
+            likelihood = tfd.Normal(loc = epred,
+                                    scale = tf.expand_dims(prior_samples[:,:,-1], -1)
+                                    )
+        else:
+            likelihood = tfd.Normal(loc = epred,
+                                    scale = tf.expand_dims(tf.math.softplus(prior_samples[:,:,-1]), -1)
+                                    )
         
         # sample prior predictive data
         ypred = likelihood.sample()
