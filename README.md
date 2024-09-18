@@ -9,9 +9,7 @@ There are two learning methods available:
 
 ## Installation
 
-**Requirements**
-
-Python >=3.10 and <= 3.12
++ requires: Python >=3.10 and <= 3.12
 
 ```
 # Create an empty Python environment (here with conda example)
@@ -21,7 +19,7 @@ conda create -n elicitation-env python=3.11
 conda activate elicitation-env
 
 # install elicit package
-pip install git+https://github.com/florence-bockting/prior_elicitation/tree/new_interface
+pip install git+https://github.com/florence-bockting/prior_elicitation.git@new_interface
 ```
 
 ## Usage 
