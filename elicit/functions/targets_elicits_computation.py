@@ -7,10 +7,10 @@ import pandas as pd
 tfd = tfp.distributions
 bfn = bf.networks
 
-from functions.helper_functions import save_as_pkl
-from user_input.custom_functions import custom_correlation
+from elicit.functions.helper_functions import save_as_pkl
+from user.custom_functions import custom_correlation
 
-
+# TODO: Update Custom Target Function
 def use_custom_functions(custom_function, model_simulations, global_dict):
     """
     Helper function that prepares custom functions if specified by checking
@@ -49,7 +49,7 @@ def use_custom_functions(custom_function, model_simulations, global_dict):
         for i in range(len(inspect.getfullargspec(custom_func)[3][0])):
             quantity = inspect.getfullargspec(custom_func)[3][i][0]
             true_model_simulations = pd.read_pickle(
-                global_dict["output_path"]["data"] + "/expert/model_simulations.pkl"
+                global_dict["output_path"] + "/expert/model_simulations.pkl"
             )
             for key in custom_args_keys:
                 if f"{key}" == quantity:
@@ -85,46 +85,36 @@ def computation_target_quantities(model_simulations, ground_truth, global_dict):
     targets_res : dict
         computed target quantities.
     """
-    # extract target quantities section from global dict
-    targets_global_dict = global_dict["target_quantities"]
-
-    # names of target quantities
-    name_targets = targets_global_dict["name"]
-    # TODO: check for duplicate naming
+    
     # initialize dict for storing results
     targets_res = dict()
     # loop over target quantities
-    for i, target in enumerate(name_targets):
-
+    for i, target in enumerate(global_dict["target_quantities"]):
         # use custom function for target quantity if it has been defined
-        if targets_global_dict["custom_target_function"][i] is not None:
+        if global_dict["target_quantities"][target]["custom_target_function"] is not None:
             target_quantity = use_custom_functions(
-                targets_global_dict["custom_target_function"][i],
+                global_dict["target_quantities"][target]["custom_target_function"],
                 model_simulations,
                 global_dict,
             )
         else:
             target_quantity = model_simulations[target]
 
-        # select indicated observations from design matrix
-        # TODO: I suppose that makes only sense for ypred as target quantity; there should be a warning?, error?
-        if targets_global_dict["select_obs"][i] is not None:
-            target_quantity = tf.gather(
-                target_quantity, list(targets_global_dict["select_obs"][i]), axis=-1
-            )
         # save target quantities
         targets_res[target] = target_quantity
 
-    if global_dict["param_independence"]["independent"]:
+    if global_dict["model_parameters"]["independence"] is not False:
         target_quantity = use_custom_functions(
-            {"function": custom_correlation, "additional_args": None},
+            {"function": custom_correlation, 
+             "additional_args": None
+             },
             model_simulations,
-            global_dict,
+            global_dict
         )
-
         targets_res["correlation"] = target_quantity
+        
     # save file in object
-    saving_path = global_dict["output_path"]["data"]
+    saving_path = global_dict["output_path"]
     if ground_truth:
         saving_path = saving_path + "/expert"
     path = saving_path + "/target_quantities.pkl"
@@ -154,102 +144,79 @@ def computation_elicited_statistics(target_quantities, ground_truth, global_dict
         simulated elicited statistics.
 
     """
-    # extract target quantities section from global dict
-    targets_global_dict = global_dict["target_quantities"]
-
-    # names of elicitation techniques
-    name_elicits = targets_global_dict["elicitation_method"]
-    # names of target quantities
-    name_targets = list(target_quantities.keys())
     # initialize dict for storing results
     elicits_res = dict()
     # loop over elicitation techniques
-    for i, (target, elicit) in enumerate(zip(name_targets, name_elicits)):
-        # check for support of elicitation technique
-        assert elicit in set(
-            ["quantiles", "histogram", "moments", "identity"]
-        ), "Name error of elicitation techniques. Currently supported elicitation techniques are quantiles, histogram, moments."
-
-        # use custom function for target quantity if it has been defined
-        # TODO: this functionality has to be checked!
-        try:
-            targets_global_dict["custom_elicitation_function"][i]
-        except:
-            pass
+    for target in set(target_quantities).symmetric_difference(set(["correlation"])):
+        # use custom method if specified otherwise use built-in methods
+        if global_dict["target_quantities"][target]["custom_elicitation_method"] is not None:
+            elicited_statistic = use_custom_functions(
+                global_dict["target_quantities"][target]["custom_elicitation_method"],
+                target_quantities
+            )
+            elicits_res[f"custom_{target}"]=elicited_statistic
+            
         else:
-            if targets_global_dict["custom_elicitation_function"][i] is not None:
-                elicited_statistic = use_custom_functions(
-                    targets_global_dict["custom_elicitation_function"][i],
-                    target_quantities,
+            if global_dict["target_quantities"][target]["elicitation_method"] == "histogram":
+                quantiles_hist = list(tf.range(2, 100, 2))
+                target_hist = tfp.stats.percentile(
+                    target_quantities[target], q=quantiles_hist, axis=-1
                 )
-
-        if elicit == "identity":
-            elicited_statistic = target_quantities[target]
-
-        if elicit == "histogram":
-            quantiles_hist = list(tf.range(2, 100, 2))
-            target_hist = tfp.stats.percentile(
-                target_quantities[target], q=quantiles_hist, axis=-1
-            )
-            elicited_statistic = tf.einsum("ij...->ji...", target_hist)
-
-        if elicit == "quantiles":
-            quantiles = targets_global_dict["quantiles_specs"][i]
-            # check whether user-provided quantiles exist and have the correct format
-            assert (
-                quantiles[-1] > 1
-            ), "quantiles must be specified as values between [0, 100]"
-            assert (
-                quantiles is not None
-            ), "no quantiles in the argument quantiles_specs have been defined"
-            # compute quantiles
-            quan = target_quantities[target]
-            if tf.rank(quan) == 3:
-                quan_reshaped = tf.reshape(
-                    quan, (quan.shape[0], quan.shape[1] * quan.shape[2])
+                elicited_statistic = tf.einsum("ij...->ji...", target_hist)
+                elicits_res[f"histogram_{target}"]=elicited_statistic
+                
+            if global_dict["target_quantities"][target]["elicitation_method"] == "quantiles":
+                quantiles = global_dict["target_quantities"][target]["quantiles_specs"]
+                
+                # reshape target quantity
+                if tf.rank(target_quantities[target]) == 3:
+                    quan_reshaped = tf.reshape(
+                        target_quantities[target], 
+                        shape=(target_quantities[target].shape[0], 
+                               target_quantities[target].shape[1] * target_quantities[target].shape[2])
+                    )
+                if tf.rank(target_quantities[target]) == 2:
+                    quan_reshaped = target_quantities[target]
+                
+                # compute quantiles
+                computed_quantiles = tfp.stats.percentile(
+                    quan_reshaped, q=quantiles, axis=-1
                 )
-            if tf.rank(quan) == 2:
-                quan_reshaped = quan
-            computed_quantiles = tfp.stats.percentile(
-                quan_reshaped, q=quantiles, axis=-1
-            )
-            # bring quantiles to the last dimension
-            elicited_statistic = tf.einsum("ij...->ji...", computed_quantiles)
+                # bring quantiles to the last dimension
+                elicited_statistic = tf.einsum("ij...->ji...", computed_quantiles)
+                elicits_res[f"quantiles_{target}"]=elicited_statistic
+                
+            if global_dict["target_quantities"][target]["elicitation_method"]  == "moments":
+                moments = global_dict["target_quantities"][target]["moments_specs"]
+                
+                # for each moment
+                # TODO: implement feature for custom moment functions
+                for moment in moments:
+                    # check whether moment is supported
+                    assert moment in [
+                        "sd",
+                        "mean",
+                    ], "currently only 'mean' and 'sd' are supported as moments"
+    
+                    if moment == "mean":
+                        computed_mean = tf.reduce_mean(target_quantities[target], axis=-1)
+                        elicited_statistic = computed_mean
+                    if moment == "sd":
+                        computed_sd = tf.math.reduce_std(target_quantities[target], axis=-1)
+                        elicited_statistic = computed_sd
+                    # save all moments in one tensor
+                    elicit=global_dict["target_quantities"][target]["elicitation_method"]
+                    elicits_res[f"{elicit}.{moment}_{target}"] = elicited_statistic
 
-        if elicit == "moments":
-            moments = targets_global_dict["moments_specs"][i]
-            assert (
-                moments is not None
-            ), "no moments in the argument moments_specs have been defined"
-            # for each moment
-            # TODO: implement feature for custom moment functions
-            for moment in moments:
-                # check whether moment is supported
-                assert moment in [
-                    "sd",
-                    "mean",
-                ], "currently only 'mean' and 'sd' are supported as moments"
-
-                if moment == "mean":
-                    computed_mean = tf.reduce_mean(target_quantities[target], axis=-1)
-                    elicited_statistic = computed_mean
-                if moment == "sd":
-                    computed_sd = tf.math.reduce_std(target_quantities[target], axis=-1)
-                    elicited_statistic = computed_sd
-                # save all moments in one tensor
-                elicits_res[f"{elicit}.{moment}_{target}"] = elicited_statistic
-
-        if elicit != "moments":
-            elicits_res[f"{elicit}_{target}"] = elicited_statistic
-
-    if global_dict["param_independence"]["independent"]:
+    if global_dict["model_parameters"]["independence"] is not False:
         elicits_res["correlation"] = target_quantities["correlation"]
 
     # save file in object
-    saving_path = global_dict["output_path"]["data"]
+    saving_path = global_dict["output_path"]
     if ground_truth:
         saving_path = saving_path + "/expert"
     path = saving_path + "/elicited_statistics.pkl"
     save_as_pkl(elicits_res, path)
+    
     # return results
     return elicits_res

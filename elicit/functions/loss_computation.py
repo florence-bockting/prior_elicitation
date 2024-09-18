@@ -5,8 +5,8 @@ import bayesflow as bf
 tfd = tfp.distributions
 bfn = bf.networks
 
-from functions.helper_functions import save_as_pkl
-from functions.loss_functions import norm_diff
+from elicit.functions.helper_functions import save_as_pkl
+from elicit.functions.loss_functions import norm_diff
 
 
 def compute_loss_components(elicited_statistics, global_dict, expert):
@@ -41,7 +41,7 @@ def compute_loss_components(elicited_statistics, global_dict, expert):
     # for later check in if statement
     name_elicits_copy = name_elicits.copy()
 
-    if global_dict["param_independence"]["independent"]:
+    if global_dict["model_parameters"]["independence"] is not False:
         if "correlation" in name_elicits:
             name_elicits.remove("correlation")
     # prepare dictionary for storing results
@@ -67,7 +67,7 @@ def compute_loss_components(elicited_statistics, global_dict, expert):
 
         if tf.rank(loss_component) == 1:
             assert (
-                targets_global_dict["loss_components"][i_target] == "all"
+                targets_global_dict[target]["loss_components"] == "all"
             ), f"the elicited statistic {name} has rank=1 and can therefore support only combine_loss = 'all'"
             # add a last axis for loss computation
             final_loss_component = tf.expand_dims(loss_component, axis=-1)
@@ -75,7 +75,7 @@ def compute_loss_components(elicited_statistics, global_dict, expert):
             loss_component_res[f"{name}_loss"] = final_loss_component
 
         else:
-            if targets_global_dict["loss_components"][i_target] == "all":
+            if targets_global_dict[target]["loss_components"] == "all":
                 assert (
                     tf.rank(loss_component) <= 3
                 ), f"the elicited statistic {name} has more than 3 dimensions; combine_loss = all is therefore not possible. Consider using combine_loss = 'by-group'"
@@ -90,9 +90,9 @@ def compute_loss_components(elicited_statistics, global_dict, expert):
                 if tf.rank(loss_component) <= 2:
                     loss_component_res[f"{name}_loss_{i_target}"] = loss_component
 
-            if targets_global_dict["loss_components"][i_target] == "by-stats":
+            if targets_global_dict[target]["loss_components"] == "by-stats":
                 assert (
-                    targets_global_dict["elicitation_method"][i_target] == "quantiles"
+                    targets_global_dict[target]["elicitation_method"] == "quantiles"
                 ), "loss combination method 'by-stats' is currently only possible for elicitation techniques: 'quantiles'."
                 for j in range(loss_component.shape[1]):
                     if tf.rank(loss_component) == 2:
@@ -100,7 +100,7 @@ def compute_loss_components(elicited_statistics, global_dict, expert):
                     if tf.rank(loss_component) == 3:
                         loss_component_res[f"{name}_loss_{j}"] = loss_component[:, j, :]
 
-            if targets_global_dict["loss_components"][i_target] == "by-group":
+            if targets_global_dict[target]["loss_components"] == "by-group":
                 for j in range(loss_component.shape[-1]):
                     final_loss_component = loss_component[..., j]
                     if tf.rank(final_loss_component) == 1:
@@ -110,7 +110,7 @@ def compute_loss_components(elicited_statistics, global_dict, expert):
 
                     loss_component_res[f"{name}_loss_{j}"] = final_loss_component
 
-    if global_dict["param_independence"]["independent"]:
+    if global_dict["model_parameters"]["independence"] is not False:
         if "correlation" in name_elicits_copy:
             loss_component = elicited_statistics["correlation"]
             for j in range(loss_component.shape[-1]):
@@ -122,7 +122,7 @@ def compute_loss_components(elicited_statistics, global_dict, expert):
                 loss_component_res[f"correlation_loss_{j}"] = correl_loss_component
 
     # save file in object
-    saving_path = global_dict["output_path"]["data"]
+    saving_path = global_dict["output_path"]
     if expert:
         saving_path = saving_path + "/expert"
     path = saving_path + "/loss_components.pkl"
@@ -225,12 +225,12 @@ def compute_discrepancy(loss_components_expert, loss_components_training, global
 
     """
     # import loss function
-    loss_function = global_dict["loss_function"]["loss_function"]
+    loss_function = global_dict["loss_function"]["loss"]
     # create dictionary for storing results
     loss_per_component = []
     # extract expert loss components by name
     keys_loss_components = list(loss_components_expert.keys())
-    if global_dict["param_independence"]["independent"]:
+    if global_dict["model_parameters"]["independence"] is not False:
         keys_loss_components = [
             x for x in keys_loss_components if not x.startswith("correlation_loss")
         ]
@@ -249,7 +249,7 @@ def compute_discrepancy(loss_components_expert, loss_components_training, global
         loss = loss_function(loss_comp_expert, loss_components_training[name])
         loss_per_component.append(loss)
 
-    if global_dict["param_independence"]["independent"]:
+    if global_dict["model_parameters"]["independence"] is not False:
         keys_loss_components = [
             x
             for x in list(loss_components_training.keys())
@@ -258,11 +258,11 @@ def compute_discrepancy(loss_components_expert, loss_components_training, global
         for key_loss in keys_loss_components:
             loss_per_component.append(
                 norm_diff(loss_components_training[key_loss])
-                * global_dict["param_independence"]["loss-scaling"]
+                * global_dict["model_parameters"]["independence"]["corr_scaling"]
             )
 
     # save file in object
-    saving_path = global_dict["output_path"]["data"]
+    saving_path = global_dict["output_path"]
     path = saving_path + "/loss_per_component.pkl"
     save_as_pkl(loss_per_component, path)
     return loss_per_component

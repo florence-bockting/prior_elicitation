@@ -3,7 +3,7 @@ import tensorflow_probability as tfp
 
 tfd = tfp.distributions
 
-from functions.helper_functions import save_as_pkl
+from elicit.functions.helper_functions import save_as_pkl
 
 
 def softmax_gumbel_trick(model_simulations, global_dict):
@@ -42,7 +42,7 @@ def softmax_gumbel_trick(model_simulations, global_dict):
     # get batch size
     B = model_simulations["epred"].shape[0]
     # get number of simulations from priors
-    rep = model_simulations["epred"].shape[1]
+    S = model_simulations["epred"].shape[1]
     # get number of observations
     number_obs = model_simulations["epred"].shape[2]
     # constant outcome vector (including zero outcome)
@@ -52,13 +52,13 @@ def softmax_gumbel_trick(model_simulations, global_dict):
         dtype=tf.float32,
     )
     # broadcast to shape (B, rep, outcome-length)
-    c_brct = tf.broadcast_to(c[None, None, None, :], shape=(B, rep, number_obs, len(c)))
+    c_brct = tf.broadcast_to(c[None, None, None, :], shape=(B, S, number_obs, len(c)))
     # compute pmf value
     pi = model_simulations["likelihood"].prob(c_brct)
     # prevent underflow
     pi = tf.where(pi < 1.8 * 10 ** (-30), 1.8 * 10 ** (-30), pi)
     # sample from uniform
-    u = tfd.Uniform(0, 1).sample((B, rep, number_obs, len(c)))
+    u = tfd.Uniform(0, 1).sample((B, S, number_obs, len(c)))
     # generate a gumbel sample from uniform sample
     g = -tf.math.log(-tf.math.log(u))
     # softmax gumbel trick
@@ -94,8 +94,7 @@ def simulate_from_generator(prior_samples, ground_truth, global_dict):
 
     """
     # get model and initialize generative model
-    # TODO: I silently assume that the given model_function is an "uninitialized class"
-    GenerativeModel = global_dict["generative_model"]["model_function"]
+    GenerativeModel = global_dict["generative_model"]["model"]
     generative_model = GenerativeModel()
     # get model specific arguments (that are not prior samples)
     add_model_args = global_dict["generative_model"]["additional_model_args"]
@@ -113,7 +112,7 @@ def simulate_from_generator(prior_samples, ground_truth, global_dict):
             model_simulations, global_dict
         )
     # save file in object
-    saving_path = global_dict["output_path"]["data"]
+    saving_path = global_dict["output_path"]
     if ground_truth:
         saving_path = saving_path + "/expert"
     path = saving_path + "/model_simulations.pkl"

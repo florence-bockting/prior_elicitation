@@ -5,8 +5,8 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry]
 name = "elicit" 
 version = "0.0.1"
-description = "A prior elicitation tool for Bayesian models"
-license = "MIT"
+description = "Tool for learning prior distributions based on expert prior knowledge elicitation"
+license = "AGPL-3.0-or-later"
 authors = [
     "Florence Bockting",
 ]
@@ -15,29 +15,30 @@ maintainers = [
 ]
 packages = [
     { include = "functions", from = "elicit"},
-    { include = "user_input", from = "elicit" },
-    { include = "dags", from = "elicit" },
-    { include = "setup", from = "elicit" },
+    { include = "core", from = "elicit"},
+    { include = "user", from = "elicit" }
 ]
 
 [tool.poetry.dependencies]
-tensorflow = "2.14.0"
-tensorflow-probability = "0.22.1"
-#tensorflow = "^2.15"
-#tensorflow_probability = "^0.23"
+#tensorflow = "2.14.0"
+#tensorflow-probability = "0.22.1"
+tensorflow = "*"
+tensorflow_probability = "^0.17, <0.24"
 pandas = "^2.2.2"
 signac = "^2.2.0"
-polars = "^0.20.25"
-numpy = "1.23.5"
+#polars = "^0.20.25"
+#numpy = "1.23.5"
 #numpy = "1.26.4"
 patsy = "^0.5.6"
-ucimlrepo = "^0.0.6"
-seaborn = "^0.13.2"
-matplotlib = "3.5.2"
-bayesflow = "1.1.4"
+#ucimlrepo = "^0.0.6"
+#seaborn = "^0.13.2"
+#matplotlib = "*"
+#matplotlib = "3.5.2"
+bayesflow = { git = "https://github.com/stefanradev93/bayesflow.git", branch="dev"}
+#bayesflow = "1.1.4"
 configs = "^3.0.3"
-python = "3.9"
-#python = "^3.9"
+#python = "3.9"
+python = "^3.9"
 pyarrow = "16.1.0"
 sphinx-pyproject = "0.3.0"
 sphinx = "7.3.7"
@@ -46,4 +47,6 @@ numpydoc = "1.7.0"
 myst_nb = "1.1.0"
 sphinx_design = "0.6.0"
 sphinxemoji = "0.3.1"
-bayesian-optimization = "1.4.3"
+#bayesian-optimization = "1.4.3"
+
+ 

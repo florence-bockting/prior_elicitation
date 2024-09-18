@@ -47,22 +47,18 @@ def save_hyperparameters(generator, epoch, global_dict):
         learned values for each hyperparameter and epoch.
 
     """
-    saving_path = global_dict["output_path"]["data"]
+    saving_path = global_dict["output_path"]
     if epoch == 0:
         # prepare list for saving hyperparameter values
-        hyperparams = global_dict["model_params"]["hyperparams_dict"]
-        hyp_list = dict()
-        for d in hyperparams:
-            hyp_list.update(d)
-        # create a dict with empty list for each hyperparameter
-        res_dict = dict()
-        for key in hyp_list.keys():
-            if key.startswith("log_"):
-                key = key.removeprefix("log_")
-            res_dict[f"{key}"] = []
+        for param in set(global_dict["model_parameters"].keys()).symmetric_difference(set(["independence","no_params"])):
+            hyperparams = global_dict["model_parameters"][param]["hyperparams_dict"]
+            # create a dict with empty list for each hyperparameter
+            res_dict = {f"{k}":[] for k in hyperparams}
+    # read saved list to add new values
     else:
         path_res_dict = saving_path + "/res_dict.pkl"
         res_dict = pd.read_pickle(rf"{path_res_dict}")
+        
     # extract learned hyperparameter values
     hyperparams = generator.trainable_variables
     # save names and values of hyperparameters
@@ -98,7 +94,7 @@ def marginal_prior_moments(prior_samples, epoch, global_dict):
         marginal prior distribution; for each epoch.
 
     """
-    saving_path = global_dict["output_path"]["data"]
+    saving_path = global_dict["output_path"]
     if epoch == 0:
         res_dict = {"means": [], "stds": []}
     else:
