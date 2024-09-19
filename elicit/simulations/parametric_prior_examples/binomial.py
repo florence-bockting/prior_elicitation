@@ -40,7 +40,7 @@ prior_elicitation(
         independence = False
         ),
     expert_data=dict(
-        #data = pd.read_pickle("elicit/simulations/LiDO_cluster/experts/deep_binomial/elicited_statistics.pkl"),
+        #data = pd.read_pickle("elicit/simulations/LiDO_cluster/experts/parametric_binomial/elicited_statistics.pkl"),
         from_ground_truth = True,
         simulator_specs = binomial_truth,
         samples_from_prior = 10000
@@ -72,9 +72,9 @@ prior_elicitation(
     training_settings=dict(
         method="parametric_prior",
         sim_id="binomial",
-        warmup_initializations=100,
+        warmup_initializations=1,#00,
         seed=1,
-        epochs=200
+        epochs=1,#200
     )
     )
 

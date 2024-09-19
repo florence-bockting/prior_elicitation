@@ -400,7 +400,7 @@ def prior_elicitation(
     # check correct spelling of arguments
     for k in training_settings.keys():
         assert k in ["method", "sim_id","B","samples_from_prior","seed","warmup_initializations",
-                     "epochs","output_path","progress_info"], f'Have you misspelled "{k}" in the parameter settings? Only ["method", "sim_id","B","samples_from_prior","seed","warmup_initializations","epochs","output_path","progress_info"] are valid argument names.'
+                     "epochs","output_path","progress_info", "view_ep"], f'Have you misspelled "{k}" in the parameter settings? Only ["method", "sim_id","B","samples_from_prior","seed","warmup_initializations","epochs","output_path","progress_info"] are valid argument names.'
     
     for k in training_settings.keys():
         assert set(["method","sim_id","seed","epochs"]) <= set(training_settings.keys()), 'At least one of the non-optional arguments "method","sim_id","seed","epochs"] is missing.'
@@ -484,8 +484,7 @@ def prior_elicitation(
         epochs=None,
         output_path="results",
         progress_info=1, 
-        view_ep=1,
-        cores=4
+        view_ep=1
         )
     
     

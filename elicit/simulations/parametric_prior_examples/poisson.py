@@ -26,32 +26,32 @@ prior_elicitation(
         b0=dict(
             family=normal_log,
             hyperparams_dict={
-                "mu0": tfd.Uniform(-10.,10), 
-                "log_sigma0": tfd.Uniform(0.,-5.)
+                "mu0": tfd.Uniform(1.,2.5), 
+                "log_sigma0": tfd.Uniform(-2.,-5.)
                 },
             param_scaling=1.
             ),
         b1=dict(
             family=normal_log,
             hyperparams_dict = {
-                "mu1": tfd.Uniform(-10.,10), 
-                "log_sigma1": tfd.Uniform(0.,-5.)
+                "mu1": tfd.Uniform(0.,0.5), 
+                "log_sigma1": tfd.Uniform(-2.,-5.)
                 },
             param_scaling=1.
             ),
         b2=dict(
             family=normal_log,
             hyperparams_dict = {
-                "mu2": tfd.Uniform(-10.,10), 
-                "log_sigma2": tfd.Uniform(0.,-5.)
+                "mu2": tfd.Uniform(-1.,-1.5), 
+                "log_sigma2": tfd.Uniform(-2.,-5.)
                 },
             param_scaling=1.
             ),
         b3=dict(
             family=normal_log,
             hyperparams_dict = {
-                "mu3": tfd.Uniform(-10.,10), 
-                "log_sigma3": tfd.Uniform(0.,-5.)
+                "mu3": tfd.Uniform(-0.5,-1.), 
+                "log_sigma3": tfd.Uniform(-2.,-5.)
                 },
             param_scaling=1.
             ),

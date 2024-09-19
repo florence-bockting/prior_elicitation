@@ -4,16 +4,19 @@ import sys
 
 tfd = tfp.distributions 
 
-from elicit.core.run import prior_elicitation
-from elicit.user.generative_models import ToyModel
-from elicit.core.write_results import create_output_summary
+from core.run import prior_elicitation
+from user.generative_models import ToyModel
+from user.custom_functions import Normal_log
+from core.write_results import create_output_summary
+
+normal_log = Normal_log()
 
 prior_elicitation(
     model_parameters=dict(
-        mu=dict(family=tfd.Normal, 
+        mu=dict(family=normal_log, 
                 hyperparams_dict={
                       "mu_loc": tfd.Uniform(100.,200.),
-                      "mu_scale": tfd.Uniform(1., 30)
+                      "log_mu_scale": tfd.Uniform(0., 5.)
                       },
                 param_scaling=1.
                 ),
@@ -23,9 +26,8 @@ prior_elicitation(
                       },
                    param_scaling=1.
                    ),
-        independence = True
+        independence = False
         ),
-    normalizing_flow=True, 
     expert_data=dict(
         from_ground_truth = True,
         simulator_specs = {
@@ -58,7 +60,6 @@ prior_elicitation(
         method="parametric_prior",
         sim_id="toy_example",
         warmup_initializations=100,
-        samples_from_prior=200,
         seed=0,
         epochs=400
     )

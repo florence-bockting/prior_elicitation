@@ -8,12 +8,12 @@ class ToyModel:
     def __call__(self, ground_truth, prior_samples, N):
         # number of observations (intercept-only)
         X = tf.ones((1,N))
-        # linear predictor
-        epred = prior_samples[:,:,0][:,:,None] @ X
-        # data-generating model
+        # linear predictor (= mu)
+        epred = tf.expand_dims(prior_samples[:,:,0],-1) @ X
+        # data-generating model 
         likelihood = tfd.Normal(loc=epred,
-                                scale=prior_samples[:,:,1][:,:,None])
-        # prior predictive distribution
+                                scale=tf.expand_dims(prior_samples[:,:,1],-1))
+        # prior predictive distribution (=height)
         ypred = likelihood.sample()
         
         return dict(likelihood = likelihood,     
