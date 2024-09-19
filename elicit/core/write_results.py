@@ -112,7 +112,7 @@ def create_output_summary(path_res, global_dict):
     else:
 
         def method_settings():
-            param_names = set(global_dict["model_parameters"].keys()).symmetric_difference(set(["independence","no_params"]))
+            param_names = sorted(list(set(global_dict["model_parameters"].keys()).difference(set(["independence","no_params"]))))
             family_dict = {
                 f"{param}": global_dict["model_parameters"][param]["family"].__name__
                 for param in param_names

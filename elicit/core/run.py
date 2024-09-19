@@ -282,7 +282,7 @@ def prior_elicitation(
         ):
     
     #%% HELPER VALUES
-    num_params = len(set(model_parameters.keys()).difference(set(["independence"])))
+    num_params = len(sorted(list(set(model_parameters.keys()).difference(set(["independence"])))))
 
     #%% CHECKS
     ######## section: model_parameters #########
@@ -301,7 +301,7 @@ def prior_elicitation(
     # check whether non-optional arguments are specified
     # TODO-Test: include test with missing non-optional argument
     if training_settings["method"] == "parametric_prior":
-        for param_name in set(model_parameters.keys()).difference(set(["independence"])):
+        for param_name in sorted(list(set(model_parameters.keys()).difference(set(["independence"])))):
             assert set(["family","hyperparams_dict"]) <= set(model_parameters[param_name].keys()), f"For parameter {param_name} one of the non-optinal arguments ['family', 'hyperparams_dict'] is missing."
         
     if training_settings["method"] == "deep_prior":
@@ -493,7 +493,7 @@ def prior_elicitation(
     
     ######### Section: model_parameters ##########
     global_dict["model_parameters"]=dict()
-    for param_name in set(model_parameters.keys()).difference(set(["independence"])):
+    for param_name in sorted(list(set(model_parameters.keys()).difference(set(["independence"])))):
         global_dict["model_parameters"][param_name]=_default_dict_parameter.copy()
         global_dict["model_parameters"][param_name].update(model_parameters[param_name])
     

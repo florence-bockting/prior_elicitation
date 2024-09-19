@@ -147,7 +147,7 @@ def computation_elicited_statistics(target_quantities, ground_truth, global_dict
     # initialize dict for storing results
     elicits_res = dict()
     # loop over elicitation techniques
-    for target in set(target_quantities).difference(set(["correlation"])):
+    for target in sorted(list(set(target_quantities).difference(set(["correlation"])))):
         # use custom method if specified otherwise use built-in methods
         if global_dict["target_quantities"][target]["custom_elicitation_method"] is not None:
             elicited_statistic = use_custom_functions(

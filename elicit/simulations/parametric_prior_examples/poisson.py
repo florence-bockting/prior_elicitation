@@ -136,7 +136,12 @@ prior_elicitation(
 pd.read_pickle("elicit/results/parametric_prior/poisson_1/expert/elicited_statistics.pkl")["quantiles_group3"]
 tf.reduce_mean(pd.read_pickle("elicit/results/parametric_prior/poisson_1/elicited_statistics.pkl")["quantiles_group3"],0)
 
+global_dict = pd.read_pickle("elicit/results/parametric_prior/poisson_1/global_dict.pkl")
+
+pd.read_pickle("elicit/results/parametric_prior/poisson_1/init_prior.pkl")
 res = pd.read_pickle("elicit/results/parametric_prior/poisson_1/final_results.pkl")
+
+res["model"].trainable_variables
 
 res["hyperparameter"].keys()
 

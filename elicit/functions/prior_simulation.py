@@ -52,8 +52,9 @@ def intialize_priors(global_dict):
         # list for saving initialize hyperparameter values
         init_hyperparam_list = []
         # loop over model parameter and initialize each hyperparameter
-        for model_param in set(global_dict["model_parameters"].keys()).difference(set(["independence", "no_params"])):
+        for model_param in sorted(list(set(global_dict["model_parameters"].keys()).difference(set(["independence", "no_params"])))):
             get_hyp_dict = global_dict["model_parameters"][model_param]["hyperparams_dict"]
+            
             initialized_hyperparam = dict()
             for name in get_hyp_dict:
                 # check whether initial value is a distributions
@@ -136,7 +137,7 @@ def sample_from_priors(initialized_priors, ground_truth, global_dict):
     if (global_dict["training_settings"]["method"] == "parametric_prior") and (not ground_truth):
         
         priors = []
-        for i, param in enumerate(set(global_dict["model_parameters"].keys()).difference(set(["independence","no_params"]))):
+        for i, param in enumerate(sorted(list(set(global_dict["model_parameters"].keys()).difference(set(["independence","no_params"]))))):
             # get the prior distribution family as specified by the user
             prior_family = global_dict["model_parameters"][param]["family"]
         
@@ -158,7 +159,7 @@ def sample_from_priors(initialized_priors, ground_truth, global_dict):
     # scaling of prior distributions according to param_scaling
     if not ground_truth:
         scaled_priors = []
-        for i, param in enumerate(set(global_dict["model_parameters"].keys()).difference(set(["independence","no_params"]))):
+        for i, param in enumerate(sorted(list(set(global_dict["model_parameters"].keys()).difference(set(["independence","no_params"]))))):
             factor = global_dict["model_parameters"][param]["param_scaling"]
             scaled_priors.append(prior_samples[:, :, i]*factor)
         
