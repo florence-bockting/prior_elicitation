@@ -147,6 +147,7 @@ def training_loop(
         "hyperparameter": res_dict,
         "time_epoch": time_per_epoch,
         "seed": seed,
+        "model": prior_model
     }
 
     if global_dict["training_settings"]["method"] == "parametric_prior":

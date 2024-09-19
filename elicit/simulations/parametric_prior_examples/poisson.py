@@ -11,7 +11,7 @@ from user.generative_models import PoissonModel
 from user.custom_functions import Normal_log, custom_groups
 
 ### ground truth:
-binomial_truth = {
+poisson_truth = {
     "b0": tfd.Normal(2.91, 0.07),
     "b1": tfd.Normal(0.23, 0.05),
     "b2": tfd.Normal(-1.51, 0.135),
@@ -60,7 +60,7 @@ prior_elicitation(
     expert_data=dict(
         #data = pd.read_pickle("elicit/simulations/LiDO_cluster/experts/deep_binomial/elicited_statistics.pkl"),
         from_ground_truth = True,
-        simulator_specs = binomial_truth,
+        simulator_specs = poisson_truth,
         samples_from_prior = 10000
         ),
     generative_model=dict(

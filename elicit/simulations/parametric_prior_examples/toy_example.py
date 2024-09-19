@@ -52,27 +52,27 @@ prior_elicitation(
     optimization_settings=dict(
         optimizer_specs={
             "learning_rate": tf.keras.optimizers.schedules.CosineDecay(
-                0.1, 700),
+                0.5, 700),
             "clipnorm": 1.0
             }
         ),
     training_settings=dict(
         method="parametric_prior",
         sim_id="toy_example",
-        warmup_initializations=100,
-        seed=0,
+        warmup_initializations=10,
+        seed=1,
         epochs=400
     )
     )
 
 import pandas as pd
 
-pd.read_pickle("elicit/results/parametric_prior/toy_example_0/model_simulations.pkl")["ypred"]
+pd.read_pickle("elicit/results/parametric_prior/toy_example_1/model_simulations.pkl")["ypred"]
 
 
-pd.read_pickle("elicit/results/parametric_prior/toy_example_0/expert/elicited_statistics.pkl")["quantiles_ypred"]
+pd.read_pickle("elicit/results/parametric_prior/toy_example_1/expert/elicited_statistics.pkl")["quantiles_ypred"]
 tf.reduce_mean(
-    pd.read_pickle("elicit/results/parametric_prior/toy_example_0/elicited_statistics.pkl")["quantiles_ypred"],
+    pd.read_pickle("elicit/results/parametric_prior/toy_example_1/elicited_statistics.pkl")["quantiles_ypred"],
     (0))
 
 res = pd.read_pickle("elicit/results/parametric_prior/toy_example_0/final_results.pkl")["hyperparameter"]
