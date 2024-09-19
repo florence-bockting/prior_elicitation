@@ -2,6 +2,6 @@
 .spyproject/
 .vscode/
 docs/source/notebooks/elicit/
-elicit/simulations/LiDO_cluster
+elicit/simulations/LiDO_cluster/
 elicit/results/
 manuscript/
