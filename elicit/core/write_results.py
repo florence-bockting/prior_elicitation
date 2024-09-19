@@ -1,6 +1,5 @@
 import pandas as pd
 import tensorflow as tf
-import inspect
 
 
 def create_output_summary(path_res, global_dict):
@@ -154,7 +153,7 @@ def create_output_summary(path_res, global_dict):
         + f"sim_id={global_dict['training_settings']['sim_id']}\n"
         #+ f"seed={global_dict['seed']}\n"
         + f"B={global_dict['training_settings']['B']}\n"
-        + f"rep={global_dict['training_settings']['simulations_from_prior']}\n"
+       # + f"rep={global_dict['training_settings']['simulations_from_prior']}\n"
         + f"epochs={global_dict['training_settings']['epochs']}\n"
         + f"wall time={min}:{sec} (min:sec)\n"
         + f"optimizer={global_dict['optimization_settings']['optimizer']}\n"

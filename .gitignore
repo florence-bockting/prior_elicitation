@@ -1,13 +1,7 @@
-logs/
-prior_elicitation/
 **/__pycache__
 .spyproject/
 .vscode/
 docs/source/notebooks/elicit/
-elicit/user_input/configuration_files/
-elicit/user_input/config_files/
-elicit/simulations/
-elicit/validation/
-elicit/notes/
+elicit/simulations/LiDO_cluster
+elicit/results
 manuscript/
-notes.txt

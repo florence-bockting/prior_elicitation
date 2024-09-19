@@ -5,8 +5,8 @@ import bayesflow as bf
 tfd = tfp.distributions
 bfn = bf.networks
 
-from elicit.functions.helper_functions import save_as_pkl
-from elicit.functions.loss_functions import norm_diff
+from functions.helper_functions import save_as_pkl
+from functions.loss_functions import norm_diff
 
 
 def compute_loss_components(elicited_statistics, global_dict, expert):

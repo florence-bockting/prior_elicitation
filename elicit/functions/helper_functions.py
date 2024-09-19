@@ -2,7 +2,7 @@ import pickle
 import os
 import pandas as pd
 import tensorflow as tf
-
+import numpy as np
 
 def save_as_pkl(variable, path_to_file):
     """
@@ -48,19 +48,21 @@ def save_hyperparameters(generator, epoch, global_dict):
 
     """
     saving_path = global_dict["output_path"]
+    # extract learned hyperparameter values
+    hyperparams = generator.trainable_variables
+    
     if epoch == 0:
         # prepare list for saving hyperparameter values
-        for param in set(global_dict["model_parameters"].keys()).symmetric_difference(set(["independence","no_params"])):
-            hyperparams = global_dict["model_parameters"][param]["hyperparams_dict"]
-            # create a dict with empty list for each hyperparameter
-            res_dict = {f"{k}":[] for k in hyperparams}
+        hyp_list=[]
+        for i in range(len(hyperparams)):
+            hyp_list.append(hyperparams[i].name[:-2])
+        # create a dict with empty list for each hyperparameter
+        res_dict = {f"{k}":[] for k in hyp_list}
     # read saved list to add new values
     else:
         path_res_dict = saving_path + "/res_dict.pkl"
         res_dict = pd.read_pickle(rf"{path_res_dict}")
         
-    # extract learned hyperparameter values
-    hyperparams = generator.trainable_variables
     # save names and values of hyperparameters
     vars_values = [hyperparams[i].numpy().copy() for i in range(len(hyperparams))]
     vars_names = [hyperparams[i].name[:-2] for i in range(len(hyperparams))]

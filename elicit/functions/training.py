@@ -6,7 +6,7 @@ import pandas as pd
 
 tfd = tfp.distributions
 
-from elicit.functions.helper_functions import (
+from functions.helper_functions import (
     save_as_pkl,
     save_hyperparameters,
     marginal_prior_moments,
@@ -73,7 +73,7 @@ def training_loop(
             )
             # update trainable_variables using gradient info with adam optimizer
             optimizer.apply_gradients(zip(gradients, prior_model.trainable_variables))
-
+        
         # time end of epoch
         epoch_time_end = time.time()
         epoch_time = epoch_time_end - epoch_time_start

@@ -7,7 +7,7 @@ import pandas as pd
 tfd = tfp.distributions
 bfn = bf.networks
 
-from elicit.functions.helper_functions import save_as_pkl
+from functions.helper_functions import save_as_pkl
 from user.custom_functions import custom_correlation
 
 # TODO: Update Custom Target Function
@@ -147,7 +147,7 @@ def computation_elicited_statistics(target_quantities, ground_truth, global_dict
     # initialize dict for storing results
     elicits_res = dict()
     # loop over elicitation techniques
-    for target in set(target_quantities).symmetric_difference(set(["correlation"])):
+    for target in set(target_quantities).difference(set(["correlation"])):
         # use custom method if specified otherwise use built-in methods
         if global_dict["target_quantities"][target]["custom_elicitation_method"] is not None:
             elicited_statistic = use_custom_functions(

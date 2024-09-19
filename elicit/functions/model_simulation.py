@@ -3,7 +3,7 @@ import tensorflow_probability as tfp
 
 tfd = tfp.distributions
 
-from elicit.functions.helper_functions import save_as_pkl
+from functions.helper_functions import save_as_pkl
 
 
 def softmax_gumbel_trick(model_simulations, global_dict):
