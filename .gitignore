@@ -3,5 +3,5 @@
 .vscode/
 docs/source/notebooks/elicit/
 elicit/simulations/LiDO_cluster
-elicit/results
+elicit/results/
 manuscript/
