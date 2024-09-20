@@ -6,3 +6,6 @@ elicit/simulations/LiDO_cluster/
 elicit/results/
 manuscript/
 docs/source/notebooks/books/normal_model.ipynb
+docs/source/notebooks/books/multilevel_model.ipynb
+docs/source/notebooks/books/binomial_model.ipynb
+docs/source/notebooks/books/poisson_model.ipynb
