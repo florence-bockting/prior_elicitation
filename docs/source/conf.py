@@ -74,9 +74,3 @@ nb_execution_mode = "off"
 html_sourcelink_suffix = ""
 
 remove_from_toctrees = ["_autosummary/*"]
-
-#suppress_warnings = [
-#    f"autosectionlabel._examples/{filename.split('.')[0]}"
-#    for filename in os.listdir("/notebooks/books")
-#    if os.path.isfile(os.path.join("/notebooks/books", filename))
-#]  # Avoid duplicate label warnings for Jupyter notebooks.

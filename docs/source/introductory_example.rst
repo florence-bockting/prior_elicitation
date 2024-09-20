@@ -45,7 +45,7 @@ Prior elicitation methods
 
 In this specific variant, the expert provides information about the prior distribution family for each model parameter. The goal becomes then to learn the hyperparameter :math:`\lambda` (of this parametric model priors) based on prior knowledge about *height*.
 
-|:arrow_forward:| :doc:`Go to the implementation of the parametric-prior variant for our toy example <notebooks/book/toy_parametric_prior>`
+|:arrow_forward:| :doc:`Go to the implementation of the parametric-prior variant for our toy example <notebooks/books/toy_parametric_prior>`
 
 **Deep prior elicitation**
 
