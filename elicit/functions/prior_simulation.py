@@ -1,12 +1,11 @@
 import tensorflow as tf
 import tensorflow_probability as tfp
 import bayesflow as bf
-import inspect
 
 tfd = tfp.distributions
 bfn = bf.networks
 
-from functions.helper_functions import save_as_pkl
+from elicit.functions.helper_functions import save_as_pkl
 
 
 # initalize generator model

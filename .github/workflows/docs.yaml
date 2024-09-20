@@ -18,17 +18,14 @@ jobs:
           python-version: "3.9"
           
       - name: Install dependencies
-        run: pip install -e .
+        run: pip install git+https://github.com/florence-bockting/prior_elicitation.git@new_interface
 
       - name: Sphinx clean
         run: sphinx-build -M clean docs build
           
       - name: Sphinx build
         run: |
-          sphinx-apidoc -o docs/source/api/dags elicit/dags --separate
-          sphinx-apidoc -o docs/source/api/functions elicit/functions --separate
-          sphinx-apidoc -o docs/source/api/setup elicit/setup --separate
-          sphinx-apidoc -o docs/source/api/user_input elicit/user_input --separate
+          sphinx-apidoc -o docs/source/api elicit --separate
           sphinx-build docs/source docs/build/html
 
       - name: Deploy

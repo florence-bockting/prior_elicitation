@@ -6,7 +6,7 @@ import pandas as pd
 
 tfd = tfp.distributions
 
-from functions.helper_functions import (
+from elicit.functions.helper_functions import (
     save_as_pkl,
     save_hyperparameters,
     marginal_prior_moments,

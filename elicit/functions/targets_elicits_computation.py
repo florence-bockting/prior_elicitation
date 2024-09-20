@@ -7,8 +7,8 @@ import pandas as pd
 tfd = tfp.distributions
 bfn = bf.networks
 
-from functions.helper_functions import save_as_pkl
-from user.custom_functions import custom_correlation
+from elicit.functions.helper_functions import save_as_pkl
+from elicit.user.custom_functions import custom_correlation
 
 # TODO: Update Custom Target Function
 def use_custom_functions(custom_function, model_simulations, global_dict):

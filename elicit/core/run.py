@@ -5,20 +5,20 @@ import pandas as pd
 
 tfd = tfp.distributions
 
-from functions.prior_simulation import Priors
-from functions.model_simulation import simulate_from_generator
-from functions.targets_elicits_computation import (
+from elicit.functions.prior_simulation import Priors
+from elicit.functions.model_simulation import simulate_from_generator
+from elicit.functions.targets_elicits_computation import (
     computation_target_quantities,
     computation_elicited_statistics,
 )
-from functions.loss_computation import (
+from elicit.functions.loss_computation import (
     compute_loss_components,
     compute_discrepancy,
     dynamic_weight_averaging,
 )
-from functions.helper_functions import save_as_pkl
-from functions.loss_functions import MMD_energy
-from functions.training import training_loop
+from elicit.functions.helper_functions import save_as_pkl
+from elicit.functions.loss_functions import MMD_energy
+from elicit.functions.training import training_loop
   
 
 def one_forward_simulation(prior_model, global_dict, ground_truth=False):

@@ -5,10 +5,10 @@ import pandas as pd
 
 tfd = tfp.distributions 
 
-from core.run import prior_elicitation
-from user.design_matrices import load_design_matrix_poisson
-from user.generative_models import PoissonModel
-from user.custom_functions import Normal_log, custom_groups
+from elicit.core.run import prior_elicitation
+from elicit.user.design_matrices import load_design_matrix_poisson
+from elicit.user.generative_models import PoissonModel
+from elicit.user.custom_functions import Normal_log, custom_groups
 
 ### ground truth:
 poisson_truth = {

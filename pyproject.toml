@@ -14,9 +14,7 @@ maintainers = [
     "Florence Bockting",
 ]
 packages = [
-    { include = "functions", from = "elicit"},
-    { include = "core", from = "elicit"},
-    { include = "user", from = "elicit" }
+	{ include = "elicit" }
 ]
 
 [tool.poetry.dependencies]
