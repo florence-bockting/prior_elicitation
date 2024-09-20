@@ -8,10 +8,18 @@ There are two learning methods available:
 + `deep prior`: This method allows for learning a joint prior on all model parameters simulateously using normalizing flows.
 
 ## Installation
-Using `prior_elicitation` as the base directory the package can be installed in development mode as follows:
+
++ requires: Python >=3.10 and <= 3.12
 
 ```
-pip install -e .
+# Create an empty Python environment (here with conda example)
+conda create -n elicitation-env python=3.11
+
+# activate environment
+conda activate elicitation-env
+
+# install elicit package
+pip install git+https://github.com/florence-bockting/prior_elicitation.git@new_interface
 ```
 
 ## Usage 

@@ -6,7 +6,7 @@ import pandas as pd
 
 tfd = tfp.distributions
 
-from functions.helper_functions import (
+from elicit.functions.helper_functions import (
     save_as_pkl,
     save_hyperparameters,
     marginal_prior_moments,
@@ -47,7 +47,7 @@ def training_loop(
     component_losses = []
     gradients_ep = []
     time_per_epoch = []
-    for epoch in tf.range(global_dict["epochs"]):
+    for epoch in tf.range(global_dict["training_settings"]["epochs"]):
         # runtime of one epoch
         epoch_time_start = time.time()
         # initialize the adam optimizer
@@ -73,19 +73,20 @@ def training_loop(
             )
             # update trainable_variables using gradient info with adam optimizer
             optimizer.apply_gradients(zip(gradients, prior_model.trainable_variables))
-
+        
         # time end of epoch
         epoch_time_end = time.time()
         epoch_time = epoch_time_end - epoch_time_start
 
-        if global_dict["print_info"]:
+        # break for loop if loss is NAN and inform about cause
+        if tf.math.is_nan(weighted_total_loss):
+            print("Loss is NAN. The training process has been stopped.")
+            break
+        
+        if global_dict["training_settings"]["progress_info"] > 0:
             # print information for user during training
-            # break for loop if loss is NAN and inform about cause
-            if tf.math.is_nan(weighted_total_loss):
-                print("Loss is NAN. The training process has been stopped.")
-                break
             # inform about epoch time, total loss and learning rate
-            if epoch % global_dict["view_ep"] == 0:
+            if epoch % global_dict["training_settings"]["view_ep"] == 0:
                 if (
                     type(
                         global_dict["optimization_settings"]["optimizer_specs"][
@@ -104,19 +105,20 @@ def training_loop(
                 print(f"epoch_time: {epoch_time:.3f} sec")
                 print(f"Epoch: {epoch}, loss: {weighted_total_loss:.5f}, lr: {lr:.6f}")
             # inform about estimated time until completion
-            if epoch > 0 and epoch % global_dict["view_ep"] == 0:
+            if epoch > 0 and epoch % global_dict["training_settings"]["view_ep"] == 0:
                 avg_ep_time = np.mean(time_per_epoch)
-                remaining_eps = np.subtract(global_dict["epochs"], epoch)
+                remaining_eps = np.subtract(global_dict["training_settings"]["epochs"], epoch)
                 estimated_time = np.multiply(remaining_eps, avg_ep_time)
                 print(
                     f"Estimated time until completion: {time.strftime('%H:%M:%S', time.gmtime(estimated_time))}"
                 )
-            if epoch == np.subtract(global_dict["epochs"], 1):
-                print("Done :)")
-
+                
+        if epoch == np.subtract(global_dict["training_settings"]["epochs"], 1):
+            print("Done :)")
+            
         # save gradients in file
-        saving_path = global_dict["output_path"]["data"]
-        if global_dict["method"] == "parametric_prior":
+        saving_path = global_dict["output_path"]
+        if global_dict["training_settings"]["method"] == "parametric_prior":
             path = saving_path + "/gradients.pkl"
             save_as_pkl(gradients, path)
             # save for each epoch
@@ -127,7 +129,7 @@ def training_loop(
         total_loss.append(weighted_total_loss)
         component_losses.append(pd.read_pickle(saving_path + "/loss_per_component.pkl"))
 
-        if global_dict["method"] == "parametric_prior":
+        if global_dict["training_settings"]["method"] == "parametric_prior":
             # save single learned hyperparameter values for each prior and epoch
             res_dict = save_hyperparameters(prior_model, epoch, global_dict)
         else:
@@ -145,9 +147,10 @@ def training_loop(
         "hyperparameter": res_dict,
         "time_epoch": time_per_epoch,
         "seed": seed,
+        "model": prior_model
     }
 
-    if global_dict["method"] == "parametric_prior":
+    if global_dict["training_settings"]["method"] == "parametric_prior":
         res["gradients"] = gradients_ep
     path = saving_path + "/final_results.pkl"
     save_as_pkl(res, path)
