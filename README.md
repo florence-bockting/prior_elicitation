@@ -19,14 +19,11 @@ conda create -n elicitation-env python=3.11
 conda activate elicitation-env
 
 # install elicit package
-pip install git+https://github.com/florence-bockting/prior_elicitation.git@new_interface
+pip install git+https://github.com/florence-bockting/prior_elicitation.git
 ```
 
 ## Usage 
-Multiple case studies that demonstrate usage of this method are implemented in the directory `elicit\user_input\configuration_files`
-
-+ open one case study implementation, e.g., `binom_deep.py` and run the file
-+ results are saved in a newly created directory `elicit\simulations\results\data` and `results\plots`
+See the [introductory example](https://florence-bockting.github.io/prior_elicitation/introductory_example.html) for a minimal example with implementation.
 
 ## Notes
 This project is under development. Documentation and in-depth examples will follow.
