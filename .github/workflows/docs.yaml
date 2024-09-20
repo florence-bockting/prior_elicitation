@@ -1,0 +1,37 @@
+name: Publish Sphinx Documentation
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish_sphinx_docs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
+          
+      - name: Install dependencies
+        run: pip install -e .
+
+      - name: Sphinx clean
+        run: sphinx-build -M clean docs build
+          
+      - name: Sphinx build
+        run: |
+          sphinx-apidoc -o docs/source/api elicit --separate
+          sphinx-build docs/source docs/build/html
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          publish_branch: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/build/html
+          force_orphan: true
