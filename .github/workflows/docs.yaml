@@ -18,7 +18,7 @@ jobs:
           python-version: "3.9"
           
       - name: Install dependencies
-        run: pip install git+https://github.com/florence-bockting/prior_elicitation.git@new_interface
+        run: pip install -e .
 
       - name: Sphinx clean
         run: sphinx-build -M clean docs build
