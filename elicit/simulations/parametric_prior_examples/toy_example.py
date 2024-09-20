@@ -52,7 +52,7 @@ prior_elicitation(
     optimization_settings=dict(
         optimizer_specs={
             "learning_rate": tf.keras.optimizers.schedules.CosineDecay(
-                0.5, 700),
+                0.1, 700),
             "clipnorm": 1.0
             }
         ),
@@ -75,9 +75,10 @@ tf.reduce_mean(
     pd.read_pickle("elicit/results/parametric_prior/toy_example_1/elicited_statistics.pkl")["quantiles_ypred"],
     (0))
 
-res = pd.read_pickle("elicit/results/parametric_prior/toy_example_0/final_results.pkl")["hyperparameter"]
+res = pd.read_pickle("elicit/results/parametric_prior/toy_example_1/final_results.pkl")["hyperparameter"]
 
-res["mu_loc"]
+res["sigma_scale"]
+tf.exp(res["sigma_scale"])
 
 
 
