@@ -42,13 +42,19 @@ def one_forward_simulation(prior_model, global_dict, ground_truth=False):
         compute the loss components
 
     """
+    # generate samples from initialized prior 
     prior_samples = prior_model()
+    # simulate prior predictive distribution based on prior samples 
+    # and generative model
     model_simulations = simulate_from_generator(
         prior_samples, ground_truth, global_dict
     )
+    # compute the target quantities
     target_quantities = computation_target_quantities(
         model_simulations, ground_truth, global_dict
     )
+    # compute the elicited statistics by applying a specific elicitation
+    # method on the target quantities
     elicited_statistics = computation_elicited_statistics(
         target_quantities, ground_truth, global_dict
     )

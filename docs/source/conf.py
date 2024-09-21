@@ -68,7 +68,7 @@ html_static_path = ['_static']
 html_favicon = "_static/favicon-light.ico"
 
 # do not execute jupyter notebooks when building docs
-nb_execution_mode = "auto"
+nb_execution_mode = "off"
 
 # download notebooks as .ipynb and not as .ipynb.txt
 html_sourcelink_suffix = ""
