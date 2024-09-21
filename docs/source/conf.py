@@ -51,7 +51,7 @@ html_theme_options = {
       "image_light": "_static/mmp-logo-light.png",
       "image_dark": "_static/mmp-logo-dark.png",
    },
-   "repository_url": "https://github.com/florence-bockting/PriorLearning",
+   "repository_url": "https://github.com/florence-bockting/prior_elicitation",
     "use_repository_button": True,
 }
 
@@ -68,7 +68,7 @@ html_static_path = ['_static']
 html_favicon = "_static/favicon-light.ico"
 
 # do not execute jupyter notebooks when building docs
-nb_execution_mode = "force"
+nb_execution_mode = "cache"
 
 # download notebooks as .ipynb and not as .ipynb.txt
 html_sourcelink_suffix = ""
