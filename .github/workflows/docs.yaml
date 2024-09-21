@@ -21,7 +21,9 @@ jobs:
         run: pip install -e .
 
       - name: Sphinx clean
-        run: sphinx-build -M clean docs build
+        run: |
+           rm -r docs/build/
+           sphinx-build -M clean docs build
           
       - name: Sphinx build
         run: |
