@@ -51,4 +51,4 @@ In this specific variant, the expert provides information about the prior distri
 
 In this second variant, we train normalizing flows (NFs) on model simulations to induce a flexible family of prior distributions. NFs are generative models that allow exact density evaluation and entail specialized deep neural networks with trainable parameters :math:`\lambda` that can learn highly complex transformations. Thus, in this variant no specification of prior distribution families for the model parameters is necessary, as we learn a joint prior density on the model parameters. 
 
-Go here to the implementation of the deep-prior variant for our toy example.
+This variant is still under construction. The toy example will come soon.

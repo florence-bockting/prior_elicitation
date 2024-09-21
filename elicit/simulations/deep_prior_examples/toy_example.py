@@ -17,8 +17,8 @@ prior_elicitation(
     expert_data=dict(
         from_ground_truth = True,
         simulator_specs = {
-            "mu": tfd.Normal(loc=17, scale=2),
-            "sigma": tfd.HalfNormal(scale=10.),
+            "mu": tfd.Normal(loc=170, scale=2),
+            "sigma": tfd.Gamma(2,5),
             },
         samples_from_prior = 10000
         ),
@@ -31,24 +31,21 @@ prior_elicitation(
     target_quantities=dict(
         ypred=dict(
             elicitation_method="quantiles",
-            quantiles_specs=(5, 10,25,30, 50, 60, 75,80, 95),
+            quantiles_specs=(5,25,50,75,95),
             loss_components = "all"
             )
         ),
     optimization_settings=dict(
         optimizer_specs={
-            "learning_rate": tf.keras.optimizers.schedules.CosineDecay(
-                0.001, 700),
+            "learning_rate": 0.001,#tf.keras.optimizers.schedules.CosineDecay(
+              #  0.001, 700),
             "clipnorm": 1.0
             }
-        ),
-    loss_function = dict(
-        use_regularization=True
         ),
     training_settings=dict(
         method="deep_prior",
         sim_id="toy_example",
-        seed=1,
+        seed=2,
         epochs=500
     )
     )
@@ -56,12 +53,12 @@ prior_elicitation(
 import pandas as pd
 import seaborn as sns
 
-prior=pd.read_pickle("elicit/results/deep_prior/toy_example_1/model_simulations.pkl")["prior_samples"]
-prior_exp=pd.read_pickle("elicit/results/deep_prior/toy_example_1/expert/model_simulations.pkl")["prior_samples"]
+prior=pd.read_pickle("elicit/results/deep_prior/toy_example_2/model_simulations.pkl")["prior_samples"]
+prior_exp=pd.read_pickle("elicit/results/deep_prior/toy_example_2/expert/model_simulations.pkl")["prior_samples"]
 
-pd.read_pickle("elicit/results/deep_prior/toy_example_1/expert/elicited_statistics.pkl")["quantiles_ypred"]
+pd.read_pickle("elicit/results/deep_prior/toy_example_2/expert/elicited_statistics.pkl")["quantiles_ypred"]
 tf.reduce_mean(
-    pd.read_pickle("elicit/results/deep_prior/toy_example_1/elicited_statistics.pkl")["quantiles_ypred"],
+    pd.read_pickle("elicit/results/deep_prior/toy_example_2/elicited_statistics.pkl")["quantiles_ypred"],
     (0))
 
 tfp.stats.correlation(prior,sample_axis=1, event_axis=-1)[:,0,1]
