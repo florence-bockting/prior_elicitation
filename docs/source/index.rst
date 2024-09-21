@@ -7,9 +7,7 @@ Learn Prior distributions from expert knowledge
 ###############################################
 
 .. note::
-   This website is currently under construction. 
-   
-   Please let me know if you notice any mistakes or omissions. 
+   This project is still in development phase. 
 
 Short overview
 ==============
