@@ -103,7 +103,7 @@ def computation_target_quantities(model_simulations, ground_truth, global_dict):
         # save target quantities
         targets_res[target] = target_quantity
 
-    if global_dict["model_parameters"]["independence"] is not False:
+    if global_dict["model_parameters"]["independence"] is not None:
         target_quantity = use_custom_functions(
             {"function": custom_correlation, 
              "additional_args": None
@@ -208,7 +208,7 @@ def computation_elicited_statistics(target_quantities, ground_truth, global_dict
                     elicit=global_dict["target_quantities"][target]["elicitation_method"]
                     elicits_res[f"{elicit}.{moment}_{target}"] = elicited_statistic
 
-    if global_dict["model_parameters"]["independence"] is not False:
+    if global_dict["model_parameters"]["independence"] is not None:
         elicits_res["correlation"] = target_quantities["correlation"]
 
     # save file in object

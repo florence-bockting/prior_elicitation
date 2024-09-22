@@ -118,6 +118,21 @@ def compute_loss(
     # regularization term for preventing degenerated solutions in var collapse to zero
     # used from Manderson and Goudie (2024)
     def regulariser(prior_samples):
+        """
+        Regularizer term for loss function: minus log sd of each prior
+        distribution (priors with larger sds should be prefered)
+
+        Parameters
+        ----------
+        prior_samples : tf.Tensor
+            samples from prior distributions.
+
+        Returns
+        -------
+        float
+            the negative mean log std across all prior distributions.
+
+        """
         log_sd = tf.math.log(tf.math.reduce_std(prior_samples, 1))
         mean_log_sd = tf.reduce_mean(log_sd)
         return -mean_log_sd
@@ -286,7 +301,95 @@ def prior_elicitation(
         loss_function: dict or None = None,
         optimization_settings: dict or None = None
         ):
+    """
+    Performes prior learning based on expert knowledge
+
+    Parameters
+    ----------
+    model_parameters : dict
     
+    Specify a dictionary for each model parameter
+        * if method=parametric_prior: dictionary per model parameter (here: param1, param2) with
+            * family: tfd.distribution, specification of the prior distribution family per parameter
+            * hyperparams_dict: dict, keys: name of hyperparameter of parametric prior distribution family and values representing the initialization which can be done via distribution or integer
+            * param_scaling: float, scaling of samples after being sampled from prior distributions
+            * independence: include correlation between priors in loss computation with specified scaling; or ignore correlation when None
+            
+        Code example::
+            
+            {
+                param1 = dict(
+                    family=tfd.distribution,
+                    hyperparams_dict={
+                        hyperparam1=tfd.distribution or int,
+                        hyperparam2=tfd.distribution or int,
+                        # ...
+                        },
+                     param_scaling=1.),
+                param2 = dict(
+                    family=tfd.distribution,
+                    # ... (see above)
+                    ),
+                independence={cor_scaling=0.1} or None    
+            }
+            
+        * if method=deep_prior: dictionary per model parameter (here: param1, param2) with
+            * param_scaling: float, scaling of samples after being sampled from prior distributions
+            * independence: include correlation between priors in loss computation with specified scaling; or ignore correlation when None
+            
+        Code example::
+            
+            {
+                param1 = dict(param_scaling=1.),
+                param2 = dict(param_sacling=1.),
+                independence={cor_scaling=0.1} or None
+            }
+            
+    expert_data : dict
+        Specify the expert information. There are two possibilities: Either you pass elicited expert data or you simulate from a pre-specified ground truth.
+        If you have expert data::
+            
+            {
+                from_ground_truth=False,
+                expert_data=read-file-with-expert-data
+                
+            }
+            
+        If you simulate from a pre-specified ground truth::
+            
+            {
+                from_ground_truth=True,
+                simulator_specs={
+                    param1 = tfd.Normal(0.1, 0.5),
+                    param2 = tfd.Normal(0.5, 0.8)
+                    },
+                samples_from_prior=10_000
+            }
+        
+        The keywords have the following interpretation:
+            * from_ground_truth: bool, True if simulating from ground truth otherwise False
+            * expert_data: read file with expert data; must have the same format as the model-simulated elicited statistics
+            * simulator_specs: dict, specifies the true prior distributions of the model parameters
+            * samples_from_prior: int, number of samples drawn from each prior distribution
+        
+    generative_model : dict
+        DESCRIPTION.
+    target_quantities : dict
+        DESCRIPTION.
+    training_settings : dict
+        DESCRIPTION.
+    normalizing_flow : dict or bool, optional
+        DESCRIPTION. The default is False.
+    loss_function : dict or None, optional
+        DESCRIPTION. The default is None.
+    optimization_settings : dict or None, optional
+        DESCRIPTION. The default is None.
+
+    Returns
+    -------
+    None.
+
+    """
     #%% HELPER VALUES
     num_params = len(sorted(list(set(model_parameters.keys()).difference(set(["independence"])))))
 
@@ -504,14 +607,11 @@ def prior_elicitation(
         global_dict["model_parameters"][param_name].update(model_parameters[param_name])
     
     #TODO-TEST: include test with independence = True, False, user-dict
-    if model_parameters["independence"] is not False:
+    if model_parameters["independence"] is not None:
         global_dict["model_parameters"]["independence"]=_default_dict_independence.copy()
-        try:
-            global_dict["model_parameters"]["independence"].update(model_parameters["independence"])
-        except:
-            pass
+        global_dict["model_parameters"]["independence"].update(model_parameters["independence"])
     else:
-        global_dict["model_parameters"]["independence"]=False
+        global_dict["model_parameters"]["independence"]=None
             
     
     ######### Section: normalizing_flow ##########

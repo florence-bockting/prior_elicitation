@@ -328,9 +328,7 @@ document.write(`
   </button>
 `);
 </script>
-<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="fa-solid fa-list"></span>
-</label>
+
 </div></div>
       
     </div>
@@ -346,18 +344,6 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
-            <div>
-                <h2> Contents </h2>
-            </div>
-            <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.core.run.one_forward_simulation"><code class="docutils literal notranslate"><span class="pre">one_forward_simulation()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.core.run.load_expert_data"><code class="docutils literal notranslate"><span class="pre">load_expert_data()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.core.run.compute_loss"><code class="docutils literal notranslate"><span class="pre">compute_loss()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.core.run.burnin_phase"><code class="docutils literal notranslate"><span class="pre">burnin_phase()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.core.run.prior_elicitation"><code class="docutils literal notranslate"><span class="pre">prior_elicitation()</span></code></a></li>
-</ul>
-            </nav>
         </div>
     </div>
 </div>
@@ -367,123 +353,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="module-elicit.core.run">
-<span id="elicit-core-run-module"></span><h1>elicit.core.run module<a class="headerlink" href="#module-elicit.core.run" title="Link to this heading">#</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="elicit.core.run.one_forward_simulation">
-<span class="sig-prename descclassname"><span class="pre">elicit.core.run.</span></span><span class="sig-name descname"><span class="pre">one_forward_simulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prior_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/core/run.html#one_forward_simulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.core.run.one_forward_simulation" title="Link to this definition">#</a></dt>
-<dd><p>One forward simulation from prior samples to elicited statistics.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>prior_model</strong><span class="classifier">instance of Priors class objects</span></dt><dd><p>initialized prior distributions which can be used for sampling.</p>
-</dd>
-<dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>global dictionary with all user input specifications.</p>
-</dd>
-<dt><strong>ground_truth</strong><span class="classifier">bool, optional</span></dt><dd><p>Is true if model should be learned with simulated data that
-represent a pre-defined ground truth. The default is False.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>elicited_statistics</strong><span class="classifier">dict</span></dt><dd><p>dictionary containing the elicited statistics that can be used to
-compute the loss components</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="elicit.core.run.load_expert_data">
-<span class="sig-prename descclassname"><span class="pre">elicit.core.run.</span></span><span class="sig-name descname"><span class="pre">load_expert_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">global_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_to_expert_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/core/run.html#load_expert_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.core.run.load_expert_data" title="Link to this definition">#</a></dt>
-<dd><p>Wrapper for loading the training data which can be expert data or
-data simulations using a pre-defined ground truth.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>global dictionary with all user input specifications.</p>
-</dd>
-<dt><strong>path_to_expert_data</strong><span class="classifier">str, optional</span></dt><dd><p>path to file location where expert data has been saved</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>expert_data</strong><span class="classifier">dict</span></dt><dd><p>dictionary containing the training data. Must have same form as the
-model-simulated elicited statistics.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="elicit.core.run.compute_loss">
-<span class="sig-prename descclassname"><span class="pre">elicit.core.run.</span></span><span class="sig-name descname"><span class="pre">compute_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">training_elicited_statistics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expert_elicited_statistics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/core/run.html#compute_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.core.run.compute_loss" title="Link to this definition">#</a></dt>
-<dd><p>Wrapper around the loss computation from elicited statistics to final
-loss value.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>training_elicited_statistics</strong><span class="classifier">dict</span></dt><dd><p>dictionary containing the expert elicited statistics.</p>
-</dd>
-<dt><strong>expert_elicited_statistics</strong><span class="classifier">TYPE</span></dt><dd><p>dictionary containing the model-simulated elicited statistics.</p>
-</dd>
-<dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>global dictionary with all user input specifications.</p>
-</dd>
-<dt><strong>epoch</strong><span class="classifier">int</span></dt><dd><p>epoch .</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>total_loss</strong><span class="classifier">float</span></dt><dd><p>total loss value.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="elicit.core.run.burnin_phase">
-<span class="sig-prename descclassname"><span class="pre">elicit.core.run.</span></span><span class="sig-name descname"><span class="pre">burnin_phase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expert_elicited_statistics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">one_forward_simulation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute_loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/core/run.html#burnin_phase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.core.run.burnin_phase" title="Link to this definition">#</a></dt>
-<dd><p>For the method “parametric_prior” it might be helpful to run different initializations
-before the actual training starts in order to find a ‘good’ set of initial values.
-For this purpose the burnin phase can be used. It rans multiple initializations and computes
-for each the respective loss value. At the end that set of initial values is chosen which
-leads to the smallest loss.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>expert_elicited_statistics</strong><span class="classifier">dict</span></dt><dd><p>dictionary with expert elicited statistics.</p>
-</dd>
-<dt><strong>one_forward_simulation</strong><span class="classifier">callable</span></dt><dd><p>one forward simulation from prior samples to model-simulated elicited
-statistics.</p>
-</dd>
-<dt><strong>compute_loss</strong><span class="classifier">callable</span></dt><dd><p>wrapper for loss computation from loss components to (weighted) total loss.</p>
-</dd>
-<dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>global dictionary with all user input specifications.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>loss_list</strong><span class="classifier">list</span></dt><dd><p>list containing the loss values for each set of initial values.</p>
-</dd>
-<dt><strong>init_var_list</strong><span class="classifier">list</span></dt><dd><p>set of initial values for each run.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="elicit.core.run.prior_elicitation">
-<span class="sig-prename descclassname"><span class="pre">elicit.core.run.</span></span><span class="sig-name descname"><span class="pre">prior_elicitation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expert_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generative_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_quantities</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">training_settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalizing_flow</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_function</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimization_settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/core/run.html#prior_elicitation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.core.run.prior_elicitation" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
+  <section id="elicit-core-run-module">
+<h1>elicit.core.run module<a class="headerlink" href="#elicit-core-run-module" title="Link to this heading">#</a></h1>
 </section>
 
 
@@ -521,25 +392,6 @@ statistics.</p>
             </div>
             
             
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> Contents
-  </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.core.run.one_forward_simulation"><code class="docutils literal notranslate"><span class="pre">one_forward_simulation()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.core.run.load_expert_data"><code class="docutils literal notranslate"><span class="pre">load_expert_data()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.core.run.compute_loss"><code class="docutils literal notranslate"><span class="pre">compute_loss()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.core.run.burnin_phase"><code class="docutils literal notranslate"><span class="pre">burnin_phase()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.core.run.prior_elicitation"><code class="docutils literal notranslate"><span class="pre">prior_elicitation()</span></code></a></li>
-</ul>
-  </nav></div>
-
-</div></div>
               
             
           </div>

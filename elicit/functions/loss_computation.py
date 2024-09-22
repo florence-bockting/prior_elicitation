@@ -41,7 +41,7 @@ def compute_loss_components(elicited_statistics, global_dict, expert):
     # for later check in if statement
     name_elicits_copy = name_elicits.copy()
 
-    if global_dict["model_parameters"]["independence"] is not False:
+    if global_dict["model_parameters"]["independence"] is not None:
         if "correlation" in name_elicits:
             name_elicits.remove("correlation")
     # prepare dictionary for storing results
@@ -110,7 +110,7 @@ def compute_loss_components(elicited_statistics, global_dict, expert):
 
                     loss_component_res[f"{name}_loss_{j}"] = final_loss_component
 
-    if global_dict["model_parameters"]["independence"] is not False:
+    if global_dict["model_parameters"]["independence"] is not None:
         if "correlation" in name_elicits_copy:
             loss_component = elicited_statistics["correlation"]
             for j in range(loss_component.shape[-1]):
@@ -230,7 +230,7 @@ def compute_discrepancy(loss_components_expert, loss_components_training, global
     loss_per_component = []
     # extract expert loss components by name
     keys_loss_components = list(loss_components_expert.keys())
-    if global_dict["model_parameters"]["independence"] is not False:
+    if global_dict["model_parameters"]["independence"] is not None:
         keys_loss_components = [
             x for x in keys_loss_components if not x.startswith("correlation_loss")
         ]
@@ -249,7 +249,7 @@ def compute_discrepancy(loss_components_expert, loss_components_training, global
         loss = loss_function(loss_comp_expert, loss_components_training[name])
         loss_per_component.append(loss)
 
-    if global_dict["model_parameters"]["independence"] is not False:
+    if global_dict["model_parameters"]["independence"] is not None:
         keys_loss_components = [
             x
             for x in list(loss_components_training.keys())

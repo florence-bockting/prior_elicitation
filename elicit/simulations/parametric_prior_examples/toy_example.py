@@ -34,7 +34,7 @@ prior_elicitation(
                       },
                    param_scaling=1.
                    ),
-        independence = False
+        independence = None
         ),
     expert_data=dict(
         data = expert_data,

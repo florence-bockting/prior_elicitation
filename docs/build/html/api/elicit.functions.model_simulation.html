@@ -328,9 +328,7 @@ document.write(`
   </button>
 `);
 </script>
-<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="fa-solid fa-list"></span>
-</label>
+
 </div></div>
       
     </div>
@@ -346,15 +344,6 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
-            <div>
-                <h2> Contents </h2>
-            </div>
-            <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.functions.model_simulation.softmax_gumbel_trick"><code class="docutils literal notranslate"><span class="pre">softmax_gumbel_trick()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.functions.model_simulation.simulate_from_generator"><code class="docutils literal notranslate"><span class="pre">simulate_from_generator()</span></code></a></li>
-</ul>
-            </nav>
         </div>
     </div>
 </div>
@@ -364,70 +353,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="module-elicit.functions.model_simulation">
-<span id="elicit-functions-model-simulation-module"></span><h1>elicit.functions.model_simulation module<a class="headerlink" href="#module-elicit.functions.model_simulation" title="Link to this heading">#</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="elicit.functions.model_simulation.softmax_gumbel_trick">
-<span class="sig-prename descclassname"><span class="pre">elicit.functions.model_simulation.</span></span><span class="sig-name descname"><span class="pre">softmax_gumbel_trick</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_simulations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/functions/model_simulation.html#softmax_gumbel_trick"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.functions.model_simulation.softmax_gumbel_trick" title="Link to this definition">#</a></dt>
-<dd><p>The softmax-gumbel trick computes a continuous approximation of ypred from a
-discrete likelihood and thus allows for the computation of gradients for
-discrete random variables.</p>
-<p>Currently this approach is only implemented for models without upper boundary (e.g., Poisson model).</p>
-<p>Corresponding literature:</p>
-<ul class="simple">
-<li><p>Maddison, C. J., Mnih, A. &amp; Teh, Y. W. The concrete distribution: A continuous relaxation of
-discrete random variables in International Conference on Learning Representations (2017).
-<a class="reference external" href="https://doi.org/10.48550/arXiv.1611.00712">https://doi.org/10.48550/arXiv.1611.00712</a></p></li>
-<li><p>Jang, E., Gu, S. &amp; Poole, B. Categorical reparameterization with gumbel-softmax in
-International Conference on Learning Representations (2017).
-<a class="reference external" href="https://openreview.net/forum?id=rkE3y85ee">https://openreview.net/forum?id=rkE3y85ee</a>.</p></li>
-<li><p>Joo, W., Kim, D., Shin, S. &amp; Moon, I.-C. Generalized gumbel-softmax gradient estimator for
-generic discrete random variables.
-Preprint at <a class="reference external" href="https://doi.org/10.48550/arXiv.2003.01847">https://doi.org/10.48550/arXiv.2003.01847</a> (2020).</p></li>
-</ul>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>model_simulations</strong><span class="classifier">dict</span></dt><dd><p>dictionary containing all simulated output variables from the generative model.</p>
-</dd>
-<dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all user-input settings.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>ypred</strong><span class="classifier">tf.Tensor</span></dt><dd><p>continuously approximated ypred from the discrete likelihood.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="elicit.functions.model_simulation.simulate_from_generator">
-<span class="sig-prename descclassname"><span class="pre">elicit.functions.model_simulation.</span></span><span class="sig-name descname"><span class="pre">simulate_from_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/functions/model_simulation.html#simulate_from_generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.functions.model_simulation.simulate_from_generator" title="Link to this definition">#</a></dt>
-<dd><p>Simulates data from the specified generative model.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>prior_samples</strong><span class="classifier">dict</span></dt><dd><p>samples from prior distributions.</p>
-</dd>
-<dt><strong>ground_truth</strong><span class="classifier">bool</span></dt><dd><p>if simulation is based on true hyperparameter vector. Mainly for saving
-results in a specific “expert” folder for later analysis.</p>
-</dd>
-<dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all user-input settings.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>model_simulations</strong><span class="classifier">dict</span></dt><dd><p>simulated data from generative model.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
+  <section id="elicit-functions-model-simulation-module">
+<h1>elicit.functions.model_simulation module<a class="headerlink" href="#elicit-functions-model-simulation-module" title="Link to this heading">#</a></h1>
 </section>
 
 
@@ -465,22 +392,6 @@ results in a specific “expert” folder for later analysis.</p>
             </div>
             
             
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> Contents
-  </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.functions.model_simulation.softmax_gumbel_trick"><code class="docutils literal notranslate"><span class="pre">softmax_gumbel_trick()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.functions.model_simulation.simulate_from_generator"><code class="docutils literal notranslate"><span class="pre">simulate_from_generator()</span></code></a></li>
-</ul>
-  </nav></div>
-
-</div></div>
               
             
           </div>

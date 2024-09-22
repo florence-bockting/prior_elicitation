@@ -328,9 +328,7 @@ document.write(`
   </button>
 `);
 </script>
-<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="fa-solid fa-list"></span>
-</label>
+
 </div></div>
       
     </div>
@@ -346,16 +344,6 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
-            <div>
-                <h2> Contents </h2>
-            </div>
-            <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.functions.targets_elicits_computation.use_custom_functions"><code class="docutils literal notranslate"><span class="pre">use_custom_functions()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.functions.targets_elicits_computation.computation_target_quantities"><code class="docutils literal notranslate"><span class="pre">computation_target_quantities()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.functions.targets_elicits_computation.computation_elicited_statistics"><code class="docutils literal notranslate"><span class="pre">computation_elicited_statistics()</span></code></a></li>
-</ul>
-            </nav>
         </div>
     </div>
 </div>
@@ -365,84 +353,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="module-elicit.functions.targets_elicits_computation">
-<span id="elicit-functions-targets-elicits-computation-module"></span><h1>elicit.functions.targets_elicits_computation module<a class="headerlink" href="#module-elicit.functions.targets_elicits_computation" title="Link to this heading">#</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="elicit.functions.targets_elicits_computation.use_custom_functions">
-<span class="sig-prename descclassname"><span class="pre">elicit.functions.targets_elicits_computation.</span></span><span class="sig-name descname"><span class="pre">use_custom_functions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">custom_function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_simulations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/functions/targets_elicits_computation.html#use_custom_functions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.functions.targets_elicits_computation.use_custom_functions" title="Link to this definition">#</a></dt>
-<dd><p>Helper function that prepares custom functions if specified by checking
-all inputs and extracting the argument from different sources.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>custom_function</strong><span class="classifier">callable</span></dt><dd><p>custom function as specified by the user.</p>
-</dd>
-<dt><strong>model_simulations</strong><span class="classifier">dict</span></dt><dd><p>simulations from the generative model.</p>
-</dd>
-<dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all user-input settings.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>custom_quantity</strong><span class="classifier">tf.Tensor</span></dt><dd><p>returns the evaluated custom function.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="elicit.functions.targets_elicits_computation.computation_target_quantities">
-<span class="sig-prename descclassname"><span class="pre">elicit.functions.targets_elicits_computation.</span></span><span class="sig-name descname"><span class="pre">computation_target_quantities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_simulations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/functions/targets_elicits_computation.html#computation_target_quantities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.functions.targets_elicits_computation.computation_target_quantities" title="Link to this definition">#</a></dt>
-<dd><p>Computes target quantities from model simulations.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>model_simulations</strong><span class="classifier">dict</span></dt><dd><p>simulations from generative model.</p>
-</dd>
-<dt><strong>ground_truth</strong><span class="classifier">bool</span></dt><dd><p>whether simulations are based on ground truth. Mainly used for saving
-results in extra folder “expert” for later analysis.</p>
-</dd>
-<dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all user-input settings..</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>targets_res</strong><span class="classifier">dict</span></dt><dd><p>computed target quantities.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="elicit.functions.targets_elicits_computation.computation_elicited_statistics">
-<span class="sig-prename descclassname"><span class="pre">elicit.functions.targets_elicits_computation.</span></span><span class="sig-name descname"><span class="pre">computation_elicited_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_quantities</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/functions/targets_elicits_computation.html#computation_elicited_statistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.functions.targets_elicits_computation.computation_elicited_statistics" title="Link to this definition">#</a></dt>
-<dd><p>Computes the elicited statistics from the target quantities by applying a
-prespecified elicitation technique.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>target_quantities</strong><span class="classifier">dict</span></dt><dd><p>simulated target quantities.</p>
-</dd>
-<dt><strong>ground_truth</strong><span class="classifier">bool</span></dt><dd><p>whether simulations are based on ground truth. Mainly used for saving
-results in extra folder “expert” for later analysis..</p>
-</dd>
-<dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all user-input settings..</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>elicits_res</strong><span class="classifier">dict</span></dt><dd><p>simulated elicited statistics.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
+  <section id="elicit-functions-targets-elicits-computation-module">
+<h1>elicit.functions.targets_elicits_computation module<a class="headerlink" href="#elicit-functions-targets-elicits-computation-module" title="Link to this heading">#</a></h1>
 </section>
 
 
@@ -480,23 +392,6 @@ results in extra folder “expert” for later analysis..</p>
             </div>
             
             
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> Contents
-  </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.functions.targets_elicits_computation.use_custom_functions"><code class="docutils literal notranslate"><span class="pre">use_custom_functions()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.functions.targets_elicits_computation.computation_target_quantities"><code class="docutils literal notranslate"><span class="pre">computation_target_quantities()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.functions.targets_elicits_computation.computation_elicited_statistics"><code class="docutils literal notranslate"><span class="pre">computation_elicited_statistics()</span></code></a></li>
-</ul>
-  </nav></div>
-
-</div></div>
               
             
           </div>
