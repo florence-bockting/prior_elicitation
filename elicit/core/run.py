@@ -342,7 +342,7 @@ def prior_elicitation(
             {
                 param1 = dict(param_scaling=1.),
                 param2 = dict(param_sacling=1.),
-                independence={cor_scaling=0.1} or None
+                independence={corr_scaling=0.1} or None
             }
             
     expert_data : dict
@@ -373,21 +373,121 @@ def prior_elicitation(
             * samples_from_prior: int, number of samples drawn from each prior distribution
         
     generative_model : dict
-        DESCRIPTION.
+        Specification of the generative model.
+        
+        Code example::
+            
+            {
+                model=ExampleModel,
+                additional_model_args={
+                    design_matrix=design-matrix-file,
+                    #...
+                    }
+            }
+            
+        With the following definitions:
+            * model: class, class definition of the generative model (see example below)
+            * additional_model_args: all input arguments of the generative model
+            
+        Code example of an example model::
+            
+            class ExampleModel:
+                def __call__(self, 
+                             ground_truth,  # required argument
+                             prior_samples, # required argument
+                             X,             # additional model args
+                             N              # additional model args
+                             ):
+                    epred = tf.expand_dims(prior_samples[:,:,0],-1) @ X
+                    likelihood = tfd.Normal(loc=epred,
+                                            scale=tf.expand_dims(prior_samples[:,:,1],-1))
+                    ypred = likelihood.sample()
+                    
+                    return dict(likelihood = likelihood,      # required
+                                ypred = ypred,                # required  
+                                epred = epred                 # required
+                                prior_samples = prior_samples # required                 
+                                )
+  
     target_quantities : dict
-        DESCRIPTION.
+        Code example::
+            
+            {
+                ypred=dict(
+                        elicitation_method="quantiles",       # "quantiles", "moments", "histogram"
+                        quantiles_specs=(5, 25, 50, 75, 95),  # only if elicitation_method="quantiles"
+                        moments_specs=("mean","sd"),          # only if elicitation_method="moments"
+                        loss_components = "all",              # "all","by-group"
+                        custom_target_function=None,          # optional if user-specific target quantity should be used
+                        custom_elicitation_method=None
+                        )  
+            }
+            
     training_settings : dict
-        DESCRIPTION.
+        Code example::
+            
+            {
+                method="parametric_prior",     # "parametric_prior", "deep_prior"
+                sim_id="toy_example",          # individual id
+                warmup_initializations=50,     # only for method="parametric_prior"; search for best initialization
+                seed=0,                      
+                view_ep=50,                    # how often should the progress_info be printed during training
+                epochs=500,
+                B=128,                         # number of batches
+                samples_from_prior=200         # number of samples from the prior distributions 
+            }
+            
     normalizing_flow : dict or bool, optional
-        DESCRIPTION. The default is False.
+        Architecture of the normalizing flow. The default is False.
+        
+        Code Example::
+            
+            {
+                 num_coupling_layers=3,
+                 coupling_design="affine",
+                 coupling_settings={
+                     "dropout": False,
+                     "dense_args": {
+                         "units": 128,
+                         "activation": "relu",
+                         "kernel_regularizer": None,
+                     },
+                     "num_dense": 2,
+                 },
+                 permutation="fixed",
+                 base_distribution=tfd.MultivariateNormalTriL(
+                         loc=tf.zeros(num_params),
+                         scale_tril=tf.linalg.cholesky(tf.eye(num_params))
+                         )   
+            }
+        
     loss_function : dict or None, optional
-        DESCRIPTION. The default is None.
+        Specification of the loss function. The default is None.
+        
+        Code Example::
+            
+            {
+                  loss=MMD_energy,            # default discrepancy measure MMD
+                  loss_weighting=None,        # if loss-balancing method is applied
+                  use_regularization=False    # if regularizer is added to the loss function
+            }
+        
     optimization_settings : dict or None, optional
-        DESCRIPTION. The default is None.
-
+        Specification of the optimizer used for SGD training. The default is None.
+        
+        Code Example::
+            
+            {
+                optimizer=tf.keras.optimizers.Adam,
+                optimizer_specs={
+                    "learning_rate": 0.0001,
+                    "clipnorm": 1.0
+                    }
+            }
+            
     Returns
     -------
-    None.
+    Learns the prior distributions
 
     """
     #%% HELPER VALUES
@@ -563,7 +663,6 @@ def prior_elicitation(
     _default_dict_targets = dict(
         elicitation_method=None,
         quantiles_specs=None,
-        histogram_specs=None,
         moments_specs=None,
         loss_components="all",
         custom_target_function=None,
