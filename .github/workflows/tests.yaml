@@ -18,7 +18,8 @@ jobs:
           python-version: "3.11"
       
       - name: Install poetry
-        run: pip install poetry
+        run: |
+            pip install poetry
 		  
       - name: Install test dependencies
         run: poetry install
