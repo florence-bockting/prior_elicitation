@@ -1,4 +1,4 @@
-name: Publish Sphinx Documentation
+name: Docs
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  publish_sphinx_docs:
+  docs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
