@@ -773,8 +773,8 @@ def prior_elicitation(
     global_dict["model_parameters"]["no_params"] = num_params
     
     #%% SAVE GLOBAL DICT
-    global_dict["output_path"]=f"./elicit/{global_dict['training_settings']['output_path']}/{training_settings['method']}/{training_settings['sim_id']}_{training_settings['seed']}"
-    path = global_dict["output_path"]+"/global_dict.pkl"
+    global_dict["training_settings"]["output_path"]=f"./elicit/{global_dict['training_settings']['output_path']}/{training_settings['method']}/{training_settings['sim_id']}_{training_settings['seed']}"
+    path = global_dict["training_settings"]["output_path"]+"/global_dict.pkl"
     save_as_pkl(global_dict, path)
     
     #%% RUN DAG

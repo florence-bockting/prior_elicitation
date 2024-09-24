@@ -75,7 +75,7 @@ def intialize_priors(global_dict):
         # save initialized priors
         init_prior = init_hyperparam_list
         # save file in object
-        path = global_dict["output_path"] + "/init_prior.pkl"
+        path = global_dict["training_settings"]["output_path"] + "/init_prior.pkl"
         save_as_pkl(init_prior, path)
 
     if global_dict["training_settings"]["method"] == "deep_prior":
@@ -165,7 +165,7 @@ def sample_from_priors(initialized_priors, ground_truth, global_dict):
         prior_samples = tf.stack(scaled_priors, -1)
     
     # save results
-    saving_path = global_dict["output_path"]
+    saving_path = global_dict["training_settings"]["output_path"]
     
     if ground_truth:
         save_as_pkl(prior_samples, saving_path + "/expert/prior_samples.pkl")
