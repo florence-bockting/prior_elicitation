@@ -1,4 +1,6 @@
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+[![Tests](https://github.com/florence-bockting/prior_elicitation/workflows/Tests/badge.svg)](https://github.com/florence-bockting/prior_elicitation/actions)
+[![Documentation](https://github.com/florence-bockting/prior_elicitation/workflows/docs.yaml/badge.svg)](https://github.com/florence-bockting/prior_elicitation/actions)
 
 # Learning prior distributions based on expert knowledge (Expert knowledge elicitation method)
 *Note: This project is still in the development stage and not yet tested for practical use.*
