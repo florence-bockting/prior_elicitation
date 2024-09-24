@@ -19,8 +19,8 @@ jobs:
           
       - name: Install poetry
         run: |
-            pip install poetry
-            pip install pytest pytest-cov
+           pip install poetry
+           pip install pytest pytest-cov
         
       - name: Run Tests
         run: poetry run pytest
