@@ -61,6 +61,8 @@ Bockting, F., Radev, S. T., & Bürkner, P. C. (2024). Simulation-based prior kno
 </table>
 
 **Contributors**
+
+(Contributing guidelines will follow)
 <table>
   <tbody>
     <tr>
