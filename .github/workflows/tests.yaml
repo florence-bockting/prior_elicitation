@@ -18,7 +18,7 @@ jobs:
           python-version: "3.11"
           
       - name: Install poetry
-        run: |
+        run:|
            pip install poetry
            pip install pytest pytest-cov
         
