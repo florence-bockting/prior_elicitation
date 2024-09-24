@@ -46,37 +46,43 @@ prior_elicitation(
         method="deep_prior",
         sim_id="toy_example",
         seed=2,
-        epochs=500
+        epochs=1,#500
     )
     )
 
-import pandas as pd
-import seaborn as sns
-
-prior=pd.read_pickle("elicit/results/deep_prior/toy_example_2/model_simulations.pkl")["prior_samples"]
-prior_exp=pd.read_pickle("elicit/results/deep_prior/toy_example_2/expert/model_simulations.pkl")["prior_samples"]
-
-pd.read_pickle("elicit/results/deep_prior/toy_example_2/expert/elicited_statistics.pkl")["quantiles_ypred"]
-tf.reduce_mean(
-    pd.read_pickle("elicit/results/deep_prior/toy_example_2/elicited_statistics.pkl")["quantiles_ypred"],
-    (0))
-
-tfp.stats.correlation(prior,sample_axis=1, event_axis=-1)[:,0,1]
-sns.kdeplot(tf.reshape(prior[:,:,0], (128*200)))
-sns.kdeplot(tf.reshape(prior_exp[:,:,0], (1*10000)))
-
-sns.kdeplot(tf.reshape(prior_exp[:,:,1],(1*10000)))
-sns.kdeplot(tf.reshape(tf.abs(prior[:,:,1]),(128*200)))
-pd.read_pickle("elicit/results/deep_prior/toy_example_1/model_simulations.pkl")["prior_samples"]
+# import pandas as pd
+# import seaborn as sns
 
 
-res = pd.read_pickle("elicit/results/parametric_prior/toy_example_1/final_results.pkl")["hyperparameter"]
+# prior=pd.read_pickle("elicit/results/deep_prior/toy_example_2/model_simulations.pkl")["prior_samples"]
+# prior_exp=pd.read_pickle("elicit/results/deep_prior/toy_example_2/expert/model_simulations.pkl")["prior_samples"]
 
-res["sigma_scale"]
-tf.exp(res["sigma_scale"])
+# pd.read_pickle("elicit/results/deep_prior/toy_example_2/expert/elicited_statistics.pkl")["quantiles_ypred"]
+# tf.reduce_mean(
+#     pd.read_pickle("elicit/results/deep_prior/toy_example_2/elicited_statistics.pkl")["quantiles_ypred"],
+#     (0))
+
+# tfp.stats.correlation(prior,sample_axis=1, event_axis=-1)[:,0,1]
+# sns.kdeplot(tf.reshape(prior[:,:,0], (128*200)))
+# sns.kdeplot(tf.reshape(prior_exp[:,:,0], (1*10000)))
+
+# sns.kdeplot(tf.reshape(prior_exp[:,:,1],(1*10000)))
+# sns.kdeplot(tf.reshape(tf.abs(prior[:,:,1]),(128*200)))
+# pd.read_pickle("elicit/results/deep_prior/toy_example_1/model_simulations.pkl")["prior_samples"]
+
+
+# res = pd.read_pickle("elicit/results/deep_prior/toy_example_2/final_results.pkl")
+
+# import matplotlib.pyplot as plt
+
+# plt.plot(res["loss"])
+
+
+# res["sigma_scale"]
+# tf.exp(res["sigma_scale"])
 
 
 
 
-global_dict = pd.read_pickle("elicit/results/parametric_prior/toy_example_0/global_dict.pkl")
-create_output_summary("elicit/results/parametric_prior/toy_example_0", global_dict)
+# global_dict = pd.read_pickle("elicit/results/parametric_prior/toy_example_0/global_dict.pkl")
+# create_output_summary("elicit/results/parametric_prior/toy_example_0", global_dict)
