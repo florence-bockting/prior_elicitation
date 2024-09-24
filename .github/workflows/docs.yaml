@@ -37,3 +37,12 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: docs/build/html
           force_orphan: true
+        
+      - name: Install test dependencies
+        run: |
+          pip install poetry
+          poetry install --with dev
+      
+      - name: Run tests
+        run: poetry run pytest
+          
