@@ -40,5 +40,5 @@ sphinxemoji = "0.3.1"
 [tool.poetry.group.test.dependencies]  
 pytest-randomly = "^3.15.0"  
 pytest = "^8.2.0" 
-python = "~=3.11.0"
+python = "^3.9,<3.12"
 tensorflow-recommenders = "~=0.7.3"
