@@ -48,8 +48,10 @@ def softmax_gumbel_trick(model_simulations, global_dict):
     S = model_simulations["epred"].shape[1]
     # get number of observations
     number_obs = model_simulations["epred"].shape[2]
+    # create subdictionaries for better readability
+    dict_generator = global_dict["generative_model"]
     # constant outcome vector (including zero outcome)
-    thres = global_dict["generative_model"]["softmax_gumble_specs"]["upper_threshold"]
+    thres = dict_generator["softmax_gumble_specs"]["upper_threshold"]
     c = tf.range(thres + 1, delta=1, dtype=tf.float32)
     # broadcast to shape (B, rep, outcome-length)
     c_brct = tf.broadcast_to(c[None, None, None, :], shape=(B, S, number_obs,
@@ -66,7 +68,7 @@ def softmax_gumbel_trick(model_simulations, global_dict):
     w = tf.nn.softmax(
         tf.math.divide(
             tf.math.add(tf.math.log(pi), g),
-            global_dict["generative_model"]["softmax_gumble_specs"]["temperature"],
+            dict_generator["softmax_gumble_specs"]["temperature"],
         )
     )
     # reparameterization/linear transformation
@@ -94,11 +96,13 @@ def simulate_from_generator(prior_samples, ground_truth, global_dict):
         simulated data from generative model.
 
     """
+    # create subdictionaries for better readability
+    dict_generator = global_dict["generative_model"]
     # get model and initialize generative model
-    GenerativeModel = global_dict["generative_model"]["model"]
+    GenerativeModel = dict_generator["model"]
     generative_model = GenerativeModel()
     # get model specific arguments (that are not prior samples)
-    add_model_args = global_dict["generative_model"]["additional_model_args"]
+    add_model_args = dict_generator["additional_model_args"]
     # simulate from generator
     if add_model_args is not None:
         model_simulations = generative_model(
@@ -108,7 +112,7 @@ def simulate_from_generator(prior_samples, ground_truth, global_dict):
         model_simulations = generative_model(ground_truth, prior_samples)
 
     # estimate gradients for discrete likelihood if necessary
-    if global_dict["generative_model"]["discrete_likelihood"]:
+    if dict_generator["discrete_likelihood"]:
         model_simulations["ypred"] = softmax_gumbel_trick(
             model_simulations, global_dict
         )

@@ -12,45 +12,51 @@ def create_output_summary(path_res, global_dict):
     path_res : str
         path to folder in which the results are saved.
     global_dict : dict
-        global dictionary incl. all user specifications as created when call the
-        prior_elicitation function.
+        global dictionary incl. all user specifications as created when call
+        the prior_elicitation function.
 
     Returns
     -------
     txt file
-        returns a text file summarizing all input information and some information
-        about the learning process (e.g., wall time).
+        returns a text file summarizing all input information and some
+        information about the learning process (e.g., wall time).
 
     """
 
     def summary_targets():
         df = pd.DataFrame()
-        df["target quantities"] = [] 
-        df["elicitation technique"] = [] 
-        df["combine-loss"] = [] 
-        
+        df["target quantities"] = []
+        df["elicitation technique"] = []
+        df["combine-loss"] = []
         for k in global_dict["target_quantities"]:
             df["target quantities"].append(k)
-            df["elicitation technique"].append(global_dict["target_quantities"][k]["elicitation_method"])
-            df["combine-loss"].append(global_dict["target_quantities"][k]["loss_components"])
+            df["elicitation technique"].append(
+                global_dict["target_quantities"][k]["elicitation_method"]
+                )
+            df["combine-loss"].append(
+                global_dict["target_quantities"][k]["loss_components"]
+                )
         return df
 
     loss_comp = pd.read_pickle(path_res + "/loss_components.pkl")
 
     df2 = pd.DataFrame()
     df2["loss components"] = list(loss_comp.keys())
-    df2["shape"] = [list(loss_comp[key].shape) for key in list(loss_comp.keys())]
+    df2["shape"] = [
+        list(loss_comp[key].shape) for key in list(loss_comp.keys())
+        ]
 
     time = (
-        tf.reduce_sum(pd.read_pickle(path_res + "/final_results.pkl")["time_epoch"])
-        / 60.0
-    )
+        tf.reduce_sum(
+            pd.read_pickle(path_res + "/final_results.pkl")["time_epoch"]
+            ) / 60.0)
     min, sec = tuple(f"{time:.2f}".split("."))
 
     optimizer_dict = {}
     if (
-        type(global_dict["optimization_settings"]["optimizer_specs"]["learning_rate"])
-        == float
+        type(global_dict["optimization_settings"][
+            "optimizer_specs"
+            ]["learning_rate"]) is float
     ):
         optimizer_dict["init_lr"] = global_dict["optimization_settings"][
             "optimizer_specs"
@@ -92,36 +98,49 @@ def create_output_summary(path_res, global_dict):
         optimizer_dict["lr_scheduler"] = global_dict["optimization_settings"][
             "optimizer_specs"
         ]["learning_rate"]
-    
     if global_dict["training_settings"]["method"] == "deep_prior":
+        # create sub(-sub)dict for better readability
+        dict_nf = global_dict['normalizing_flow']
+        dict_nf_copl = dict_nf['coupling_settings']
 
         def method_settings():
 
             return str(
                 "\nNormalizing Flow"
                 + "\n---------------- \n"
-                + f"number coupling layers={global_dict['normalizing_flow']['num_coupling_layers']}\n"
-                + f"coupling design={global_dict['normalizing_flow']['coupling_design']}\n"
-                + f"units in dense layer={global_dict['normalizing_flow']['coupling_settings']['dense_args']['units']}\n"
-                + f"activation function={global_dict['normalizing_flow']['coupling_settings']['dense_args']['activation']}\n"
-                + f"number dense layers={global_dict['normalizing_flow']['coupling_settings']['num_dense']}\n"
-                + f"permutation={global_dict['normalizing_flow']['permutation']}\n"
-                + f"base distribution family={global_dict['normalizing_flow']['base_distribution']._name}\n"
+                + f"number coupling layers={dict_nf['num_coupling_layers']}\n"
+                + f"coupling design={dict_nf['coupling_design']}\n"
+                + f"units in dense layer=\
+                    {dict_nf_copl['dense_args']['units']}\n"
+                + f"activation function=\
+                    {dict_nf_copl['dense_args']['activation']}\n"
+                + f"number dense layers={dict_nf_copl['num_dense']}\n"
+                + f"permutation={dict_nf['permutation']}\n"
+                + f"base distribution family=\
+                    {dict_nf['base_distribution']._name}\n"
             )
 
     else:
+        # create subdict for better readability
+        dict_param = global_dict['model_parameters']
 
         def method_settings():
-            param_names = sorted(list(set(global_dict["model_parameters"].keys()).difference(set(["independence","no_params"]))))
+            param_names = sorted(
+                list(
+                    set(
+                        dict_param.keys()
+                        ).difference(set(["independence", "no_params"]))
+                    )
+                )
             family_dict = {
-                f"{param}": global_dict["model_parameters"][param]["family"].__name__
+                f"{param}": dict_param[param]["family"].__name__
                 for param in param_names
             }
             init_dict = {}
             for param in param_names:
-                for k in global_dict["model_parameters"][param]["hyperparams_dict"]:
-                    init_info = global_dict["model_parameters"][param]["hyperparams_dict"][k]
-                    init_dict[k]=init_info
+                for k in dict_param[param]["hyperparams_dict"]:
+                    init_info = dict_param[param]["hyperparams_dict"][k]
+                    init_dict[k] = init_info
 
             return str(
                 "\nParametric Prior"
@@ -142,7 +161,9 @@ def create_output_summary(path_res, global_dict):
             true_info.pop("force_probs_to_zero_outside_support", None)
             true_info2[key] = true_info
 
-        expert_info = [str(f"{key}={true_info2[key]}") for key in true_info2.keys()]
+        expert_info = [
+            str(f"{key}={true_info2[key]}") for key in true_info2.keys()
+            ]
     else:
         expert_info = ["see file (ToDo)"]
 
@@ -151,20 +172,21 @@ def create_output_summary(path_res, global_dict):
         + "\n---------------- \n"
         + f"method={global_dict['training_settings']['method']}\n"
         + f"sim_id={global_dict['training_settings']['sim_id']}\n"
-        #+ f"seed={global_dict['seed']}\n"
+        + f"seed={global_dict['seed']}\n"
         + f"B={global_dict['training_settings']['B']}\n"
-       # + f"rep={global_dict['training_settings']['simulations_from_prior']}\n"
+        + f"rep={global_dict['training_settings']['simulations_from_prior']}\n"
         + f"epochs={global_dict['training_settings']['epochs']}\n"
         + f"wall time={min}:{sec} (min:sec)\n"
         + f"optimizer={global_dict['optimization_settings']['optimizer']}\n"
         + f"learning rate={optimizer_dict}\n"
-     #   + f"use_regularizer={global_dict['use_regularizer']}\n"
+        + f"use_regularizer={global_dict['use_regularizer']}\n"
         + "\nModel info"
         + "\n---------------- \n"
         + f"model name={global_dict['generative_model']['model_function']}\n"
-        + f"model parameters={list(global_dict['model_parameters'].keys())}\n"
-        + f"model parameter scaling={[global_dict['model_parameters'][k]['param_scaling'] for k in global_dict['model_parameters']]}\n"
-        + f"model parameter independent={global_dict['model_parameters']['independence']}\n"
+        + f"model parameters={list(dict_param.keys())}\n"
+        + f"model parameter scaling=\
+            {[dict_param[k]['param_scaling'] for k in dict_param]}\n"
+        + f"model parameter independent={dict_param['independence']}\n"
         + "\nExpert info"
         + "\n---------------- \n"
         + f"{expert_info}\n"
@@ -191,7 +213,7 @@ def write_res_summary(path_res, global_dict):
         dictionary containing all user specifications.
 
     """
-    f = open(path_res + "\overview.txt", "w")
+    f = open(path_res + "/overview.txt", "w")
     output_summary = create_output_summary(path_res, global_dict)
     f.write(output_summary)
     f.close()
