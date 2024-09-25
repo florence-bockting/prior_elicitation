@@ -4,13 +4,13 @@ import time
 import numpy as np
 import pandas as pd
 
-tfd = tfp.distributions
-
 from elicit.functions.helper_functions import (
     save_as_pkl,
     save_hyperparameters,
     marginal_prior_moments,
 )
+
+tfd = tfp.distributions
 
 
 def training_loop(
@@ -19,7 +19,7 @@ def training_loop(
     one_forward_simulation,
     compute_loss,
     global_dict,
-    seed
+    seed,
 ):
     """
     Wrapper that runs the optimization algorithms for E epochs.
@@ -29,30 +29,35 @@ def training_loop(
     expert_elicited_statistics : dict
         expert data or simulated data representing a prespecified ground truth.
     prior_model_init : class instance
-        instance of a class that initializes and samples from the prior distributions.
+        instance of a class that initializes and samples from the prior
+        distributions.
     one_forward_simulation : callable
-        one forward simulation cycle including: sampling from priors, simulating model
+        one forward simulation cycle including: sampling from priors,
+        simulating model
         predictions, computing target quantities and elicited statistics.
     compute_loss : callable
-        sub-dag to compute the loss value including: compute loss components of
-        model simulations and expert data, compute loss per component, compute total loss.
+        sub-dag to compute the loss value including: compute loss components
+        of model simulations and expert data, compute loss per component,
+        compute total loss.
     global_dict : dict
         dictionary including all user-input settings.
 
     """
     # prepare generative model
     prior_model = prior_model_init
-
     total_loss = []
     component_losses = []
     gradients_ep = []
     time_per_epoch = []
-    for epoch in tf.range(global_dict["training_settings"]["epochs"]):
+    # create subdirectories for better readability
+    dict_training = global_dict["training_settings"]
+    dict_optimization = global_dict["optimization_settings"]
+    for epoch in tf.range(dict_training["epochs"]):
         # runtime of one epoch
         epoch_time_start = time.time()
         # initialize the adam optimizer
-        get_optimizer = global_dict["optimization_settings"]["optimizer"]
-        args_optimizer = global_dict["optimization_settings"]["optimizer_specs"]
+        get_optimizer = dict_optimization["optimizer"]
+        args_optimizer = dict_optimization["optimizer_specs"]
         optimizer = get_optimizer(**args_optimizer)
 
         with tf.GradientTape() as tape:
@@ -71,9 +76,12 @@ def training_loop(
             gradients = tape.gradient(
                 weighted_total_loss, prior_model.trainable_variables
             )
-            # update trainable_variables using gradient info with adam optimizer
-            optimizer.apply_gradients(zip(gradients, prior_model.trainable_variables))
-        
+            # update trainable_variables using gradient info with adam
+            # optimizer
+            optimizer.apply_gradients(
+                zip(gradients, prior_model.trainable_variables)
+                )
+
         # time end of epoch
         epoch_time_end = time.time()
         epoch_time = epoch_time_end - epoch_time_start
@@ -82,43 +90,45 @@ def training_loop(
         if tf.math.is_nan(weighted_total_loss):
             print("Loss is NAN. The training process has been stopped.")
             break
-        
-        if global_dict["training_settings"]["progress_info"] > 0:
+
+        if dict_training["progress_info"] > 0:
             # print information for user during training
             # inform about epoch time, total loss and learning rate
-            if epoch % global_dict["training_settings"]["view_ep"] == 0:
+            if epoch % dict_training["view_ep"] == 0:
                 if (
                     type(
-                        global_dict["optimization_settings"]["optimizer_specs"][
+                        dict_optimization["optimizer_specs"][
                             "learning_rate"
                         ]
                     )
                     is float
                 ):
-                    lr = global_dict["optimization_settings"]["optimizer_specs"][
+                    lr = dict_optimization["optimizer_specs"][
                         "learning_rate"
                     ]
                 else:
-                    lr = global_dict["optimization_settings"]["optimizer_specs"][
+                    lr = dict_optimization["optimizer_specs"][
                         "learning_rate"
                     ](epoch)
                 print(f"epoch_time: {epoch_time:.3f} sec")
-                print(f"Epoch: {epoch}, loss: {weighted_total_loss:.5f}, lr: {lr:.6f}")
+                print(f"Epoch: {epoch}, loss: {weighted_total_loss:.5f},\
+                      lr: {lr:.6f}")
             # inform about estimated time until completion
-            if epoch > 0 and epoch % global_dict["training_settings"]["view_ep"] == 0:
+            if epoch > 0 and epoch % dict_training["view_ep"] == 0:
                 avg_ep_time = np.mean(time_per_epoch)
-                remaining_eps = np.subtract(global_dict["training_settings"]["epochs"], epoch)
-                estimated_time = np.multiply(remaining_eps, avg_ep_time)
-                print(
-                    f"Estimated time until completion: {time.strftime('%H:%M:%S', time.gmtime(estimated_time))}"
+                remaining_eps = np.subtract(
+                    dict_training["epochs"], epoch
                 )
-                
-        if epoch == np.subtract(global_dict["training_settings"]["epochs"], 1):
+                estimated_time = np.multiply(remaining_eps, avg_ep_time)
+                timing = time.strftime('%H:%M:%S', time.gmtime(estimated_time))
+                print(f"Estimated time until completion: {timing}")
+
+        if epoch == np.subtract(dict_training["epochs"], 1):
             print("Done :)")
-            
+
         # save gradients in file
         saving_path = global_dict["output_path"]
-        if global_dict["training_settings"]["method"] == "parametric_prior":
+        if dict_training["method"] == "parametric_prior":
             path = saving_path + "/gradients.pkl"
             save_as_pkl(gradients, path)
             # save for each epoch
@@ -127,15 +137,19 @@ def training_loop(
         # savings per epoch
         time_per_epoch.append(epoch_time)
         total_loss.append(weighted_total_loss)
-        component_losses.append(pd.read_pickle(saving_path + "/loss_per_component.pkl"))
+        component_losses.append(
+            pd.read_pickle(saving_path + "/loss_per_component.pkl")
+            )
 
-        if global_dict["training_settings"]["method"] == "parametric_prior":
-            # save single learned hyperparameter values for each prior and epoch
+        if dict_training["method"] == "parametric_prior":
+            # save single learned hyperparameter values for each prior and
+            # epoch
             res_dict = save_hyperparameters(prior_model, epoch, global_dict)
         else:
             # save mean and std for each sampled marginal prior; for each epoch
+            path_model = saving_path + "/model_simulations.pkl"
             res_dict = marginal_prior_moments(
-                pd.read_pickle(saving_path + "/model_simulations.pkl")["prior_samples"],
+                pd.read_pickle(path_model)["prior_samples"],
                 epoch,
                 global_dict,
             )
@@ -146,11 +160,11 @@ def training_loop(
         "loss_component": component_losses,
         "hyperparameter": res_dict,
         "time_epoch": time_per_epoch,
-        "seed": seed
-      #  "model": prior_model
+        "seed": seed,
+        #  "model": prior_model
     }
 
-    if global_dict["training_settings"]["method"] == "parametric_prior":
+    if dict_training["method"] == "parametric_prior":
         res["gradients"] = gradients_ep
     path = saving_path + "/final_results.pkl"
     save_as_pkl(res, path)

@@ -83,8 +83,8 @@ def simulate_from_generator(prior_samples, ground_truth, global_dict):
     prior_samples : dict
         samples from prior distributions.
     ground_truth : bool
-        if simulation is based on true hyperparameter vector. Mainly for saving
-        results in a specific "expert" folder for later analysis.
+        if simulation is based on true hyperparameter vector. Mainly for
+        saving results in a specific "expert" folder for later analysis.
     global_dict : dict
         dictionary including all user-input settings.
 
