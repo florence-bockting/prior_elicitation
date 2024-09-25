@@ -27,7 +27,7 @@ jobs:
         run: pip install -e .
 
       - name: Run Tests
-        run: poetry run pytest
+        run: poetry run pytest --cov=elicit tests --cov-report html
       
       - name: Run Coverage
         run: |
