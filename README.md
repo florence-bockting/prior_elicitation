@@ -1,7 +1,7 @@
 ![license](https://raw.githubusercontent.com/florence-bockting/prior_elicitation/badges/.badges/main/poetry-license.svg)
 ![version](https://raw.githubusercontent.com/florence-bockting/prior_elicitation/badges/.badges/main/poetry-version.svg)
 [![Tests](https://github.com/florence-bockting/prior_elicitation/workflows/Tests/badge.svg)](https://github.com/florence-bockting/prior_elicitation/actions)
-[![Coverage Status](./reports/coverage/coverage-badge.svg?dummy=8484744)](./reports/coverage/index.html)
+[![Coverage Status](https://github.com/florence-bockting/prior_elicitation/coverage-badge.svg)](./reports/coverage/index.html)
 [![Documentation](https://github.com/florence-bockting/prior_elicitation/workflows/Docs/badge.svg)](https://github.com/florence-bockting/prior_elicitation/actions)
 
 # Learning prior distributions based on expert knowledge (Expert knowledge elicitation method)
