@@ -42,4 +42,4 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: reports_dir
-          path: ./docs/reports
+          path: ./reports

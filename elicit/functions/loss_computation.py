@@ -9,7 +9,7 @@ tfd = tfp.distributions
 bfn = bf.networks
 
 
-def compute_loss_components(elicited_statistics, global_dict, expert):
+def compute_loss_comps(elicited_statistics, global_dict, expert):
     """
     Computes the single loss components used for computing the discrepancy
     between the elicited statistics. This computation depends on the
@@ -28,7 +28,7 @@ def compute_loss_components(elicited_statistics, global_dict, expert):
 
     Returns
     -------
-    loss_component_res : dict
+    loss_comp_res : dict
         dictionary including all loss components which will be used to compute
         the discrepancy.
 
@@ -45,7 +45,7 @@ def compute_loss_components(elicited_statistics, global_dict, expert):
         if "correlation" in name_elicits:
             name_elicits.remove("correlation")
     # prepare dictionary for storing results
-    loss_component_res = dict()
+    loss_comp_res = dict()
     # initialize some helpers for keeping track of target quantity
     target_control = []
     i_target = 0
@@ -64,76 +64,76 @@ def compute_loss_components(elicited_statistics, global_dict, expert):
         if not eval_target:
             i_target += 1
         # extract loss component
-        loss_component = elicited_statistics[name]
+        loss_comp = elicited_statistics[name]
 
-        if tf.rank(loss_component) == 1:
+        if tf.rank(loss_comp) == 1:
             assert (
-                targets_global_dict[target]["loss_components"] == "all"
+                targets_global_dict[target]["loss_comps"] == "all"
             ), f"the elicited statistic {name} has rank=1 and can therefore \
                 support only combine_loss = 'all'"
             # add a last axis for loss computation
-            final_loss_component = tf.expand_dims(loss_component, axis=-1)
+            final_loss_comp = tf.expand_dims(loss_comp, axis=-1)
             # store result
-            loss_component_res[f"{name}_loss"] = final_loss_component
+            loss_comp_res[f"{name}_loss"] = final_loss_comp
 
         else:
-            if targets_global_dict[target]["loss_components"] == "all":
+            if targets_global_dict[target]["loss_comps"] == "all":
                 assert (
-                    tf.rank(loss_component) <= 3
+                    tf.rank(loss_comp) <= 3
                 ), f"the elicited statistic {name} has more than 3 dimensions;\
                     combine_loss = all is therefore not possible. \
                         Consider using combine_loss = 'by-group'"
-                if tf.rank(loss_component) == 3:
-                    loss_component_res[f"{name}_loss_{i_target}"] = tf.reshape(
-                        loss_component,
+                if tf.rank(loss_comp) == 3:
+                    loss_comp_res[f"{name}_loss_{i_target}"] = tf.reshape(
+                        loss_comp,
                         (
-                            loss_component.shape[0],
-                            loss_component.shape[1] * loss_component.shape[2],
+                            loss_comp.shape[0],
+                            loss_comp.shape[1] * loss_comp.shape[2],
                         ),
                     )
-                if tf.rank(loss_component) <= 2:
-                    loss_component_res[f"{name}_loss_{i_target}"] = loss_component
+                if tf.rank(loss_comp) <= 2:
+                    loss_comp_res[f"{name}_loss_{i_target}"] = loss_comp
 
-            if targets_global_dict[target]["loss_components"] == "by-stats":
+            if targets_global_dict[target]["loss_comps"] == "by-stats":
                 assert (
                     targets_global_dict[target]["elicitation_method"] == "quantiles"
                 ), "loss combination method 'by-stats' is currently only \
                     possible for elicitation techniques: 'quantiles'."
-                for j in range(loss_component.shape[1]):
-                    if tf.rank(loss_component) == 2:
-                        loss_component_res[f"{name}_loss_{j}"] = loss_component[:, j]
-                    if tf.rank(loss_component) == 3:
-                        loss_component_res[f"{name}_loss_{j}"] = loss_component[:, j, :]
+                for j in range(loss_comp.shape[1]):
+                    if tf.rank(loss_comp) == 2:
+                        loss_comp_res[f"{name}_loss_{j}"] = loss_comp[:, j]
+                    if tf.rank(loss_comp) == 3:
+                        loss_comp_res[f"{name}_loss_{j}"] = loss_comp[:, j, :]
 
-            if targets_global_dict[target]["loss_components"] == "by-group":
-                for j in range(loss_component.shape[-1]):
-                    final_loss_component = loss_component[..., j]
-                    if tf.rank(final_loss_component) == 1:
-                        final_loss_component = tf.expand_dims(
-                            final_loss_component, axis=-1
+            if targets_global_dict[target]["loss_comps"] == "by-group":
+                for j in range(loss_comp.shape[-1]):
+                    final_loss_comp = loss_comp[..., j]
+                    if tf.rank(final_loss_comp) == 1:
+                        final_loss_comp = tf.expand_dims(
+                            final_loss_comp, axis=-1
                         )
 
-                    loss_component_res[f"{name}_loss_{j}"] = final_loss_component
+                    loss_comp_res[f"{name}_loss_{j}"] = final_loss_comp
 
     if global_dict["model_parameters"]["independence"] is not None:
         if "correlation" in name_elicits_copy:
-            loss_component = elicited_statistics["correlation"]
-            for j in range(loss_component.shape[-1]):
-                correl_loss_component = loss_component[:, j]
-                if tf.rank(correl_loss_component) == 1:
-                    correl_loss_component = tf.expand_dims(
-                        correl_loss_component, axis=-1
+            loss_comp = elicited_statistics["correlation"]
+            for j in range(loss_comp.shape[-1]):
+                correl_loss_comp = loss_comp[:, j]
+                if tf.rank(correl_loss_comp) == 1:
+                    correl_loss_comp = tf.expand_dims(
+                        correl_loss_comp, axis=-1
                     )
-                loss_component_res[f"correlation_loss_{j}"] = correl_loss_component
+                loss_comp_res[f"correlation_loss_{j}"] = correl_loss_comp
 
     # save file in object
     saving_path = global_dict["output_path"]
     if expert:
         saving_path = saving_path + "/expert"
-    path = saving_path + "/loss_components.pkl"
-    save_as_pkl(loss_component_res, path)
+    path = saving_path + "/loss_comps.pkl"
+    save_as_pkl(loss_comp_res, path)
     # return results
-    return loss_component_res
+    return loss_comp_res
 
 
 def dynamic_weight_averaging(
@@ -173,16 +173,16 @@ def dynamic_weight_averaging(
     -------
     total_loss : float
         Weighted sum of all loss components. Loss used for gradient computation.
-    weight_loss_component : list of floats
+    weight_loss_comp : list of floats
         List of computed weight values per loss component for current epoch.
 
     """
     # get number of loss components
-    num_loss_components = len(loss_per_component_current)
+    num_loss_comps = len(loss_per_component_current)
 
     # initialize weights
     if epoch < 2:
-        rel_weight_descent = tf.ones(num_loss_components)
+        rel_weight_descent = tf.ones(num_loss_comps)
     # w_t (epoch-1) = L_t (epoch-1) / L_t (epoch_0)
     else:
         rel_weight_descent = tf.math.divide(
@@ -191,16 +191,16 @@ def dynamic_weight_averaging(
 
     # T*exp(w_t(epoch-1)/a)
     numerator = tf.math.multiply(
-        tf.cast(num_loss_components, dtype=tf.float32),
+        tf.cast(num_loss_comps, dtype=tf.float32),
         tf.exp(tf.math.divide(rel_weight_descent, task_balance_factor)),
     )
 
     # softmax operator
-    weight_loss_component = tf.math.divide(numerator, tf.math.reduce_sum(numerator))
+    weight_loss_comp = tf.math.divide(numerator, tf.math.reduce_sum(numerator))
 
     # total loss: L = sum_t lambda_t*L_t
     weighted_total_loss = tf.math.reduce_sum(
-        tf.math.multiply(weight_loss_component, loss_per_component_current)
+        tf.math.multiply(weight_loss_comp, loss_per_component_current)
     )
     # save file in object
     path = saving_path + "/weighted_total_loss.pkl"
@@ -208,20 +208,20 @@ def dynamic_weight_averaging(
     return weighted_total_loss
 
 
-def compute_discrepancy(loss_components_expert, loss_components_training, global_dict):
+def compute_discrepancy(loss_comps_expert, loss_comps_training, global_dict):
     """
     Computes the discrepancy between all loss components using a specified
     discrepancy measure and returns a list with all loss values.
 
     Parameters
     ----------
-    loss_components_expert : dict
+    loss_comps_expert : dict
         dictionary including all loss components derived from the expert-elicited
         statistics.
-    loss_components_training : dict
+    loss_comps_training : dict
         dictionary including all loss components derived from the model
-        simulations. (The names (keys) between loss_components_expert and \
-                      loss_components_training must match)
+        simulations. (The names (keys) between loss_comps_expert and \
+                      loss_comps_training must match)
     global_dict : dict
         dictionary including all user-input settings.
 
@@ -236,35 +236,35 @@ def compute_discrepancy(loss_components_expert, loss_components_training, global
     # create dictionary for storing results
     loss_per_component = []
     # extract expert loss components by name
-    keys_loss_components = list(loss_components_expert.keys())
+    keys_loss_comps = list(loss_comps_expert.keys())
     if global_dict["model_parameters"]["independence"] is not None:
-        keys_loss_components = [
-            x for x in keys_loss_components if not x.startswith("correlation_loss")
+        keys_loss_comps = [
+            x for x in keys_loss_comps if not x.startswith("correlation_loss")
         ]
     # compute discrepancy
-    for name in keys_loss_components:
+    for name in keys_loss_comps:
         # broadcast expert loss to training-shape
         loss_comp_expert = tf.broadcast_to(
-            loss_components_expert[name],
+            loss_comps_expert[name],
             shape=(
-                loss_components_training[name].shape[0],
-                loss_components_expert[name].shape[1],
+                loss_comps_training[name].shape[0],
+                loss_comps_expert[name].shape[1],
             ),
         )
 
         # compute loss
-        loss = loss_function(loss_comp_expert, loss_components_training[name])
+        loss = loss_function(loss_comp_expert, loss_comps_training[name])
         loss_per_component.append(loss)
 
     if global_dict["model_parameters"]["independence"] is not None:
-        keys_loss_components = [
+        keys_loss_comps = [
             x
-            for x in list(loss_components_training.keys())
+            for x in list(loss_comps_training.keys())
             if x.startswith("correlation_loss")
         ]
-        for key_loss in keys_loss_components:
+        for key_loss in keys_loss_comps:
             loss_per_component.append(
-                norm_diff(loss_components_training[key_loss])
+                norm_diff(loss_comps_training[key_loss])
                 * global_dict["model_parameters"]["independence"]["corr_scaling"]
             )
 
