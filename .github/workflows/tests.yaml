@@ -36,34 +36,24 @@ jobs:
             poetry run coverage xml
             genbadge coverage
        
-      # Share ./docs/reports so that they can be deployed with doc in next job
-      - name: Share reports with other jobs
-        # if: matrix.nox_session == '...': not needed, if empty wont be shared
-        uses: actions/upload-artifact@master
+      - name: Verify Changed files
+        uses: tj-actions/verify-changed-files@v20
+        id: verify-changed-files
         with:
-          name: reports_dir
-          path: ./reports
-          
-      # 1) retrieve the reports generated previously
-      - name: Retrieve reports
-        uses: actions/download-artifact@master
-        with:
-          name: reports_dir
-          path: ./reports
-          
-      # 6) Publish coverage report
-      - name: \[not on TAG\] Create codecov.yaml with correct paths
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads')
-        shell: bash
+          files: test_package/coverage.svg
+
+      - name: Commit README changes
+        if: steps.verify-changed-files.outputs.files_changed == 'true'
         run: |
-          cat << EOF > codecov.yml
-          # codecov.yml
-          fixes:
-            - "/home/runner/work/florence-bockting/prior-elicitation/::" # Correct paths
-          EOF
-      - name: \[not on TAG\] Publish coverage report
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads')
-        uses: codecov/codecov-action@v1
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add ${{ steps.verify-changed-files.outputs.changed_files }}
+          git commit -m "chore: update coverage badge."
+
+      - name: Push changes
+        if: steps.verify-changed-files.outputs.files_changed == 'true'
+        uses: ad-m/github-push-action@master
+        continue-on-error: true
         with:
-          files: ./reports/coverage/coverage.xml
-          token: ${{ secrets.CODECOV_TOKEN }}
+          github_token: ${{ secrets.PAT_TOKEN }}
+          branch: ${{ github.head_ref }}
