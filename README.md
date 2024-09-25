@@ -1,4 +1,5 @@
-[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+![license](https://raw.githubusercontent.com/florence-bockting/prior_elicitation/badges/.badges/main/poetry-license.svg)
+![version](https://raw.githubusercontent.com/florence-bockting/prior_elicitation/badges/.badges/main/poetry-version.svg)
 [![Tests](https://github.com/florence-bockting/prior_elicitation/workflows/Tests/badge.svg)](https://github.com/florence-bockting/prior_elicitation/actions)
 [![Documentation](https://github.com/florence-bockting/prior_elicitation/workflows/Docs/badge.svg)](https://github.com/florence-bockting/prior_elicitation/actions)
 
