@@ -18,7 +18,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-tensorflow = "2.14"
+tensorflow = "*" #"2.14"
 tensorflow-probability = "0.22.1"
 pandas = "^2.2.2"
 signac = "^2.2.0"
@@ -37,7 +37,21 @@ numpydoc = "1.7.0"
 myst_nb = "1.1.0"
 sphinx_design = "0.6.0"
 #sphinxemoji = * # "0.3.1"
+tensorflow-macos = "*"
 
 [tool.poetry.group.test.dependencies]  
 pytest-randomly = "^3.15.0"  
 pytest = "^8.2.0" 
+
+[tool.poetry.group.dev.dependencies]  
+pytest = "^8.3.3"  
+coverage = "^7.6.1"  
+
+[tool.coverage.run]  
+branch = true  
+source = ["src"]  
+dynamic_context = "test_function"  
+  
+[tool.coverage.report]  
+show_missing = false  
+fail_under = 80  
