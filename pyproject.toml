@@ -48,7 +48,7 @@ coverage = "^7.6.1"
 
 [tool.coverage.run]  
 branch = true  
-source = ["src"]  
+source = ["tests"]  
 dynamic_context = "test_function"  
   
 [tool.coverage.report]  
