@@ -33,4 +33,5 @@ jobs:
         run: |
             poetry run coverage run --source=./elicit -m pytest
             poetry run coverage report
+            genbadge coverage
         
