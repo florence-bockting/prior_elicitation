@@ -31,6 +31,6 @@ jobs:
       
       - name: Run Coverage
         run: |
-            poetry run coverage run -m pytest
+            poetry run coverage run --source=./elicit -m pytest
             poetry run coverage report
         
