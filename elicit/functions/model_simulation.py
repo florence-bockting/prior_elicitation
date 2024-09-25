@@ -1,35 +1,38 @@
 import tensorflow as tf
 import tensorflow_probability as tfp
 
-tfd = tfp.distributions
-
 from elicit.functions.helper_functions import save_as_pkl
+
+tfd = tfp.distributions
 
 
 def softmax_gumbel_trick(model_simulations, global_dict):
     """
-    The softmax-gumbel trick computes a continuous approximation of ypred from a
-    discrete likelihood and thus allows for the computation of gradients for
+    The softmax-gumbel trick computes a continuous approximation of ypred from
+    a discrete likelihood and thus allows for the computation of gradients for
     discrete random variables.
 
-    Currently this approach is only implemented for models without upper boundary (e.g., Poisson model).
+    Currently this approach is only implemented for models without upper
+    boundary (e.g., Poisson model).
 
     Corresponding literature:
 
-    - Maddison, C. J., Mnih, A. & Teh, Y. W. The concrete distribution: A continuous relaxation of
-      discrete random variables in International Conference on Learning Representations (2017).
-      https://doi.org/10.48550/arXiv.1611.00712
-    - Jang, E., Gu, S. & Poole, B. Categorical reparameterization with gumbel-softmax in
-      International Conference on Learning Representations (2017).
-      https://openreview.net/forum?id=rkE3y85ee.
-    - Joo, W., Kim, D., Shin, S. & Moon, I.-C. Generalized gumbel-softmax gradient estimator for
-      generic discrete random variables.
+    - Maddison, C. J., Mnih, A. & Teh, Y. W. The concrete distribution:
+        A continuous relaxation of
+      discrete random variables in International Conference on Learning
+      Representations (2017). https://doi.org/10.48550/arXiv.1611.00712
+    - Jang, E., Gu, S. & Poole, B. Categorical reparameterization with
+    gumbel-softmax in International Conference on Learning Representations
+    (2017). https://openreview.net/forum?id=rkE3y85ee.
+    - Joo, W., Kim, D., Shin, S. & Moon, I.-C. Generalized gumbel-softmax
+    gradient estimator for generic discrete random variables.
       Preprint at https://doi.org/10.48550/arXiv.2003.01847 (2020).
 
     Parameters
     ----------
     model_simulations : dict
-        dictionary containing all simulated output variables from the generative model.
+        dictionary containing all simulated output variables from the
+        generative model.
     global_dict : dict
         dictionary including all user-input settings.
 
@@ -46,13 +49,11 @@ def softmax_gumbel_trick(model_simulations, global_dict):
     # get number of observations
     number_obs = model_simulations["epred"].shape[2]
     # constant outcome vector (including zero outcome)
-    c = tf.range(
-        global_dict["generative_model"]["softmax_gumble_specs"]["upper_threshold"] + 1,
-        delta=1,
-        dtype=tf.float32,
-    )
+    thres = global_dict["generative_model"]["softmax_gumble_specs"]["upper_threshold"]
+    c = tf.range(thres + 1, delta=1, dtype=tf.float32)
     # broadcast to shape (B, rep, outcome-length)
-    c_brct = tf.broadcast_to(c[None, None, None, :], shape=(B, S, number_obs, len(c)))
+    c_brct = tf.broadcast_to(c[None, None, None, :], shape=(B, S, number_obs,
+                                                            len(c)))
     # compute pmf value
     pi = model_simulations["likelihood"].prob(c_brct)
     # prevent underflow
