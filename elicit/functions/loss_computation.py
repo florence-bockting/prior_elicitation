@@ -2,11 +2,11 @@ import tensorflow as tf
 import tensorflow_probability as tfp
 import bayesflow as bf
 
-tfd = tfp.distributions
-bfn = bf.networks
-
 from elicit.functions.helper_functions import save_as_pkl
 from elicit.functions.loss_functions import norm_diff
+
+tfd = tfp.distributions
+bfn = bf.networks
 
 
 def compute_loss_components(elicited_statistics, global_dict, expert):
@@ -55,7 +55,8 @@ def compute_loss_components(elicited_statistics, global_dict, expert):
         # get name of target quantity
         target = name.split(sep="_")[-1]
         if i != 0:
-            # check whether elicited statistic correspond to same target quantity
+            # check whether elicited statistic correspond to same target
+            # quantity
             eval_target = target_control[-1] == target
         # append current target quantity
         target_control.append(target)
@@ -68,7 +69,8 @@ def compute_loss_components(elicited_statistics, global_dict, expert):
         if tf.rank(loss_component) == 1:
             assert (
                 targets_global_dict[target]["loss_components"] == "all"
-            ), f"the elicited statistic {name} has rank=1 and can therefore support only combine_loss = 'all'"
+            ), f"the elicited statistic {name} has rank=1 and can therefore \
+                support only combine_loss = 'all'"
             # add a last axis for loss computation
             final_loss_component = tf.expand_dims(loss_component, axis=-1)
             # store result
@@ -78,7 +80,9 @@ def compute_loss_components(elicited_statistics, global_dict, expert):
             if targets_global_dict[target]["loss_components"] == "all":
                 assert (
                     tf.rank(loss_component) <= 3
-                ), f"the elicited statistic {name} has more than 3 dimensions; combine_loss = all is therefore not possible. Consider using combine_loss = 'by-group'"
+                ), f"the elicited statistic {name} has more than 3 dimensions;\
+                    combine_loss = all is therefore not possible. \
+                        Consider using combine_loss = 'by-group'"
                 if tf.rank(loss_component) == 3:
                     loss_component_res[f"{name}_loss_{i_target}"] = tf.reshape(
                         loss_component,
@@ -93,7 +97,8 @@ def compute_loss_components(elicited_statistics, global_dict, expert):
             if targets_global_dict[target]["loss_components"] == "by-stats":
                 assert (
                     targets_global_dict[target]["elicitation_method"] == "quantiles"
-                ), "loss combination method 'by-stats' is currently only possible for elicitation techniques: 'quantiles'."
+                ), "loss combination method 'by-stats' is currently only \
+                    possible for elicitation techniques: 'quantiles'."
                 for j in range(loss_component.shape[1]):
                     if tf.rank(loss_component) == 2:
                         loss_component_res[f"{name}_loss_{j}"] = loss_component[:, j]
@@ -146,9 +151,10 @@ def dynamic_weight_averaging(
     Specifically, the weight of a component exhibiting a slower learning speed
     is increased, while it is decreased for faster learning components.
 
-    Liu, S., Johns, E., & Davison, A. J. (2019). End-To-End Multi-Task Learning With Attention. In
-    IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) (pp. 1871–1880).
-    doi: https://doi.org/10.1109/CVPR.2019.00197
+    Liu, S., Johns, E., & Davison, A. J. (2019). End-To-End Multi-Task \
+        Learning With Attention. In IEEE/CVF Conference on Computer Vision \
+            and Pattern Recognition (CVPR) (pp. 1871–1880). \
+                doi: https://doi.org/10.1109/CVPR.2019.00197
 
     Parameters
     ----------
@@ -214,7 +220,8 @@ def compute_discrepancy(loss_components_expert, loss_components_training, global
         statistics.
     loss_components_training : dict
         dictionary including all loss components derived from the model
-        simulations. (The names (keys) between loss_components_expert and loss_components_training must match)
+        simulations. (The names (keys) between loss_components_expert and \
+                      loss_components_training must match)
     global_dict : dict
         dictionary including all user-input settings.
 

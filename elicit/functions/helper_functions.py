@@ -2,7 +2,7 @@ import pickle
 import os
 import pandas as pd
 import tensorflow as tf
-import numpy as np
+
 
 def save_as_pkl(variable, path_to_file):
     """
@@ -50,22 +50,24 @@ def save_hyperparameters(generator, epoch, global_dict):
     saving_path = global_dict["output_path"]
     # extract learned hyperparameter values
     hyperparams = generator.trainable_variables
-    
     if epoch == 0:
         # prepare list for saving hyperparameter values
-        hyp_list=[]
+        hyp_list = []
         for i in range(len(hyperparams)):
             hyp_list.append(hyperparams[i].name[:-2])
         # create a dict with empty list for each hyperparameter
-        res_dict = {f"{k}":[] for k in hyp_list}
+        res_dict = {f"{k}": [] for k in hyp_list}
     # read saved list to add new values
     else:
         path_res_dict = saving_path + "/res_dict.pkl"
         res_dict = pd.read_pickle(rf"{path_res_dict}")
-        
     # save names and values of hyperparameters
-    vars_values = [hyperparams[i].numpy().copy() for i in range(len(hyperparams))]
-    vars_names = [hyperparams[i].name[:-2] for i in range(len(hyperparams))]
+    vars_values = [
+        hyperparams[i].numpy().copy() for i in range(len(hyperparams))
+        ]
+    vars_names = [
+        hyperparams[i].name[:-2] for i in range(len(hyperparams))
+        ]
     # create a final dict of hyperparameter values
     for val, name in zip(vars_values, vars_names):
         res_dict[name].append(val)
@@ -77,8 +79,10 @@ def save_hyperparameters(generator, epoch, global_dict):
 
 def marginal_prior_moments(prior_samples, epoch, global_dict):
     """
-    Used for summarizing learned prior distributions in the case of method='deep_prior'.
-    Computes mean and standard deviation of the sampled marginal prior distributions for each epoch.
+    Used for summarizing learned prior distributions in the case of
+    method='deep_prior'.
+    Computes mean and standard deviation of the sampled marginal prior
+    distributions for each epoch.
 
     Parameters
     ----------
@@ -92,8 +96,8 @@ def marginal_prior_moments(prior_samples, epoch, global_dict):
     Returns
     -------
     res_dict : dict
-        returns mean (key:'means') and standard deviation (key:'stds') for each sampled
-        marginal prior distribution; for each epoch.
+        returns mean (key:'means') and standard deviation (key:'stds')
+        for each sampled marginal prior distribution; for each epoch.
 
     """
     saving_path = global_dict["output_path"]
