@@ -54,3 +54,6 @@ dynamic_context = "test_function"
 [tool.coverage.report]  
 show_missing = true  
 fail_under = 0  
+
+[tool.coverage.html]
+directory = "coverage_html_report"
