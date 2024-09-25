@@ -43,3 +43,26 @@ jobs:
         with:
           name: reports_dir
           path: ./reports
+          
+      # 1) retrieve the reports generated previously
+      - name: Retrieve reports
+        uses: actions/download-artifact@master
+        with:
+          name: reports_dir
+          path: ./reports
+          
+      # 6) Publish coverage report
+      - name: \[not on TAG\] Create codecov.yaml with correct paths
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads')
+        shell: bash
+        run: |
+          cat << EOF > codecov.yml
+          # codecov.yml
+          fixes:
+            - "/home/runner/work/florence-bockting/prior-elicitation/::" # Correct paths
+          EOF
+      - name: \[not on TAG\] Publish coverage report
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads')
+        uses: codecov/codecov-action@v1
+        with:
+          files: ./reports/coverage/coverage.xml
