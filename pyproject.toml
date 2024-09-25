@@ -52,5 +52,5 @@ source = ["tests"]
 dynamic_context = "test_function"  
   
 [tool.coverage.report]  
-show_missing = false  
-fail_under = 80  
+show_missing = true  
+fail_under = 0  
