@@ -54,6 +54,7 @@ Bockting, F., Radev, S. T., & Bürkner, P. C. (2024). Simulation-based prior kno
 ```
 ## Authors and Contributors
 You are very welcome to contribute to our project. If you find an issue or have a feature request, please use our issue templates.
+For those of you who would like to contribute to our project, please have a look at our [contributing guidelines](CONTRIBUTING.md).
 
 **Authors**
 <table>
@@ -68,7 +69,6 @@ You are very welcome to contribute to our project. If you find an issue or have 
 
 **Contributors**
 
-(Contributing guidelines will follow)
 <table>
   <tbody>
     <tr>
