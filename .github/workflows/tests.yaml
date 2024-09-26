@@ -34,26 +34,10 @@ jobs:
             poetry run coverage run --source=./elicit -m pytest
             poetry run coverage report
             poetry run coverage xml
-            genbadge coverage
+            genbadge coverage -o ""
        
-      - name: Verify Changed files
-        uses: tj-actions/verify-changed-files@v20
-        id: verify-changed-files
-        with:
-          files: prior_elicitation/coverage-badge.svg
-
-      - name: Commit README changes
-        if: steps.verify-changed-files.outputs.files_changed == 'true'
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add ${{ steps.verify-changed-files.outputs.changed_files }}
-          git commit -m "chore: update coverage badge."
-
-      - name: Push changes
-        if: steps.verify-changed-files.outputs.files_changed == 'true'
-        uses: ad-m/github-push-action@master
-        continue-on-error: true
-        with:
-          github_token: ${{ secrets.PAT_TOKEN }}
-          branch: ${{ github.head_ref }}
+      - name: Update Coverage Badge
+        # GitHub actions: default branch variable
+        # https://stackoverflow.com/questions/64781462/github-actions-default-branch-variable
+        if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+        uses: we-cli/coverage-badge-action@main
