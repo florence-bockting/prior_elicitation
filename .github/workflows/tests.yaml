@@ -34,7 +34,7 @@ jobs:
             poetry run coverage run --source=./elicit -m pytest
             poetry run coverage report
             poetry run coverage xml
-            genbadge coverage -o ""
+            genbadge coverage
        
       - name: Update Coverage Badge
         # GitHub actions: default branch variable
