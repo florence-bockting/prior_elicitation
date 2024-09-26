@@ -13,7 +13,7 @@ If you want to contribute we suggest the following workflow:
 
 ## Documentation related changes
 
-If you are looking to improve or fix documentation, you need to be able to build the documentation locally to check that your changes work properly.
+If you are looking to improve or fix documentation, you need to be able to build the documentation locally to check that your changes work properly. Helpful tools in this respect are for example: [black](https://black.readthedocs.io/en/stable/index.html) (Python formatter) and [flake8](https://flake8.pycqa.org/en/latest/) (Python linter).
 
 * Create an environment 
 
@@ -25,13 +25,10 @@ conda create -n elicitation-env python=3.11
 conda activate elicitation-env
 ```
 
-* Clone the <repository>
-* Create a new branch
-
-`git checkout -b <my-new-feature>`
-
+* Clone the repository
+* Create a new branch: `git checkout -b <my-new-feature>`
 * Make your changes
-* build the documentation:
+* Build the documentation:
 
 ```
 # clean the build folder
