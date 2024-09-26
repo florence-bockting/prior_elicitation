@@ -3,7 +3,7 @@
 [![Tests](https://github.com/florence-bockting/prior_elicitation/workflows/Tests/badge.svg)](https://github.com/florence-bockting/prior_elicitation/actions)
 [![Documentation](https://github.com/florence-bockting/prior_elicitation/workflows/Docs/badge.svg)](https://github.com/florence-bockting/prior_elicitation/actions)
 [![Lint](https://github.com/florence-bockting/prior_elicitation/workflows/Linter/badge.svg)](https://github.com/florence-bockting/prior_elicitation/actions?query=workflow%3Alinting)
-[![Check Links](https://github.com/florence-bockting/prior_elicitation/workflows/links.yml/badge.svg)](https://github.com/florence-bockting/prior_elicitation/workflows/links.yml)
+[![Check Links](https://github.com/florence-bockting/prior_elicitation/workflows/Links/badge.svg)](https://github.com/florence-bockting/prior_elicitation/workflows/Links.yaml)
 
 # Learning prior distributions based on expert knowledge (Expert knowledge elicitation method)
 *Note: This project is still in the development stage and not yet tested for practical use.*
