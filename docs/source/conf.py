@@ -13,19 +13,18 @@ release = '0.0.1'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
-
+# 'sphinxemoji.sphinxemoji',  # Allows emojis in RST files
 extensions = [
     "sphinx.ext.autodoc",     # Support automatic documentation
     "sphinx.ext.autosummary",
-    "sphinx.ext.coverage",    # Automatically check if functions are documented
-    "sphinx.ext.mathjax",     # Allow support for Latex
-    "sphinx.ext.viewcode",    # Include the source code in documentation
-    "sphinx.ext.githubpages", # Build for GitHub pages
-   # 'sphinxemoji.sphinxemoji', # Allows emojis in RST files
-    "numpydoc",               # Support NumPy style docstrings
-    "myst_nb",                # For compiling Jupyter Notebooks into high quality documentation formats
-    'sphinx.ext.autosectionlabel', # Using references to files in local folders   
-    "sphinx_design"    
+    "sphinx.ext.coverage",     # Automatic check if functions are documented
+    "sphinx.ext.mathjax",      # Allow support for Latex
+    "sphinx.ext.viewcode",     # Include the source code in documentation
+    "sphinx.ext.githubpages",  # Build for GitHub pages
+    "numpydoc",                # Support NumPy style docstrings
+    "myst_nb",                 # Compiling Jupyter Notebooks
+    'sphinx.ext.autosectionlabel',  # References to files in local folders
+    "sphinx_design"
 ]
 autoclass_content = 'both'
 
@@ -50,8 +49,8 @@ html_theme_options = {
     "logo": {
       "image_light": "_static/mmp-logo-light.png",
       "image_dark": "_static/mmp-logo-dark.png",
-   },
-   "repository_url": "https://github.com/florence-bockting/prior_elicitation",
+    },
+    "repository_url": "https://github.com/florence-bockting/prior_elicitation",
     "use_repository_button": True,
 }
 
@@ -64,7 +63,7 @@ exclude_patterns = []
 html_theme = "sphinx_book_theme"
 html_title = 'Prior Learning'
 html_static_path = ['_static']
-#html_logo = "_static/mmp-logo-light.png"
+# html_logo = "_static/mmp-logo-light.png"
 html_favicon = "_static/favicon-light.ico"
 
 # do not execute jupyter notebooks when building docs
