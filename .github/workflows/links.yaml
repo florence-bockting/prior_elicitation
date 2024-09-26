@@ -1,13 +1,12 @@
 name: Links
 
 on:
-  repository_dispatch:
-  workflow_dispatch:
-  schedule:
-    - cron: "00 18 * * *"
+  push:
+    branches:
+      - main
 
 jobs:
-  linkChecker:
+  links:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
