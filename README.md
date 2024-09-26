@@ -1,4 +1,4 @@
-![license](https://raw.githubusercontent.com/florence-bockting/prior_elicitation/badges/.badges/main/poetry-license.svg)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 ![version](https://raw.githubusercontent.com/florence-bockting/prior_elicitation/badges/.badges/main/poetry-version.svg)
 [![Tests](https://github.com/florence-bockting/prior_elicitation/workflows/Tests/badge.svg)](https://github.com/florence-bockting/prior_elicitation/actions)
 [![Documentation](https://github.com/florence-bockting/prior_elicitation/workflows/Docs/badge.svg)](https://github.com/florence-bockting/prior_elicitation/actions)
