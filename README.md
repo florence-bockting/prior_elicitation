@@ -1,6 +1,5 @@
 ![license](https://raw.githubusercontent.com/florence-bockting/prior_elicitation/badges/.badges/main/poetry-license.svg)
 ![version](https://raw.githubusercontent.com/florence-bockting/prior_elicitation/badges/.badges/main/poetry-version.svg)
-![coverage](https://raw.githubusercontent.com/action-badges/poetry-badges/badges/.badges/main/coverage.svg)
 [![Tests](https://github.com/florence-bockting/prior_elicitation/workflows/Tests/badge.svg)](https://github.com/florence-bockting/prior_elicitation/actions)
 [![Documentation](https://github.com/florence-bockting/prior_elicitation/workflows/Docs/badge.svg)](https://github.com/florence-bockting/prior_elicitation/actions)
 
