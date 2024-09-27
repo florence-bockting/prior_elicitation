@@ -1,6 +1,6 @@
 # noqa SPDX-FileCopyrightText: 2024 Florence Bockting <florence.bockting@tu-dortmund.de>
 # noqa 
-# noqa  SPDX-License-Identifier: CC-BY-4.0
+# noqa SPDX-License-Identifier: CC-BY-4.0
 
 # Configuration file for the Sphinx documentation builder.
 #

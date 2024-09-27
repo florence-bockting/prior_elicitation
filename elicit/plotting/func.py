@@ -1,6 +1,6 @@
-# SPDX-FileCopyrightText: 2024 Florence Bockting <florence.bockting@tu-dortmund.de>
+# noqa SPDX-FileCopyrightText: 2024 Florence Bockting <florence.bockting@tu-dortmund.de>
 #
-# SPDX-License-Identifier: Apache-2.0
+# noqa SPDX-License-Identifier: Apache-2.0
 
 import matplotlib.pyplot as plt
 import pandas as pd
