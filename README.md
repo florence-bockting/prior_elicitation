@@ -36,7 +36,10 @@ pip install git+https://github.com/florence-bockting/prior_elicitation.git
 See the [introductory example](https://florence-bockting.github.io/prior_elicitation/introductory_example.html) for a minimal example with implementation.
 
 ## License
-This work is licensed under a [Apache License 2.0](LICENSE).
+This work is licensed under multiple licences:
+
+  + All original source code is licensed under [Apache License 2.0](LICENSES/Apache-2.0.txt).
+  + All documentation is licensed under [CC-BY-SA-4.0](LICENSES/CC-BY-4.0.txt).
 
 ## Documentation
 Documentation for this project can be found on the [project website](https://florence-bockting.github.io/prior_elicitation/).
