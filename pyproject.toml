@@ -6,7 +6,7 @@ build-backend = "poetry.core.masonry.api"
 name = "elicit" 
 version = "0.0.1"
 description = "Tool for learning prior distributions based on expert prior knowledge elicitation"
-license = "AGPL-3.0-or-later"
+license = "Apache-2.0"
 authors = [
     "Florence Bockting",
 ]
