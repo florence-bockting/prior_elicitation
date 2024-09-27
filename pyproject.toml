@@ -61,5 +61,5 @@ directory = "htmlcov"
 [tool.coverage.xml]
 output = "reports/coverage/coverage.xml"
 
-[flake8]
-exclude = .git,__pycache__,docs/source/conf.py,build
+[tool.flake8]
+max-line-length = 88
