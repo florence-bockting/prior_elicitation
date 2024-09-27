@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 Florence Bockting <florence.bockting@tu-dortmund.de>
+#
+# SPDX-License-Identifier: Apache-2.0
+
 import tensorflow as tf
 import tensorflow_probability as tfp
 

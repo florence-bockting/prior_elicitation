@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2024 Florence Bockting <florence.bockting@tu-dortmund.de>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 ![version](https://raw.githubusercontent.com/florence-bockting/prior_elicitation/badges/.badges/main/poetry-version.svg)
 [![Tests](https://github.com/florence-bockting/prior_elicitation/workflows/Tests/badge.svg)](https://github.com/florence-bockting/prior_elicitation/actions)
@@ -30,7 +36,7 @@ pip install git+https://github.com/florence-bockting/prior_elicitation.git
 See the [introductory example](https://florence-bockting.github.io/prior_elicitation/introductory_example.html) for a minimal example with implementation.
 
 ## License
-This work is licensed under a [AGPL v3 license](LICENSE).
+This work is licensed under a [Apache License 2.0](LICENSE).
 
 ## Documentation
 Documentation for this project can be found on the [project website](https://florence-bockting.github.io/prior_elicitation/).
