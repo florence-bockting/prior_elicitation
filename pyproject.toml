@@ -60,6 +60,3 @@ directory = "htmlcov"
 
 [tool.coverage.xml]
 output = "reports/coverage/coverage.xml"
-
-[tool.flake8]
-line-length = 88
