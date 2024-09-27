@@ -55,9 +55,11 @@ def test_intialize_priors_counts(global_dict):
 def test_intialize_priors_labels(global_dict):
     res = intialize_priors(global_dict)
     parameters = sorted(
-        list(set(
-            global_dict["model_parameters"].keys()
-            ).difference({"independence"}))
+        list(
+            set(
+                global_dict["model_parameters"].keys()
+                ).difference({"independence"})
+            )
     )
 
     # correct labelling of hyperparameters

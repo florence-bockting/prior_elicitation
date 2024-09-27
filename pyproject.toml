@@ -60,3 +60,7 @@ directory = "htmlcov"
 
 [tool.coverage.xml]
 output = "reports/coverage/coverage.xml"
+
+[flake8]
+extend-ignore = E501
+exclude = .git,__pycache__,docs/source/conf.py,build

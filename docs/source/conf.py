@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2024 Florence Bockting <florence.bockting@tu-dortmund.de>
+# SPDX-FileCopyrightText: 2024 Florence Bockting <florence.bockting@tu-dortmund.de> # noqa: E501
 #
 # SPDX-License-Identifier: CC-BY-4.0
 
