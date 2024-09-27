@@ -13,16 +13,16 @@ authors:
     email: florence.bockting@tu-dortmund.de
     affiliation: TU Dortmund university
     orcid: 'https://orcid.org/0000-0003-0924-6413'
-  - given-names: Paul-Christian
-    family-names: Bürkner
-    email: paul.buerkner@gmail.com
-    affiliation: TU Dortmund university
-    orcid: 'https://orcid.org/0000-0001-5765-8995'
   - given-names: Stefan T.
     family-names: Radev
     affiliation: Rensselaer Polytechnic Institute (RPI)
     email: radevs@rpi.edu
     orcid: 'https://orcid.org/0000-0002-6702-9559'
+  - given-names: Paul-Christian
+	family-names: Bürkner
+	email: paul.buerkner@gmail.com
+	affiliation: TU Dortmund university
+	orcid: 'https://orcid.org/0000-0001-5765-8995'
 repository-code: 'https://github.com/florence-bockting/prior_elicitation'
 url: 'https://florence-bockting.github.io/prior_elicitation/'
 abstract: >-

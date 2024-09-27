@@ -9,6 +9,8 @@ description = "Tool for learning prior distributions based on expert prior knowl
 license = "Apache-2.0"
 authors = [
     "Florence Bockting",
+	"Stefan T. Radev",
+	"Paul-Christian Bürkner"
 ]
 maintainers = [
     "Florence Bockting",
@@ -34,7 +36,7 @@ sphinx-book-theme = "1.1.2"
 numpydoc = "1.7.0"
 myst_nb = "1.1.0"
 sphinx_design = "0.6.0"
-#sphinxemoji = * # "0.3.1"
+#sphinxemoji = "0.3.1"
 genbadge = "*"
 defusedxml = "*"
 
