@@ -5,6 +5,7 @@
 import tensorflow as tf
 from elicit.functions.loss_functions import MMD_energy
 
+
 def global_dict(
     model_parameters=dict(
         param1=dict(
@@ -84,8 +85,7 @@ def global_dict(
          progress_info=1
          )
     ):
-    """
-    User settings for prior elicitation tool
+    """User settings for prior elicitation tool
 
     Parameters
     ----------
@@ -112,13 +112,13 @@ def global_dict(
             TODO: Do we really need the param_scaling argument?
 
             Code Example::
-                
+
                 mu=dict(
                     param_scaling=1.
                     )
 
         Method="parametric_prior":
-            For the parametric approach an independent parametric prior 
+            For the parametric approach an independent parametric prior
             distribution family is specified for each model parameter.
 
             Additionally, it is required to specify an initialization for each
@@ -135,7 +135,7 @@ def global_dict(
             Code Example::
 
                 mu=dict(
-                    family=tfd.Normal, 
+                    family=tfd.Normal,
                     hyperparams_dict=dict(
                         loc_mu=tfd.Normal(0.,1.),
                         scale_mu=0.5
@@ -147,7 +147,7 @@ def global_dict(
     global_dict = dict(
         model_parameters=dict(
             param1=dict(
-                family=None, 
+                family=None,
                 hyperparams_dict=dict(
                     hyppar1=None
                     ),

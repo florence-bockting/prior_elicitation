@@ -27,8 +27,6 @@ def check_model_parameters(training_settings, model_parameters, num_params):
                 ], f"Have you misspelled '{k}' in the parameter settings? \
                     Only ['family', 'hyperparam_dict', 'param_scaling'] are \
                         valid argument names."
-
-
     # check whether non-optional arguments are specified
     # TODO-Test: include test with missing non-optional argument
     if training_settings["method"] == "parametric_prior":
