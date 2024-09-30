@@ -20,7 +20,8 @@ prior_elicitation(
         },
         samples_from_prior=10000,
     ),
-    generative_model=dict(model=ToyModel, additional_model_args={"N": 200}),
+    generative_model=dict(model=ToyModel, 
+                          additional_model_args={"N": 200}),
     target_quantities=dict(
         ypred=dict(
             elicitation_method="quantiles",
@@ -38,6 +39,6 @@ prior_elicitation(
         method="deep_prior",
         sim_id="toy_example",
         seed=2,
-        epochs=1,  # 500
+        epochs=10,  # 500
     ),
 )

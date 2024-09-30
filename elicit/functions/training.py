@@ -131,7 +131,7 @@ def training_loop(
             print("Done :)")
 
         # save gradients in file
-        saving_path = global_dict["output_path"]
+        saving_path = global_dict["training_settings"]["output_path"]
         if dict_training["method"] == "parametric_prior":
             path = saving_path + "/gradients.pkl"
             save_as_pkl(gradients, path)

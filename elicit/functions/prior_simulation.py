@@ -4,12 +4,11 @@
 
 import tensorflow as tf
 import tensorflow_probability as tfp
-import bayesflow as bf
+from bayesflow import networks
 
 from elicit.functions.helper_functions import save_as_pkl
 
 tfd = tfp.distributions
-bfn = bf.networks
 
 
 # initalize generator model
@@ -98,7 +97,7 @@ def intialize_priors(global_dict):
         input_INN = dict(global_dict["normalizing_flow"])
         input_INN.pop("base_distribution")
 
-        invertible_neural_network = bfn.InvertibleNetwork(
+        invertible_neural_network = networks.InvertibleNetwork(
             num_params=global_dict["model_parameters"]["no_params"],
             **input_INN
         )

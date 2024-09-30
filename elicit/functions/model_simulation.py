@@ -121,7 +121,7 @@ def simulate_from_generator(prior_samples, ground_truth, global_dict):
             model_simulations, global_dict
         )
     # save file in object
-    saving_path = global_dict["output_path"]
+    saving_path = global_dict["training_settings"]["output_path"]
     if ground_truth:
         saving_path = saving_path + "/expert"
     path = saving_path + "/model_simulations.pkl"

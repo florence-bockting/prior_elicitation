@@ -104,7 +104,7 @@ def marginal_prior_moments(prior_samples, epoch, global_dict):
         for each sampled marginal prior distribution; for each epoch.
 
     """
-    saving_path = global_dict["output_path"]
+    saving_path = global_dict["training_settings"]["output_path"]
     if epoch == 0:
         res_dict = {"means": [], "stds": []}
     else:

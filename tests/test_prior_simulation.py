@@ -7,6 +7,7 @@ import pytest
 import pandas as pd
 
 from elicit.functions.prior_simulation import intialize_priors
+from elicit.functions.prior_simulation import sample_from_priors
 from os import listdir
 
 tfd = tfp.distributions
@@ -40,6 +41,7 @@ def global_dict():
         ),
     )
 
+#%% initialize_priors
 
 def test_intialize_priors_counts(global_dict):
     res = intialize_priors(global_dict)
@@ -90,3 +92,55 @@ def test_initialize_priors_file(global_dict):
     )
 
     assert expected_data == observed_file
+
+#%% sample_from_priors
+@pytest.fixture
+def global_dict2():
+    return dict(
+        training_settings=dict(
+            method="parametric_prior",
+            sim_id="toy_example",
+            seed=2,
+            epochs=2,
+            output_path="results",
+            samples_from_prior = 200,
+            B = 100
+        ),
+        model_parameters=dict(
+            mu=dict(
+                family=tfd.Normal,
+                hyperparams_dict={
+                    "mu_loc": tfd.Uniform(0.0, 1.0),
+                    "mu_scale": tfd.Uniform(0.0, 1.0),
+                },
+                param_scaling=1.0,
+            ),
+            sigma=dict(
+                family=tfd.HalfNormal,
+                hyperparams_dict={"sigma_scale": tfd.Uniform(1.0, 50.0)},
+                param_scaling=1.0,
+            ),
+            independence=None,
+        ),
+        expert_data=dict(
+            from_ground_truth=True,
+            simulator_specs={
+                "mu": tfd.Normal(loc=17, scale=2),
+                "sigma": tfd.Gamma(2, 5),
+            },
+            samples_from_prior=200,
+        )
+    )
+
+@pytest.fixture
+def intialized_prior(): 
+    return [
+        dict(
+            mu_loc = 1.,
+            mu_scale = 0.2
+        ),
+        dict(
+            sigma_scale = 0.5
+        )
+    ]
+

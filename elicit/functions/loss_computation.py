@@ -13,7 +13,7 @@ tfd = tfp.distributions
 bfn = bf.networks
 
 
-def compute_loss_comps(elicited_statistics, glob_dict, expert):
+def compute_loss_components(elicited_statistics, glob_dict, expert):
     """
     Computes the single loss components used for computing the discrepancy
     between the elicited statistics. This computation depends on the
@@ -37,8 +37,8 @@ def compute_loss_comps(elicited_statistics, glob_dict, expert):
         the discrepancy.
 
     """
-    # extract the tar quantities section from the glob dict
-    tar_glob_dict = glob_dict["tar_quantities"]
+    # extract the target quantities section from the glob dict
+    target_glob_dict = glob_dict["target_quantities"]
 
     # extract names from elicited statistics
     name_elicits = list(elicited_statistics.keys())
@@ -50,29 +50,29 @@ def compute_loss_comps(elicited_statistics, glob_dict, expert):
             name_elicits.remove("correlation")
     # prepare dictionary for storing results
     loss_comp_res = dict()
-    # initialize some helpers for keeping track of tar quantity
-    tar_control = []
-    i_tar = 0
-    eval_tar = True
+    # initialize some helpers for keeping track of target quantity
+    target_control = []
+    i_target = 0
+    eval_target = True
     # loop over elicited statistics
     for i, name in enumerate(name_elicits):
-        # get name of tar quantity
-        tar = name.split(sep="_")[-1]
+        # get name of target quantity
+        target = name.split(sep="_")[-1]
         if i != 0:
-            # check whether elicited statistic correspond to same tar
+            # check whether elicited statistic correspond to same target
             # quantity
-            eval_tar = tar_control[-1] == tar
-        # append current tar quantity
-        tar_control.append(tar)
-        # if tar quantity changes go with index one up
-        if not eval_tar:
-            i_tar += 1
+            eval_target = target_control[-1] == target
+        # append current target quantity
+        target_control.append(target)
+        # if target quantity changes go with index one up
+        if not eval_target:
+            i_target += 1
         # extract loss component
         loss_comp = elicited_statistics[name]
 
         if tf.rank(loss_comp) == 1:
             assert (
-                tar_glob_dict[tar]["loss_comps"] == "all"
+                target_glob_dict[target]["loss_components"] == "all"
             ), f"the elicited statistic {name} has rank=1 and can therefore \
                 support only combine_loss = 'all'"
             # add a last axis for loss computation
@@ -81,14 +81,14 @@ def compute_loss_comps(elicited_statistics, glob_dict, expert):
             loss_comp_res[f"{name}_loss"] = final_loss_comp
 
         else:
-            if tar_glob_dict[tar]["loss_comps"] == "all":
+            if target_glob_dict[target]["loss_components"] == "all":
                 assert (
                     tf.rank(loss_comp) <= 3
                 ), f"the elicited statistic {name} has more than 3 dimensions;\
                     combine_loss = all is therefore not possible. \
                         Consider using combine_loss = 'by-group'"
                 if tf.rank(loss_comp) == 3:
-                    loss_comp_res[f"{name}_loss_{i_tar}"] = tf.reshape(
+                    loss_comp_res[f"{name}_loss_{i_target}"] = tf.reshape(
                         loss_comp,
                         (
                             loss_comp.shape[0],
@@ -96,11 +96,11 @@ def compute_loss_comps(elicited_statistics, glob_dict, expert):
                         ),
                     )
                 if tf.rank(loss_comp) <= 2:
-                    loss_comp_res[f"{name}_loss_{i_tar}"] = loss_comp
+                    loss_comp_res[f"{name}_loss_{i_target}"] = loss_comp
 
-            if tar_glob_dict[tar]["loss_comps"] == "by-stats":
+            if target_glob_dict[target]["loss_components"] == "by-stats":
                 assert (
-                    tar_glob_dict[tar]["elicitation_method"] == "quantiles"
+                    target_glob_dict[target]["elicitation_method"] == "quantiles"
                 ), "loss combination method 'by-stats' is currently only \
                     possible for elicitation techniques: 'quantiles'."
                 for j in range(loss_comp.shape[1]):
@@ -109,7 +109,7 @@ def compute_loss_comps(elicited_statistics, glob_dict, expert):
                     if tf.rank(loss_comp) == 3:
                         loss_comp_res[f"{name}_loss_{j}"] = loss_comp[:, j, :]
 
-            if tar_glob_dict[tar]["loss_comps"] == "by-group":
+            if target_glob_dict[target]["loss_components"] == "by-group":
                 for j in range(loss_comp.shape[-1]):
                     final_loss_comp = loss_comp[..., j]
                     if tf.rank(final_loss_comp) == 1:
@@ -131,10 +131,10 @@ def compute_loss_comps(elicited_statistics, glob_dict, expert):
                 loss_comp_res[f"correlation_loss_{j}"] = correl_loss_comp
 
     # save file in object
-    saving_path = glob_dict["output_path"]
+    saving_path = glob_dict["training_settings"]["output_path"]
     if expert:
         saving_path = saving_path + "/expert"
-    path = saving_path + "/loss_comps.pkl"
+    path = saving_path + "/loss_components.pkl"
     save_as_pkl(loss_comp_res, path)
     # return results
     return loss_comp_res
@@ -215,20 +215,21 @@ def dynamic_weight_averaging(
     return weighted_total_loss
 
 
-def compute_discrepancy(loss_comps_expert, loss_comps_training, glob_dict):
+def compute_discrepancy(loss_components_expert, loss_components_training,
+                        glob_dict):
     """
     Computes the discrepancy between all loss components using a specified
     discrepancy measure and returns a list with all loss values.
 
     Parameters
     ----------
-    loss_comps_expert : dict
+    loss_components_expert : dict
         dictionary including all loss components derived from the
         expert-elicited statistics.
-    loss_comps_training : dict
+    loss_components_training : dict
         dictionary including all loss components derived from the model
-        simulations. (The names (keys) between loss_comps_expert and \
-                      loss_comps_training must match)
+        simulations. (The names (keys) between loss_components_expert and \
+                      loss_components_training must match)
     glob_dict : dict
         dictionary including all user-input settings.
 
@@ -243,7 +244,7 @@ def compute_discrepancy(loss_comps_expert, loss_comps_training, glob_dict):
     # create dictionary for storing results
     loss_per_component = []
     # extract expert loss components by name
-    keys_loss_comps = list(loss_comps_expert.keys())
+    keys_loss_comps = list(loss_components_expert.keys())
     if glob_dict["model_parameters"]["independence"] is not None:
         keys_loss_comps = [
             x for x in keys_loss_comps if not x.startswith("correlation_loss")
@@ -252,31 +253,31 @@ def compute_discrepancy(loss_comps_expert, loss_comps_training, glob_dict):
     for name in keys_loss_comps:
         # broadcast expert loss to training-shape
         loss_comp_expert = tf.broadcast_to(
-            loss_comps_expert[name],
+            loss_components_expert[name],
             shape=(
-                loss_comps_training[name].shape[0],
-                loss_comps_expert[name].shape[1],
+                loss_components_training[name].shape[0],
+                loss_components_expert[name].shape[1],
             ),
         )
 
         # compute loss
-        loss = loss_function(loss_comp_expert, loss_comps_training[name])
+        loss = loss_function(loss_comp_expert, loss_components_training[name])
         loss_per_component.append(loss)
 
     if glob_dict["model_parameters"]["independence"] is not None:
         keys_loss_comps = [
             x
-            for x in list(loss_comps_training.keys())
+            for x in list(loss_components_training.keys())
             if x.startswith("correlation_loss")
         ]
         for key_loss in keys_loss_comps:
             loss_per_component.append(
-                norm_diff(loss_comps_training[key_loss])
+                norm_diff(loss_components_training[key_loss])
                 * glob_dict["model_parameters"]["independence"]["corr_scaling"]
             )
 
     # save file in object
-    saving_path = glob_dict["output_path"]
+    saving_path = glob_dict["training_settings"]["output_path"]
     path = saving_path + "/loss_per_component.pkl"
     save_as_pkl(loss_per_component, path)
     return loss_per_component

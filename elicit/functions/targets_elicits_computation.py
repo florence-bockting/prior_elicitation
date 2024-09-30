@@ -122,7 +122,7 @@ def computation_target_quantities(model_simulations, ground_truth,
         )
         targets_res["correlation"] = target_quantity
     # save file in object
-    saving_path = global_dict["output_path"]
+    saving_path = global_dict["training_settings"]["output_path"]
     if ground_truth:
         saving_path = saving_path + "/expert"
     path = saving_path + "/target_quantities.pkl"
@@ -248,7 +248,7 @@ def computation_elicited_statistics(target_quantities, ground_truth,
         elicits_res["correlation"] = target_quantities["correlation"]
 
     # save file in object
-    saving_path = global_dict["output_path"]
+    saving_path = global_dict["training_settings"]["output_path"]
     if ground_truth:
         saving_path = saving_path + "/expert"
     path = saving_path + "/elicited_statistics.pkl"
