@@ -20,7 +20,7 @@ prior_elicitation(
         },
         samples_from_prior=10000,
     ),
-    generative_model=dict(model=ToyModel, 
+    generative_model=dict(model=ToyModel,
                           additional_model_args={"N": 200}),
     target_quantities=dict(
         ypred=dict(

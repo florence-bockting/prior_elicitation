@@ -100,7 +100,8 @@ def compute_loss_components(elicited_statistics, glob_dict, expert):
 
             if target_glob_dict[target]["loss_components"] == "by-stats":
                 assert (
-                    target_glob_dict[target]["elicitation_method"] == "quantiles"
+                    target_glob_dict[target][
+                        "elicitation_method"] == "quantiles"
                 ), "loss combination method 'by-stats' is currently only \
                     possible for elicitation techniques: 'quantiles'."
                 for j in range(loss_comp.shape[1]):

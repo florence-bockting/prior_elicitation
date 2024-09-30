@@ -7,6 +7,7 @@ import inspect
 # %% CHECKS
 # section: model_parameters
 
+
 # check spelling of arguments
 # TODO-TEST: include test with invalid spelling of arguments; with bool
 # argument
@@ -27,6 +28,7 @@ def check_model_parameters(training_settings, model_parameters, num_params):
                     Only ['family', 'hyperparam_dict', 'param_scaling'] are \
                         valid argument names."
 
+
     # check whether non-optional arguments are specified
     # TODO-Test: include test with missing non-optional argument
     if training_settings["method"] == "parametric_prior":
@@ -39,7 +41,6 @@ def check_model_parameters(training_settings, model_parameters, num_params):
                 model_parameters[param_name].keys()
             ), f"For parameter {param_name} one of the non-optinal arguments \
                 ['family', 'hyperparams_dict'] is missing."
-    
     if training_settings["method"] == "deep_prior":
         assert (
             num_params > 1
@@ -51,13 +52,13 @@ def check_model_parameters(training_settings, model_parameters, num_params):
 # TODO: check whether spelling of arguments is correct?
 # TODO: additional checks for normalizing flows?
 
+
 # section: expert_data
 def check_expert_data(expert_data):
     # check whether non-optional arguments are specified
     assert (
         "from_ground_truth" in expert_data.keys()
     ), "The argument 'from_ground_truth' needs to be specified."
-    
     # check whether combination of arguments is consistent
     # TODO-TEST: include test with (1) data=path, ground_truth=True,
     # (2) data=None, ground_truth=False, (3) missing non-optional keywords,
@@ -67,12 +68,12 @@ def check_expert_data(expert_data):
             expert_data["data"] is not None
         ), "The 'data' argument needs to be specified if not simulating from\
             ground truth."
-    
     else:
         assert set(["simulator_specs", "samples_from_prior"]) <= set(
             expert_data.keys()
         ), "At least one of the non-optional arguments 'simulator_specs', \
             'samples_from_prior' is missing."
+
 
 # section: generative_model
 def check_generative_model(generative_model):
@@ -87,16 +88,15 @@ def check_generative_model(generative_model):
         ], f"Have you misspelled '{k}' in the parameter settings? Only \
             ['model', 'additional_model_args' ,'discrete_likelihood', \
              'softmax_gumble_specs'] are valid argument names."
-    
     # asure that provided model is a class (and not an instance of the class)
     assert inspect.isclass(
         generative_model["model"]
     ), "The model must be an object of type class."
-    
     # check specification of non-optional arguments
     # TODO-TEST: include case with missing model argument
     assert "model" in generative_model.keys(), "The argument 'model' is \
         missing."
+
 
 # section: target_quantities
 def check_target_quantities(target_quantities):
@@ -118,7 +118,6 @@ def check_target_quantities(target_quantities):
                 ["elicitation_method", "quantiles_specs" , "moment_specs", \
                  "loss_components", "custom_target_function", \
                      "custom_elicitation_method"] are valid argument names.'
-    
         try:
             target_quantities[k]["elicitation_method"]
         except KeyError:
@@ -152,7 +151,6 @@ def check_target_quantities(target_quantities):
             target_quantities[k]["loss_components"]
         except KeyError:
             print("The non-optional argument 'loss_components' is missing.")
-    
         try:
             target_quantities[k]["custom_elicitation_method"]
         except KeyError:
@@ -163,6 +161,7 @@ def check_target_quantities(target_quantities):
                     target_quantities[k]["elicitation_method"] is None
                 ), "If custom_elicitation_method is specified, \
                     elicitation_method has to be None."
+
 
 def check_loss_function(loss_function):
     # section: loss_function
@@ -176,6 +175,7 @@ def check_loss_function(loss_function):
             ], f"Have you misspelled '{k}' in the parameter settings? Only \
                 ['loss', 'loss_weighting' ,'use_regularization'] are valid \
                     argument names."
+
 
 # section: optimization_settings
 def check_optimization_settings(optimization_settings):
@@ -191,6 +191,7 @@ def check_optimization_settings(optimization_settings):
                 "optimizer_specs",
             ], f"Have you misspelled '{k}' in the parameter settings? Only \
                 ['optimizer', 'optimizer_specs'] are valid argument names."
+
 
 # section: training_settings
 def check_training_settings(training_settings):
@@ -210,15 +211,13 @@ def check_training_settings(training_settings):
             "view_ep",
         ], f'Have you misspelled "{k}" in the parameter settings? Only \
             ["method", "sim_id","B","samples_from_prior","seed",\
-             "warmup_initializations","epochs","output_path","progress_info"] \
+             "warmup_initializations","epochs","output_path","progress_info"]\
                 are valid argument names.'
-    
     for k in training_settings.keys():
         assert set(["method", "sim_id", "seed", "epochs"]) <= set(
             training_settings.keys()
         ), 'At least one of the non-optional arguments "method","sim_id",\
             "seed","epochs"] is missing.'
-    
     if training_settings["method"] == "parametric_prior":
         assert "warmup_initializations" in list(
             training_settings.keys()

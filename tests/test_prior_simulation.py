@@ -7,7 +7,6 @@ import pytest
 import pandas as pd
 
 from elicit.functions.prior_simulation import intialize_priors
-from elicit.functions.prior_simulation import sample_from_priors
 from os import listdir
 
 tfd = tfp.distributions
@@ -41,8 +40,8 @@ def global_dict():
         ),
     )
 
-#%% initialize_priors
 
+# initialize_priors
 def test_intialize_priors_counts(global_dict):
     res = intialize_priors(global_dict)
     parameters = set(global_dict["model_parameters"].keys()).difference(
@@ -93,7 +92,8 @@ def test_initialize_priors_file(global_dict):
 
     assert expected_data == observed_file
 
-#%% sample_from_priors
+
+# sample_from_priors
 @pytest.fixture
 def global_dict2():
     return dict(
@@ -103,8 +103,8 @@ def global_dict2():
             seed=2,
             epochs=2,
             output_path="results",
-            samples_from_prior = 200,
-            B = 100
+            samples_from_prior=200,
+            B=100
         ),
         model_parameters=dict(
             mu=dict(
@@ -132,15 +132,15 @@ def global_dict2():
         )
     )
 
+
 @pytest.fixture
-def intialized_prior(): 
+def intialized_prior():
     return [
         dict(
-            mu_loc = 1.,
-            mu_scale = 0.2
+            mu_loc=1.,
+            mu_scale=0.2
         ),
         dict(
-            sigma_scale = 0.5
+            sigma_scale=0.5
         )
     ]
-

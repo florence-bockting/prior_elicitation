@@ -554,9 +554,10 @@ def prior_elicitation(
                 )
             )
     )
-    
+
     # %% CHECKS
-    check_run.check_model_parameters(training_settings, model_parameters, num_params)
+    check_run.check_model_parameters(training_settings, model_parameters,
+                                     num_params)
     check_run.check_expert_data(expert_data)
     check_run.check_generative_model(generative_model)
     check_run.check_target_quantities(target_quantities)
@@ -595,7 +596,7 @@ def prior_elicitation(
     )
 
     _default_dict_model = dict(
-        additional_model_args=None, 
+        additional_model_args=None,
         discrete_likelihood=False,
         softmax_gumble_specs=None
     )
@@ -612,15 +613,17 @@ def prior_elicitation(
     )
 
     _default_dict_loss = dict(
-        loss=MMD_energy, 
-        loss_weighting=None, 
+        loss=MMD_energy,
+        loss_weighting=None,
         use_regularization=False
     )
 
     _default_dict_optimizer = dict(
         optimizer=tf.keras.optimizers.Adam,
-        optimizer_specs={"learning_rate": 0.0001, 
-                         "clipnorm": 1.0},
+        optimizer_specs={
+            "learning_rate": 0.0001,
+            "clipnorm": 1.0
+        },
     )
 
     _default_dict_training = dict(
@@ -724,7 +727,7 @@ def prior_elicitation(
     # %% SAVE GLOBAL DICT
     global_dict["training_settings"][
         "output_path"
-    ] = f"./elicit/{global_dict['training_settings']['output_path']}/{training_settings['method']}/{training_settings['sim_id']}_{training_settings['seed']}"
+    ] = f"./elicit/{global_dict['training_settings']['output_path']}/{training_settings['method']}/{training_settings['sim_id']}_{training_settings['seed']}" # noqa
     path = global_dict["training_settings"]["output_path"] + "/global_dict.pkl"
     save_as_pkl(global_dict, path)
 
