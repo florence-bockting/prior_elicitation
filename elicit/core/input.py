@@ -83,9 +83,9 @@ def global_dict(
          samples_from_prior=200,
          output_path="results",
          progress_info=1
-         )
-    ):
-    """User settings for prior elicitation tool
+         )):
+    """
+    User settings for prior elicitation tool
 
     Parameters
     ----------
