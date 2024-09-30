@@ -82,7 +82,7 @@ For those of you who would like to contribute to our project, please have a look
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/bmfazio"><img src="https://avatars.githubusercontent.com/u/26548493?v=4" width="100px;" alt="Luna Fazio"/><br /><sub><b>Luna Fazio</b></sub></a><br /></a><br /><a href="#conceptual-lunafazio" title="Conceptual">🖋</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/lunafazio"><img src="https://avatars.githubusercontent.com/u/26548493?v=4" width="100px;" alt="Luna Fazio"/><br /><sub><b>Luna Fazio</b></sub></a><br /></a><br /><a href="#conceptual-lunafazio" title="Conceptual">🖋</a></td>
     </tr>
   </tbody>
 </table>
