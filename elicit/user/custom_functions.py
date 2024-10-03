@@ -52,3 +52,8 @@ def custom_groups(ypred, gr):
         return ypred[:, :, 14:36]
     if gr == 3:
         return ypred[:, :, 36:]
+
+
+def quantiles_per_ypred(ypred, quantiles_specs):
+    return tf.einsum("ij...->ji...",
+                     tfp.stats.percentile(ypred, quantiles_specs, axis=1))

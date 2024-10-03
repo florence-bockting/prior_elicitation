@@ -40,7 +40,9 @@ class BinomialModel(tf.Module):
                                   probs=probs[:, :, :, None])
 
         return dict(
-            likelihood=likelihood, ypred=None, epred=epred,
+            likelihood=likelihood,
+            ypred=None,
+            epred=epred,
             prior_samples=prior_samples
         )
 

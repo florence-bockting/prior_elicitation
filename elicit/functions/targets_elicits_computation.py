@@ -169,10 +169,16 @@ def computation_elicited_statistics(target_quantities, ground_truth,
             elicited_statistic = use_custom_functions(
                 target_dict[tar]["custom_elicitation_method"],
                 target_quantities,
+                global_dict
             )
             elicits_res[f"custom_{tar}"] = elicited_statistic
 
         else:
+            if (
+                target_dict[tar]["elicitation_method"]
+                == "identity"
+            ):
+                elicits_res[f"identity_{tar}"] = target_quantities[tar]
             if (
                 target_dict[tar]["elicitation_method"]
                 == "histogram"

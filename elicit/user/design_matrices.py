@@ -11,10 +11,13 @@ import tensorflow_probability as tfp
 tfd = tfp.distributions
 
 
+
 def load_design_matrix_binomial(N):
-    X_std = tfd.Normal(0.0, 1.0).sample(N)
-    # X_std = tfd.Normal(0.,1.).quantile([0.05, 0.25, 0.5, 0.75, 0.95])
-    d_final = tf.stack([[1.0] * len(X_std), X_std], axis=-1)
+    X = tf.range(1.,N,1.)
+    x_sd = tf.math.reduce_std(X)
+    X_std = X/x_sd
+    X_selected = tfp.stats.percentile(X_std,[25, 75])
+    d_final = tf.stack([[1.0] * len(X_selected), X_selected.numpy()], axis=-1)
     return d_final
 
 
