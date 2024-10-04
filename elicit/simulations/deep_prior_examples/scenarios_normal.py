@@ -39,6 +39,9 @@ truth_correlated = {
         ])
 }
 
+scenario="skewed"
+seed=1
+
 def run_sim(seed, scenario):
 
     prior_elicitation(
@@ -88,10 +91,13 @@ def run_sim(seed, scenario):
         ),
         optimization_settings=dict(
             optimizer_specs={
-                "learning_rate": 0.0001,
+                "learning_rate": 0.00025,
                 "clipnorm": 1.0,
             }
         ),
+        loss_function=dict(
+            use_regularization=True
+            ),
         training_settings=dict(
             method="deep_prior",
             sim_id=f"normal_{scenario}",

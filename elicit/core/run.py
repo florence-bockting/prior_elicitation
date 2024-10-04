@@ -177,25 +177,25 @@ def compute_loss(
                 # read from results (if not yet existing, create list)
                 try:
                     pd.read_pickle(
-                        global_dict["output_path"] + "/regularizer.pkl"
+                        global_dict["training_settings"]["output_path"] + "/regularizer.pkl"
                         )
                 except FileNotFoundError:
                     regularizer_term = []
                 else:
                     regularizer_term = pd.read_pickle(
-                        global_dict["output_path"] + "/regularizer.pkl"
+                        global_dict["training_settings"]["output_path"] + "/regularizer.pkl"
                     )
 
                 # get prior samples
                 priorsamples = pd.read_pickle(
-                    global_dict["output_path"] + "/model_simulations.pkl"
+                    global_dict["training_settings"]["output_path"] + "/model_simulations.pkl"
                 )["prior_samples"]
                 # compute regularization
                 regul_term = regulariser(priorsamples)
                 # save regularization
                 regularizer_term.append(regul_term)
 
-                path = global_dict["output_path"] + "/regularizer.pkl"
+                path = global_dict["training_settings"]["output_path"] + "/regularizer.pkl"
                 save_as_pkl(regularizer_term, path)
 
                 total_loss = total_loss + regul_term

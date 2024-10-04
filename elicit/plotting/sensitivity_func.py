@@ -315,88 +315,91 @@ def normals_convergence(sim_path, expert_path, file, model, save_fig=True):
         plt.show()
 
 
-def normal_sensitivity(prior_expert, path_expert, prior_res_agg, elicits_gr1_agg,
-                       elicits_gr2_agg, elicits_gr3_agg, elicits_r2_agg,
-                       cor_res_agg, model, save_fig=True):
+def nomral_sensitivity(prior_expert, expert_path, prior_res_agg,
+                       elicits_gr1_agg, elicits_gr2_agg, elicits_gr3_agg,
+                       elicits_r2_agg, cor_res_agg, model,
+                       save_fig=True):
     col_exp = "#7d1717"
     col_mod = "#e2a854"
 
-    exp_gr1 = pd.read_pickle(path_expert+"/elicited_statistics.pkl")["quantiles_group1"]
-    exp_gr2 = pd.read_pickle(path_expert+"/elicited_statistics.pkl")["quantiles_group2"]
-    exp_gr3 = pd.read_pickle(path_expert+"/elicited_statistics.pkl")["quantiles_group3"]
+    exp_gr1 = pd.read_pickle(expert_path+"/elicited_statistics.pkl")["quantiles_group1"]
+    exp_gr2 = pd.read_pickle(expert_path+"/elicited_statistics.pkl")["quantiles_group2"]
+    exp_gr3 = pd.read_pickle(expert_path+"/elicited_statistics.pkl")["quantiles_group3"]
     mod_gr1 = elicits_gr1_agg
     mod_gr2 = elicits_gr2_agg
     mod_gr3 = elicits_gr3_agg
-    exp_r2 = tf.exp(pd.read_pickle(path_expert+"/elicited_statistics.pkl")["quantiles_logR2"])
+    exp_r2 = tf.exp(pd.read_pickle(expert_path+"/elicited_statistics.pkl")["quantiles_logR2"])
     mod_r2 = elicits_r2_agg
     if model.startswith("correl"):
-        cor_expert = pd.read_pickle(path_expert+"/elicited_statistics.pkl")["identity_correl"][0,:]
+        cor_expert = pd.read_pickle(expert_path+"/elicited_statistics.pkl")["identity_correl"][0,:]
     else:
-        cor_expert = pd.read_pickle(path_expert+"/elicited_statistics.pkl")["correlation"][0,:]
+        cor_expert = pd.read_pickle(expert_path+"/elicited_statistics.pkl")["correlation"][0,:]
    
-    fig = plt.figure(layout='constrained', figsize=(4, 5.))
-    subfigs = fig.subfigures(3, 1, hspace=0.03, height_ratios=[1.,0.8,1.])
-    axs0 = subfigs[0].subplots(1,4)
+    fig = plt.figure(layout='constrained', figsize=(3.5, 5.))
+    subfigs = fig.subfigures(2, 1, hspace=0.03, height_ratios=[1.,0.4])
+    axs0 = subfigs[0].subplots(4,2)
     axs1 = subfigs[1].subplots(1,1)
-    axs2 = subfigs[2].subplots(1,4)
+    #axs2 = subfigs[1].subplots(4,1)
 
     for p in range(4):
-        sns.kdeplot(prior_expert[0,:,p], color="#7d1717", lw=2, ax=axs0[p], zorder=1)
+        sns.kdeplot(prior_expert[0,:,p], color="#7d1717", lw=2, ax=axs0[p,0], zorder=1)
         [sns.kdeplot(prior_res_agg[:,p,i], color="#e2a854", lw=3, alpha=0.2, 
-                     ax=axs0[p], zorder=0) for i in range(prior_res_agg.shape[-1])]
+                     ax=axs0[p,0], zorder=0) for i in range(prior_res_agg.shape[-1])]
         
-        axs0[p].spines[['right', 'top']].set_visible(False) 
-        axs0[p].yaxis.set_tick_params(labelsize=7) 
-        axs0[p].xaxis.set_tick_params(labelsize=7) 
-        axs0[0].set_ylabel("density",fontsize="small") 
-        [axs0[j].set_ylabel("",fontsize="small") for j in [1,2,3]]
-    [axs0[i].set_xlabel(t, fontsize="small") for i,t in enumerate([r"$\beta_0$",r"$\beta_1$",r"$\beta_2$",r"$\sigma$"])]
-    axs0[0].set_title("Marginal priors", fontsize="small", ha="left", x=0)
-    axs0[0].set_xlim(-0.1,25.)
-    axs0[1].set_xlim(-10,30)
-    axs0[2].set_xlim(-2.,17.)
-    axs0[3].set_xlim(-0.1,8.)
+        axs0[p,0].spines[['right', 'top']].set_visible(False) 
+        axs0[p,0].yaxis.set_tick_params(labelsize=7) 
+        axs0[p,0].xaxis.set_tick_params(labelsize=7) 
+        axs0[0,0].set_ylabel("density",fontsize="small") 
+        axs0[0,0].set_title(r"$\mathbf{(a)}$"+" Marginal priors\n"+r"$\qquad\qquad\beta_0$",fontsize="small", ha="left", x=0)
+        axs0[-1,0].set_xlabel(r"$\theta$",fontsize="small") 
+        [axs0[j,0].set_ylabel("",fontsize="small") for j in [1,2,3]]
+    [axs0[i+1,0].set_title(t, fontsize="small") for i,t in enumerate([r"$\beta_1$",r"$\beta_2$",r"$\sigma$"])]
+    axs0[0,0].set_xlim(-0.1,25.)
+    axs0[1,0].set_xlim(-10,30)
+    axs0[2,0].set_xlim(-2.,17.)
+    axs0[3,0].set_xlim(-0.1,8.)
     sns.scatterplot(x=tf.expand_dims(cor_expert[0],-1), y=tf.zeros(1), color="#7d1717", 
                 ax = axs1, zorder=2, marker="o", label="true") 
-    sns.scatterplot(x=cor_res_agg[0,0,:], y=tf.zeros(cor_res_agg.shape[-1]), color="#e2a854", 
+    sns.scatterplot(x=cor_res_agg[0,:], y=tf.zeros(cor_res_agg.shape[-1]), color="#e2a854", 
                     ax = axs1, zorder=1, marker="o", alpha = 0.6, label="learned") 
     for i in range(1,len(cor_expert)):    
         sns.scatterplot(x=tf.expand_dims(cor_expert[i],-1), y=tf.zeros(1)+i, color="#7d1717", 
                     ax = axs1, zorder=2, marker="o") 
-        sns.scatterplot(x=cor_res_agg[0,i,:], y=tf.zeros(cor_res_agg.shape[-1])+i, color="#e2a854", 
+        sns.scatterplot(x=cor_res_agg[i,:], y=tf.zeros(cor_res_agg.shape[-1])+i, color="#e2a854", 
                         ax = axs1, zorder=1, marker="o", alpha = 0.6) 
     axs1.spines[['right', 'top']].set_visible(False) 
     axs1.xaxis.set_tick_params(labelsize=7)
     axs1.yaxis.set_tick_params(labelsize=7)
     axs1.set_yticks(tf.range(len(cor_expert)), [r"$r(\beta_0,\beta_1)$",r"$r(\beta_0,\beta_2)$",r"$r(\beta_0,\sigma)$",
-                                               r"$r(\beta_1,\beta_2)$",r"$r(\beta_1,\sigma)$",r"$r(\beta_2,\sigma)$"])
-    axs1.set_title("Pearson correlation", fontsize="small", ha="left", x=0)
+                                                r"$r(\beta_1,\beta_2)$",r"$r(\beta_1,\sigma)$",r"$r(\beta_2,\sigma)$"])
+    axs1.set_title(r"$\mathbf{(c)}$"+" Pearson correlation", fontsize="small", ha="left", x=0)
     axs1.set_ylim(-0.5,6.)
     axs1.legend(handlelength=0.5,ncol=2, fontsize="x-small", frameon=False,
                       loc=(0.01,0.9))
     axs1.set_xlim(-1,1)
     
     for b in range(mod_gr1.shape[-1]):
-        [sns.scatterplot(x=exp_gr[0,:], y=mod_gr[0,:,b], ax=axs2[i],
-                           color=col_mod, lw = 0, zorder=1, alpha=0.1) for i, (exp_gr, mod_gr) in enumerate(
-                               zip([exp_gr1, exp_gr2, exp_gr3, exp_r2],[mod_gr1,mod_gr2,mod_gr3, mod_r2]))]
-    [axs2[i].axline((0,0), slope=1, color = "black", 
-                     lw=1, linestyle="dashed", zorder=0)  for i, (exp_gr, mod_gr) in enumerate(
-                         zip([exp_gr1, exp_gr2, exp_gr3],[mod_gr1,mod_gr2,mod_gr3]))]
-    axs2[-1].axline((0,0), (1,1), color = "black", lw=1, linestyle="dashed", zorder=0)
-    [axs2[i].xaxis.set_tick_params(labelsize=7) for i in range(4)]
-    [axs2[i].yaxis.set_tick_params(labelsize=7) for i in range(4)]
-    axs2[-1].set_ylim(0,1)
-    axs2[0].set_ylabel("learned \n", fontsize="small")
-    [axs2[i].spines[['right', 'top']].set_visible(False) for i in range(4)]
-    axs2[0].set_xlabel("true", fontsize="small")
-    [axs2[i].set_title(t, fontsize="small") for i,t in enumerate(
-        [r"$ y_i \mid gr_1$", r"$ y_i \mid gr_2$", r"$ y_i \mid gr_3$", r"$ R^2$"])]
+        [sns.scatterplot(x=exp_gr[0,:], y=mod_gr[:,b], ax=axs0[i,1],
+                            color=col_mod, lw = 0, zorder=1, alpha=0.1) for i, (exp_gr, mod_gr) in enumerate(
+                                zip([exp_gr1, exp_gr2, exp_gr3, exp_r2],[mod_gr1,mod_gr2,mod_gr3, mod_r2]))]
+    [axs0[i,1].axline((0,0), slope=1, color = "black", 
+                      lw=1, linestyle="dashed", zorder=0)  for i, (exp_gr, mod_gr) in enumerate(
+                          zip([exp_gr1, exp_gr2, exp_gr3],[mod_gr1,mod_gr2,mod_gr3]))]
+    axs0[-1,1].axline((0,0), (1,1), color = "black", lw=1, linestyle="dashed", zorder=0)
+    [axs0[i,1].xaxis.set_tick_params(labelsize=7) for i in range(4)]
+    [axs0[i,1].yaxis.set_tick_params(labelsize=7) for i in range(4)]
+    axs0[-1,1].set_ylim(0,1)
+    axs0[0,1].set_ylabel("learned", fontsize="small")
+    [axs0[i,1].spines[['right', 'top']].set_visible(False) for i in range(4)]
+    axs0[-1,1].set_xlabel("true", fontsize="small")
+    axs0[0,1].set_title(r"$\mathbf{(b)}$"+" Faithfulness\n"+r"$\qquad\qquady_i \mid gr_1$",fontsize="small", ha="left", x=0)
+    [axs0[i+1,1].set_title(t, fontsize="small") for i,t in enumerate(
+        [ r"$ y_i \mid gr_2$", r"$ y_i \mid gr_3$", r"$ R^2$"])]
  
-    subfigs[0].suptitle(r"$\mathbf{(a)}$"+" Uniqueness & Replicability", ha="left", 
-                        x = 0.01, fontsize="medium")
-    subfigs[2].suptitle(r"$\mathbf{(b)}$"+" Faithfulness", ha="left", 
-                        x = 0.01, fontsize="medium")
+    # subfigs[0].suptitle(r"$\mathbf{(a)}$"+" Marginal priors", ha="left", 
+    #                     x = 0.01, fontsize="medium")
+    # subfigs[1].suptitle(r"$\mathbf{(b)}$"+" Faithfulness", ha="left", 
+    #                     x = 0.01, fontsize="medium")
     if save_fig:
         plt.savefig(f"elicit/simulations/nf_sim_studies/plots/sensitivity_{model}.png", dpi=300)
     else:
