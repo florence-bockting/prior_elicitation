@@ -5,7 +5,8 @@ import tensorflow as tf
 from elicit.plotting.sensitivity_func import (
     binomial_sensitivity,
     binomial_diagnostics,
-    normals_convergence
+    normals_convergence,
+    normal_sensitivity
 )
 
 # plot results of deep-binomial model
@@ -64,7 +65,7 @@ binomial_diagnostics(path_sim, path_expert, f"/{all_files[1]}", save_fig=True)
 
 
 #%% Independent, skewed Normal
-scenario="skewed"
+scenario="correlated"
 path_sim = f"elicit/simulations/LiDO_cluster/sim_results/deep_prior/normal_{scenario}"
 
 all_files = os.listdir(path_sim)
@@ -83,7 +84,7 @@ for i in range(len(all_files)):
         elicits_gr3 = pd.read_pickle(path_sim+f"/{all_files[i]}"+"/elicited_statistics.pkl")["quantiles_group3"]
         elicits_r2 = tf.exp(pd.read_pickle(path_sim+f"/{all_files[i]}"+"/elicited_statistics.pkl")["quantiles_logR2"])
         if scenario == "correlated":
-            cor_res = pd.read_pickle(path_sim+f"/{all_files[i]}"+"/elicited_statistics.pkl")["histogram_correl"]
+            cor_res = pd.read_pickle(path_sim+f"/{all_files[i]}"+"/elicited_statistics.pkl")["identity_correl"]
         else:
             cor_res = pd.read_pickle(path_sim+f"/{all_files[i]}"+"/elicited_statistics.pkl")["correlation"] # histogram_correl
         prior_res_list.append(prior_res[0,:,:])
@@ -92,7 +93,7 @@ for i in range(len(all_files)):
         elicits_gr2_list.append(elicits_gr2[0,:])
         elicits_gr3_list.append(elicits_gr3[0,:])
         elicits_r2_list.append(elicits_r2[0,:])
-    
+
 cor_res_agg = tf.stack(cor_res_list, -1)
 prior_res_agg = tf.stack(prior_res_list, -1)
 elicits_gr1_agg = tf.stack(elicits_gr1_list, -1)
@@ -105,4 +106,9 @@ prior_expert = pd.read_pickle(f"elicit/simulations/LiDO_cluster/experts/deep_{sc
 path_expert = f"elicit/simulations/LiDO_cluster/experts/deep_{scenario}_normal"
 #path_expert = "elicit/simulations/LiDO_cluster/experts/normal_independent"
 
-normals_convergence(path_sim, path_expert, "_4", model="skewed", save_fig=False)
+normals_convergence(path_sim, path_expert, "/normal_correlated_2", model="correlated",
+                    save_fig=False)
+
+normal_sensitivity(prior_expert, path_expert, prior_res_agg,
+                   elicits_gr1_agg, elicits_gr2_agg, elicits_gr3_agg,
+                   elicits_r2_agg, cor_res_agg, "correlated", save_fig=False)

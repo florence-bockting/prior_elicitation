@@ -315,7 +315,7 @@ def normals_convergence(sim_path, expert_path, file, model, save_fig=True):
         plt.show()
 
 
-def nomral_sensitivity(prior_expert, expert_path, prior_res_agg,
+def normal_sensitivity(prior_expert, expert_path, prior_res_agg,
                        elicits_gr1_agg, elicits_gr2_agg, elicits_gr3_agg,
                        elicits_r2_agg, cor_res_agg, model,
                        save_fig=True):

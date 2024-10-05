@@ -76,7 +76,7 @@ def run_sim(seed):
             ),
             correl=dict(
                 elicitation_method="identity",
-                loss_components="all",
+                loss_components="by-group",
                 custom_target_function=dict(
                     function=custom_correlation,
                     additional_args=None
@@ -104,4 +104,3 @@ if __name__ == "__main__":
     seed = int(sys.argv[1])
     
     run_sim(seed)
-
