@@ -89,9 +89,9 @@ def run_sim(seed):
                 "clipnorm": 1.0,
             }
         ),
-        loss_function=dict(
-            use_regularization=True
-            ),
+        # loss_function=dict(
+        #     use_regularization=True
+        #     ),
         training_settings=dict(
             method="deep_prior",
             sim_id="normal_correlated",

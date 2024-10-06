@@ -59,7 +59,7 @@ prior_expert = pd.read_pickle(path_expert+"/prior_samples.pkl")
 
 # plot results
 binomial_sensitivity(prior_expert, path_expert, path_sim, elicit_res_agg,
-                         prior_res_agg, cor_res_agg, save_fig=True)
+                         prior_res_agg, cor_res_agg, save_fig=False)
 binomial_diagnostics(path_sim, path_expert, f"/{all_files[1]}", save_fig=True)
 
 
@@ -106,9 +106,9 @@ prior_expert = pd.read_pickle(f"elicit/simulations/LiDO_cluster/experts/deep_{sc
 path_expert = f"elicit/simulations/LiDO_cluster/experts/deep_{scenario}_normal"
 #path_expert = "elicit/simulations/LiDO_cluster/experts/normal_independent"
 
-normals_convergence(path_sim, path_expert, "/normal_correlated_2", model="correlated",
-                    save_fig=False)
+normals_convergence(path_sim, path_expert, f"/normal_{scenario}_2", model=scenario,
+                    save_fig=True)
 
 normal_sensitivity(prior_expert, path_expert, prior_res_agg,
                    elicits_gr1_agg, elicits_gr2_agg, elicits_gr3_agg,
-                   elicits_r2_agg, cor_res_agg, "correlated", save_fig=False)
+                   elicits_r2_agg, cor_res_agg, scenario, save_fig=True)

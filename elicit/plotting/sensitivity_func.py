@@ -132,7 +132,7 @@ def binomial_diagnostics(sim_path, expert_path, file, save_fig=True):
     axs[0,0].plot(range(total_loss.shape[0]), total_loss, color="black")
     [axs[0,1].plot(range(component_loss.shape[1]), component_loss[i,:],
                    color=col_losses[i,:]) for i in range(component_loss.shape[0])]
-    [axs[0,i].set_yscale('log') for i in range(2)]
+    #[axs[0,i].set_yscale('log') for i in range(2)]
     [axs[0,i].set_title(t, fontsize="small") for i,t in enumerate(
         ["total loss","loss components"])]
     [axs[1,0].axhline(exp_means[i], color="black", linestyle="dashed", lw=1)
@@ -401,6 +401,6 @@ def normal_sensitivity(prior_expert, expert_path, prior_res_agg,
     # subfigs[1].suptitle(r"$\mathbf{(b)}$"+" Faithfulness", ha="left", 
     #                     x = 0.01, fontsize="medium")
     if save_fig:
-        plt.savefig(f"elicit/simulations/nf_sim_studies/plots/sensitivity_{model}.png", dpi=300)
+        plt.savefig(f"elicit/simulations/LiDO_cluster/sim_results/deep_prior/graphics/sensitivity_{model}.png", dpi=300)
     else:
         plt.show()
