@@ -46,6 +46,8 @@ def softmax_gumbel_trick(model_simulations, global_dict):
         continuously approximated ypred from the discrete likelihood.
 
     """
+    # set seed
+    tf.random.set_seed(global_dict["training_settings"]["seed"])
     # get batch size
     B = model_simulations["epred"].shape[0]
     # get number of simulations from priors
@@ -100,6 +102,8 @@ def simulate_from_generator(prior_samples, ground_truth, global_dict):
         simulated data from generative model.
 
     """
+    # set seed
+    tf.random.set_seed(global_dict["training_settings"]["seed"])
     # create subdictionaries for better readability
     dict_generator = global_dict["generative_model"]
     # get model and initialize generative model

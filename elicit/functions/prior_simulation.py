@@ -20,6 +20,8 @@ class Priors(tf.Module):
     def __init__(self, ground_truth, global_dict):
         self.global_dict = global_dict
         self.ground_truth = ground_truth
+        # set seed
+        tf.random.set_seed(global_dict["training_settings"]["seed"])
         # initialize hyperparameter for learning (if true hyperparameter
         # are given, no initialization is needed)
         if not self.ground_truth:
@@ -28,6 +30,7 @@ class Priors(tf.Module):
             self.init_priors = None
 
     def __call__(self):
+        
         prior_samples = sample_from_priors(
             self.init_priors, self.ground_truth, self.global_dict
         )
@@ -49,6 +52,8 @@ def intialize_priors(global_dict):
         returns initialized prior distributions ready for sampling.
 
     """
+    # set seed
+    tf.random.set_seed(global_dict["training_settings"]["seed"])
 
     if global_dict["training_settings"]["method"] == "parametric_prior":
         # list for saving initialize hyperparameter values
@@ -130,6 +135,8 @@ def sample_from_priors(initialized_priors, ground_truth, global_dict):
     # extract variables from dict
     S = global_dict["training_settings"]["samples_from_prior"]
     B = global_dict["training_settings"]["B"]
+    # set seed
+    tf.random.set_seed(global_dict["training_settings"]["seed"])
 
     if ground_truth:
         # number of samples for ground truth

@@ -47,6 +47,8 @@ def one_forward_simulation(prior_model, global_dict, ground_truth=False):
         compute the loss components
 
     """
+    # set seed
+    tf.random.set_seed(global_dict["training_settings"]["seed"])
     # generate samples from initialized prior
     prior_samples = prior_model()
     # simulate prior predictive distribution based on prior samples
@@ -86,7 +88,9 @@ def load_expert_data(global_dict, path_to_expert_data=None):
 
     """
     if global_dict["expert_data"]["from_ground_truth"]:
-
+        # set seed
+        tf.random.set_seed(global_dict["training_settings"]["seed"])
+        # sample from true priors
         prior_model = Priors(global_dict=global_dict, ground_truth=True)
         expert_data = one_forward_simulation(
             prior_model, global_dict, ground_truth=True
@@ -283,6 +287,8 @@ def burnin_phase(
     loss_list = []
     init_var_list = []
     save_prior = []
+    # set seed
+    tf.random.set_seed(global_dict["training_settings"]["seed"])
     # create subdictionary for better readability
     dict_training = global_dict["training_settings"]
     for i in range(dict_training["warmup_initializations"]):
