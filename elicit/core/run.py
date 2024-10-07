@@ -287,30 +287,28 @@ def burnin_phase(
     loss_list = []
     init_var_list = []
     save_prior = []
-    # set seed
-    tf.random.set_seed(global_dict["training_settings"]["seed"])
-    # create subdictionary for better readability
-    dict_training = global_dict["training_settings"]
-    for i in range(dict_training["warmup_initializations"]):
-        print("|", end="")
+    dict_copy = dict(global_dict)
+    for i in range(dict_copy["training_settings"]["warmup_initializations"]):
+        dict_copy["training_settings"]["seed"] = dict_copy["training_settings"]["seed"]+i
         # prepare generative model
-        prior_model = Priors(global_dict=global_dict, ground_truth=False)
+        prior_model = Priors(global_dict=dict_copy, ground_truth=False)
         # generate simulations from model
         training_elicited_statistics = one_forward_simulation(prior_model,
-                                                              global_dict)
+                                                              dict_copy)
         # compute loss for each set of initial values
         weighted_total_loss = compute_loss(
             training_elicited_statistics,
             expert_elicited_statistics,
-            global_dict,
+            dict_copy,
             epoch=0,
         )
+        print(f"({i}) {weighted_total_loss.numpy():.1f} ", end="")
 
         init_var_list.append(prior_model)
         save_prior.append(prior_model.trainable_variables)
         loss_list.append(weighted_total_loss.numpy())
 
-    path = global_dict["training_settings"]["output_path"] + "/burnin_phase.pkl"
+    path = dict_copy["training_settings"]["output_path"] + "/burnin_phase.pkl"
     save_as_pkl((loss_list, save_prior), path)
 
     print(" ")
