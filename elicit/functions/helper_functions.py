@@ -51,7 +51,7 @@ def save_hyperparameters(generator, epoch, global_dict):
         learned values for each hyperparameter and epoch.
 
     """
-    saving_path = global_dict["output_path"]
+    saving_path = global_dict["training_settings"]["output_path"]
     # extract learned hyperparameter values
     hyperparams = generator.trainable_variables
     if epoch == 0:

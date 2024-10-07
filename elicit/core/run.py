@@ -304,7 +304,7 @@ def burnin_phase(
         save_prior.append(prior_model.trainable_variables)
         loss_list.append(weighted_total_loss.numpy())
 
-    path = global_dict["output_path"] + "/burnin_phase.pkl"
+    path = global_dict["training_settings"]["output_path"] + "/burnin_phase.pkl"
     save_as_pkl((loss_list, save_prior), path)
 
     print(" ")
