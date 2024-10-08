@@ -1,0 +1,610 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>elicit.core.input &#8212; Prior Learning</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=87e54e7c" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../../_static/documentation_options.js?v=e645c8fa"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/elicit/core/input';</script>
+    <link rel="icon" href="../../../_static/favicon-light.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/mmp-logo-light.png" class="logo__image only-light" alt="Prior Learning - Home"/>
+    <script>document.write(`<img src="../../../_static/mmp-logo-dark.png" class="logo__image only-dark" alt="Prior Learning - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../introductory_example.html">Introductory example</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/modules.html">API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/elicit.html">elicit package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../api/elicit.core.html">elicit.core package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/elicit.core.run.html">elicit.core.run module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/elicit.core.write_results.html">elicit.core.write_results module</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../api/elicit.functions.html">elicit.functions package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/elicit.functions.helper_functions.html">elicit.functions.helper_functions module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/elicit.functions.loss_computation.html">elicit.functions.loss_computation module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/elicit.functions.loss_functions.html">elicit.functions.loss_functions module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/elicit.functions.model_simulation.html">elicit.functions.model_simulation module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/elicit.functions.prior_simulation.html">elicit.functions.prior_simulation module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/elicit.functions.targets_elicits_computation.html">elicit.functions.targets_elicits_computation module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/elicit.functions.training.html">elicit.functions.training module</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../api/elicit.user.html">elicit.user package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/elicit.user.custom_functions.html">elicit.user.custom_functions module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/elicit.user.design_matrices.html">elicit.user.design_matrices module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/elicit.user.generative_models.html">elicit.user.generative_models module</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/florence-bockting/prior_elicitation" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for elicit.core.input</h1><div class="highlight"><pre>
+<span></span><span class="c1"># noqa SPDX-FileCopyrightText: 2024 Florence Bockting &lt;florence.bockting@tu-dortmund.de&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># noqa SPDX-License-Identifier: Apache-2.0</span>
+
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">from</span> <span class="nn">elicit.functions.loss_functions</span> <span class="kn">import</span> <span class="n">MMD_energy</span>
+
+
+<div class="viewcode-block" id="global_dict">
+<a class="viewcode-back" href="../../../api/elicit.core.input.html#elicit.core.input.global_dict">[docs]</a>
+<span class="k">def</span> <span class="nf">global_dict</span><span class="p">(</span>
+    <span class="n">model_parameters</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">param1</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">family</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">hyperparams_dict</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">hyppar1</span><span class="o">=</span><span class="kc">None</span>
+                <span class="p">),</span>
+            <span class="n">param_scaling</span><span class="o">=</span><span class="mf">1.</span>
+            <span class="p">),</span>
+        <span class="n">independence</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">),</span>
+    <span class="n">expert_data</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+         <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+         <span class="n">from_ground_truth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+         <span class="n">simulator_specs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+             <span class="n">param1</span><span class="o">=</span><span class="kc">None</span>
+             <span class="p">),</span>
+         <span class="n">samples_from_prior</span><span class="o">=</span><span class="mi">10000</span>
+         <span class="p">),</span>
+    <span class="n">generative_model</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+         <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+         <span class="n">additional_model_args</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+             <span class="n">model_arg1</span><span class="o">=</span><span class="kc">None</span>
+             <span class="p">),</span>
+         <span class="n">discrete_likelihood</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+         <span class="n">softmax_gumble_specs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+             <span class="n">temperature</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+             <span class="n">upper_threshold</span><span class="o">=</span><span class="kc">None</span>
+             <span class="p">)</span>
+         <span class="p">),</span>
+    <span class="n">target_quantities</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+         <span class="n">target1</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+             <span class="n">elicitation_method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+             <span class="n">custom_elicitation_method</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                 <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">additional_args</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                     <span class="n">func_arg1</span><span class="o">=</span><span class="kc">None</span>
+                     <span class="p">)</span>
+                 <span class="p">),</span>
+             <span class="n">custom_target_function</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                 <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">additional_args</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                     <span class="n">func_arg1</span><span class="o">=</span><span class="kc">None</span>
+                     <span class="p">)</span>
+                 <span class="p">),</span>
+             <span class="n">quantiles_specs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+             <span class="n">moments_specs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+             <span class="n">loss_components</span><span class="o">=</span><span class="s2">&quot;all&quot;</span>
+             <span class="p">)</span>
+         <span class="p">),</span>
+    <span class="n">loss_function</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">loss</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">loss_weighting</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">use_regularization</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">loss_scaling</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">corr</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+            <span class="n">targets</span><span class="o">=</span><span class="kc">None</span>
+            <span class="p">)</span>
+        <span class="p">),</span>
+    <span class="n">optimization_settings</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">,</span>
+        <span class="n">optimizer_specs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">learning_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">clipnorm</span><span class="o">=</span><span class="mf">1.0</span>
+            <span class="p">)</span>
+        <span class="p">),</span>
+    <span class="n">training_settings</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+         <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+         <span class="n">sim_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+         <span class="n">warmup_initializations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+         <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+         <span class="n">view_ep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+         <span class="n">epochs</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+         <span class="n">B</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
+         <span class="n">samples_from_prior</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+         <span class="n">output_path</span><span class="o">=</span><span class="s2">&quot;results&quot;</span><span class="p">,</span>
+         <span class="n">progress_info</span><span class="o">=</span><span class="mi">1</span>
+         <span class="p">)):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    User settings for prior elicitation tool</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model_parameters : dict</span>
+<span class="sd">        Description of model parameters in generative model with keys</span>
+<span class="sd">        referring to the name of the model parameter and the value is a</span>
+<span class="sd">        dictionary with additional model parameter specifications, which</span>
+<span class="sd">        depend on the selected method (see below).</span>
+
+<span class="sd">        With the additional argument &#39;independence&#39; can be specified whether</span>
+<span class="sd">        the model parameters are assumed to be independent or not. For the</span>
+<span class="sd">        method &quot;parametric_prior&quot; we assume always independence, thus the</span>
+<span class="sd">        value has to be true (and is by default true).</span>
+<span class="sd">        For the method &quot;deep_prior&quot; the user can specify whether the model</span>
+<span class="sd">        parameters are assumed to be independent (independence=true) or</span>
+<span class="sd">        dependent (independence=false).</span>
+
+<span class="sd">        Method=&quot;deep_prior&quot;:</span>
+<span class="sd">            For the deep prior approach we assume a joint prior on all model</span>
+<span class="sd">            parameters. Through the additional argument &#39;param_scaling&#39; it is</span>
+<span class="sd">            possible to scale the sample from the marginal prior by the</span>
+<span class="sd">            specified value. By default the scaling value is 1., thus no</span>
+<span class="sd">            scaling is applied.</span>
+<span class="sd">            TODO: Do we really need the param_scaling argument?</span>
+
+<span class="sd">            Code Example::</span>
+
+<span class="sd">                mu=dict(</span>
+<span class="sd">                    param_scaling=1.</span>
+<span class="sd">                    )</span>
+
+<span class="sd">        Method=&quot;parametric_prior&quot;:</span>
+<span class="sd">            For the parametric approach an independent parametric prior</span>
+<span class="sd">            distribution family is specified for each model parameter.</span>
+
+<span class="sd">            Additionally, it is required to specify an initialization for each</span>
+<span class="sd">            hyperparameter of the parametric distributions, according to which</span>
+<span class="sd">            samples can be drawn for the first epoch.Initialization can be a</span>
+<span class="sd">            distribution or a specific value.</span>
+
+<span class="sd">            Through the additional argument &#39;param_scaling&#39; it is</span>
+<span class="sd">            possible to scale the sample from the marginal prior by the</span>
+<span class="sd">            specified value. By default the scaling value is 1., thus no</span>
+<span class="sd">            scaling is applied.</span>
+<span class="sd">            TODO: Do we really need the param_scaling argument?</span>
+
+<span class="sd">            Code Example::</span>
+
+<span class="sd">                mu=dict(</span>
+<span class="sd">                    family=tfd.Normal,</span>
+<span class="sd">                    hyperparams_dict=dict(</span>
+<span class="sd">                        loc_mu=tfd.Normal(0.,1.),</span>
+<span class="sd">                        scale_mu=0.5</span>
+<span class="sd">                        ),</span>
+<span class="sd">                    param_scaling=1.</span>
+<span class="sd">                    )</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+    <span class="n">global_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">model_parameters</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">param1</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">family</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">hyperparams_dict</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">hyppar1</span><span class="o">=</span><span class="kc">None</span>
+                    <span class="p">),</span>
+                <span class="n">param_scaling</span><span class="o">=</span><span class="mf">1.</span>
+                <span class="p">),</span>
+            <span class="n">independence</span><span class="o">=</span><span class="kc">None</span>
+            <span class="p">),</span>
+        <span class="n">expert_data</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">from_ground_truth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">simulator_specs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">param1</span><span class="o">=</span><span class="kc">None</span>
+                 <span class="p">),</span>
+            <span class="n">samples_from_prior</span><span class="o">=</span><span class="mi">10000</span>
+            <span class="p">),</span>
+        <span class="n">generative_model</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">additional_model_args</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">model_arg1</span><span class="o">=</span><span class="kc">None</span>
+                <span class="p">),</span>
+            <span class="n">discrete_likelihood</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">softmax_gumble_specs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">temperature</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+                <span class="n">upper_threshold</span><span class="o">=</span><span class="kc">None</span>
+                <span class="p">)</span>
+            <span class="p">),</span>
+        <span class="n">target_quantities</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">target1</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">elicitation_method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">custom_elicitation_method</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">additional_args</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                         <span class="n">func_arg1</span><span class="o">=</span><span class="kc">None</span>
+                         <span class="p">)</span>
+                     <span class="p">),</span>
+                <span class="n">custom_target_function</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">additional_args</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                        <span class="n">func_arg1</span><span class="o">=</span><span class="kc">None</span>
+                        <span class="p">)</span>
+                    <span class="p">),</span>
+                <span class="n">quantiles_specs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">moments_specs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">loss_components</span><span class="o">=</span><span class="s2">&quot;all&quot;</span>
+                <span class="p">)</span>
+            <span class="p">),</span>
+        <span class="n">loss_function</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">loss</span><span class="o">=</span><span class="n">MMD_energy</span><span class="p">,</span>
+            <span class="n">loss_weighting</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>         <span class="c1"># dwa, custom</span>
+                <span class="n">method_specs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">temperature</span><span class="o">=</span><span class="mf">1.6</span>  <span class="c1"># dwa-specific</span>
+                    <span class="p">),</span>
+                <span class="n">weights</span><span class="o">=</span><span class="kc">None</span>
+                <span class="p">),</span>
+            <span class="n">use_regularization</span><span class="o">=</span><span class="kc">None</span>
+            <span class="p">),</span>
+        <span class="n">optimization_settings</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">,</span>
+            <span class="n">optimizer_specs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">learning_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">clipnorm</span><span class="o">=</span><span class="mf">1.0</span>
+                <span class="p">)</span>
+            <span class="p">),</span>
+        <span class="n">training_settings</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+             <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+             <span class="n">sim_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+             <span class="n">warmup_initializations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+             <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+             <span class="n">view_ep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+             <span class="n">epochs</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+             <span class="n">B</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
+             <span class="n">samples_from_prior</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+             <span class="n">output_path</span><span class="o">=</span><span class="s2">&quot;results&quot;</span><span class="p">,</span>
+             <span class="n">progress_info</span><span class="o">=</span><span class="mi">1</span>
+             <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">global_dict</span></div>
+
+
+
+<span class="n">global_dict</span><span class="p">()</span>
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Florence Bockting
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024, Florence Bockting.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
