@@ -39,7 +39,7 @@ truth_correlated = {
         ])
 }
 
-scenario="skewed"
+scenario="independent"
 seed=1
 
 def run_sim(seed, scenario):
@@ -54,12 +54,12 @@ def run_sim(seed, scenario):
         ),
         normalizing_flow=True,
         expert_data=dict(
-            data=pd.read_pickle(
-                f"elicit/simulations/LiDO_cluster/experts/deep_{scenario}_normal/elicited_statistics.pkl" # noqa
-            ),
-            from_ground_truth=False,
-            #simulator_specs=truth_correlated,
-            #samples_from_prior=10_000,
+            #data=pd.read_pickle(
+            #    f"elicit/simulations/LiDO_cluster/experts/deep_{scenario}_normal/elicited_statistics.pkl" # noqa
+            #),
+            from_ground_truth=True,
+            simulator_specs=truth_independent,
+            samples_from_prior=10_000,
         ),
         generative_model=dict(
             model=NormalModel,
@@ -85,7 +85,7 @@ def run_sim(seed, scenario):
             ),
             logR2=dict(
                 elicitation_method="quantiles",
-                quantiles_specs=(5,10,20,30,40,50,60,70,80,90,95),
+                quantiles_specs=(5, 25, 50, 75, 95),#(5,10,20,30,40,50,60,70,80,90,95),
                 loss_components="all"
             )
         ),
@@ -112,3 +112,12 @@ if __name__ == "__main__":
     
     run_sim(seed, scenario)
 
+
+normals_convergence("elicit/results/deep_prior/normal_independent_1",
+                    "elicit/results/deep_prior/normal_independent_1/expert", "", 
+                    model=scenario,
+                    save_fig=False)
+
+tf.reduce_mean(pd.read_pickle("elicit/results/deep_prior/normal_independent_1/elicited_statistics.pkl")["quantiles_logR2"],0)
+
+tf.reduce_mean(pd.read_pickle("elicit/results/deep_prior/normal_independent_1/expert/elicited_statistics.pkl")["quantiles_logR2"],0)

@@ -19,13 +19,13 @@ def run_prior_checks(seed, mu0, sigma0, mu1, sigma1):
         ),
         normalizing_flow=True,
         expert_data=dict(
-            data=pd.read_pickle(
-                "elicit/simulations/LiDO_cluster/experts/deep_binomial/elicited_statistics.pkl" # noqa
-            ),
+            #data=pd.read_pickle(
+            #    "elicit/simulations/LiDO_cluster/experts/deep_binomial/elicited_statistics.pkl" # noqa
+            #),
             from_ground_truth=True,
             simulator_specs={
-                "b0": tfd.Normal(0.1, 0.1),
-                "b1": tfd.Normal(-0.1, 0.3),
+                "b0": tfd.Normal(mu0, sigma0),
+                "b1": tfd.Normal(mu1, sigma1),
             },
             samples_from_prior=10_000,
         ),
@@ -61,13 +61,20 @@ def run_prior_checks(seed, mu0, sigma0, mu1, sigma1):
         ),
         training_settings=dict(
             method="deep_prior",
-            sim_id="binomial",
+            sim_id=f"binomial_{mu0:.0f}_{sigma0:.0f}_{mu1:.0f}_{sigma1:.0f}",
             seed=seed,
-            epochs=600
+            epochs=1
         ),
     )
 
-if __name__ == "__main__":
-    seed = int(sys.argv[1])
-    
-    run_sim(seed)
+import numpy as np
+import itertools
+
+mu0_seq = np.linspace(-0.5, 0.5, 5)
+mu1_seq = np.linspace(-0.5, 0.5, 5)
+sigma0_seq = np.linspace(-0.3, 0.3, 5)
+sigma1_seq = np.linspace(-0.3, 0.3, 5)
+
+
+for mu0, sigma0, mu1, sigma1 in itertools.product(mu0_seq, mu1_seq, sigma0_seq, sigma1_seq):
+    run_prior_checks(1, mu0, sigma0, mu1, sigma1)
