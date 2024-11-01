@@ -72,10 +72,13 @@ def global_dict(
             clipnorm=1.0
             )
         ),
+    initialization_settings=dict(
+        method=None,
+        number_of_iterations=10
+        ),
     training_settings=dict(
          method=None,
          sim_id=None,
-         warmup_initializations=None,
          seed=None,
          view_ep=1,
          epochs=500,
@@ -212,10 +215,13 @@ def global_dict(
                 clipnorm=1.0
                 )
             ),
+        initialization_settings=dict(
+            method=None,
+            number_of_iterations=10
+            ),
         training_settings=dict(
              method=None,
              sim_id=None,
-             warmup_initializations=None,
              seed=None,
              view_ep=1,
              epochs=500,

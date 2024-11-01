@@ -290,25 +290,31 @@ def burnin_phase(
     save_prior = []
     dict_copy = dict(global_dict)
 
-    # get number of hyperparameters
-    n_hypparam=0
-    param_names = set(global_dict["model_parameters"]).difference(["independence", "no_params"])
-    for param in param_names:
-        n_hypparam += len(global_dict["model_parameters"][param]["hyperparams_dict"].keys())
-    # create initializations
-    init_matrix = init_method(n_hypparam, 
-                              dict_copy["training_settings"]["warmup_initializations"])
+    if global_dict["initialization_settings"]["method"] == "multivariate":
+        # get number of hyperparameters
+        n_hypparam=0
+        param_names = set(global_dict["model_parameters"]).difference(["independence", "no_params"])
+        for param in param_names:
+            n_hypparam += len(global_dict["model_parameters"][param]["hyperparams_dict"].keys())
+        # create initialization matrix
+        init_matrix = init_method(n_hypparam, 
+                                  dict_copy["initialization_settings"]["number_of_iterations"])
     
-    path=dict_copy["training_settings"]["output_path"] + "/initialization_matrix.pkl"
-    save_as_pkl(init_matrix, path)
+        path=dict_copy["training_settings"]["output_path"] + "/initialization_matrix.pkl"
+        save_as_pkl(init_matrix, path)
     
-    for i in range(dict_copy["training_settings"]["warmup_initializations"]):
+    for i in range(dict_copy["initialization_settings"]["number_of_iterations"]):
         dict_copy["training_settings"]["seed"] = dict_copy["training_settings"]["seed"]+i
-        # create init-matrix-slice
-        init_matrix_slice = init_matrix[i,:]
-        # prepare generative model
-        prior_model = Priors(global_dict=dict_copy, ground_truth=False, 
-                              init_matrix_slice=init_matrix_slice)
+        if global_dict["initialization_settings"]["method"] == "multivariate":
+            # create init-matrix-slice
+            init_matrix_slice = init_matrix[i,:]
+            # prepare generative model
+            prior_model = Priors(global_dict=dict_copy, ground_truth=False, 
+                                  init_matrix_slice=init_matrix_slice)
+        else:
+            # prepare generative model
+            prior_model = Priors(global_dict=dict_copy, ground_truth=False, 
+                                  init_matrix_slice=None)
         # generate simulations from model
         training_elicited_statistics = one_forward_simulation(prior_model,
                                                               dict_copy)
@@ -338,9 +344,10 @@ def prior_elicitation(
     generative_model: dict,
     target_quantities: dict,
     training_settings: dict,
+    initialization_settings: dict,
     normalizing_flow: dict or bool = False,
     loss_function: dict or None = None,
-    optimization_settings: dict or None = None,
+    optimization_settings: dict or None = None
 ):
     """
     Performes prior learning based on expert knowledge
@@ -647,6 +654,11 @@ def prior_elicitation(
         },
     )
 
+    _default_dict_initialization = dict(
+        method=None,
+        number_of_iterations=10
+        )
+
     _default_dict_training = dict(
         method=None,
         sim_id=None,
@@ -735,13 +747,18 @@ def prior_elicitation(
     global_dict["optimization_settings"] = _default_dict_optimizer.copy()
     if optimization_settings is not None:
         global_dict["optimization_settings"].update(optimization_settings)
-
+    
+    # Section: initialization_settings
+    global_dict["initialization_settings"] = dict()
+    global_dict["initialization_settings"] = _default_dict_initialization.copy()
+    global_dict["initialization_settings"].update(initialization_settings)
+    
     # Section: training_settings
     # TODO-Test: include test optimization_setting is None
     global_dict["training_settings"] = dict()
     global_dict["training_settings"] = _default_dict_training.copy()
     global_dict["training_settings"].update(training_settings)
-
+    
     # include helper value about parameter number to global dict
     global_dict["model_parameters"]["no_params"] = num_params
 
@@ -759,11 +776,10 @@ def prior_elicitation(
     # get expert data
     expert_elicited_statistics = load_expert_data(global_dict)
 
-    if global_dict["training_settings"]["warmup_initializations"] is None:
+    if global_dict["initialization_settings"]["method"] is None:
         # prepare generative model
         init_prior_model = Priors(global_dict=global_dict, ground_truth=False,
                                    init_matrix_slice=None)
-
     else:
         loss_list, init_prior = burnin_phase(
             expert_elicited_statistics,

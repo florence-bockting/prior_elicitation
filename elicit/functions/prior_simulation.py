@@ -59,6 +59,7 @@ def intialize_priors(global_dict, init_matrix_slice):
     if global_dict["training_settings"]["method"] == "parametric_prior":
         # list for saving initialize hyperparameter values
         init_hyperparam_list = []
+        # initialize j counting number of hyperparameters
         j = 0
         # loop over model parameter and initialize each hyperparameter
         for model_param in sorted(
@@ -74,15 +75,28 @@ def intialize_priors(global_dict, init_matrix_slice):
 
             initialized_hyperparam = dict()
             for name in get_hyp_dict:
-                # increment j
+                if global_dict["initialization_settings"]["method"]=="multivariate":
+                    initial_value=init_matrix_slice[j]
+                    # increase j
+                    j += 1
+                else:
+                    # check whether initial value is a distributions
+                    # TODO currently we silently assume that we have either a
+                    # value or a tfd.distribution object
+                    try:
+                        get_hyp_dict[name].reparameterization_type
+                    except AttributeError:
+                        initial_value = get_hyp_dict[name]
+                    else:
+                        initial_value = get_hyp_dict[name].sample()
+
                 # initialize hyperparameter
                 initialized_hyperparam[f"{name}"] = tf.Variable(
-                    initial_value=init_matrix_slice[j],
+                    initial_value=initial_value,
                     trainable=True,
                     name=f"{name}",
                 )
-                # increase j
-                j += 1
+                
             init_hyperparam_list.append(initialized_hyperparam)
         # save initialized priors
         init_prior = init_hyperparam_list

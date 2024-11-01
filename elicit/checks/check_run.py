@@ -202,7 +202,6 @@ def check_training_settings(training_settings):
             "B",
             "samples_from_prior",
             "seed",
-            "warmup_initializations",
             "epochs",
             "output_path",
             "progress_info",
@@ -216,8 +215,3 @@ def check_training_settings(training_settings):
             training_settings.keys()
         ), 'At least one of the non-optional arguments "method","sim_id",\
             "seed","epochs"] is missing.'
-    if training_settings["method"] == "parametric_prior":
-        assert "warmup_initializations" in list(
-            training_settings.keys()
-        ), "If method is parametric_prior, warmup_initializations has to be \
-            specified."
