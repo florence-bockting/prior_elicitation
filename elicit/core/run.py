@@ -6,7 +6,7 @@ import tensorflow as tf
 import tensorflow_probability as tfp
 import pandas as pd
 
-from elicit.functions.prior_simulation import Priors2
+from elicit.functions.prior_simulation import Priors, init_method
 from elicit.functions.model_simulation import simulate_from_generator
 from elicit.functions.targets_elicits_computation import (
     computation_target_quantities,
@@ -91,7 +91,7 @@ def load_expert_data(global_dict, path_to_expert_data=None):
         # set seed
         tf.random.set_seed(global_dict["training_settings"]["seed"])
         # sample from true priors
-        prior_model = Priors2(global_dict=global_dict, ground_truth=True, 
+        prior_model = Priors(global_dict=global_dict, ground_truth=True, 
                               init_matrix_slice=None)
         expert_data = one_forward_simulation(
             prior_model, global_dict, ground_truth=True
@@ -290,12 +290,6 @@ def burnin_phase(
     save_prior = []
     dict_copy = dict(global_dict)
 
-    def init_method(n_hypparam, n_warm_up):
-        mvdist = tfd.MultivariateNormalDiag(
-            tf.zeros(n_hypparam), 
-            tf.ones(n_hypparam)).sample(n_warm_up)
-        return mvdist
-
     # get number of hyperparameters
     n_hypparam=0
     param_names = set(global_dict["model_parameters"]).difference(["independence", "no_params"])
@@ -305,7 +299,7 @@ def burnin_phase(
     init_matrix = init_method(n_hypparam, 
                               dict_copy["training_settings"]["warmup_initializations"])
     
-    path = dict_copy["training_settings"]["output_path"] + "/initialization_matrix.pkl"
+    path=dict_copy["training_settings"]["output_path"] + "/initialization_matrix.pkl"
     save_as_pkl(init_matrix, path)
     
     for i in range(dict_copy["training_settings"]["warmup_initializations"]):
@@ -313,7 +307,7 @@ def burnin_phase(
         # create init-matrix-slice
         init_matrix_slice = init_matrix[i,:]
         # prepare generative model
-        prior_model = Priors2(global_dict=dict_copy, ground_truth=False, 
+        prior_model = Priors(global_dict=dict_copy, ground_truth=False, 
                               init_matrix_slice=init_matrix_slice)
         # generate simulations from model
         training_elicited_statistics = one_forward_simulation(prior_model,
@@ -767,7 +761,7 @@ def prior_elicitation(
 
     if global_dict["training_settings"]["warmup_initializations"] is None:
         # prepare generative model
-        init_prior_model = Priors2(global_dict=global_dict, ground_truth=False,
+        init_prior_model = Priors(global_dict=global_dict, ground_truth=False,
                                    init_matrix_slice=None)
 
     else:
