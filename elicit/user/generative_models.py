@@ -60,7 +60,11 @@ class NormalModel(tf.Module):
         group1 = ypred[:, :, 0::3]
         group2 = ypred[:, :, 1::3]
         group3 = ypred[:, :, 2::3]
-
+        
+        # effects
+        group2vs1 = tf.reduce_mean(group2,-1)-tf.reduce_mean(group1,-1)
+        group3vs1 = tf.reduce_mean(group3,-1)-tf.reduce_mean(group1,-1)
+        
         # R2
         var_epred = tf.math.reduce_variance(epred, -1)
         # variance of difference between ypred and epred
@@ -84,6 +88,8 @@ class NormalModel(tf.Module):
             group1=group1,
             group2=group2,
             group3=group3,
+            group2vs1=group2vs1,
+            group3vs1=group3vs1
         )
 
 

@@ -77,7 +77,7 @@ def binomial_convergence(sim_path, expert_path, file, save_fig=True):
     axs1[0,0].spines[['right', 'top']].set_visible(False)
     axs1[1,1].spines[['right', 'top']].set_visible(False)
     sns.scatterplot(x=exp_priors[0,:,0], y=exp_priors[0,:,1], color=col_exp,
-                    ax=axs1[0,1], marker="X", s=15, lw =0, alpha=0.7)
+                    ax=axs1[0,1], marker="X", s=7, lw =0, alpha=0.1)
     sns.kdeplot(x=mod_priors[0,:,0], y=mod_priors[0,:,1], color=col_mod,
                     ax=axs1[0,1], alpha=0.7)
     axs1[0,1].spines[['right', 'top']].set_visible(False)
@@ -172,58 +172,40 @@ def binomial_sensitivity(prior_expert, path_expert, path_sim, elicit_res_agg,
     cor_expert = tfp.stats.correlation(
         prior_expert, sample_axis=1, event_axis=-1)[:,1,0]
 
-    fig = plt.figure(layout='constrained', figsize=(4, 3))
-    subfigs = fig.subfigures(2, 1)
-    axs0 = subfigs[0].subplots(1,2)
-    axs2 = subfigs[1].subplots(1,3)
-
-    for p in range(2):
-        sns.kdeplot(prior_expert[0,:,p], color="#7d1717", lw=2, ax=axs0[p],
-                    zorder=1)
-        [sns.kdeplot(prior_res_agg[:,p,i], color="#e2a854", lw=3, alpha=0.2,
-                     ax=axs0[p], zorder=0)
-         for i in range(prior_res_agg.shape[-1])]
-        axs0[p].spines[['right', 'top']].set_visible(False)
-        axs0[p].yaxis.set_tick_params(labelsize=7)
-        axs0[p].xaxis.set_tick_params(labelsize=7)
-        axs0[0].set_ylabel("density\n", fontsize="small")
-        axs0[1].set_ylabel("", fontsize="small") 
-        axs0[0].set_xlabel(r"$\beta_0$", fontsize="small")
-        axs0[1].set_xlabel(r"$\beta_1$", fontsize="small")
-        axs0[0].set_title(r"$\mathbf{(a)}$"+" Marginal priors",
-                          fontsize="small", ha="left", x=0)
+    fig, axs = plt.subplots(1,3, constrained_layout=True, figsize=(5,2))
 
     for b in range(mod_elicits.shape[-1]):
-        [sns.scatterplot(x=exp_elicits[0,:,i], y=mod_elicits[:,i,b], ax=axs2[i],
+        [sns.scatterplot(x=exp_elicits[0,:,i], y=mod_elicits[:,i,b], ax=axs[i],
                          color=col_mod, lw = 0, alpha = 0.1, zorder=1)
          for i in range(2)]
     for i in range(2):
-        axs2[i].axline((0, 0), slope=1, color="black", lw=1, linestyle="dashed",
+        axs[i].axline((0, 0), slope=1, color="black", lw=1, linestyle="dashed",
                        zorder=0)
-        axs2[i].xaxis.set_tick_params(labelsize=7)
-        axs2[i].yaxis.set_tick_params(labelsize=7)
-        axs2[i].set_xlabel("true", fontsize="small")
-        axs2[i].spines[['right', 'top']].set_visible(False)
-    axs2[0].set_ylabel("learned\n", fontsize="small")
+        axs[i].xaxis.set_tick_params(labelsize=7)
+        axs[i].yaxis.set_tick_params(labelsize=7)
+        axs[i].set_xlabel("true", fontsize="small")
+        axs[i].spines[['right', 'top']].set_visible(False)
+    axs[0].set_ylabel("learned", fontsize="small")
+    axs[2].set_xlabel(r"$\rho$", fontsize="small")
     #axs2[0].set_title(r"$y \mid x_1$", fontsize="medium")
-    axs2[1].set_title(r"$y \mid x_2$", fontsize="small")
-    axs2[2].set_title(r"$\mathbf{(c)}$"+" Pearson correl. \n"+r"$\qquad \quad r(\beta_0,\beta_1)$",
+    axs[1].set_title(r"$y \mid x_2$", fontsize="small")
+    axs[2].set_title(r"$\mathbf{(b)}$"+" Correlation \n"+r"$\qquad \quad r(\beta_0,\beta_1)$",
                       fontsize="small", ha="left", x=0)
-    axs2[0].set_title(r"$\mathbf{(b)}$"+" Faithfulness \n"+r"$\qquad \quad y \mid x_1$", fontsize="small",
+    axs[0].set_title(r"$\mathbf{(a)}$"+" Faithfulness \n"+r"$\qquad \qquad y \mid x_1$", fontsize="small",
                       ha="left", x=0)
   #  axs2.axvline(cor_expert, color="#7d1717", lw=1, linestyle="dashed", zorder=0)
     sns.scatterplot(x=cor_expert, y=tf.ones(cor_expert.shape), color="#7d1717",
-                    ax = axs2[2], zorder=2, marker="o", label="true")
+                    ax = axs[2], zorder=2, marker="o", label="true")
     sns.scatterplot(x=cor_res_agg[0,:], y=tf.ones(cor_res_agg.shape[-1]),
-                    color="#e2a854", ax = axs2[2], zorder=1, marker="o",
+                    color="#e2a854", ax = axs[2], zorder=1, marker="o",
                     alpha = 0.6, label="learned")
-    axs2[2].spines[['right', 'top']].set_visible(False)
-    axs2[2].xaxis.set_tick_params(labelsize=7)
-    axs2[2].yaxis.set_tick_params(labelsize=7)
-    axs2[2].set_yticklabels("")
-    axs2[2].set_xlim(-1, 1)
-    axs2[2].legend(handlelength=0.2, ncol=2, fontsize="x-small", frameon=False,
-                      loc=(0.01, 0.75))
+    axs[2].spines[['right', 'top']].set_visible(False)
+    axs[2].xaxis.set_tick_params(labelsize=7)
+    axs[2].yaxis.set_tick_params(labelsize=7)
+    axs[2].set_yticklabels("")
+    axs[2].set_xlim(-1, 1)
+    axs[2].legend(handlelength=0.2, ncol=2, fontsize="x-small", frameon=False,
+                      loc=(0.03, 0.75))
     if save_fig:
         plt.savefig("elicit/simulations/LiDO_cluster/sim_results/deep_prior/graphics/sensitivity_binom.png", dpi=300)
     else:
@@ -288,7 +270,7 @@ def normals_convergence(sim_path, expert_path, file, model, save_fig=True):
         axs1[i,i].get_yaxis().set_visible(False) 
     for i,j in zip([0,0,0,1,1,2],[1,2,3,2,3,3]):
         sns.scatterplot(x=exp_priors[0,:,i], y=exp_priors[0,:,j], color = col_exp, 
-                        ax=axs1[i,j], marker="X", s=15, lw =0, alpha=0.7)
+                        ax=axs1[i,j], marker="X", s=7, lw =0, alpha=0.1)
         sns.kdeplot(x=mod_priors[0,:,i], y=mod_priors[0,:,j], color = col_mod, 
                         ax=axs1[i,j], alpha=0.7)
         axs1[i,j].get_xaxis().set_visible(False)
@@ -335,29 +317,30 @@ def normal_sensitivity(prior_expert, expert_path, prior_res_agg,
     else:
         cor_expert = pd.read_pickle(expert_path+"/elicited_statistics.pkl")["correlation"][0,:]
    
-    fig = plt.figure(layout='constrained', figsize=(3.5, 5.))
-    subfigs = fig.subfigures(2, 1, hspace=0.03, height_ratios=[1.,0.4])
-    axs0 = subfigs[0].subplots(4,2)
+    fig = plt.figure(layout='constrained', figsize=(3.5, 3.5))
+    subfigs = fig.subfigures(2, 1, hspace=0.02, height_ratios=[1.5,1])
+    axs0 = subfigs[0].subplots(2,2)
     axs1 = subfigs[1].subplots(1,1)
     #axs2 = subfigs[1].subplots(4,1)
 
-    for p in range(4):
-        sns.kdeplot(prior_expert[0,:,p], color="#7d1717", lw=2, ax=axs0[p,0], zorder=1)
-        [sns.kdeplot(prior_res_agg[:,p,i], color="#e2a854", lw=3, alpha=0.2, 
-                     ax=axs0[p,0], zorder=0) for i in range(prior_res_agg.shape[-1])]
+    for p in range(2):
+    #     sns.kdeplot(prior_expert[0,:,p], color="#7d1717", lw=2, ax=axs0[p,0], zorder=1)
+    #     [sns.kdeplot(prior_res_agg[:,p,i], color="#e2a854", lw=3, alpha=0.2, 
+    #                  ax=axs0[p,0], zorder=0) for i in range(prior_res_agg.shape[-1])]
         
         axs0[p,0].spines[['right', 'top']].set_visible(False) 
         axs0[p,0].yaxis.set_tick_params(labelsize=7) 
         axs0[p,0].xaxis.set_tick_params(labelsize=7) 
         axs0[0,0].set_ylabel("density",fontsize="small") 
-        axs0[0,0].set_title(r"$\mathbf{(a)}$"+" Marginal priors\n"+r"$\qquad\qquad\beta_0$",fontsize="small", ha="left", x=0)
+        axs0[0,0].set_title(r"$\mathbf{(a)}$"+" Faithfulness\n"+r"$\qquad\qquady_i \mid gr_1$",
+                            fontsize="small", ha="left", x=0)
         axs0[-1,0].set_xlabel(r"$\theta$",fontsize="small") 
-        [axs0[j,0].set_ylabel("",fontsize="small") for j in [1,2,3]]
-    [axs0[i+1,0].set_title(t, fontsize="small") for i,t in enumerate([r"$\beta_1$",r"$\beta_2$",r"$\sigma$"])]
-    axs0[0,0].set_xlim(-0.1,25.)
-    axs0[1,0].set_xlim(-10,30)
-    axs0[2,0].set_xlim(-2.,17.)
-    axs0[3,0].set_xlim(-0.1,8.)
+        axs0[p,1].set_ylabel("",fontsize="small")
+    #[axs0[i+1,0].set_title(t, fontsize="small") for i,t in enumerate([r"$\beta_1$",r"$\beta_2$",r"$\sigma$"])]
+   # axs0[0,0].set_xlim(-0.1,25.)
+   # axs0[1,0].set_xlim(-10,30)
+   # axs0[2,0].set_xlim(-2.,17.)
+   # axs0[3,0].set_xlim(-0.1,8.)
     sns.scatterplot(x=tf.expand_dims(cor_expert[0],-1), y=tf.zeros(1), color="#7d1717", 
                 ax = axs1, zorder=2, marker="o", label="true") 
     sns.scatterplot(x=cor_res_agg[0,:], y=tf.zeros(cor_res_agg.shape[-1]), color="#e2a854", 
@@ -372,28 +355,31 @@ def normal_sensitivity(prior_expert, expert_path, prior_res_agg,
     axs1.yaxis.set_tick_params(labelsize=7)
     axs1.set_yticks(tf.range(len(cor_expert)), [r"$r(\beta_0,\beta_1)$",r"$r(\beta_0,\beta_2)$",r"$r(\beta_0,\sigma)$",
                                                 r"$r(\beta_1,\beta_2)$",r"$r(\beta_1,\sigma)$",r"$r(\beta_2,\sigma)$"])
-    axs1.set_title(r"$\mathbf{(c)}$"+" Pearson correlation", fontsize="small", ha="left", x=0)
+    axs1.set_title(r"$\mathbf{(b)}$"+" Pearson correlation", fontsize="small", ha="left", x=0)
     axs1.set_ylim(-0.5,6.)
     axs1.legend(handlelength=0.5,ncol=2, fontsize="x-small", frameon=False,
                       loc=(0.01,0.9))
     axs1.set_xlim(-1,1)
     
     for b in range(mod_gr1.shape[-1]):
-        [sns.scatterplot(x=exp_gr[0,:], y=mod_gr[:,b], ax=axs0[i,1],
-                            color=col_mod, lw = 0, zorder=1, alpha=0.1) for i, (exp_gr, mod_gr) in enumerate(
-                                zip([exp_gr1, exp_gr2, exp_gr3, exp_r2],[mod_gr1,mod_gr2,mod_gr3, mod_r2]))]
-    [axs0[i,1].axline((0,0), slope=1, color = "black", 
-                      lw=1, linestyle="dashed", zorder=0)  for i, (exp_gr, mod_gr) in enumerate(
-                          zip([exp_gr1, exp_gr2, exp_gr3],[mod_gr1,mod_gr2,mod_gr3]))]
+        [sns.scatterplot(x=exp_gr[0,:], y=mod_gr[:,b], ax=axs0[i,k],
+                            color=col_mod, lw = 0, zorder=1, alpha=0.3) for i,k,exp_gr, mod_gr in zip(
+                                [0,1,0,1],[0,0,1,1],[exp_gr1, exp_gr2, exp_gr3, exp_r2],
+                                [mod_gr1,mod_gr2,mod_gr3, mod_r2])]
+    [axs0[i,k].axline((0,0), slope=1, color = "black", 
+                      lw=1, linestyle="dashed", zorder=0)  for i,k,exp_gr, mod_gr in zip(
+                          [0,1,0,1],[0,0,1,1],[exp_gr1, exp_gr2, exp_gr3],[mod_gr1,mod_gr2,mod_gr3])]
     axs0[-1,1].axline((0,0), (1,1), color = "black", lw=1, linestyle="dashed", zorder=0)
-    [axs0[i,1].xaxis.set_tick_params(labelsize=7) for i in range(4)]
-    [axs0[i,1].yaxis.set_tick_params(labelsize=7) for i in range(4)]
+    [axs0[i,1].xaxis.set_tick_params(labelsize=7) for i in range(2)]
+    [axs0[i,1].yaxis.set_tick_params(labelsize=7) for i in range(2)]
     axs0[-1,1].set_ylim(0,1)
-    axs0[0,1].set_ylabel("learned", fontsize="small")
-    [axs0[i,1].spines[['right', 'top']].set_visible(False) for i in range(4)]
-    axs0[-1,1].set_xlabel("true", fontsize="small")
-    axs0[0,1].set_title(r"$\mathbf{(b)}$"+" Faithfulness\n"+r"$\qquad\qquady_i \mid gr_1$",fontsize="small", ha="left", x=0)
-    [axs0[i+1,1].set_title(t, fontsize="small") for i,t in enumerate(
+    [axs0[i,0].set_ylabel(" \n learned", fontsize="x-small") for i in range(2)]
+    [axs0[i,1].spines[['right', 'top']].set_visible(False) for i in range(2)]
+    [axs0[1,i].set_xlabel("true", fontsize="x-small") for i in range(2)]
+    # axs0[0,1].set_title(r"$\mathbf{(b)}$"+" Faithfulness\n"+r"$\qquad\qquady_i \mid gr_1$",
+    #                     fontsize="small", ha="left", x=0)
+    [axs0[i,j].set_title(t, fontsize="small") for i,j,t in zip(
+        [0,1,1], [1,0,1],
         [ r"$ y_i \mid gr_2$", r"$ y_i \mid gr_3$", r"$ R^2$"])]
  
     # subfigs[0].suptitle(r"$\mathbf{(a)}$"+" Marginal priors", ha="left", 

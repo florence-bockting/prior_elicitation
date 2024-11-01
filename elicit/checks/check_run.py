@@ -108,12 +108,12 @@ def check_target_quantities(target_quantities):
             assert k2 in [
                 "elicitation_method",
                 "quantiles_specs",
-                "moment_specs",
+                "moments_specs",
                 "loss_components",
                 "custom_target_function",
                 "custom_elicitation_method",
             ], f'Have you misspelled "{k}" in the parameter settings? Only \
-                ["elicitation_method", "quantiles_specs" , "moment_specs", \
+                ["elicitation_method", "quantiles_specs" , "moments_specs", \
                  "loss_components", "custom_target_function", \
                      "custom_elicitation_method"] are valid argument names.'
         try:

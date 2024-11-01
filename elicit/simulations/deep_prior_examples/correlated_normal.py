@@ -12,9 +12,9 @@ tfd = tfp.distributions
 
 
 S = [2.5, 1.3, .8]
-M = [[1., 0.95, -0.99],
-     [0.95, 1., -0.95],
-     [-0.99, -0.95, 1.]]
+M = [[1., 0.3, -0.3],
+     [0.3, 1., -0.2],
+     [-0.3, -0.2, 1.]]
 
 covariance_matrix = (tf.linalg.diag(S) @ M) @ tf.linalg.diag(S)
 
@@ -71,7 +71,7 @@ def run_sim(seed):
             ),
             logR2=dict(
                 elicitation_method="quantiles",
-                quantiles_specs=(5,10,20,30,40,50,60,70,80,90,95),
+                quantiles_specs=(5, 25, 50, 75, 95),
                 loss_components="all"
             ),
             correl=dict(
@@ -89,9 +89,6 @@ def run_sim(seed):
                 "clipnorm": 1.0,
             }
         ),
-        # loss_function=dict(
-        #     use_regularization=True
-        #     ),
         training_settings=dict(
             method="deep_prior",
             sim_id="normal_correlated",

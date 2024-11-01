@@ -20,7 +20,8 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-"tensorflow[and-cuda]" = "*"# "2.14"
+#"tensorflow[and-cuda]" = "*"# "2.14"
+tensorflow = "2.14"
 tensorflow-probability = "0.22.1"
 pandas = "^2.2.2"
 signac = "^2.2.0"
