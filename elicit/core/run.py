@@ -6,7 +6,7 @@ import tensorflow as tf
 import tensorflow_probability as tfp
 import pandas as pd
 
-from elicit.functions.prior_simulation import Priors2
+from elicit.functions.prior_simulation import Priors
 from elicit.functions.model_simulation import simulate_from_generator
 from elicit.functions.targets_elicits_computation import (
     computation_target_quantities,
@@ -91,8 +91,7 @@ def load_expert_data(global_dict, path_to_expert_data=None):
         # set seed
         tf.random.set_seed(global_dict["training_settings"]["seed"])
         # sample from true priors
-        prior_model = Priors2(global_dict=global_dict, ground_truth=True, 
-                              init_matrix_slice=None)
+        prior_model = Priors(global_dict=global_dict, ground_truth=True)
         expert_data = one_forward_simulation(
             prior_model, global_dict, ground_truth=True
         )
@@ -310,11 +309,8 @@ def burnin_phase(
     
     for i in range(dict_copy["training_settings"]["warmup_initializations"]):
         dict_copy["training_settings"]["seed"] = dict_copy["training_settings"]["seed"]+i
-        # create init-matrix-slice
-        init_matrix_slice = init_matrix[i,:]
         # prepare generative model
-        prior_model = Priors2(global_dict=dict_copy, ground_truth=False, 
-                              init_matrix_slice=init_matrix_slice)
+        prior_model = Priors(global_dict=dict_copy, ground_truth=False)
         # generate simulations from model
         training_elicited_statistics = one_forward_simulation(prior_model,
                                                               dict_copy)
@@ -767,8 +763,7 @@ def prior_elicitation(
 
     if global_dict["training_settings"]["warmup_initializations"] is None:
         # prepare generative model
-        init_prior_model = Priors2(global_dict=global_dict, ground_truth=False,
-                                   init_matrix_slice=None)
+        init_prior_model = Priors(global_dict=global_dict, ground_truth=False)
 
     else:
         loss_list, init_prior = burnin_phase(

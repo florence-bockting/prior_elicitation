@@ -36,32 +36,6 @@ class Priors(tf.Module):
         )
         return prior_samples
 
-class Priors2(tf.Module):
-    """
-    Initializes the hyperparameters of the prior distributions.
-    """
-
-    def __init__(self, ground_truth, global_dict, init_matrix_slice):
-        self.global_dict = global_dict
-        self.ground_truth = ground_truth
-        self.init_matrix_slice = init_matrix_slice
-        # set seed
-        tf.random.set_seed(global_dict["training_settings"]["seed"])
-        # initialize hyperparameter for learning (if true hyperparameter
-        # are given, no initialization is needed)
-        if not self.ground_truth:
-            self.init_priors = intialize_priors2(self.global_dict, 
-                                                 self.init_matrix_slice)
-        else:
-            self.init_priors = None
-
-    def __call__(self):
-        
-        prior_samples = sample_from_priors(
-            self.init_priors, self.ground_truth, self.global_dict
-        )
-        return prior_samples
-
 def intialize_priors(global_dict):
     """
     Initialize prior distributions.
@@ -113,75 +87,6 @@ def intialize_priors(global_dict):
                     trainable=True,
                     name=f"{name}",
                 )
-            init_hyperparam_list.append(initialized_hyperparam)
-        # save initialized priors
-        init_prior = init_hyperparam_list
-        # save file in object
-        output_path = global_dict["training_settings"]["output_path"]
-        path = output_path + "/init_prior.pkl"
-        save_as_pkl(init_prior, path)
-
-    if global_dict["training_settings"]["method"] == "deep_prior":
-        # for more information see BayesFlow documentation
-        # https://bayesflow.org/api/bayesflow.inference_networks.html
-        input_INN = dict(global_dict["normalizing_flow"])
-        input_INN.pop("base_distribution")
-
-        invertible_neural_network = networks.InvertibleNetwork(
-            num_params=global_dict["model_parameters"]["no_params"],
-            **input_INN
-        )
-        # save initialized priors
-        init_prior = invertible_neural_network
-
-    return init_prior
-
-
-def intialize_priors2(global_dict, init_matrix_slice):
-    """
-    Initialize prior distributions.
-
-    Parameters
-    ----------
-    global_dict : dict
-        dictionary including all user-input settings..
-
-    Returns
-    -------
-    init_prior : dict
-        returns initialized prior distributions ready for sampling.
-
-    """
-    # set seed
-    tf.random.set_seed(global_dict["training_settings"]["seed"])
-
-    if global_dict["training_settings"]["method"] == "parametric_prior":
-        # list for saving initialize hyperparameter values
-        init_hyperparam_list = []
-        j = 0
-        # loop over model parameter and initialize each hyperparameter
-        for model_param in sorted(
-            list(
-                set(global_dict["model_parameters"].keys()).difference(
-                    set(["independence", "no_params"])
-                )
-            )
-        ):
-            get_hyp_dict = global_dict["model_parameters"][model_param][
-                "hyperparams_dict"
-            ]
-
-            initialized_hyperparam = dict()
-            for name in get_hyp_dict:
-                # increment j
-                # initialize hyperparameter
-                initialized_hyperparam[f"{name}"] = tf.Variable(
-                    initial_value=init_matrix_slice[j],
-                    trainable=True,
-                    name=f"{name}",
-                )
-                # increase j
-                j += 1
             init_hyperparam_list.append(initialized_hyperparam)
         # save initialized priors
         init_prior = init_hyperparam_list
