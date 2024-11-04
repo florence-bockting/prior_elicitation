@@ -75,7 +75,7 @@ def intialize_priors(global_dict, init_matrix_slice):
 
             initialized_hyperparam = dict()
             for name in get_hyp_dict:
-                if global_dict["initialization_settings"]["method"]=="multivariate":
+                if global_dict["initialization_settings"]["method"]!="univariate":
                     initial_value=init_matrix_slice[j]
                     # increase j
                     j += 1
@@ -120,7 +120,7 @@ def intialize_priors(global_dict, init_matrix_slice):
 
     return init_prior
 
-def init_method(n_hypparam, n_warm_up):
+def init_method(n_hypparam, n_warm_up, method):
     """
     Initialize multivariate normal prior over hyperparameter values
 
@@ -137,9 +137,22 @@ def init_method(n_hypparam, n_warm_up):
         samples from the multivariate prior (shape=(n_warm_up, n_hyperparameters).
 
     """
-    mvdist = tfd.MultivariateNormalDiag(
-        tf.zeros(n_hypparam), 
-        tf.ones(n_hypparam)).sample(n_warm_up)
+    if method == "random":
+        print("init_method=random")
+        mvdist = tfd.MultivariateNormalDiag(
+            tf.zeros(n_hypparam), 
+            tf.ones(n_hypparam)).sample(n_warm_up)
+    elif method == "lhs":
+        print("init_method=lhs")
+        mvdist = tfd.MultivariateNormalDiag(
+            tf.zeros(n_hypparam), 
+            tf.ones(n_hypparam)).sample(n_warm_up)
+    elif method == "sobol":
+        print("init_method=sobol")
+        mvdist = tfd.MultivariateNormalDiag(
+            tf.zeros(n_hypparam), 
+            tf.ones(n_hypparam)).sample(n_warm_up)
+        
     return mvdist
 
 def sample_from_priors(initialized_priors, ground_truth, global_dict):

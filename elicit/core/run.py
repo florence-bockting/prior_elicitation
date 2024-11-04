@@ -290,7 +290,7 @@ def burnin_phase(
     save_prior = []
     dict_copy = dict(global_dict)
 
-    if global_dict["initialization_settings"]["method"] == "multivariate":
+    if global_dict["initialization_settings"]["method"] != "univariate":
         # get number of hyperparameters
         n_hypparam=0
         param_names = set(global_dict["model_parameters"]).difference(["independence", "no_params"])
@@ -298,14 +298,16 @@ def burnin_phase(
             n_hypparam += len(global_dict["model_parameters"][param]["hyperparams_dict"].keys())
         # create initialization matrix
         init_matrix = init_method(n_hypparam, 
-                                  dict_copy["initialization_settings"]["number_of_iterations"])
+                                  dict_copy["initialization_settings"]["number_of_iterations"],
+                                  global_dict["initialization_settings"]["method"]
+                                  )
     
         path=dict_copy["training_settings"]["output_path"] + "/initialization_matrix.pkl"
         save_as_pkl(init_matrix, path)
     
     for i in range(dict_copy["initialization_settings"]["number_of_iterations"]):
         dict_copy["training_settings"]["seed"] = dict_copy["training_settings"]["seed"]+i
-        if global_dict["initialization_settings"]["method"] == "multivariate":
+        if global_dict["initialization_settings"]["method"] != "univariate":
             # create init-matrix-slice
             init_matrix_slice = init_matrix[i,:]
             # prepare generative model

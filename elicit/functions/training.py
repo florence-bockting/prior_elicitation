@@ -58,7 +58,6 @@ def training_loop(
     dict_optimization = global_dict["optimization_settings"]
     # save initiale hyperparameter values (before any updating took place)
     if dict_training["method"] == "parametric_prior":
-        print(prior_model_init.trainable_variables)
         res_dict = save_hyperparameters(prior_model_init, 0, global_dict)
     for epoch in tf.range(dict_training["epochs"]):
         # runtime of one epoch
