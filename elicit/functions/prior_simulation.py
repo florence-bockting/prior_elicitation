@@ -137,6 +137,8 @@ def init_method(n_hypparam, n_warm_up, method):
         samples from the multivariate prior (shape=(n_warm_up, n_hyperparameters).
 
     """
+    assert method in ["random", "lhs", "sobol"], "The initialization method must be one of the following: 'sobol', 'lhs', 'random'"
+    
     if method == "random":
         print("init_method=random")
         mvdist = tfd.MultivariateNormalDiag(
