@@ -13,7 +13,7 @@ def cor(idx, x):
     return np.corrcoef(x=x[:,idx[0]], y=x[:,idx[1]])[0,1]
 
 
-def plot_prior_binom(sim_path, expert_path, file, save_fig=True):
+def binomial_convergence(sim_path, expert_path, file, save_fig=True):
     final_res = pd.read_pickle(sim_path+file+"/final_results.pkl")
     total_loss = tf.stack(final_res["loss"], -1)
     component_loss = tf.stack(final_res["loss_component"], -1)
@@ -113,7 +113,7 @@ def plot_prior_binom(sim_path, expert_path, file, save_fig=True):
         plt.show()
 
 
-def plot_loss_binom(sim_path, expert_path, file, save_fig=True):
+def binomial_diagnostics(sim_path, expert_path, file, save_fig=True):
     final_res = pd.read_pickle(sim_path+file+"/final_results.pkl")
     total_loss = tf.stack(final_res["loss"], -1)
     component_loss = tf.stack(final_res["loss_component"], -1)
@@ -162,7 +162,7 @@ def plot_loss_binom(sim_path, expert_path, file, save_fig=True):
     else:
         plt.show()
 
-def plot_elicited_stats_binom(prior_expert, path_expert, path_sim, elicit_res_agg,
+def binomial_sensitivity(prior_expert, path_expert, path_sim, elicit_res_agg,
                          prior_res_agg, cor_res_agg, save_fig=True):
     col_mod = "#ba6b34"
 
@@ -212,7 +212,7 @@ def plot_elicited_stats_binom(prior_expert, path_expert, path_sim, elicit_res_ag
         plt.show()
 
 
-def plot_loss(sim_path, expert_path, file, model, save_fig=True):
+def normals_convergence(sim_path, expert_path, file, model, save_fig=True):
     final_res = pd.read_pickle(sim_path+file+"/final_results.pkl")
     total_loss = tf.stack(final_res["loss"], -1)
     component_loss = tf.stack(final_res["loss_component"], -1)
@@ -297,7 +297,7 @@ def plot_loss(sim_path, expert_path, file, model, save_fig=True):
         plt.show()
 
 
-def plot_elicited_stats(prior_expert, expert_path, prior_res_agg,
+def normal_sensitivity(prior_expert, expert_path, prior_res_agg,
                        elicits_gr1_agg, elicits_gr2_agg, elicits_gr3_agg,
                        elicits_r2_agg, cor_res_agg, model,
                        save_fig=True):

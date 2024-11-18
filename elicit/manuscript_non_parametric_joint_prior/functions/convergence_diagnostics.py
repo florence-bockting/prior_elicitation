@@ -65,10 +65,6 @@ def plot_conv_diagnostics(path_sim, start, end, last_vals,scenario=None,
     subfig0.set_xlabel("seed", fontsize="small")
     subfig0.yaxis.set_tick_params(labelsize=7)
     subfig0.xaxis.set_tick_params(labelsize=7)
-    if scenario is None:
-        subfig0.set_title("binomial model", fontsize="medium")
-    else:
-        subfig0.set_title(f"{scenario} normal model", fontsize="medium")
     subfig0.set_ylim(-0.001,0.02)
     
     for i, c in enumerate(["#2e5c2c"]+["#21284f"]*4):
@@ -93,11 +89,7 @@ def plot_conv_diagnostics(path_sim, start, end, last_vals,scenario=None,
     subfig1[0].set_ylabel(r"$L(\lambda)$", fontsize="small")
 
 
-scenario="independent"
-path_sim_norm = f"elicit/simulations/LiDO_cluster/sim_results/deep_prior/normal_{scenario}3"
-plot_conv_diagnostics(path_sim_norm, start=1400, end=1500, scenario=scenario, 
-                      last_vals=200)
+# scenario="correlated"
+# path_sim_norm = f"elicit/simulations/LiDO_cluster/sim_results/deep_prior/normal_{scenario}2"
 
 
-path_sim_binom = "elicit/simulations/LiDO_cluster/sim_results/deep_prior/binomial"
-plot_conv_diagnostics(path_sim_binom, start=500, end=600, last_vals=200)

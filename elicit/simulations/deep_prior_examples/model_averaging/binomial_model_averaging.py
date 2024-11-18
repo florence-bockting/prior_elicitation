@@ -28,7 +28,7 @@ min_loss = min(mean_losses)
 # compute Delta_i MMD
 delta_MMD = mean_losses - min_loss
 # relative likelihood
-rel_likeli = np.exp(-delta_MMD)
+rel_likeli = np.exp(1*delta_MMD)
 # compute Akaike weights
 w_MMD = rel_likeli/np.sum(rel_likeli)
 # get minimum weight (for plotting)
@@ -70,7 +70,7 @@ subfig1 = subfigs[1].subplots(1,2)
 sns.barplot(w_MMD, ax=subfig0, color="darkgrey")
 subfig0.set_ylim(0,0.04)
 subfig0.set_xlabel("seed")
-subfig0.set_ylabel("Akaike weights")
+subfig0.set_ylabel("model weights")
 [subfig0.tick_params(axis=ax, labelsize="x-small") for ax in ["x","y"]]
 subfig0.spines[["right", "top"]].set_visible(False)
 
@@ -85,12 +85,14 @@ for l,t in zip(range(2), [r"$\beta_0$",r"$\beta_1$"]):
                 ax=subfig1[l], lw=2, alpha=0.6)
     [subfig1[l].tick_params(axis=ax, labelsize="x-small") for ax in ["x","y"]]
     subfig1[l].set_xlabel(t)
-subfigs[1].suptitle("prior distributions", x=0.5, y=1.1)
+subfigs[0].suptitle(r"$\bf{(a)}$"+" Model averaging weights", x=0.17, y=1.1)
+subfigs[1].suptitle(r"$\bf{(b)}$"+" Marginal priors", x=0.12, y=1.1)
 for x,t,c in zip([0.01, 0.08, 0.21, 0.32], 
                  ["legend:","prior per seed", r"average $\mathbf{- -}$", 
                   r"truth $\mathbf{\cdot\cdot\cdot}$"],
                ["black","grey", "black", "black"]):
     subfigs[1].text(x,-0.08,t, color=c, fontsize="small")
+subfig1[0].set_ylabel("density", fontsize="x-small")
 subfig1[1].set_ylabel(" ", fontsize="x-small")
 subfigs[1].patches.extend(
     [
