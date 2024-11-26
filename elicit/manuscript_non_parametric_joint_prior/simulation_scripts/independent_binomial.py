@@ -9,7 +9,7 @@ from elicit.user.custom_functions import quantiles_per_ypred
 
 tfd = tfp.distributions
 
-def run_prior_checks(seed, mu0, sigma0, mu1, sigma1):
+def run_sim(seed):
 
     prior_elicitation(
         model_parameters=dict(
@@ -71,3 +71,6 @@ if __name__ == "__main__":
     seed = int(sys.argv[1])
     
     run_sim(seed)
+
+
+

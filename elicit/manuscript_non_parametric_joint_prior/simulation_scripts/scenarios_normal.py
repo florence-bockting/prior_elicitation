@@ -96,7 +96,7 @@ def run_sim(seed, scenario):
             method="deep_prior",
             sim_id=f"normal_{scenario}",
             seed=seed,
-            epochs=1500
+            epochs=1,#500
         )
     )
 
@@ -106,33 +106,3 @@ if __name__ == "__main__":
     
     run_sim(seed, scenario)
 
-
-#run_sim(1, "skewed")
-
-
-
-# normals_convergence("elicit/results/deep_prior/normal_independent_2",
-#                     "elicit/results/deep_prior/normal_independent_2/expert", "", 
-#                     model="independent",
-#                     save_fig=False)
-
-# tf.reduce_mean(pd.read_pickle("elicit/results/deep_prior/normal_independent_2/elicited_statistics.pkl")["quantiles_logR2"],0)
-
-tf.reduce_mean(pd.read_pickle("elicit/results/deep_prior/normal_independent_1/expert/prior_samples.pkl"),(0,1))
-
-
-
-# mean = tf.stack(pd.read_pickle("elicit/results/deep_prior/normal_independent_2/final_results.pkl")
-#          ["hyperparameter"]["stds"],-1)
-
-# plt.plot(mean[0,:])
-# plt.plot(mean[1,:])
-# plt.plot(mean[2,:])
-# plt.plot(mean[3,:])
-
-
-# tf.reduce_mean(pd.read_pickle("elicit/results/deep_prior/normal_independent_2/expert/prior_samples.pkl"),(0,1))
-
-
-# tf.reduce_mean(tf.math.reduce_std(pd.read_pickle("elicit/results/deep_prior/normal_independent_2/prior_samples.pkl"),1),0)
-# tf.reduce_mean(tf.math.reduce_std(pd.read_pickle("elicit/results/deep_prior/normal_independent_2/expert/prior_samples.pkl"),1),0)

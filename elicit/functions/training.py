@@ -157,15 +157,17 @@ def training_loop(
                 epoch,
                 global_dict,
             )
-
-    # save final results in file
+        
+        if epoch==0:
+            train_var = prior_model.trainable_variables
+            # save final results in file
     res = {
         "loss": total_loss,
         "loss_component": component_losses,
         "hyperparameter": res_dict,
         "time_epoch": time_per_epoch,
         "seed": seed,
-        #  "model": prior_model
+        "nf_weights": train_var
     }
 
     if dict_training["method"] == "parametric_prior":
