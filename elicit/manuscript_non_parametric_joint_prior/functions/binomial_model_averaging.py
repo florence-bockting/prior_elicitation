@@ -71,7 +71,7 @@ def plot_learned_priors(w_MMD, prior_samples, averaged_priors, min_weight,
     subfig0.spines[["right", "top"]].set_visible(False)
     
     for l,t in zip(range(2), [r"$\beta_0$",r"$\beta_1$"]):
-        for i in range(30):
+        for i in range(prior_samples.shape[0]):
             sns.kdeplot(prior_samples[i,:,l], color="lightgrey", alpha=0.5, 
                         ax=subfig1[l], lw=3)
             subfig1[l].spines[["right", "top"]].set_visible(False)

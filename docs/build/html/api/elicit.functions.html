@@ -39,7 +39,7 @@
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../_static/documentation_options.js?v=e645c8fa"></script>
-    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -160,7 +160,7 @@
     <div class="bd-toc-item navbar-nav active">
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../introductory_example.html">Introductory example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introductory_example.html">Tutorials</a></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="modules.html">API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="elicit.html">elicit package</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3 has-children"><a class="reference internal" href="elicit.core.html">elicit.core package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -352,7 +352,7 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module contents</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-elicit.functions">Module contents</a></li>
 </ul>
             </nav>
         </div>
@@ -370,18 +370,61 @@ document.write(`
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="elicit.functions.helper_functions.html">elicit.functions.helper_functions module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="elicit.functions.loss_computation.html">elicit.functions.loss_computation module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="elicit.functions.loss_functions.html">elicit.functions.loss_functions module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="elicit.functions.model_simulation.html">elicit.functions.model_simulation module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="elicit.functions.prior_simulation.html">elicit.functions.prior_simulation module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="elicit.functions.targets_elicits_computation.html">elicit.functions.targets_elicits_computation module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="elicit.functions.training.html">elicit.functions.training module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="elicit.functions.helper_functions.html">elicit.functions.helper_functions module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="elicit.functions.helper_functions.html#elicit.functions.helper_functions.save_as_pkl"><code class="docutils literal notranslate"><span class="pre">save_as_pkl()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.functions.helper_functions.html#elicit.functions.helper_functions.save_hyperparameters"><code class="docutils literal notranslate"><span class="pre">save_hyperparameters()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.functions.helper_functions.html#elicit.functions.helper_functions.marginal_prior_moments"><code class="docutils literal notranslate"><span class="pre">marginal_prior_moments()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="elicit.functions.loss_computation.html">elicit.functions.loss_computation module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="elicit.functions.loss_computation.html#elicit.functions.loss_computation.compute_loss_components"><code class="docutils literal notranslate"><span class="pre">compute_loss_components()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.functions.loss_computation.html#elicit.functions.loss_computation.dynamic_weight_averaging"><code class="docutils literal notranslate"><span class="pre">dynamic_weight_averaging()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.functions.loss_computation.html#elicit.functions.loss_computation.compute_discrepancy"><code class="docutils literal notranslate"><span class="pre">compute_discrepancy()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="elicit.functions.loss_functions.html">elicit.functions.loss_functions module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="elicit.functions.loss_functions.html#elicit.functions.loss_functions.norm_diff"><code class="docutils literal notranslate"><span class="pre">norm_diff()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.functions.loss_functions.html#elicit.functions.loss_functions.MmdEnergy"><code class="docutils literal notranslate"><span class="pre">MmdEnergy</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="elicit.functions.loss_functions.html#elicit.functions.loss_functions.MmdEnergy.__call__"><code class="docutils literal notranslate"><span class="pre">MmdEnergy.__call__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.functions.loss_functions.html#elicit.functions.loss_functions.MmdEnergy.generate_weights"><code class="docutils literal notranslate"><span class="pre">MmdEnergy.generate_weights()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.functions.loss_functions.html#elicit.functions.loss_functions.MmdEnergy.squared_distances"><code class="docutils literal notranslate"><span class="pre">MmdEnergy.squared_distances()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.functions.loss_functions.html#elicit.functions.loss_functions.MmdEnergy.distances"><code class="docutils literal notranslate"><span class="pre">MmdEnergy.distances()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.functions.loss_functions.html#elicit.functions.loss_functions.MmdEnergy.scal"><code class="docutils literal notranslate"><span class="pre">MmdEnergy.scal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.functions.loss_functions.html#elicit.functions.loss_functions.MmdEnergy.kernel_loss"><code class="docutils literal notranslate"><span class="pre">MmdEnergy.kernel_loss()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="elicit.functions.model_simulation.html">elicit.functions.model_simulation module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="elicit.functions.model_simulation.html#elicit.functions.model_simulation.softmax_gumbel_trick"><code class="docutils literal notranslate"><span class="pre">softmax_gumbel_trick()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.functions.model_simulation.html#elicit.functions.model_simulation.simulate_from_generator"><code class="docutils literal notranslate"><span class="pre">simulate_from_generator()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="elicit.functions.prior_simulation.html">elicit.functions.prior_simulation module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="elicit.functions.prior_simulation.html#elicit.functions.prior_simulation.Priors"><code class="docutils literal notranslate"><span class="pre">Priors</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="elicit.functions.prior_simulation.html#elicit.functions.prior_simulation.Priors.__init__"><code class="docutils literal notranslate"><span class="pre">Priors.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.functions.prior_simulation.html#elicit.functions.prior_simulation.Priors.__call__"><code class="docutils literal notranslate"><span class="pre">Priors.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.functions.prior_simulation.html#elicit.functions.prior_simulation.intialize_priors"><code class="docutils literal notranslate"><span class="pre">intialize_priors()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.functions.prior_simulation.html#elicit.functions.prior_simulation.sample_from_priors"><code class="docutils literal notranslate"><span class="pre">sample_from_priors()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="elicit.functions.targets_elicits_computation.html">elicit.functions.targets_elicits_computation module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="elicit.functions.targets_elicits_computation.html#elicit.functions.targets_elicits_computation.use_custom_functions"><code class="docutils literal notranslate"><span class="pre">use_custom_functions()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.functions.targets_elicits_computation.html#elicit.functions.targets_elicits_computation.computation_target_quantities"><code class="docutils literal notranslate"><span class="pre">computation_target_quantities()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.functions.targets_elicits_computation.html#elicit.functions.targets_elicits_computation.computation_elicited_statistics"><code class="docutils literal notranslate"><span class="pre">computation_elicited_statistics()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="elicit.functions.training.html">elicit.functions.training module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="elicit.functions.training.html#elicit.functions.training.training_loop"><code class="docutils literal notranslate"><span class="pre">training_loop()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </div>
 </section>
-<section id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
+<section id="module-elicit.functions">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-elicit.functions" title="Link to this heading">#</a></h2>
 </section>
 </section>
 
@@ -431,7 +474,7 @@ document.write(`
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module contents</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-elicit.functions">Module contents</a></li>
 </ul>
   </nav></div>
 

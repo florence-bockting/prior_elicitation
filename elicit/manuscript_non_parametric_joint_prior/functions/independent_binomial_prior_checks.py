@@ -208,21 +208,21 @@ def plot_sensitivity_binom(df):
         ],
     ):
         fig.text(i, 1.02, lab, color=col, fontsize="small")
-    fig.patches.extend(
-        [
-            plt.Rectangle(
-                (10, 279),
-                600,
-                3,
-                fill=True,
-                color="grey",
-                alpha=0.2,
-                zorder=-1,
-                transform=None,
-                figure=fig,
-            )
-        ]
-    )
+    # fig.patches.extend(
+    #     [
+    #         plt.Rectangle(
+    #             (10, 279),
+    #             600,
+    #             3,
+    #             fill=True,
+    #             color="grey",
+    #             alpha=0.2,
+    #             zorder=-1,
+    #             transform=None,
+    #             figure=fig,
+    #         )
+    #     ]
+    #)
     for x, y, lab in zip([0.01] * 2, [0.73, 0.26], [r"$\beta_0$", r"$\beta_1$"]):
         fig.text(
             x, y, lab, fontsize="medium", bbox=dict(facecolor="none", edgecolor="grey")

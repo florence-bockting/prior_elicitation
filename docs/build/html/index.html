@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Learn Prior distributions from expert knowledge &#8212; Prior Learning</title>
+    <title>The prior_elicitation package &#8212; Prior Learning</title>
   
   
   
@@ -39,7 +39,7 @@
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="_static/documentation_options.js?v=e645c8fa"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
@@ -49,7 +49,7 @@
     <link rel="icon" href="_static/favicon-light.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="An introductory example" href="introductory_example.html" />
+    <link rel="next" title="Tutorials" href="introductory_example.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -163,7 +163,7 @@
     <div class="bd-toc-item navbar-nav active">
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Home</a></li>
-<li class="toctree-l1"><a class="reference internal" href="introductory_example.html">Introductory example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introductory_example.html">Tutorials</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="api/modules.html">API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="api/elicit.html">elicit package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="api/elicit.core.html">elicit.core package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -344,7 +344,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Learn Prior distributions from expert knowledge</h1>
+    <h1>The prior_elicitation package</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -354,7 +354,12 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#short-overview">Short overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-it-about">What is it about?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-does-it-work">How does it work?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conceptual-idea">Conceptual idea</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation">Implementation</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contents">Contents</a></li>
 </ul>
@@ -368,40 +373,124 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="learn-prior-distributions-from-expert-knowledge">
-<h1>Learn Prior distributions from expert knowledge<a class="headerlink" href="#learn-prior-distributions-from-expert-knowledge" title="Link to this heading">#</a></h1>
-<div class="admonition note">
+  <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This project is still in development phase.</p>
+<p>This project is currently under development.</p>
+<p>If you are interested in the underlying conceptual framework, we encourage you to explore the following papers:</p>
+<ul class="simple">
+<li><p>Bockting, F., Radev S. T., &amp; Bürkner P. C. (2024) Expert-elicitation method for non-parametric joint priors using normalizing flows. Preprint at <a class="reference external" href="https://arxiv.org/abs/2411.15826">https://arxiv.org/abs/2411.15826</a></p></li>
+<li><p>Bockting, F., Radev, S. T. &amp; Bürkner, P. C. (2024). Simulation-based prior knowledge elicitation for parametric Bayesian models. Scientific Reports 14, 17330 (2024). <a class="reference external" href="https://doi.org/10.1038/s41598-024-68090-7">https://doi.org/10.1038/s41598-024-68090-7</a></p></li>
+</ul>
 </div>
-<section id="short-overview">
-<h2>Short overview<a class="headerlink" href="#short-overview" title="Link to this heading">#</a></h2>
-<p>We propose a new elicitation method for translating knowledge from a domain expert into an appropriate parametric prior distribution <a class="reference external" href="https://arxiv.org/abs/2308.11672">(Bockting et al., 2023)</a>.
-In particular, our approach builds on recent contributions made by <a class="reference external" href="http://proceedings.mlr.press/v124/hartmann20a/hartmann20a.pdf">Hartmann et al. (2020)</a>, <a class="reference external" href="https://www.jmlr.org/papers/volume24/21-0623/21-0623.pdf">da Silva et al. (2019)</a>, and <a class="reference external" href="https://arxiv.org/pdf/2303.08528">Manderson &amp; Goudie (2023)</a>.
-Their key commonality is the development of (more or less) model-agnostic methods in which the search for appropriate prior distributions is formulated as an optimization problem.
-Thus, the objective is to determine the optimal hyperparameters that minimize the discrepancy between model-implied and expert-elicited statistics.
-We also adopt this perspective and introduce a novel elicitation method that supports expert feedback in both the space of parameters and observable quantities (i.e., a hybrid approach)
-and minimizes human effort. The key ideas underlying our method are visualized in the following figure and outlined below.</p>
-<a class="reference internal image-reference" href="_images/conceptTemplate.png"><img alt="Visual representation workflow" src="_images/conceptTemplate.png" style="width: 800px;" />
+<section id="the-prior-elicitation-package">
+<h1>The <cite>prior_elicitation</cite> package<a class="headerlink" href="#the-prior-elicitation-package" title="Link to this heading">#</a></h1>
+<p>The <cite>prior_elicitation</cite> package provides a simulation-based framework for learning either parametric or non-parametric,
+as well as independent or join prior distributions for parameters in a Bayesian model based on expert knowledge.</p>
+<section id="what-is-it-about">
+<h2>What is it about?<a class="headerlink" href="#what-is-it-about" title="Link to this heading">#</a></h2>
+<p>The <em>Bayesian paradigm</em> offers the possibility to incorporate <em>prior knowledge</em> into a statistical model through the specification of
+prior distributions (short: priors):</p>
+<div class="math notranslate nohighlight">
+\[\underbrace{p(\theta \mid y)}_{\text{posterior}} \propto \underbrace{p(y \mid \theta)}_{\text{likelihood}} \cdot \underbrace{p(\theta \mid \lambda)}_{\text{prior}},\]</div>
+<p>whereby we consider here a prior distribution <span class="math notranslate nohighlight">\(p(\theta \mid \lambda)\)</span> parameterized by <span class="math notranslate nohighlight">\(\lambda\)</span>.
+The ultimate question that arise here is <em>How should the prior distribution be specified?</em></p>
+<p>In this project, we focus on specifying priors through <em>expert knowledge</em>.
+A whole field of research, commonly referred to as <em>(expert) prior elicitation</em>, has emerged around the question of how to gather
+expert knowledge and translate it into appropriate prior distributions.
+Garthwaite et al. (2005) <a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> identified four key stages in a <em>prior elicitation process</em>:</p>
+<p>1. <strong>Setup stage</strong>: In this stage, the problem is defined, an expert is selected, and
+the quantities to be elicited from the expert (referred to as target quantities) are
+determined;</p>
+<p>2. <strong>Elicitation stage</strong>: Here, the target quantities are queried from the expert using
+specific elicitation techniques, resulting in what we call elicited statistics;</p>
+<p>3. <strong>Fitting stage</strong>: This involves fitting a (potentially joint) probability distribution
+based on the expert-elicited statistics;</p>
+<p>4. <strong>Evaluation stage</strong>: Finally, the adequacy of the fitted probability distribution is
+assessed in collaboration with the expert</p>
+<p>In this context, <em>elicitation methods</em> aim to provide a systematic and formal procedure for deriving prior distributions based on expert-elicited statistic.
+The <cite>prior_elicitation</cite> package provides a modular framework that supports the development of a wide range of prior elicitation methods.</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id2" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">2</a><span class="fn-bracket">]</span></span>
+<p>Garthwaite PH, Kadane JB, O’Hagan A (2005) Statistical methods for eliciting probability distributions. J. Am. Stat. Assoc. 100(470):680–701. <a class="reference external" href="https://doi.org/10.1198/016214505000000105">https://doi.org/10.1198/016214505000000105</a></p>
+</aside>
+</aside>
+</section>
+<section id="how-does-it-work">
+<h2>How does it work?<a class="headerlink" href="#how-does-it-work" title="Link to this heading">#</a></h2>
+<section id="conceptual-idea">
+<h3>Conceptual idea<a class="headerlink" href="#conceptual-idea" title="Link to this heading">#</a></h3>
+<p>The general workflow of our framework can be summarized as follows:</p>
+<a class="reference internal image-reference" href="_images/sim-framework-1.png"><img alt="Visual representation workflow" src="_images/sim-framework-1.png" style="width: 700px;" />
 </a>
+<p>1. <em>Define the generative model</em>: Define the generative model including dimensionality
+and parameterization of prior distribution(s). (Setup stage)</p>
+<p>2. <em>Identify variables and elicitation techniques for querying expert knowledge</em>: Select
+the set of variables to be elicited from the domain expert (target quantities) and
+determine which elicitation techniques to use for querying the selected variables
+from the expert (elicited statistics). (Setup stage)</p>
+<p>3. <em>Elicit statistics from expert and simulate corresponding predictions from the gener-
+ative model</em>: Sample from the generative model and perform all necessary computa-
+tional steps to generate model predictions (model-elicited statistics) corresponding
+to the set of expert-elicited statistics. (Elicitation stage)</p>
+<p>4. <em>Evaluate consistency between expert knowledge and model predictions</em>: Evaluate the
+discrepancy between the model- and expert-elicited statistics via a multi-objective
+loss function. (Fitting stage)</p>
+<p>5. <em>Adjust prior to align model predictions more closely with expert knowledge</em>: Use
+mini-batch stochastic gradient descent to adjust the prior so as to reduce the loss.
+(Fitting stage)</p>
+<p>6. <em>Find prior that minimizes the discrepancy between expert knowledge and model
+predictions</em>: Repeat steps 2 to 5 iteratively until a prior is found that minimizes
+the discrepancy between the model and expert-elicited statistics. (Fitting stage)</p>
+<p>7. <em>Evaluate the learned prior distributions</em>: Run the learning algorithm (steps 2 to 6)
+multiple times to obtain a set of prior distributions that can equally well represent
+the expert data. Select a plausible prior distribution in consultation with the domain
+expert or apply model averaging techniques. (Evaluation stage)</p>
+<p>Please consult our papers for the <strong>methodological details</strong> (see Bockting et al. 2024a, 2024b; References are provided below).</p>
+</section>
+<section id="implementation">
+<h3>Implementation<a class="headerlink" href="#implementation" title="Link to this heading">#</a></h3>
+<p>The project is implemented as a <em>Python package</em> and primarily utilizes the following libraries:
+<a class="reference external" href="https://bayesflow.org/">BayesFlow</a>, <a class="reference external" href="https://www.tensorflow.org/">TensorFlow</a>, <a class="reference external" href="https://numpy.org/">NumPy</a>, and
+<a class="reference external" href="https://pandas.pydata.org/">pandas</a>.
+For visualization, <a class="reference external" href="https://matplotlib.org/">matplotlib</a> and <a class="reference external" href="https://seaborn.pydata.org/">seaborn</a> are used.</p>
+<p>The following notebooks showcase the functionality of our <cite>prior_elicitation</cite> package through a series of simple case studies:</p>
+<p>(Please note that the tutorials are currently being updated.)</p>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header sd-bg-primary sd-bg-text-primary">
+<span class="sd-summary-text">Learning independent, parametric priors for each model parameter</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
 <ol class="arabic simple">
-<li><p>The analyst defines a generative model comprising a likelihood function <span class="math notranslate nohighlight">\(p(y \mid \theta)\)</span> and a parametric prior distribution <span class="math notranslate nohighlight">\(p(\theta \mid \lambda)\)</span> for the model parameters, where <span class="math notranslate nohighlight">\(\lambda\)</span> represents the prior hyperparameters to be inferred from expert knowledge.</p></li>
-<li><p>The analyst selects a set of target quantities, which may involve queries related to observable quantities (data), model parameters, or anything else in between.</p></li>
-<li><p>The domain expert is queried using a specific elicitation technique for each target quantity (<em>expert-elicited statistics</em>).</p></li>
-<li><p>From the generative model implied by likelihood and prior and a given value of <span class="math notranslate nohighlight">\(\lambda\)</span>, parameters and (prior) predictive data are simulated, and the predefined set of target quantities is computed based on the simulations (<em>model-implied quantities</em>).</p></li>
-<li><p>The discrepancy between the model-implied and the expert-elicited statistics is evaluated with a discrepancy measure (loss function).</p></li>
-<li><p>Stochastic gradient descent is employed to update the hyperparameters <span class="math notranslate nohighlight">\(\lambda\)</span> so as to minimize the loss function.</p></li>
-<li><p>Steps 4 to 6 are repeated iteratively until an optimal set of hyperparameters <span class="math notranslate nohighlight">\(\lambda\)</span> is found that minimizes the discrepancy between the model-implied and the expert-elicited statistics.</p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="notebooks/binomial_independent.html"><span class="doc">Binomial model</span></a></p></li>
+<li><p class="sd-card-text">Poisson model (coming soon)</p></li>
+<li><p class="sd-card-text">Normal model (coming soon)</p></li>
+<li><p class="sd-card-text">Hierarchical model (coming soon)</p></li>
 </ol>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header sd-bg-primary sd-bg-text-primary">
+<span class="sd-summary-text">Learning a joint, non-parametric prior for all model parameters</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<ol class="arabic simple">
+<li><p class="sd-card-text"><a class="reference internal" href="notebooks/binomial_joint.html"><span class="doc">Binomial model</span></a></p></li>
+<li><p class="sd-card-text">Normal model (coming soon)</p></li>
+</ol>
+</div>
+</details></section>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<p>We introduced the <cite>prior_elicitation</cite> package (conceptually) in the following papers:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://arxiv.org/abs/2308.11672">Bockting F., Radev, S. T., &amp; Bürkner P. C. (2023). Simulation-Based Prior Knowledge Elicitation for Parametric Bayesian Models. ArXiv preprint.</a></p></li>
-<li><p><a class="reference external" href="https://www.jmlr.org/papers/volume24/21-0623/21-0623.pdf">da Silva, E. D. S., Kuśmierczyk, T., Hartmann, M., &amp; Klami, A. (2023). Prior Specification for Bayesian Matrix Factorization via Prior Predictive Matching. Journal of Machine Learning Research, 24(67), 1-51.</a></p></li>
-<li><p><a class="reference external" href="http://proceedings.mlr.press/v124/hartmann20a/hartmann20a.pdf">Hartmann, M., Agiashvili, G., Bürkner, P., &amp; Klami, A. (2020). Flexible prior elicitation via the prior predictive distribution. In Conference on Uncertainty in Artificial Intelligence (pp. 1129-1138). PMLR.</a></p></li>
-<li><p><a class="reference external" href="https://arxiv.org/pdf/2303.08528">Manderson, A. A., &amp; Goudie, R. J. (2023). Translating predictive distributions into informative priors. ArXiv preprint.</a></p></li>
-<li><p><a class="reference external" href="https://arxiv.org/pdf/2308.11672">Mikkola, P., Martin, O. A., Chandramouli, S., Hartmann, M., Pla, O. A., Thomas, O., … &amp; Klami, A. (2021). Prior knowledge elicitation: The past, present, and future. ArXiv preprint.</a></p></li>
+<li><p>Bockting, F., Radev S. T., &amp; Bürkner P. C. (2024a) Expert-elicitation method for non-parametric joint priors using normalizing flows. Preprint at <a class="reference external" href="https://arxiv.org/abs/2411.15826">https://arxiv.org/abs/2411.15826</a></p></li>
+<li><p>Bockting, F., Radev, S. T. &amp; Bürkner, P. C. (2024b). Simulation-based prior knowledge elicitation for parametric Bayesian models. Scientific Reports 14, 17330 (2024). <a class="reference external" href="https://doi.org/10.1038/s41598-024-68090-7">https://doi.org/10.1038/s41598-024-68090-7</a></p></li>
+<li><p>(A software paper is in progress)</p></li>
+</ul>
+<p>A selection of reviews on <em>prior elicitation</em>:</p>
+<ul class="simple">
+<li><p>Falconer J. R., Frank E., Polaschek D. L., et al. (2022) Methods for eliciting informative prior distributions: A critical review. Decision Analysis 19(3):189–204. <a class="reference external" href="https://doi.org/10.1287/deca.2022.0451">https://doi.org/10.1287/deca.2022.0451</a></p></li>
+<li><p>Garthwaite P. H., Kadane J. B., O’Hagan A. (2005) Statistical methods for eliciting probability distributions. Journal of the American statistical Association 100(470):680–701. <a class="reference external" href="https://doi.org/10.1198/016214505000000105">https://doi.org/10.1198/016214505000000105</a></p></li>
+<li><p>Mikkola, P., Martin, O. A., Chandramouli, S., Hartmann, M., Abril Pla, O., Thomas, O., … &amp; Klami, A. (2024). Prior knowledge elicitation: The past, present, and future. Bayesian Analysis, 19(4), 1129-1161. <a class="reference external" href="https://doi.org/10.1214/23-BA1381">https://doi.org/10.1214/23-BA1381</a></p></li>
+<li><p>O’Hagan A., Buck C. E., Daneshkhah A., et al. (2006) Uncertain judgements: eliciting experts’ probabilities. John Wiley &amp; Sons</p></li>
+<li><p>Stefan A. M., Evans N. J., Wagenmakers E. J. (2022) Practical challenges and methodological flexibility in prior elicitation. Psychological Methods 27(2):177–197. <a class="reference external" href="https://doi.org/10.1037/met0000354">https://doi.org/10.1037/met0000354</a></p></li>
 </ul>
 </section>
 <section id="contents">
@@ -409,9 +498,9 @@ and minimizes human effort. The key ideas underlying our method are visualized i
 <div class="toctree-wrapper compound">
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Home</a></li>
-<li class="toctree-l1"><a class="reference internal" href="introductory_example.html">Introductory example</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="introductory_example.html#background-and-problem-formulation">Background and problem formulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introductory_example.html#prior-elicitation-methods">Prior elicitation methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introductory_example.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introductory_example.html#learning-independent-parametric-priors">Learning independent, parametric priors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introductory_example.html#learning-a-joint-non-parametric-prior">Learning a joint, non-parametric prior</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api/modules.html">API</a><ul>
@@ -439,7 +528,7 @@ and minimizes human effort. The key ideas underlying our method are visualized i
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">An introductory example</p>
+        <p class="prev-next-title">Tutorials</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -459,7 +548,12 @@ and minimizes human effort. The key ideas underlying our method are visualized i
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#short-overview">Short overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-it-about">What is it about?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-does-it-work">How does it work?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conceptual-idea">Conceptual idea</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation">Implementation</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contents">Contents</a></li>
 </ul>

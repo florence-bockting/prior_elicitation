@@ -39,7 +39,7 @@
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../_static/documentation_options.js?v=e645c8fa"></script>
-    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -160,7 +160,7 @@
     <div class="bd-toc-item navbar-nav active">
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../introductory_example.html">Introductory example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introductory_example.html">Tutorials</a></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="modules.html">API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="elicit.html">elicit package</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3 current active has-children"><a class="reference internal" href="elicit.core.html">elicit.core package</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
@@ -328,7 +328,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -344,6 +346,16 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.core.write_results.create_output_summary"><code class="docutils literal notranslate"><span class="pre">create_output_summary()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.core.write_results.write_res_summary"><code class="docutils literal notranslate"><span class="pre">write_res_summary()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.core.write_results.print_res_summary"><code class="docutils literal notranslate"><span class="pre">print_res_summary()</span></code></a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -353,8 +365,65 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="elicit-core-write-results-module">
-<h1>elicit.core.write_results module<a class="headerlink" href="#elicit-core-write-results-module" title="Link to this heading">#</a></h1>
+  <section id="module-elicit.core.write_results">
+<span id="elicit-core-write-results-module"></span><h1>elicit.core.write_results module<a class="headerlink" href="#module-elicit.core.write_results" title="Link to this heading">#</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="elicit.core.write_results.create_output_summary">
+<span class="sig-prename descclassname"><span class="pre">elicit.core.write_results.</span></span><span class="sig-name descname"><span class="pre">create_output_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/core/write_results.html#create_output_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.core.write_results.create_output_summary" title="Link to this definition">#</a></dt>
+<dd><p>Creates a text summary of all user inputs and some information about the
+learning process</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>path_res</strong><span class="classifier">str</span></dt><dd><p>path to folder in which the results are saved.</p>
+</dd>
+<dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>global dictionary incl. all user specifications as created when call
+the prior_elicitation function.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>txt file</dt><dd><p>returns a text file summarizing all input information and some
+information about the learning process (e.g., wall time).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="elicit.core.write_results.write_res_summary">
+<span class="sig-prename descclassname"><span class="pre">elicit.core.write_results.</span></span><span class="sig-name descname"><span class="pre">write_res_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/core/write_results.html#write_res_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.core.write_results.write_res_summary" title="Link to this definition">#</a></dt>
+<dd><p>saves the summary of the user inputs in a text file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>path_res</strong><span class="classifier">str</span></dt><dd><p>path to location where results are saved.</p>
+</dd>
+<dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>dictionary containing all user specifications.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="elicit.core.write_results.print_res_summary">
+<span class="sig-prename descclassname"><span class="pre">elicit.core.write_results.</span></span><span class="sig-name descname"><span class="pre">print_res_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/core/write_results.html#print_res_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.core.write_results.print_res_summary" title="Link to this definition">#</a></dt>
+<dd><p>Prints the summary output without saving it to a particular location.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>path_res</strong><span class="classifier">str</span></dt><dd><p>path to location where results are saved.</p>
+</dd>
+<dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>global dictionary containing all user specifications.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 
@@ -392,6 +461,23 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.core.write_results.create_output_summary"><code class="docutils literal notranslate"><span class="pre">create_output_summary()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.core.write_results.write_res_summary"><code class="docutils literal notranslate"><span class="pre">write_res_summary()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.core.write_results.print_res_summary"><code class="docutils literal notranslate"><span class="pre">print_res_summary()</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

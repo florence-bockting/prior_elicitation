@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>An introductory example &#8212; Prior Learning</title>
+    <title>Tutorials &#8212; Prior Learning</title>
   
   
   
@@ -39,18 +39,16 @@
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="_static/documentation_options.js?v=e645c8fa"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
-    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'introductory_example';</script>
     <link rel="icon" href="_static/favicon-light.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="elicit" href="api/modules.html" />
-    <link rel="prev" title="Learn Prior distributions from expert knowledge" href="index.html" />
+    <link rel="prev" title="The prior_elicitation package" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -162,7 +160,7 @@
     <div class="bd-toc-item navbar-nav active">
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Introductory example</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Tutorials</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="api/modules.html">API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="api/elicit.html">elicit package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="api/elicit.core.html">elicit.core package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -343,7 +341,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>An introductory example</h1>
+    <h1>Tutorials</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -353,8 +351,8 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#background-and-problem-formulation">Background and problem formulation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prior-elicitation-methods">Prior elicitation methods</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-independent-parametric-priors">Learning independent, parametric priors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-a-joint-non-parametric-prior">Learning a joint, non-parametric prior</a></li>
 </ul>
             </nav>
         </div>
@@ -366,38 +364,25 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="an-introductory-example">
-<h1>An introductory example<a class="headerlink" href="#an-introductory-example" title="Link to this heading">#</a></h1>
-<section id="background-and-problem-formulation">
-<h2>Background and problem formulation<a class="headerlink" href="#background-and-problem-formulation" title="Link to this heading">#</a></h2>
-<a class="reference internal image-reference" href="_images/toy_example_measure.png"><img alt="intro toy example" src="_images/toy_example_measure.png" style="width: 200px;" />
-</a>
-<p>Let’s consider the following example: We plan to conduct a study on the height of people (in cm) in our neighborhood. To model the height data, we use a normal likelihood as the data-generating model, with average height <span class="math notranslate nohighlight">\(\mu\)</span> and random variation <span class="math notranslate nohighlight">\(\sigma\)</span>. Furthermore, to keep the example as simple as possible, we ignore any individual differences and other potential factors influencing the height of people. Thus, we use an intercept-only model as data-generating model:</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}\begin{align*}
-        \theta &amp;:= (\mu, \sigma)\\
-        \mu &amp;= \mathbf{1}_N \beta_0 \\
-        height_i &amp;\sim \text{Normal}(\mu, \sigma)
-\end{align*}\end{split}\]</div>
-<p>As we have prior knowledge about the expected :math:<a href="#id1"><span class="problematic" id="id2">`</span></a>height_i`​ and would like to incorporate this information into our model, we choose a Bayesian modeling approach. This approach allows us to include our prior knowledge by specifying prior distributions for the model parameters:</p>
-<div class="math notranslate nohighlight">
-\[\theta \sim p(\theta).\]</div>
-<p>The challenge is that our prior knowledge pertains to <span class="math notranslate nohighlight">\(height_i\)</span> (i.e., the outcome variable), but we need to specify prior distributions for <span class="math notranslate nohighlight">\(\theta\)</span> (i.e., the model parameters).</p>
-<ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(\mathcal Q\)</span>: Which prior distributions for the model parameters accurately reflects our prior knowledge on the outcome variable? <span class="math notranslate nohighlight">\([p(\theta) = ??]\)</span></p></li>
-</ul>
+  <section id="tutorials">
+<h1>Tutorials<a class="headerlink" href="#tutorials" title="Link to this heading">#</a></h1>
+<p>The tutorials are designed to demonstrate the use of the <cite>prior_elicitation</cite> package through selected case studies.
+Please note that the tutorials are currently being developed and updated.</p>
+<section id="learning-independent-parametric-priors">
+<h2>Learning independent, parametric priors<a class="headerlink" href="#learning-independent-parametric-priors" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="notebooks/binomial_independent.html"><span class="doc">Binomial model</span></a></p></li>
+<li><p>Poisson model (coming soon)</p></li>
+<li><p>Normal model (coming soon)</p></li>
+<li><p>Hierarchical model (coming soon)</p></li>
+</ol>
 </section>
-<section id="prior-elicitation-methods">
-<h2>Prior elicitation methods<a class="headerlink" href="#prior-elicitation-methods" title="Link to this heading">#</a></h2>
-<p><em>Prior elicitation methods</em> are designed to translate expert information into corresponding prior distributions for the model parameters. We will focus on a specific group of prior elicitation methods that address specifically the following translation problem: The expert provides information about the outcome variable (here: <span class="math notranslate nohighlight">\(height_i\)</span>) and we need a translation of this information to prior distributions <span class="math notranslate nohighlight">\(p(\theta)\)</span> that correctly reflect this knowledge. To understand this point, it helps to think generatively. Suppose we specify particular prior distributions <span class="math notranslate nohighlight">\(p(\mu)\)</span> and <span class="math notranslate nohighlight">\(p(\sigma)\)</span>. To assess whether these priors reflect our knowledge, we can sample values from them: <span class="math notranslate nohighlight">\(\sigma^{S} \sim p(\sigma)\)</span> and <span class="math notranslate nohighlight">\(\mu^{S} \sim p(\mu)\)</span>. Next, we plug these sampled values into our likelihood and simulate data: <span class="math notranslate nohighlight">\(height_i^{S} \sim \text{Normal}(\mu^{S}, \sigma^{S})\)</span>. Finally, we can ask ourselves: Do these simulated data <span class="math notranslate nohighlight">\(height_i^{S}\)</span> align with our expectations about <span class="math notranslate nohighlight">\(height_i\)</span>, then the set of select prior distributions correctly reflects our prior knowledge.</p>
-<a class="reference internal image-reference" href="_images/generative_workflow.png"><img alt="generative approach" src="_images/generative_workflow.png" style="width: 400px;" />
-</a>
-<p><strong>Parameteric prior elicitation</strong></p>
-<p>In this specific variant, the expert provides information about the prior distribution family for each model parameter. The goal becomes then to learn the hyperparameter <span class="math notranslate nohighlight">\(\lambda\)</span> (of this parametric model priors) based on prior knowledge about <em>height</em>.</p>
-<p>▶️ <a class="reference internal" href="notebooks/books/toy_parametric_prior.html"><span class="doc">Go to the implementation of the parametric-prior variant for our toy example</span></a></p>
-<p><strong>Deep prior elicitation</strong></p>
-<p>In this second variant, we train normalizing flows (NFs) on model simulations to induce a flexible family of prior distributions. NFs are generative models that allow exact density evaluation and entail specialized deep neural networks with trainable parameters <span class="math notranslate nohighlight">\(\lambda\)</span> that can learn highly complex transformations. Thus, in this variant no specification of prior distribution families for the model parameters is necessary, as we learn a joint prior density on the model parameters.</p>
-<p>This variant is still under construction. The toy example will come soon.</p>
+<section id="learning-a-joint-non-parametric-prior">
+<h2>Learning a joint, non-parametric prior<a class="headerlink" href="#learning-a-joint-non-parametric-prior" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="notebooks/binomial_joint.html"><span class="doc">Binomial model</span></a></p></li>
+<li><p>Normal model (coming soon)</p></li>
+</ol>
 </section>
 </section>
 
@@ -418,7 +403,7 @@ document.write(`
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Learn Prior distributions from expert knowledge</p>
+        <p class="prev-next-title">The <cite>prior_elicitation</cite> package</p>
       </div>
     </a>
     <a class="right-next"
@@ -446,8 +431,8 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#background-and-problem-formulation">Background and problem formulation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prior-elicitation-methods">Prior elicitation methods</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-independent-parametric-priors">Learning independent, parametric priors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-a-joint-non-parametric-prior">Learning a joint, non-parametric prior</a></li>
 </ul>
   </nav></div>
 

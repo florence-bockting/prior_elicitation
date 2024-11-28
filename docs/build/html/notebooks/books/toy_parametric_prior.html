@@ -39,7 +39,7 @@
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../../_static/documentation_options.js?v=e645c8fa"></script>
-    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
@@ -162,7 +162,7 @@
     <div class="bd-toc-item navbar-nav active">
         <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Home</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../introductory_example.html">Introductory example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introductory_example.html">Tutorials</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/modules.html">API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../api/elicit.html">elicit package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../api/elicit.core.html">elicit.core package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -520,7 +520,7 @@ document.write(`
                       <span class="p">},</span>
                    <span class="n">param_scaling</span><span class="o">=</span><span class="mf">1.</span>
                    <span class="p">),</span>
-        <span class="n">independence</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">independence</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="p">),</span>
     <span class="n">expert_data</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
         <span class="n">data</span><span class="o">=</span><span class="n">expert_info</span><span class="p">,</span>
@@ -541,7 +541,7 @@ document.write(`
         <span class="p">),</span>
     <span class="n">optimization_settings</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
         <span class="n">optimizer_specs</span><span class="o">=</span><span class="p">{</span>
-            <span class="s2">&quot;learning_rate&quot;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>
+            <span class="s2">&quot;learning_rate&quot;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">,</span>
             <span class="s2">&quot;clipnorm&quot;</span><span class="p">:</span> <span class="mf">1.0</span>
             <span class="p">}</span>
         <span class="p">),</span>
@@ -559,35 +559,35 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|||||||||||||||||||||||||||||||||||||||||||||||||| 
-epoch_time: 0.722 sec
-Epoch: 0, loss: 2.03578, lr: 0.100000
-epoch_time: 0.604 sec
-Epoch: 50, loss: 0.60201, lr: 0.100000
-Estimated time until completion: 00:04:37
-epoch_time: 0.644 sec
-Epoch: 100, loss: 0.08066, lr: 0.100000
-Estimated time until completion: 00:04:06
-epoch_time: 0.550 sec
-Epoch: 150, loss: 0.07663, lr: 0.100000
-Estimated time until completion: 00:03:32
-epoch_time: 0.628 sec
-Epoch: 200, loss: 0.07383, lr: 0.100000
-Estimated time until completion: 00:02:59
-epoch_time: 0.674 sec
-Epoch: 250, loss: 0.07951, lr: 0.100000
-Estimated time until completion: 00:02:33
-epoch_time: 0.740 sec
-Epoch: 300, loss: 0.08401, lr: 0.100000
-Estimated time until completion: 00:02:03
-epoch_time: 0.573 sec
-Epoch: 350, loss: 0.08512, lr: 0.100000
-Estimated time until completion: 00:01:32
-epoch_time: 0.785 sec
-Epoch: 400, loss: 0.08110, lr: 0.100000
-Estimated time until completion: 00:01:01
-epoch_time: 0.646 sec
-Epoch: 450, loss: 0.08697, lr: 0.100000
-Estimated time until completion: 00:00:31
+epoch_time: 0.708 sec
+Epoch: 0, loss: 2.03578, lr: 0.050000
+epoch_time: 0.660 sec
+Epoch: 50, loss: 1.21167, lr: 0.050000
+Estimated time until completion: 00:05:16
+epoch_time: 0.676 sec
+Epoch: 100, loss: 0.61057, lr: 0.050000
+Estimated time until completion: 00:04:38
+epoch_time: 0.770 sec
+Epoch: 150, loss: 0.13442, lr: 0.050000
+Estimated time until completion: 00:04:04
+epoch_time: 0.675 sec
+Epoch: 200, loss: 0.07451, lr: 0.050000
+Estimated time until completion: 00:03:31
+epoch_time: 0.692 sec
+Epoch: 250, loss: 0.07921, lr: 0.050000
+Estimated time until completion: 00:02:57
+epoch_time: 0.662 sec
+Epoch: 300, loss: 0.08308, lr: 0.050000
+Estimated time until completion: 00:02:21
+epoch_time: 0.631 sec
+Epoch: 350, loss: 0.08496, lr: 0.050000
+Estimated time until completion: 00:01:45
+epoch_time: 0.781 sec
+Epoch: 400, loss: 0.08047, lr: 0.050000
+Estimated time until completion: 00:01:10
+epoch_time: 0.770 sec
+Epoch: 450, loss: 0.08650, lr: 0.050000
+Estimated time until completion: 00:00:35
 Done :)
 </pre></div>
 </div>
@@ -608,7 +608,7 @@ Done :)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/62bdc481443dd30d84e1837637378381658a0f3daffd3426cade7fc843a6551c.png" src="../../_images/62bdc481443dd30d84e1837637378381658a0f3daffd3426cade7fc843a6551c.png" />
+<img alt="../../_images/9a3d5df94cc29d6fa803e1f2ba08f20c25c24e0f4e82e977858334481454a328.png" src="../../_images/9a3d5df94cc29d6fa803e1f2ba08f20c25c24e0f4e82e977858334481454a328.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -618,7 +618,7 @@ Done :)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/5024214710f8f315df6a6279768ed3044379a8fe86146c6479bce90af8aa4b63.png" src="../../_images/5024214710f8f315df6a6279768ed3044379a8fe86146c6479bce90af8aa4b63.png" />
+<img alt="../../_images/b162e415f06e6f59f00aa8eb0b8cbeb8c6ff0acb19fd549e3427587c1302d772.png" src="../../_images/b162e415f06e6f59f00aa8eb0b8cbeb8c6ff0acb19fd549e3427587c1302d772.png" />
 </div>
 </div>
 </section>
@@ -672,7 +672,7 @@ Done :)
     </tr>
     <tr>
       <th>model</th>
-      <td>153.0</td>
+      <td>154.0</td>
       <td>166.0</td>
       <td>170.0</td>
       <td>174.0</td>
@@ -708,7 +708,7 @@ Done :)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/a51bfb73b0d3e6f55c8cfb81d94d526bcce981f728387c6d82abde1c0205abc8.png" src="../../_images/a51bfb73b0d3e6f55c8cfb81d94d526bcce981f728387c6d82abde1c0205abc8.png" />
+<img alt="../../_images/6cec318b6d95a3a34776f48467873ce80fc382b1e8d1ab08ebb031d4e69b3f08.png" src="../../_images/6cec318b6d95a3a34776f48467873ce80fc382b1e8d1ab08ebb031d4e69b3f08.png" />
 </div>
 </div>
 </section>

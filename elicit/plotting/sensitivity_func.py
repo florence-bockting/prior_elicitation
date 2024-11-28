@@ -8,22 +8,35 @@ import seaborn as sns
 import tensorflow_probability as tfp
 from itertools import product
 
+tfd = tfp.distributions
+
 
 def cor(idx, x):
     return np.corrcoef(x=x[:,idx[0]], y=x[:,idx[1]])[0,1]
 
 
-def plot_prior_binom(sim_path, expert_path, file, save_fig=True):
-    final_res = pd.read_pickle(sim_path+file+"/final_results.pkl")
+def plot_prior_binom(sim_path, expert_path, file, seed=None, save_fig=True):
+    if file is None:
+        final_res = pd.read_pickle(sim_path+"/final_results.pkl")
+    else:
+        final_res = pd.read_pickle(sim_path+file+"/final_results.pkl")
+        
     total_loss = tf.stack(final_res["loss"], -1)
     component_loss = tf.stack(final_res["loss_component"], -1)
     marginal_means = tf.stack(final_res["hyperparameter"]["means"], 0)
     marginal_sds = tf.stack(final_res["hyperparameter"]["stds"], 0)
 
     exp_priors = pd.read_pickle(expert_path+"/prior_samples.pkl")
-    mod_priors = pd.read_pickle(sim_path+file+"/prior_samples.pkl")
+    if file is None:
+        mod_priors = pd.read_pickle(sim_path+"/prior_samples.pkl")
+    else:
+        mod_priors = pd.read_pickle(sim_path+file+"/prior_samples.pkl")
+        
     exp_means = tf.reduce_mean(exp_priors, (0,1))
     exp_sds = tf.math.reduce_std(exp_priors, (0,1))
+
+    if file is not None:
+        seed = file.split('_')[-1]
 
     cmap = mpl.colormaps['gray']
     col_losses = cmap(np.linspace(0.,0.8,component_loss.shape[0]))
@@ -99,11 +112,11 @@ def plot_prior_binom(sim_path, expert_path, file, save_fig=True):
                      frameon=False, loc=(0.01,0.4))
     subfigs[1].suptitle(
         r"$\mathbf{(b)}$"+
-        f" Joint prior distribution (seed: {file.split('_')[-1]})", ha="left",
+        f" Joint prior distribution (seed: {int(seed)})", ha="left",
         x=0.01, fontsize="medium")
     subfigs[0].suptitle(
         r"$\mathbf{(a)}$"+
-        f" Convergence diagnostics (seed: {file.split('_')[-1]})", ha="left",
+        f" Convergence diagnostics (seed: {int(seed)})", ha="left",
         x=0.01, fontsize="medium")
     if save_fig:
         plt.savefig(
@@ -112,6 +125,34 @@ def plot_prior_binom(sim_path, expert_path, file, save_fig=True):
     else:
         plt.show()
 
+
+def plot_prior_binom_independent(path_sim_res, seed):
+    final_res = pd.read_pickle(path_sim_res+"/final_results.pkl")["hyperparameter"]
+    final_hyps = dict()
+    
+    for m in final_res.keys():
+        if m.startswith("log"):
+            m_new = m.split("_")[-1]
+            final_hyps[m_new] = tf.reduce_mean(tf.exp(final_res[m][-30:]))
+        else:
+            final_hyps[m] = tf.reduce_mean(final_res[m][-30:])
+    
+    xrge=tf.range(-0.5, 0.8, 0.001)
+    xrge2=tf.range(-1.5, 1.5, 0.001)
+    
+    _, axs = plt.subplots(1,2,constrained_layout=True, figsize=(6,2))
+    axs[0].plot(xrge, tfd.Normal(0.1, 0.1).prob(xrge), color="black", linestyle="dashed")
+    axs[0].plot(xrge, tfd.Normal(final_hyps["mu0"],final_hyps["sigma0"]).prob(xrge), color="#26bfbf", lw=2)
+    axs[1].plot(xrge2, tfd.Normal(-0.1, 0.3).prob(xrge2), color="black", linestyle="dashed", label="true")
+    axs[1].plot(xrge2, tfd.Normal(final_hyps["mu1"], final_hyps["sigma1"]).prob(xrge2),color="#26bfbf", lw=2, label="learned")
+    [axs[i].spines[['right', 'top']].set_visible(False) for i in range(2)]
+    axs[0].set_xlabel(r"$\beta_0$", fontsize="medium")
+    axs[1].set_xlabel(r"$\beta_1$", fontsize="medium")
+    [axs[i].xaxis.set_tick_params(labelsize=7) for i in range(2)]
+    [axs[i].yaxis.set_tick_params(labelsize=7) for i in range(2)]
+    axs[1].legend(handlelength=0.5,ncol=1, fontsize="small", frameon=False)
+    plt.suptitle(f"learned prior distributions, seed={seed}", ha="left", x=0.03)
+    plt.show()
 
 def plot_loss_binom(sim_path, expert_path, file, save_fig=True):
     final_res = pd.read_pickle(sim_path+file+"/final_results.pkl")
@@ -162,8 +203,59 @@ def plot_loss_binom(sim_path, expert_path, file, save_fig=True):
     else:
         plt.show()
 
+def plot_loss_binom_independent(sim_path, expert_path, file=None, save_fig=True):
+    if file is None:
+        final_res = pd.read_pickle(sim_path+"/final_results.pkl")
+    else:
+        final_res = pd.read_pickle(sim_path+file+"/final_results.pkl")
+    total_loss = tf.stack(final_res["loss"], -1)
+    component_loss = tf.stack(final_res["loss_component"], -1)
+    marginal_means = tf.stack([pd.read_pickle(sim_path+"/final_results.pkl")["hyperparameter"][m] for m in ["mu0", "mu1"]],-1)
+    marginal_sds = tf.stack([tf.exp(pd.read_pickle(sim_path+"/final_results.pkl")["hyperparameter"][m]) for m in ["log_sigma0", "log_sigma1"]],-1)
+    expert_res = pd.read_pickle(expert_path+"/prior_samples.pkl")
+    exp_means = tf.reduce_mean(expert_res, (0,1))
+    exp_sds = tf.math.reduce_std(expert_res, (0,1))
+    
+    cmap = mpl.colormaps['gray']
+    col_losses = cmap(np.linspace(0.,0.8,component_loss.shape[0]))
+    col_betas = ["#b85420", "#205e78"]
+    
+    fig, axs = plt.subplots(2,2, constrained_layout=True, figsize=(5,2), 
+                            sharex=True)
+    axs[0,0].plot(range(total_loss.shape[0]), total_loss, color="black")
+    [axs[0,1].plot(range(component_loss.shape[1]), component_loss[i,:],
+                   color=col_losses[i,:]) for i in range(component_loss.shape[0])]
+    #[axs[0,i].set_yscale('log') for i in range(2)]
+    [axs[0,i].set_title(t, fontsize="small") for i,t in enumerate(
+        ["total loss","loss components"])]
+    [axs[1,0].axhline(exp_means[i], color="black", linestyle="dashed", lw=1)
+     for i in range(2)] 
+    [axs[1,1].axhline(exp_sds[i], color="black", linestyle="dashed", lw=1)
+     for i in range(2)] 
+    [axs[1,0].plot(range(marginal_means.shape[0]), marginal_means[:,i],
+                   label=rf"$\mu_{i}$", color=col_betas[i])
+     for i in range(2)]
+    [axs[1,1].plot(range(marginal_sds.shape[0]), marginal_sds[:,i],
+                   label=rf"$\sigma_{i}$", color=col_betas[i])
+     for i in range(2)]
+    [axs[1,i].legend(handlelength=0.5,ncol=2, fontsize="small", frameon=False)
+     for i in range(2)]
+    [axs[j,i].spines[['right', 'top']].set_visible(False) for j,i in
+     product([0,1],[0,1])]
+    [axs[j,i].yaxis.set_tick_params(labelsize=7) for j,i in
+     product([0,1],[0,1])]
+    [axs[1,i].xaxis.set_tick_params(labelsize=7) for i in range(2)]
+    [axs[1,i].set_title(t, fontsize="small") for i,t in
+     enumerate(["location hyperparam.","scale hyperparam."])]
+    [axs[1,i].set_xlabel("epochs", fontsize="x-small") for i in range(2)]
+
 def plot_elicited_stats_binom(prior_expert, path_expert, path_sim, elicit_res_agg,
-                         prior_res_agg, cor_res_agg, save_fig=True):
+                         prior_res_agg, cor_res_agg, rep=True, save_fig=True):
+    if rep:
+        alpha=0.9
+    else:
+        rep=0.1
+
     col_mod = "#ba6b34"
 
     exp_elicits = pd.read_pickle(
@@ -176,7 +268,7 @@ def plot_elicited_stats_binom(prior_expert, path_expert, path_sim, elicit_res_ag
 
     for b in range(mod_elicits.shape[-1]):
         [sns.scatterplot(x=exp_elicits[0,:,i], y=mod_elicits[:,i,b], ax=axs[i],
-                         color=col_mod, lw = 0, alpha = 0.1, zorder=1)
+                         color=col_mod, lw=0, alpha=alpha, zorder=1)
          for i in range(2)]
     for i in range(2):
         axs[i].axline((0, 0), slope=1, color="black", lw=1, linestyle="dashed",
@@ -210,6 +302,36 @@ def plot_elicited_stats_binom(prior_expert, path_expert, path_sim, elicit_res_ag
         plt.savefig("elicit/simulations/LiDO_cluster/sim_results/deep_prior/graphics/sensitivity_binom.png", dpi=300)
     else:
         plt.show()
+        
+def plot_elicited_stats_binom_independent(prior_expert, path_expert, path_sim, elicit_res_agg,
+                         prior_res_agg, rep=True, save_fig=True):
+    if rep:
+        alpha=0.9
+    else:
+        rep=0.1
+
+    col_mod = "#ba6b34"
+
+    exp_elicits = pd.read_pickle(
+        path_expert+"/elicited_statistics.pkl")["custom_ypred"]
+    mod_elicits = elicit_res_agg
+
+    fig, axs = plt.subplots(1,2, constrained_layout=True, figsize=(4,1.5))
+
+    for b in range(mod_elicits.shape[-1]):
+        [sns.scatterplot(x=exp_elicits[0,:,i], y=mod_elicits[:,i,b], ax=axs[i],
+                         color=col_mod, lw=0, alpha=alpha, zorder=1)
+         for i in range(2)]
+    for i in range(2):
+        axs[i].axline((0, 0), slope=1, color="black", lw=1, linestyle="dashed",
+                       zorder=0)
+        axs[i].xaxis.set_tick_params(labelsize=7)
+        axs[i].yaxis.set_tick_params(labelsize=7)
+        axs[i].set_xlabel("true", fontsize="small")
+        axs[i].spines[['right', 'top']].set_visible(False)
+    axs[0].set_ylabel("learned", fontsize="small")
+    axs[1].set_title(r"$y \mid x_1$", fontsize="small")
+    axs[0].set_title(r"$y \mid x_0$", fontsize="small")
 
 
 def plot_loss(sim_path, expert_path, file, model, save_fig=True):

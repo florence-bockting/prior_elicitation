@@ -39,7 +39,7 @@
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../_static/documentation_options.js?v=e645c8fa"></script>
-    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -160,7 +160,7 @@
     <div class="bd-toc-item navbar-nav active">
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../introductory_example.html">Introductory example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introductory_example.html">Tutorials</a></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="modules.html">API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="elicit.html">elicit package</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3 has-children"><a class="reference internal" href="elicit.core.html">elicit.core package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -328,7 +328,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -344,6 +346,17 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.design_matrices.load_design_matrix_binomial"><code class="docutils literal notranslate"><span class="pre">load_design_matrix_binomial()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.design_matrices.load_design_matrix_normal"><code class="docutils literal notranslate"><span class="pre">load_design_matrix_normal()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.design_matrices.load_design_matrix_binomial2"><code class="docutils literal notranslate"><span class="pre">load_design_matrix_binomial2()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.design_matrices.load_design_matrix_poisson"><code class="docutils literal notranslate"><span class="pre">load_design_matrix_poisson()</span></code></a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -353,8 +366,49 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="elicit-user-design-matrices-module">
-<h1>elicit.user.design_matrices module<a class="headerlink" href="#elicit-user-design-matrices-module" title="Link to this heading">#</a></h1>
+  <section id="module-elicit.user.design_matrices">
+<span id="elicit-user-design-matrices-module"></span><h1>elicit.user.design_matrices module<a class="headerlink" href="#module-elicit.user.design_matrices" title="Link to this heading">#</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="elicit.user.design_matrices.load_design_matrix_binomial">
+<span class="sig-prename descclassname"><span class="pre">elicit.user.design_matrices.</span></span><span class="sig-name descname"><span class="pre">load_design_matrix_binomial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/user/design_matrices.html#load_design_matrix_binomial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.user.design_matrices.load_design_matrix_binomial" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="elicit.user.design_matrices.load_design_matrix_normal">
+<span class="sig-prename descclassname"><span class="pre">elicit.user.design_matrices.</span></span><span class="sig-name descname"><span class="pre">load_design_matrix_normal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N_group</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/user/design_matrices.html#load_design_matrix_normal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.user.design_matrices.load_design_matrix_normal" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="elicit.user.design_matrices.load_design_matrix_binomial2">
+<span class="sig-prename descclassname"><span class="pre">elicit.user.design_matrices.</span></span><span class="sig-name descname"><span class="pre">load_design_matrix_binomial2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/user/design_matrices.html#load_design_matrix_binomial2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.user.design_matrices.load_design_matrix_binomial2" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="elicit.user.design_matrices.load_design_matrix_poisson">
+<span class="sig-prename descclassname"><span class="pre">elicit.user.design_matrices.</span></span><span class="sig-name descname"><span class="pre">load_design_matrix_poisson</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/user/design_matrices.html#load_design_matrix_poisson"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.user.design_matrices.load_design_matrix_poisson" title="Link to this definition">#</a></dt>
+<dd><p>Loads the equality index dataset from BayesRule!, preprocess the data, and
+creates a design matrix as used in the poisson model.
+source: <a class="reference external" href="https://www.bayesrulesbook.com/chapter-12">https://www.bayesrulesbook.com/chapter-12</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>scaling</strong><span class="classifier">str or None</span></dt><dd><p>whether the continuous predictor should be scaled;
+possible values = [‘divide_by_std’, ‘standardize’]</p>
+</dd>
+<dt><strong>selected_obs</strong><span class="classifier">list of integers or None</span></dt><dd><p>whether only specific observations shall be selected from the design
+matrix.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>design_matrix</strong><span class="classifier">tf.Tensor</span></dt><dd><p>design matrix.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 
@@ -392,6 +446,24 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.design_matrices.load_design_matrix_binomial"><code class="docutils literal notranslate"><span class="pre">load_design_matrix_binomial()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.design_matrices.load_design_matrix_normal"><code class="docutils literal notranslate"><span class="pre">load_design_matrix_normal()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.design_matrices.load_design_matrix_binomial2"><code class="docutils literal notranslate"><span class="pre">load_design_matrix_binomial2()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.design_matrices.load_design_matrix_poisson"><code class="docutils literal notranslate"><span class="pre">load_design_matrix_poisson()</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
