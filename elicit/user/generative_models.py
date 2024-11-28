@@ -40,9 +40,7 @@ class BinomialModel(tf.Module):
                                   probs=probs[:, :, :, None])
 
         return dict(
-            likelihood=likelihood,
-            ypred=None,
-            epred=epred,
+            likelihood=likelihood, ypred=None, epred=epred,
             prior_samples=prior_samples
         )
 
@@ -60,11 +58,11 @@ class NormalModel(tf.Module):
         group1 = ypred[:, :, 0::3]
         group2 = ypred[:, :, 1::3]
         group3 = ypred[:, :, 2::3]
-        
+
         # effects
-        group2vs1 = tf.reduce_mean(group2,-1)-tf.reduce_mean(group1,-1)
-        group3vs1 = tf.reduce_mean(group3,-1)-tf.reduce_mean(group1,-1)
-        
+        group2vs1 = tf.reduce_mean(group2, -1) - tf.reduce_mean(group1, -1)
+        group3vs1 = tf.reduce_mean(group3, -1) - tf.reduce_mean(group1, -1)
+
         # R2
         var_epred = tf.math.reduce_variance(epred, -1)
         # variance of difference between ypred and epred
@@ -74,8 +72,8 @@ class NormalModel(tf.Module):
         log_R2 = tf.subtract(tf.math.log(var_epred), tf.math.log(var_total))
 
         prior_samples = tf.concat(
-            [prior_samples[:, :, :-1],
-             tf.abs(prior_samples[:, :, -1][:, :, None])],
+            [prior_samples[:, :, :-1], tf.abs(
+                prior_samples[:, :, -1][:, :, None])],
             axis=-1,
         )
 
@@ -89,14 +87,13 @@ class NormalModel(tf.Module):
             group2=group2,
             group3=group3,
             group2vs1=group2vs1,
-            group3vs1=group3vs1
+            group3vs1=group3vs1,
         )
 
 
 class BinomialModel2(tf.Module):
     def __call__(
-        self, ground_truth, prior_samples, design_matrix, total_count,
-        **kwargs
+        self, ground_truth, prior_samples, design_matrix, total_count, **kwargs
     ):
         """
         Binomial model with one continuous predictor.

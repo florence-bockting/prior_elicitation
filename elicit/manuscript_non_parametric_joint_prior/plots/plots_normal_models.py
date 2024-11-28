@@ -177,7 +177,7 @@ plot_loss(path_sim_res, path_expert, file_seed, scenario, save_fig=False)
 
 # %% SIMULATION RESULTS / LEARNED PRIORS
 # run model averaging method
-(w_MMD, prior_samples, averaged_priors, min_weight, max_weight) = run_model_averaging(
+(w_MMD, prior_samples, averaged_priors, min_weight, max_weight) = run_model_averaging( # noqa
     path_sim_res, B=128, sim_from_prior=200, num_param=4
 )  # noqa
 # plot learned marginal priors per seed and average prior

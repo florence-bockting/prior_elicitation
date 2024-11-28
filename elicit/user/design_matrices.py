@@ -11,12 +11,11 @@ import tensorflow_probability as tfp
 tfd = tfp.distributions
 
 
-
 def load_design_matrix_binomial(N):
-    X = tf.range(1.,N,1.)
+    X = tf.range(1.0, N, 1.0)
     x_sd = tf.math.reduce_std(X)
-    X_std = X/x_sd
-    X_selected = tfp.stats.percentile(X_std,[25, 75])
+    X_std = X / x_sd
+    X_selected = tfp.stats.percentile(X_std, [25, 75])
     d_final = tf.stack([[1.0] * len(X_selected), X_selected.numpy()], axis=-1)
     return d_final
 
@@ -72,23 +71,24 @@ def load_design_matrix_poisson():
     # reorder historical predictor
     df_reordered = df_prep.sort_values(["historical", "percent_urban"])
     # add dummy coded predictors
-    df_reordered["gop"] = np.where(df_reordered["historical"] == "gop", 1, 0)
-    df_reordered["swing"] = np.where(df_reordered["historical"] == "swing", 1,
-                                     0)
+    df_reordered["gop"] = np.where(
+        df_reordered["historical"] == "gop", 1, 0)
+    df_reordered["swing"] = np.where(
+        df_reordered["historical"] == "swing", 1, 0)
     df_reordered["intercept"] = 1
     # select only required columns
-    data_reordered = df_reordered[["intercept", "percent_urban", "gop",
-                                   "swing"]]
+    data_reordered = df_reordered[
+        ["intercept", "percent_urban", "gop", "swing"]]
     # scale predictor if specified
     sd = np.std(np.array(data_reordered["percent_urban"]))
     mean = np.mean(np.array(data_reordered["percent_urban"]))
     d_scaled = data_reordered.assign(
-        percent_urban_scaled=(
-            np.array(data_reordered["percent_urban"]) - mean
-            ) / sd
+        percent_urban_scaled=(np.array(
+            data_reordered["percent_urban"]) - mean) / sd
     )
-    d_final = d_scaled.loc[:, ["intercept", "percent_urban_scaled", "gop",
-                               "swing"]]
+    d_final = d_scaled.loc[:,
+                           ["intercept", "percent_urban_scaled", "gop",
+                            "swing"]]
     # cast to appropriate data type
     array = tf.cast(d_final, tf.float32)
     return array
