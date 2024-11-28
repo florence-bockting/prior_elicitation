@@ -30,11 +30,12 @@ class Priors(tf.Module):
             self.init_priors = None
 
     def __call__(self):
-        
+
         prior_samples = sample_from_priors(
             self.init_priors, self.ground_truth, self.global_dict
         )
         return prior_samples
+
 
 def intialize_priors(global_dict):
     """
@@ -109,6 +110,7 @@ def intialize_priors(global_dict):
         init_prior = invertible_neural_network
 
     return init_prior
+
 
 def sample_from_priors(initialized_priors, ground_truth, global_dict):
     """

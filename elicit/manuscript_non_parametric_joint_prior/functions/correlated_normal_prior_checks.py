@@ -21,7 +21,8 @@ tfd = tfp.distributions
 
 # prepare simulations
 def run_prior_checks(
-    seed, path, vary, mu0, sigma0, mu1, sigma1, mu2, sigma2, a, b, cor01, cor02, cor12
+    seed, path, vary, mu0, sigma0, mu1, sigma1, mu2, sigma2, a, b, cor01,
+    cor02, cor12
 ):
     S = [sigma0, sigma1, sigma2]
     M = [[1.0, cor01, cor02], [cor01, 1.0, cor12], [cor02, cor12, 1.0]]
@@ -54,7 +55,9 @@ def run_prior_checks(
         ),
         generative_model=dict(
             model=NormalModel,
-            additional_model_args={"design_matrix": load_design_matrix_normal(30)},
+            additional_model_args={
+                "design_matrix": load_design_matrix_normal(30)
+                },
         ),
         target_quantities=dict(
             group1=dict(
@@ -93,7 +96,7 @@ def run_prior_checks(
         ),
         training_settings=dict(
             method="deep_prior",
-            sim_id="normalcorrelated_"+vary,
+            sim_id="normalcorrelated_" + vary,
             seed=seed,
             output_path=path,
             epochs=1,
@@ -101,15 +104,26 @@ def run_prior_checks(
     )
 
 
-def run_sensitivity(seed, path_sensitivity_res, mu0_seq, mu1_seq,
-                    mu2_seq, sigma0_seq, sigma1_seq,
-                    sigma2_seq, a_seq, b_seq, cor_seq, 
-                    skewness1_seq, skewness2_seq):
+def run_sensitivity(
+    seed,
+    path_sensitivity_res,
+    mu0_seq,
+    mu1_seq,
+    mu2_seq,
+    sigma0_seq,
+    sigma1_seq,
+    sigma2_seq,
+    a_seq,
+    b_seq,
+    cor_seq,
+    skewness1_seq,
+    skewness2_seq,
+):
     # run simulations
     for mu0 in mu0_seq:
         run_prior_checks(
             seed,
-            path=path_sensitivity_res+"/vary_mu0",
+            path=path_sensitivity_res + "/vary_mu0",
             vary=f"mu0_{mu0:.1f}",
             mu0=mu0,
             sigma0=2.5,
@@ -123,11 +137,11 @@ def run_sensitivity(seed, path_sensitivity_res, mu0_seq, mu1_seq,
             cor02=-0.3,
             cor12=-0.2,
         )
-    
+
     for sigma0 in sigma0_seq:
         run_prior_checks(
             seed,
-            path=path_sensitivity_res+"/vary_sigma0",
+            path=path_sensitivity_res + "/vary_sigma0",
             vary=f"sigma0_{sigma0:.1f}",
             mu0=10.0,
             sigma0=sigma0,
@@ -141,11 +155,11 @@ def run_sensitivity(seed, path_sensitivity_res, mu0_seq, mu1_seq,
             cor02=-0.3,
             cor12=-0.2,
         )
-    
+
     for mu1 in mu1_seq:
         run_prior_checks(
             seed,
-            path=path_sensitivity_res+"/vary_mu1",
+            path=path_sensitivity_res + "/vary_mu1",
             vary=f"mu1_{mu1:.1f}",
             mu0=10.0,
             sigma0=2.5,
@@ -159,11 +173,11 @@ def run_sensitivity(seed, path_sensitivity_res, mu0_seq, mu1_seq,
             cor02=-0.3,
             cor12=-0.2,
         )
-    
+
     for sigma1 in sigma1_seq:
         run_prior_checks(
             seed,
-            path=path_sensitivity_res+"/vary_sigma1",
+            path=path_sensitivity_res + "/vary_sigma1",
             vary=f"sigma1_{sigma1:.1f}",
             mu0=10.0,
             sigma0=2.5,
@@ -177,11 +191,11 @@ def run_sensitivity(seed, path_sensitivity_res, mu0_seq, mu1_seq,
             cor02=-0.3,
             cor12=-0.2,
         )
-    
+
     for mu2 in mu2_seq:
         run_prior_checks(
             seed,
-            path=path_sensitivity_res+"/vary_mu2",
+            path=path_sensitivity_res + "/vary_mu2",
             vary=f"mu2_{mu2:.1f}",
             mu0=10.0,
             sigma0=2.5,
@@ -195,11 +209,11 @@ def run_sensitivity(seed, path_sensitivity_res, mu0_seq, mu1_seq,
             cor02=-0.3,
             cor12=-0.2,
         )
-    
+
     for sigma2 in sigma2_seq:
         run_prior_checks(
             seed,
-            path=path_sensitivity_res+"/vary_sigma2",
+            path=path_sensitivity_res + "/vary_sigma2",
             vary=f"sigma2_{sigma2:.1f}",
             mu0=10.0,
             sigma0=2.5,
@@ -213,11 +227,11 @@ def run_sensitivity(seed, path_sensitivity_res, mu0_seq, mu1_seq,
             cor02=-0.3,
             cor12=-0.2,
         )
-    
+
     for a in a_seq:
         run_prior_checks(
             seed,
-            path=path_sensitivity_res+"/vary_a",
+            path=path_sensitivity_res + "/vary_a",
             vary=f"a_{a:.1f}",
             mu0=10.0,
             sigma0=2.5,
@@ -231,11 +245,11 @@ def run_sensitivity(seed, path_sensitivity_res, mu0_seq, mu1_seq,
             cor02=-0.3,
             cor12=-0.2,
         )
-    
+
     for b in b_seq:
         run_prior_checks(
             seed,
-            path=path_sensitivity_res+"/vary_b",
+            path=path_sensitivity_res + "/vary_b",
             vary=f"b_{b:.1f}",
             mu0=10.0,
             sigma0=2.5,
@@ -249,11 +263,11 @@ def run_sensitivity(seed, path_sensitivity_res, mu0_seq, mu1_seq,
             cor02=-0.3,
             cor12=-0.2,
         )
-    
+
     for cor01 in cor_seq:
         run_prior_checks(
             seed,
-            path=path_sensitivity_res+"/vary_cor01",
+            path=path_sensitivity_res + "/vary_cor01",
             vary=f"cor01_{cor01:.1f}",
             mu0=10.0,
             sigma0=2.5,
@@ -267,11 +281,11 @@ def run_sensitivity(seed, path_sensitivity_res, mu0_seq, mu1_seq,
             cor02=-0.3,
             cor12=-0.2,
         )
-    
+
     for cor02 in cor_seq:
         run_prior_checks(
             seed,
-            path=path_sensitivity_res+"/vary_cor02",
+            path=path_sensitivity_res + "/vary_cor02",
             vary=f"cor02_{cor02:.1f}",
             mu0=10.0,
             sigma0=2.5,
@@ -285,11 +299,11 @@ def run_sensitivity(seed, path_sensitivity_res, mu0_seq, mu1_seq,
             cor02=cor02,
             cor12=-0.2,
         )
-    
+
     for cor12 in cor_seq:
         run_prior_checks(
             seed,
-            path=path_sensitivity_res+"/vary_cor12",
+            path=path_sensitivity_res + "/vary_cor12",
             vary=f"cor12_{cor12:.1f}",
             mu0=10.0,
             sigma0=2.5,
@@ -303,6 +317,7 @@ def run_sensitivity(seed, path_sensitivity_res, mu0_seq, mu1_seq,
             cor02=-0.3,
             cor12=cor12,
         )
+
 
 def prep_sensitivity_res(path_sensitivity_res, input_dict):
     # save results in dictionary
@@ -324,7 +339,7 @@ def prep_sensitivity_res(path_sensitivity_res, input_dict):
         "group3": [],
         "R2": [],
     }
-    
+
     for vary in [
         "vary_mu0",
         "vary_sigma0",
@@ -338,12 +353,12 @@ def prep_sensitivity_res(path_sensitivity_res, input_dict):
         "vary_cor02",
         "vary_cor12",
     ]:
-        path = "elicit/"+path_sensitivity_res+"/" + vary + "/deep_prior"
+        path = "elicit/" + path_sensitivity_res + "/" + vary + "/deep_prior"
         all_files = os.listdir(path)
         for i in range(len(all_files)):
             labels = all_files[i].split("_")
             # update varying value
-            input_dict[labels[1]]=labels[2]
+            input_dict[labels[1]] = labels[2]
 
             res_dict["id"].append(vary)
             res_dict["mu0"].append(input_dict["mu0"])
@@ -359,32 +374,44 @@ def prep_sensitivity_res(path_sensitivity_res, input_dict):
             res_dict["cor12"].append(input_dict["cor12"])
             res_dict["group1"].append(
                 pd.read_pickle(
-                    path + f"/{all_files[i]}" + "/expert/elicited_statistics.pkl"
+                    path + f"/{all_files[i]}" + "/expert/elicited_statistics.pkl" # noqa
                 )["quantiles_group1"][0, :].numpy()
             )
             res_dict["group2"].append(
                 pd.read_pickle(
-                    path + f"/{all_files[i]}" + "/expert/elicited_statistics.pkl"
+                    path + f"/{all_files[i]}" + "/expert/elicited_statistics.pkl" # noqa
                 )["quantiles_group2"][0, :].numpy()
             )
             res_dict["group3"].append(
                 pd.read_pickle(
-                    path + f"/{all_files[i]}" + "/expert/elicited_statistics.pkl"
+                    path + f"/{all_files[i]}" + "/expert/elicited_statistics.pkl" # noqa
                 )["quantiles_group3"][0, :].numpy()
             )
             res_dict["R2"].append(
                 tf.exp(
                     pd.read_pickle(
-                        path + f"/{all_files[i]}" + "/expert/elicited_statistics.pkl"
+                        path + f"/{all_files[i]}" + "/expert/elicited_statistics.pkl" # noqa
                     )["quantiles_logR2"][0, :]
                 ).numpy()
             )
     df = pd.DataFrame(res_dict)
     return df
 
-def plot_sensitivity(df, mu0_seq, mu1_seq, mu2_seq, sigma0_seq, sigma1_seq,
-                     sigma2_seq, a_seq, b_seq, cor_seq, 
-                     skewness1_seq, skewness2_seq):
+
+def plot_sensitivity(
+    df,
+    mu0_seq,
+    mu1_seq,
+    mu2_seq,
+    sigma0_seq,
+    sigma1_seq,
+    sigma2_seq,
+    a_seq,
+    b_seq,
+    cor_seq,
+    skewness1_seq,
+    skewness2_seq,
+):
     # create helpers for plotting
     range_list2 = [
         mu0_seq,
@@ -426,11 +453,10 @@ def plot_sensitivity(df, mu0_seq, mu1_seq, mu2_seq, sigma0_seq, sigma1_seq,
         [1, 0, 2, 3, 4],
         [1, 0, 2, 3, 4],
     ]
-    
-    
+
     # plot sensitivity
     fig, axs = plt.subplots(11, 4, constrained_layout=True, figsize=(7, 11))
-    for l, (k, xseq, idx) in enumerate(
+    for m, (k, xseq, idx) in enumerate(
         zip(
             [
                 "vary_mu0",
@@ -451,7 +477,7 @@ def plot_sensitivity(df, mu0_seq, mu1_seq, mu2_seq, sigma0_seq, sigma1_seq,
     ):
         for j, elicit in enumerate(["group1", "group2", "group3", "R2"]):
             for i, col in list(enumerate(cols_quantiles)):
-                axs[l, j].plot(
+                axs[m, j].plot(
                     xseq,
                     tf.gather(np.stack(df[df["id"] == k][elicit], 1)[i], idx),
                     "-o",
@@ -478,22 +504,30 @@ def plot_sensitivity(df, mu0_seq, mu1_seq, mu2_seq, sigma0_seq, sigma1_seq,
         ]
         [
             axs[i, j].set_xticks(
-                range_list2[i], np.array(range_list2[i]).astype(int), fontsize="x-small"
+                range_list2[i], np.array(range_list2[i]).astype(int),
+                fontsize="x-small"
             )
             for i in range(8)
         ]
         [
-            axs[i, j].set_xticks(range_list2[i], range_list2[i], fontsize="x-small")
+            axs[i, j].set_xticks(range_list2[i], range_list2[i],
+                                 fontsize="x-small")
             for i in range(8, 11)
         ]
-        [axs[i, j].tick_params(axis="y", labelsize="x-small") for i in range(11)]
+        [axs[i, j].tick_params(axis="y", labelsize="x-small") for
+         i in range(11)]
     [axs[i, 0].set_ylabel(" ", rotation=0, labelpad=10) for i in range(11)]
-    [axs[0, j].set_title(t) for j, t in enumerate([
-               r"quantiles $y_i \mid gr_1$",
-               r"quantiles $y_i \mid gr_2$",
-               r"quantiles $y_i \mid gr_3$",
-               r"quantiles $R^2$",
-        ])]
+    [
+        axs[0, j].set_title(t)
+        for j, t in enumerate(
+            [
+                r"quantiles $y_i \mid gr_1$",
+                r"quantiles $y_i \mid gr_2$",
+                r"quantiles $y_i \mid gr_3$",
+                r"quantiles $R^2$",
+            ]
+        )
+    ]
     [
         axs[i, j].spines[["right", "top"]].set_visible(False)
         for i, j in itertools.product(range(11), range(4))
@@ -525,7 +559,8 @@ def plot_sensitivity(df, mu0_seq, mu1_seq, mu2_seq, sigma0_seq, sigma1_seq,
         fig.text(i, 1.02, lab, color=col)
     fig.suptitle("correlated-normal model", x=0.5, y=1.06)
     for k, val in enumerate(true_vals):
-        [axs[k, j].axvline(true_vals[val], color="darkred", lw=2) for j in range(4)]
+        [axs[k, j].axvline(true_vals[val], color="darkred", lw=2) for
+         j in range(4)]
     for y in [1280, 998, 713, 432]:
         fig.patches.extend(
             [
@@ -547,5 +582,7 @@ def plot_sensitivity(df, mu0_seq, mu1_seq, mu2_seq, sigma0_seq, sigma1_seq,
         [0.905, 0.73, 0.55, 0.365, 0.145],
         [r"$\beta_0$", r"$\beta_1$", r"$\beta_2$", r"$\sigma$", r"$\rho$"],
     ):
-        fig.text(x, y, lab, fontsize="large", bbox=dict(facecolor="none", edgecolor="grey"))
-    
+        fig.text(
+            x, y, lab, fontsize="large", bbox=dict(facecolor="none",
+                                                   edgecolor="grey")
+        )

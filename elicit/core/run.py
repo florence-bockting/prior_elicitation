@@ -181,25 +181,31 @@ def compute_loss(
                 # read from results (if not yet existing, create list)
                 try:
                     pd.read_pickle(
-                        global_dict["training_settings"]["output_path"] + "/regularizer.pkl"
-                        )
+                        global_dict["training_settings"]["output_path"]
+                        + "/regularizer.pkl"
+                    )
                 except FileNotFoundError:
                     regularizer_term = []
                 else:
                     regularizer_term = pd.read_pickle(
-                        global_dict["training_settings"]["output_path"] + "/regularizer.pkl"
+                        global_dict["training_settings"]["output_path"]
+                        + "/regularizer.pkl"
                     )
 
                 # get prior samples
                 priorsamples = pd.read_pickle(
-                    global_dict["training_settings"]["output_path"] + "/model_simulations.pkl"
+                    global_dict["training_settings"]["output_path"]
+                    + "/model_simulations.pkl"
                 )["prior_samples"]
                 # compute regularization
                 regul_term = regulariser(priorsamples)
                 # save regularization
                 regularizer_term.append(regul_term)
 
-                path = global_dict["training_settings"]["output_path"] + "/regularizer.pkl"
+                path = (
+                    global_dict["training_settings"][
+                        "output_path"] + "/regularizer.pkl"
+                )
                 save_as_pkl(regularizer_term, path)
 
                 total_loss = total_loss + regul_term
@@ -219,9 +225,7 @@ def compute_loss(
                     dict_loss["loss_weighting"]["method_specs"][
                         "loss_per_component_initial"
                     ],
-                    dict_loss["loss_weighting"]["method_specs"][
-                        "temperature"
-                    ],
+                    dict_loss["loss_weighting"]["method_specs"]["temperature"],
                     global_dict["output_path"],
                 )
 
@@ -291,24 +295,32 @@ def burnin_phase(
 
     def init_method(n_hypparam, n_warm_up):
         mvdist = tfd.MultivariateNormalDiag(
-            tf.zeros(n_hypparam), 
-            tf.ones(n_hypparam)).sample(n_warm_up)
+            tf.zeros(n_hypparam), tf.ones(n_hypparam)
+        ).sample(n_warm_up)
         return mvdist
 
     # get number of hyperparameters
-    n_hypparam=0
-    param_names = set(global_dict["model_parameters"]).difference(["independence", "no_params"])
+    n_hypparam = 0
+    param_names = set(global_dict["model_parameters"]).difference(
+        ["independence", "no_params"]
+    )
     for param in param_names:
-        n_hypparam += len(global_dict["model_parameters"][param]["hyperparams_dict"].keys())
+        n_hypparam += len(
+            global_dict["model_parameters"][param]["hyperparams_dict"].keys()
+        )
     # create initializations
-    init_matrix = init_method(n_hypparam, 
-                              dict_copy["training_settings"]["warmup_initializations"])
-    
-    path = dict_copy["training_settings"]["output_path"] + "/initialization_matrix.pkl"
+    init_matrix = init_method(
+        n_hypparam, dict_copy["training_settings"]["warmup_initializations"]
+    )
+
+    path = dict_copy["training_settings"][
+        "output_path"] + "/initialization_matrix.pkl"
     save_as_pkl(init_matrix, path)
-    
+
     for i in range(dict_copy["training_settings"]["warmup_initializations"]):
-        dict_copy["training_settings"]["seed"] = dict_copy["training_settings"]["seed"]+i
+        dict_copy["training_settings"]["seed"] = (
+            dict_copy["training_settings"]["seed"] + i
+        )
         # prepare generative model
         prior_model = Priors(global_dict=dict_copy, ground_truth=False)
         # generate simulations from model
@@ -358,15 +370,15 @@ def prior_elicitation(
 
             * family: tfd.distribution, specification of the prior distribution
             family per parameter
-            
-            * hyperparams_dict: dict, keys: name of hyperparameter of parametric
-            prior distribution family and values representing the initialization
+
+            * hyperparams_dict: dict, keys: name of hyperparameter of parametric # noqa
+            prior distribution family and values representing the initialization # noqa
             which can be done via distribution or integer
-            
+
             * param_scaling: float, scaling of samples after being sampled from
             prior distributions
-            
-            * independence: include correlation between priors in loss computation
+
+            * independence: include correlation between priors in loss computation # noqa
             with specified scaling; or ignore correlation when None
 
         **Code example**::
@@ -389,11 +401,11 @@ def prior_elicitation(
 
         * if method=deep_prior: dictionary per model parameter
         (here: param1, param2) with
-            
+
             * param_scaling: float, scaling of samples after being sampled from
             prior distributions
-            
-            * independence: include correlation between priors in loss computation
+
+            * independence: include correlation between priors in loss computation # noqa
             with specified scaling; or ignore correlation when None
 
         **Code example**::
@@ -430,13 +442,13 @@ def prior_elicitation(
         The keywords have the following interpretation:
             * from_ground_truth: bool, True if simulating from ground truth
             otherwise False
-            
+
             * expert_data: read file with expert data; must have the same
             format as the model-simulated elicited statistics
-            
+
             * simulator_specs: dict, specifies the true prior distributions
             of the model parameters
-            
+
             * samples_from_prior: int, number of samples drawn from each prior
             distribution
 
@@ -456,7 +468,7 @@ def prior_elicitation(
         With the following definitions:
             * model: class, class definition of the generative model
             (see example below)
-            
+
             * additional_model_args: all input arguments of the generative
             model
 
@@ -510,10 +522,10 @@ def prior_elicitation(
                 sim_id="toy_example",          \
                     # individual id
                 warmup_initializations=50,     \
-                    # only for method="parametric_prior"; search for best initialization
+                    # only for method="parametric_prior"; search for best initialization # noqa
                 seed=0,
                 view_ep=50,                    \
-                    # how often should the progress_info be printed during training
+                    # how often should the progress_info be printed during training # noqa
                 epochs=500,
                 B=128,                         \
                     # number of batches
@@ -580,11 +592,8 @@ def prior_elicitation(
     """
     # %% HELPER VALUES
     num_params = len(
-        sorted(
-            list(
-                set(model_parameters.keys()).difference(set(["independence"]))
-                )
-            )
+        sorted(list(set(
+            model_parameters.keys()).difference(set(["independence"]))))
     )
 
     # %% CHECKS
@@ -628,8 +637,7 @@ def prior_elicitation(
     )
 
     _default_dict_model = dict(
-        additional_model_args=None,
-        discrete_likelihood=False,
+        additional_model_args=None, discrete_likelihood=False,
         softmax_gumble_specs=None
     )
 
@@ -645,17 +653,12 @@ def prior_elicitation(
     )
 
     _default_dict_loss = dict(
-        loss=MMD_energy,
-        loss_weighting=None,
-        use_regularization=False
+        loss=MMD_energy, loss_weighting=None, use_regularization=False
     )
 
     _default_dict_optimizer = dict(
         optimizer=tf.keras.optimizers.Adam,
-        optimizer_specs={
-            "learning_rate": 0.0001,
-            "clipnorm": 1.0
-        },
+        optimizer_specs={"learning_rate": 0.0001, "clipnorm": 1.0},
     )
 
     _default_dict_training = dict(
@@ -678,10 +681,10 @@ def prior_elicitation(
     for param_name in sorted(
         list(set(model_parameters.keys()).difference(set(["independence"])))
     ):
-        global_dict["model_parameters"
-                    ][param_name] = _default_dict_parameter.copy()
-        global_dict["model_parameters"
-                    ][param_name].update(model_parameters[param_name])
+        global_dict["model_parameters"][
+            param_name] = _default_dict_parameter.copy()
+        global_dict["model_parameters"][
+            param_name].update(model_parameters[param_name])
 
     # TODO-TEST: include test with independence = True, False, user-dict
     if model_parameters["independence"] is not None:
@@ -712,8 +715,7 @@ def prior_elicitation(
     # Section: expert_data
     global_dict["expert_data"] = dict()
     global_dict["expert_data"][
-        "from_ground_truth"
-        ] = expert_data["from_ground_truth"]
+        "from_ground_truth"] = expert_data["from_ground_truth"]
     global_dict["expert_data"].update(_default_dict_expert.copy())
     global_dict["expert_data"].update(expert_data)
 
@@ -726,9 +728,8 @@ def prior_elicitation(
     # Section: target_quantities
     global_dict["target_quantities"] = dict()
     for target_quant in target_quantities.keys():
-        global_dict[
-            "target_quantities"
-            ][target_quant] = _default_dict_targets.copy()
+        global_dict["target_quantities"][
+            target_quant] = _default_dict_targets.copy()
         global_dict["target_quantities"][target_quant].update(
             target_quantities[target_quant]
         )
@@ -759,7 +760,7 @@ def prior_elicitation(
     # %% SAVE GLOBAL DICT
     global_dict["training_settings"][
         "output_path"
-    ] = f"./elicit/{global_dict['training_settings']['output_path']}/{training_settings['method']}/{training_settings['sim_id']}_{training_settings['seed']}" # noqa
+    ] = f"./elicit/{global_dict['training_settings']['output_path']}/{training_settings['method']}/{training_settings['sim_id']}_{training_settings['seed']}"  # noqa
     path = global_dict["training_settings"]["output_path"] + "/global_dict.pkl"
     save_as_pkl(global_dict, path)
 
@@ -786,7 +787,7 @@ def prior_elicitation(
         # initial values
         min_index = tf.argmin(loss_list)
         init_prior_model = init_prior[min_index]
-    
+
     # run dag with optimal set of initial values
     training_loop(
         expert_elicited_statistics,

@@ -157,8 +157,8 @@ def training_loop(
                 epoch,
                 global_dict,
             )
-        
-        if epoch==0:
+
+        if epoch == 0:
             train_var = prior_model.trainable_variables
             # save final results in file
     res = {
