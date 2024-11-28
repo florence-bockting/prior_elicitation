@@ -28,13 +28,12 @@ sigma0_seq = [0.01, 0.1, 0.3, 0.6, 1.0]
 sigma1_seq = [0.01, 0.1, 0.3, 0.6, 1.0]
 
 # run sensitivity analysis
+run_sensitivity_binom(seed, path_sensitivity_res, mu0_seq, mu1_seq, 
+                                   sigma0_seq, sigma1_seq)
+
 # Note: data used in manuscript are provided in OSF (see file header)
 # if you  want to use data from manuscript:
 df_sim_res = prep_sensitivity_res(path_sensitivity_res)
-
-# if you want to run sensitivity analysis again
-df_sim_res = run_sensitivity_binom(seed, path_sensitivity_res, mu0_seq, mu1_seq, 
-                                   sigma0_seq, sigma1_seq)
 
 # plot results
 plot_sensitivity_binom(df_sim_res)
