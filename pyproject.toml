@@ -65,5 +65,5 @@ directory = "htmlcov"
 output = "reports/coverage/coverage.xml"
 
 [tool.flake8]
-exclude = elicit/simulations
+exclude = "elicit/simulations"
 	
