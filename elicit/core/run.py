@@ -113,7 +113,7 @@ def compute_loss(
     ----------
     training_elicited_statistics : dict
         dictionary containing the expert elicited statistics.
-    expert_elicited_statistics : TYPE
+    expert_elicited_statistics : dict
         dictionary containing the model-simulated elicited statistics.
     global_dict : dict
         global dictionary with all user input specifications.
@@ -352,19 +352,24 @@ def prior_elicitation(
     model_parameters : dict
 
     Specify a dictionary for each model parameter
+
         * if method=parametric_prior: dictionary per model parameter
         (here: param1, param2) with
-        * family: tfd.distribution, specification of the prior distribution
-        family per parameter
-        * hyperparams_dict: dict, keys: name of hyperparameter of parametric
-        prior distribution family and values representing the initialization
-        which can be done via distribution or integer
-        * param_scaling: float, scaling of samples after being sampled from
-        prior distributions
-        * independence: include correlation between priors in loss computation
-        with specified scaling; or ignore correlation when None
 
-        Code example::
+            * family: tfd.distribution, specification of the prior distribution
+            family per parameter
+            
+            * hyperparams_dict: dict, keys: name of hyperparameter of parametric
+            prior distribution family and values representing the initialization
+            which can be done via distribution or integer
+            
+            * param_scaling: float, scaling of samples after being sampled from
+            prior distributions
+            
+            * independence: include correlation between priors in loss computation
+            with specified scaling; or ignore correlation when None
+
+        **Code example**::
 
             {
                 param1 = dict(
@@ -384,12 +389,14 @@ def prior_elicitation(
 
         * if method=deep_prior: dictionary per model parameter
         (here: param1, param2) with
-        * param_scaling: float, scaling of samples after being sampled from
-        prior distributions
-        * independence: include correlation between priors in loss computation
-        with specified scaling; or ignore correlation when None
+            
+            * param_scaling: float, scaling of samples after being sampled from
+            prior distributions
+            
+            * independence: include correlation between priors in loss computation
+            with specified scaling; or ignore correlation when None
 
-        Code example::
+        **Code example**::
 
             {
                 param1 = dict(param_scaling=1.),
@@ -423,17 +430,20 @@ def prior_elicitation(
         The keywords have the following interpretation:
             * from_ground_truth: bool, True if simulating from ground truth
             otherwise False
+            
             * expert_data: read file with expert data; must have the same
             format as the model-simulated elicited statistics
+            
             * simulator_specs: dict, specifies the true prior distributions
             of the model parameters
+            
             * samples_from_prior: int, number of samples drawn from each prior
             distribution
 
     generative_model : dict
         Specification of the generative model.
 
-        Code example::
+        **Code example**::
 
             {
                 model=ExampleModel,
@@ -446,10 +456,11 @@ def prior_elicitation(
         With the following definitions:
             * model: class, class definition of the generative model
             (see example below)
+            
             * additional_model_args: all input arguments of the generative
             model
 
-        Code example of an example model::
+        **Code example** of an example model::
 
             class ExampleModel:
                 def __call__(self,
@@ -471,7 +482,7 @@ def prior_elicitation(
                                 )
 
     target_quantities : dict
-        Code example::
+        **Code example**::
 
             {
                 ypred=dict(
@@ -491,7 +502,7 @@ def prior_elicitation(
             }
 
     training_settings : dict
-        Code example::
+        **Code example**::
 
             {
                 method="parametric_prior",     \
@@ -499,12 +510,10 @@ def prior_elicitation(
                 sim_id="toy_example",          \
                     # individual id
                 warmup_initializations=50,     \
-                    # only for method="parametric_prior"; search for best \
-                        initialization
+                    # only for method="parametric_prior"; search for best initialization
                 seed=0,
                 view_ep=50,                    \
-                    # how often should the progress_info be printed during \
-                        training
+                    # how often should the progress_info be printed during training
                 epochs=500,
                 B=128,                         \
                     # number of batches
@@ -515,7 +524,7 @@ def prior_elicitation(
     normalizing_flow : dict or bool, optional
         Architecture of the normalizing flow. The default is False.
 
-        Code Example::
+        **Code Example**::
 
             {
                  num_coupling_layers=3,
@@ -539,7 +548,7 @@ def prior_elicitation(
     loss_function : dict or None, optional
         Specification of the loss function. The default is None.
 
-        Code Example::
+        **Code Example**::
 
             {
                   loss=MMD_energy,            \
@@ -554,7 +563,7 @@ def prior_elicitation(
         Specification of the optimizer used for SGD training.
         The default is None.
 
-        Code Example::
+        **Code Example**::
 
             {
                 optimizer=tf.keras.optimizers.Adam,

@@ -110,6 +110,12 @@ The following notebooks showcase the functionality of our `prior_elicitation` pa
 
 (Please note that the tutorials are currently being updated.)
 
+.. dropdown:: Learning a joint, non-parametric prior for all model parameters
+   :color: primary
+
+   #. :doc:`Binomial model <notebooks/binomial_joint>`
+   #. Normal model (coming soon)
+
 .. dropdown:: Learning independent, parametric priors for each model parameter
    :color: primary
 
@@ -117,13 +123,6 @@ The following notebooks showcase the functionality of our `prior_elicitation` pa
    #. Poisson model (coming soon)
    #. Normal model (coming soon)
    #. Hierarchical model (coming soon)
-
-.. dropdown:: Learning a joint, non-parametric prior for all model parameters
-   :color: primary
-
-   #. :doc:`Binomial model <notebooks/binomial_joint>`
-   #. Normal model (coming soon)
-
 
 References
 ==========

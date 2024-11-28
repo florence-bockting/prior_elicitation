@@ -428,7 +428,7 @@ document.write(`
 <span class="sd">    ----------</span>
 <span class="sd">    training_elicited_statistics : dict</span>
 <span class="sd">        dictionary containing the expert elicited statistics.</span>
-<span class="sd">    expert_elicited_statistics : TYPE</span>
+<span class="sd">    expert_elicited_statistics : dict</span>
 <span class="sd">        dictionary containing the model-simulated elicited statistics.</span>
 <span class="sd">    global_dict : dict</span>
 <span class="sd">        global dictionary with all user input specifications.</span>
@@ -673,19 +673,24 @@ document.write(`
 <span class="sd">    model_parameters : dict</span>
 
 <span class="sd">    Specify a dictionary for each model parameter</span>
+
 <span class="sd">        * if method=parametric_prior: dictionary per model parameter</span>
 <span class="sd">        (here: param1, param2) with</span>
-<span class="sd">        * family: tfd.distribution, specification of the prior distribution</span>
-<span class="sd">        family per parameter</span>
-<span class="sd">        * hyperparams_dict: dict, keys: name of hyperparameter of parametric</span>
-<span class="sd">        prior distribution family and values representing the initialization</span>
-<span class="sd">        which can be done via distribution or integer</span>
-<span class="sd">        * param_scaling: float, scaling of samples after being sampled from</span>
-<span class="sd">        prior distributions</span>
-<span class="sd">        * independence: include correlation between priors in loss computation</span>
-<span class="sd">        with specified scaling; or ignore correlation when None</span>
 
-<span class="sd">        Code example::</span>
+<span class="sd">            * family: tfd.distribution, specification of the prior distribution</span>
+<span class="sd">            family per parameter</span>
+<span class="sd">            </span>
+<span class="sd">            * hyperparams_dict: dict, keys: name of hyperparameter of parametric</span>
+<span class="sd">            prior distribution family and values representing the initialization</span>
+<span class="sd">            which can be done via distribution or integer</span>
+<span class="sd">            </span>
+<span class="sd">            * param_scaling: float, scaling of samples after being sampled from</span>
+<span class="sd">            prior distributions</span>
+<span class="sd">            </span>
+<span class="sd">            * independence: include correlation between priors in loss computation</span>
+<span class="sd">            with specified scaling; or ignore correlation when None</span>
+
+<span class="sd">        **Code example**::</span>
 
 <span class="sd">            {</span>
 <span class="sd">                param1 = dict(</span>
@@ -705,12 +710,14 @@ document.write(`
 
 <span class="sd">        * if method=deep_prior: dictionary per model parameter</span>
 <span class="sd">        (here: param1, param2) with</span>
-<span class="sd">        * param_scaling: float, scaling of samples after being sampled from</span>
-<span class="sd">        prior distributions</span>
-<span class="sd">        * independence: include correlation between priors in loss computation</span>
-<span class="sd">        with specified scaling; or ignore correlation when None</span>
+<span class="sd">            </span>
+<span class="sd">            * param_scaling: float, scaling of samples after being sampled from</span>
+<span class="sd">            prior distributions</span>
+<span class="sd">            </span>
+<span class="sd">            * independence: include correlation between priors in loss computation</span>
+<span class="sd">            with specified scaling; or ignore correlation when None</span>
 
-<span class="sd">        Code example::</span>
+<span class="sd">        **Code example**::</span>
 
 <span class="sd">            {</span>
 <span class="sd">                param1 = dict(param_scaling=1.),</span>
@@ -744,17 +751,20 @@ document.write(`
 <span class="sd">        The keywords have the following interpretation:</span>
 <span class="sd">            * from_ground_truth: bool, True if simulating from ground truth</span>
 <span class="sd">            otherwise False</span>
+<span class="sd">            </span>
 <span class="sd">            * expert_data: read file with expert data; must have the same</span>
 <span class="sd">            format as the model-simulated elicited statistics</span>
+<span class="sd">            </span>
 <span class="sd">            * simulator_specs: dict, specifies the true prior distributions</span>
 <span class="sd">            of the model parameters</span>
+<span class="sd">            </span>
 <span class="sd">            * samples_from_prior: int, number of samples drawn from each prior</span>
 <span class="sd">            distribution</span>
 
 <span class="sd">    generative_model : dict</span>
 <span class="sd">        Specification of the generative model.</span>
 
-<span class="sd">        Code example::</span>
+<span class="sd">        **Code example**::</span>
 
 <span class="sd">            {</span>
 <span class="sd">                model=ExampleModel,</span>
@@ -767,10 +777,11 @@ document.write(`
 <span class="sd">        With the following definitions:</span>
 <span class="sd">            * model: class, class definition of the generative model</span>
 <span class="sd">            (see example below)</span>
+<span class="sd">            </span>
 <span class="sd">            * additional_model_args: all input arguments of the generative</span>
 <span class="sd">            model</span>
 
-<span class="sd">        Code example of an example model::</span>
+<span class="sd">        **Code example** of an example model::</span>
 
 <span class="sd">            class ExampleModel:</span>
 <span class="sd">                def __call__(self,</span>
@@ -792,7 +803,7 @@ document.write(`
 <span class="sd">                                )</span>
 
 <span class="sd">    target_quantities : dict</span>
-<span class="sd">        Code example::</span>
+<span class="sd">        **Code example**::</span>
 
 <span class="sd">            {</span>
 <span class="sd">                ypred=dict(</span>
@@ -812,7 +823,7 @@ document.write(`
 <span class="sd">            }</span>
 
 <span class="sd">    training_settings : dict</span>
-<span class="sd">        Code example::</span>
+<span class="sd">        **Code example**::</span>
 
 <span class="sd">            {</span>
 <span class="sd">                method=&quot;parametric_prior&quot;,     \</span>
@@ -836,7 +847,7 @@ document.write(`
 <span class="sd">    normalizing_flow : dict or bool, optional</span>
 <span class="sd">        Architecture of the normalizing flow. The default is False.</span>
 
-<span class="sd">        Code Example::</span>
+<span class="sd">        **Code Example**::</span>
 
 <span class="sd">            {</span>
 <span class="sd">                 num_coupling_layers=3,</span>
@@ -860,7 +871,7 @@ document.write(`
 <span class="sd">    loss_function : dict or None, optional</span>
 <span class="sd">        Specification of the loss function. The default is None.</span>
 
-<span class="sd">        Code Example::</span>
+<span class="sd">        **Code Example**::</span>
 
 <span class="sd">            {</span>
 <span class="sd">                  loss=MMD_energy,            \</span>
@@ -875,7 +886,7 @@ document.write(`
 <span class="sd">        Specification of the optimizer used for SGD training.</span>
 <span class="sd">        The default is None.</span>
 
-<span class="sd">        Code Example::</span>
+<span class="sd">        **Code Example**::</span>
 
 <span class="sd">            {</span>
 <span class="sd">                optimizer=tf.keras.optimizers.Adam,</span>

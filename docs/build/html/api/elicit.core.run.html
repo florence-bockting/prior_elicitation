@@ -429,7 +429,7 @@ loss value.</p>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>training_elicited_statistics</strong><span class="classifier">dict</span></dt><dd><p>dictionary containing the expert elicited statistics.</p>
 </dd>
-<dt><strong>expert_elicited_statistics</strong><span class="classifier">TYPE</span></dt><dd><p>dictionary containing the model-simulated elicited statistics.</p>
+<dt><strong>expert_elicited_statistics</strong><span class="classifier">dict</span></dt><dd><p>dictionary containing the model-simulated elicited statistics.</p>
 </dd>
 <dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>global dictionary with all user input specifications.</p>
 </dd>
@@ -492,17 +492,27 @@ loss.</p>
 <dt><strong>Specify a dictionary for each model parameter</strong></dt><dd><ul class="simple">
 <li><p>if method=parametric_prior: dictionary per model parameter</p></li>
 </ul>
-<p>(here: param1, param2) with
-* family: tfd.distribution, specification of the prior distribution
-family per parameter
-* hyperparams_dict: dict, keys: name of hyperparameter of parametric
-prior distribution family and values representing the initialization
-which can be done via distribution or integer
-* param_scaling: float, scaling of samples after being sampled from
-prior distributions
-* independence: include correlation between priors in loss computation
-with specified scaling; or ignore correlation when None</p>
-<p>Code example:</p>
+<p>(here: param1, param2) with</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>family: tfd.distribution, specification of the prior distribution</p></li>
+</ul>
+<p>family per parameter</p>
+<ul class="simple">
+<li><p>hyperparams_dict: dict, keys: name of hyperparameter of parametric</p></li>
+</ul>
+<p>prior distribution family and values representing the initialization
+which can be done via distribution or integer</p>
+<ul class="simple">
+<li><p>param_scaling: float, scaling of samples after being sampled from</p></li>
+</ul>
+<p>prior distributions</p>
+<ul class="simple">
+<li><p>independence: include correlation between priors in loss computation</p></li>
+</ul>
+<p>with specified scaling; or ignore correlation when None</p>
+</div></blockquote>
+<p><strong>Code example</strong>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="n">param1</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">family</span><span class="o">=</span><span class="n">tfd</span><span class="o">.</span><span class="n">distribution</span><span class="p">,</span>
@@ -523,12 +533,18 @@ with specified scaling; or ignore correlation when None</p>
 <ul class="simple">
 <li><p>if method=deep_prior: dictionary per model parameter</p></li>
 </ul>
-<p>(here: param1, param2) with
-* param_scaling: float, scaling of samples after being sampled from
-prior distributions
-* independence: include correlation between priors in loss computation
-with specified scaling; or ignore correlation when None</p>
-<p>Code example:</p>
+<p>(here: param1, param2) with</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>param_scaling: float, scaling of samples after being sampled from</p></li>
+</ul>
+<p>prior distributions</p>
+<ul class="simple">
+<li><p>independence: include correlation between priors in loss computation</p></li>
+</ul>
+<p>with specified scaling; or ignore correlation when None</p>
+</div></blockquote>
+<p><strong>Code example</strong>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="n">param1</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">param_scaling</span><span class="o">=</span><span class="mf">1.</span><span class="p">),</span>
     <span class="n">param2</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">param_sacling</span><span class="o">=</span><span class="mf">1.</span><span class="p">),</span>
@@ -563,18 +579,24 @@ If you have expert data:</p>
 <dt>The keywords have the following interpretation:</dt><dd><ul class="simple">
 <li><p>from_ground_truth: bool, True if simulating from ground truth</p></li>
 </ul>
-<p>otherwise False
-* expert_data: read file with expert data; must have the same
-format as the model-simulated elicited statistics
-* simulator_specs: dict, specifies the true prior distributions
-of the model parameters
-* samples_from_prior: int, number of samples drawn from each prior
-distribution</p>
+<p>otherwise False</p>
+<ul class="simple">
+<li><p>expert_data: read file with expert data; must have the same</p></li>
+</ul>
+<p>format as the model-simulated elicited statistics</p>
+<ul class="simple">
+<li><p>simulator_specs: dict, specifies the true prior distributions</p></li>
+</ul>
+<p>of the model parameters</p>
+<ul class="simple">
+<li><p>samples_from_prior: int, number of samples drawn from each prior</p></li>
+</ul>
+<p>distribution</p>
 </dd>
 </dl>
 </dd>
 <dt><strong>generative_model</strong><span class="classifier">dict</span></dt><dd><p>Specification of the generative model.</p>
-<p>Code example:</p>
+<p><strong>Code example</strong>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="n">model</span><span class="o">=</span><span class="n">ExampleModel</span><span class="p">,</span>
     <span class="n">additional_model_args</span><span class="o">=</span><span class="p">{</span>
@@ -588,12 +610,14 @@ distribution</p>
 <dt>With the following definitions:</dt><dd><ul class="simple">
 <li><p>model: class, class definition of the generative model</p></li>
 </ul>
-<p>(see example below)
-* additional_model_args: all input arguments of the generative
-model</p>
+<p>(see example below)</p>
+<ul class="simple">
+<li><p>additional_model_args: all input arguments of the generative</p></li>
+</ul>
+<p>model</p>
 </dd>
 </dl>
-<p>Code example of an example model:</p>
+<p><strong>Code example</strong> of an example model:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ExampleModel</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">ground_truth</span><span class="p">,</span>  <span class="c1"># required argument</span>
@@ -615,7 +639,7 @@ model</p>
 </pre></div>
 </div>
 </dd>
-<dt><strong>target_quantities</strong><span class="classifier">dict</span></dt><dd><p>Code example:</p>
+<dt><strong>target_quantities</strong><span class="classifier">dict</span></dt><dd><p><strong>Code example</strong>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="n">ypred</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
             <span class="n">elicitation_method</span><span class="o">=</span><span class="s2">&quot;quantiles&quot;</span><span class="p">,</span>                                   <span class="c1"># &quot;quantiles&quot;, &quot;moments&quot;, &quot;histogram&quot;</span>
@@ -630,7 +654,7 @@ model</p>
 </pre></div>
 </div>
 </dd>
-<dt><strong>training_settings</strong><span class="classifier">dict</span></dt><dd><p>Code example:</p>
+<dt><strong>training_settings</strong><span class="classifier">dict</span></dt><dd><p><strong>Code example</strong>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="n">method</span><span class="o">=</span><span class="s2">&quot;parametric_prior&quot;</span><span class="p">,</span>                         <span class="c1"># &quot;parametric_prior&quot;, &quot;deep_prior&quot;</span>
     <span class="n">sim_id</span><span class="o">=</span><span class="s2">&quot;toy_example&quot;</span><span class="p">,</span>                              <span class="c1"># individual id</span>
@@ -645,7 +669,7 @@ model</p>
 </div>
 </dd>
 <dt><strong>normalizing_flow</strong><span class="classifier">dict or bool, optional</span></dt><dd><p>Architecture of the normalizing flow. The default is False.</p>
-<p>Code Example:</p>
+<p><strong>Code Example</strong>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
      <span class="n">num_coupling_layers</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
      <span class="n">coupling_design</span><span class="o">=</span><span class="s2">&quot;affine&quot;</span><span class="p">,</span>
@@ -668,7 +692,7 @@ model</p>
 </div>
 </dd>
 <dt><strong>loss_function</strong><span class="classifier">dict or None, optional</span></dt><dd><p>Specification of the loss function. The default is None.</p>
-<p>Code Example:</p>
+<p><strong>Code Example</strong>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
       <span class="n">loss</span><span class="o">=</span><span class="n">MMD_energy</span><span class="p">,</span>                                  <span class="c1"># default discrepancy measure MMD</span>
       <span class="n">loss_weighting</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>                              <span class="c1"># if loss-balancing method is applied</span>
@@ -679,7 +703,7 @@ model</p>
 </dd>
 <dt><strong>optimization_settings</strong><span class="classifier">dict or None, optional</span></dt><dd><p>Specification of the optimizer used for SGD training.
 The default is None.</p>
-<p>Code Example:</p>
+<p><strong>Code Example</strong>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">,</span>
     <span class="n">optimizer_specs</span><span class="o">=</span><span class="p">{</span>

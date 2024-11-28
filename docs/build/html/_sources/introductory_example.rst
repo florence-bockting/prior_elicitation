@@ -13,6 +13,12 @@ Tutorials
 The tutorials are designed to demonstrate the use of the `prior_elicitation` package through selected case studies. 
 Please note that the tutorials are currently being developed and updated.
 
+Learning a joint, non-parametric prior
+======================================
+
+#. :doc:`Binomial model <notebooks/binomial_joint>`
+#. Normal model (coming soon)
+
 Learning independent, parametric priors
 ========================================
 
@@ -20,9 +26,3 @@ Learning independent, parametric priors
 #. Poisson model (coming soon)
 #. Normal model (coming soon)
 #. Hierarchical model (coming soon)
-
-Learning a joint, non-parametric prior
-======================================
-
-#. :doc:`Binomial model <notebooks/binomial_joint>`
-#. Normal model (coming soon)

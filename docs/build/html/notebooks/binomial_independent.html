@@ -420,8 +420,6 @@ document.write(`
 <span class="c1"># set path to oracle data and to simulation results</span>
 <span class="n">path_sim_res</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;elicit/results/parametric_prior/binomial_model_</span><span class="si">{</span><span class="n">seed</span><span class="si">}</span><span class="s2">&quot;</span>
 <span class="n">path_expert</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;elicit/results/parametric_prior/binomial_model_</span><span class="si">{</span><span class="n">seed</span><span class="si">}</span><span class="s2">/expert&quot;</span>
-<span class="c1"># set path for saving sensitivity results</span>
-<span class="n">path_sensitivity_res</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;elicit/elicit/results/parametric_prior/binomial_model_</span><span class="si">{</span><span class="n">seed</span><span class="si">}</span><span class="s2">/sensitivity_results&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -432,8 +430,8 @@ document.write(`
 <section id="generative-model">
 <h3>Generative model<a class="headerlink" href="#generative-model" title="Link to this heading">#</a></h3>
 <p>Binomial model with a logit link (sigmoid response function) and one continuous predictor~<span class="math notranslate nohighlight">\(x=1,\ldots,50\)</span>, scaled by its standard deviation:</p>
-<div class="amsmath math notranslate nohighlight" id="equation-ebeccf67-4258-4265-bf7b-901494445252">
-<span class="eqno">(1)<a class="headerlink" href="#equation-ebeccf67-4258-4265-bf7b-901494445252" title="Permalink to this equation">#</a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-b7c5d36d-1b0e-4ca4-b953-df0a214b88cc">
+<span class="eqno">(1)<a class="headerlink" href="#equation-b7c5d36d-1b0e-4ca4-b953-df0a214b88cc" title="Permalink to this equation">#</a></span>\[\begin{align}
     \begin{split}
         y_i &amp;\sim \text{Binomial}(p_i, 30)\\
         p_i &amp;= \text{sigmoid}(\beta_0+\beta_1x_i)\\
