@@ -1,5 +1,5 @@
 import logging.config
-from pythonjsonlogger import jsonlogger
+from pythonjsonlogger import jsonlogger # noqa
 
 LOGGING = {
     "version": 1,
@@ -8,7 +8,7 @@ LOGGING = {
         "json": {
             "format": "%(asctime)s %(levelname)s %(name)s %(message)s",
             "datefmt": "%Y-%m-%d %H:%M",
-            "class": str(jsonlogger.JsonFormatter),
+            "class": "pythonjsonlogger.jsonlogger.JsonFormatter",
         }
     },
     "handlers": {
