@@ -22,8 +22,7 @@ ground_truth = {
 }
 
 expert_data = pd.read_pickle(
-    "elicit/simulations/parametric_prior_examples/expert_data/\
-        toy-example/elicited_statistics.pkl"
+    "elicit/simulations/parametric_prior_examples/expert_data/toy-example/elicited_statistics.pkl"
 )
 
 prior_elicitation(

@@ -207,10 +207,12 @@ def check_training_settings(training_settings):
             "output_path",
             "progress_info",
             "view_ep",
+            "print_log",
+            "save_log"
         ], f'Have you misspelled "{k}" in the parameter settings? Only \
             ["method", "sim_id","B","samples_from_prior","seed",\
-             "warmup_initializations","epochs","output_path","progress_info"]\
-                are valid argument names.'
+             "warmup_initializations","epochs","output_path","progress_info",\
+             "view_ep", "print_log", "save_log"] are valid argument names.'
     for k in training_settings.keys():
         assert set(["method", "sim_id", "seed", "epochs"]) <= set(
             training_settings.keys()

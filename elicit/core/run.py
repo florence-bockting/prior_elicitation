@@ -5,7 +5,9 @@
 import tensorflow as tf
 import tensorflow_probability as tfp
 import pandas as pd
+import logging
 
+from elicit.functions import logging_config
 from elicit.functions.prior_simulation import Priors
 from elicit.functions.model_simulation import simulate_from_generator
 from elicit.functions.targets_elicits_computation import (
@@ -17,7 +19,7 @@ from elicit.functions.loss_computation import (
     compute_discrepancy,
     dynamic_weight_averaging,
 )
-from elicit.functions.helper_functions import save_as_pkl
+from elicit.functions.helper_functions import save_as_pkl, custom_logger
 from elicit.functions.loss_functions import MMD_energy
 from elicit.functions.training import training_loop
 
@@ -25,8 +27,8 @@ from elicit.checks import check_run
 
 tfd = tfp.distributions
 
-
-def one_forward_simulation(prior_model, global_dict, ground_truth=False):
+def one_forward_simulation(prior_model, global_dict, 
+                           ground_truth=False):
     """
     One forward simulation from prior samples to elicited statistics.
 
@@ -54,7 +56,7 @@ def one_forward_simulation(prior_model, global_dict, ground_truth=False):
     # simulate prior predictive distribution based on prior samples
     # and generative model
     model_simulations = simulate_from_generator(
-        prior_samples, ground_truth, global_dict
+        prior_samples, ground_truth, global_dict,
     )
     # compute the target quantities
     target_quantities = computation_target_quantities(
@@ -87,15 +89,20 @@ def load_expert_data(global_dict, path_to_expert_data=None):
         model-simulated elicited statistics.
 
     """
+    logger = logging.getLogger(__name__)
+
     if global_dict["expert_data"]["from_ground_truth"]:
+        logger.info("Simulate from oracle")
         # set seed
         tf.random.set_seed(global_dict["training_settings"]["seed"])
         # sample from true priors
-        prior_model = Priors(global_dict=global_dict, ground_truth=True)
+        prior_model = Priors(global_dict=global_dict,
+                             ground_truth=True)
         expert_data = one_forward_simulation(
             prior_model, global_dict, ground_truth=True
         )
     else:
+        logger.info("Read expert data")
         # load expert data from file
         expert_data = global_dict["expert_data"]["data"]
     return expert_data
@@ -126,7 +133,6 @@ def compute_loss(
         total loss value.
 
     """
-
     # regularization term for preventing degenerated solutions in var
     # collapse to zero used from Manderson and Goudie (2024)
     def regulariser(prior_samples):
@@ -170,6 +176,8 @@ def compute_loss(
             total loss value (either weighted or unweighted).
 
         """
+        logger = logging.getLogger(__name__)
+        logger.info("compute total loss")
         loss_per_component_current = loss_per_component
         # TODO: check whether indicated loss weighting input is implemented
         # create subdictionary for better readability
@@ -256,7 +264,7 @@ def compute_loss(
 
 def burnin_phase(
     expert_elicited_statistics, one_forward_simulation, compute_loss,
-    global_dict
+    global_dict,
 ):
     """
     For the method "parametric_prior" it might be helpful to run different
@@ -322,7 +330,8 @@ def burnin_phase(
             dict_copy["training_settings"]["seed"] + i
         )
         # prepare generative model
-        prior_model = Priors(global_dict=dict_copy, ground_truth=False)
+        prior_model = Priors(global_dict=dict_copy,
+                             ground_truth=False)
         # generate simulations from model
         training_elicited_statistics = one_forward_simulation(prior_model,
                                                               dict_copy)
@@ -590,6 +599,8 @@ def prior_elicitation(
     Learns the prior distributions
 
     """
+    
+    logger = logging.getLogger(__name__)
     # %% HELPER VALUES
     num_params = len(
         sorted(list(set(
@@ -671,6 +682,8 @@ def prior_elicitation(
         output_path="results",
         progress_info=1,
         view_ep=1,
+        print_log=True,
+        save_log=False
     )
 
     # %% CREATE GLOBAL DICTIONARY
@@ -770,25 +783,35 @@ def prior_elicitation(
 
     # get expert data
     expert_elicited_statistics = load_expert_data(global_dict)
-
-    if global_dict["training_settings"]["warmup_initializations"] is None:
-        # prepare generative model
-        init_prior_model = Priors(global_dict=global_dict, ground_truth=False)
-
-    else:
-        loss_list, init_prior = burnin_phase(
-            expert_elicited_statistics,
-            one_forward_simulation,
-            compute_loss,
-            global_dict,
-        )
-
-        # extract minimum loss out of all runs and corresponding set of
-        # initial values
-        min_index = tf.argmin(loss_list)
-        init_prior_model = init_prior[min_index]
+    
+    def pre_training(warmup):
+        logger = logging.getLogger(__name__)
+        if warmup is None:
+            # prepare generative model
+            init_prior_model = Priors(global_dict=global_dict,
+                                      ground_truth=False)
+    
+        else:
+            logger.info("Pre-training phase (only first run)")
+            loss_list, init_prior = burnin_phase(
+                expert_elicited_statistics,
+                one_forward_simulation,
+                compute_loss,
+                global_dict,
+            )
+    
+            # extract minimum loss out of all runs and corresponding set of
+            # initial values
+            min_index = tf.argmin(loss_list)
+            init_prior_model = init_prior[min_index]
+        
+        return (min_index, init_prior_model)
+    
+    min_index, init_prior_model = pre_training(
+        global_dict["training_settings"]["warmup_initializations"])
 
     # run dag with optimal set of initial values
+    logger.info("Training Phase (only first epoch)")
     training_loop(
         expert_elicited_statistics,
         init_prior_model,

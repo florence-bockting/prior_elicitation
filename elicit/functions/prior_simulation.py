@@ -2,10 +2,12 @@
 #
 # noqa SPDX-License-Identifier: Apache-2.0
 
+import logging
 import tensorflow as tf
 import tensorflow_probability as tfp
-from bayesflow import networks
 
+from bayesflow import networks
+from elicit.functions import logging_config
 from elicit.functions.helper_functions import save_as_pkl
 
 tfd = tfp.distributions
@@ -16,21 +18,26 @@ class Priors(tf.Module):
     """
     Initializes the hyperparameters of the prior distributions.
     """
-
     def __init__(self, ground_truth, global_dict):
         self.global_dict = global_dict
         self.ground_truth = ground_truth
+        self.logger = logging.getLogger(__name__)
         # set seed
         tf.random.set_seed(global_dict["training_settings"]["seed"])
         # initialize hyperparameter for learning (if true hyperparameter
         # are given, no initialization is needed)
         if not self.ground_truth:
+            self.logger.info("Initialize prior hyperparameters")
             self.init_priors = intialize_priors(self.global_dict)
         else:
+            self.logger.info("Set true prior hyperparameters")
             self.init_priors = None
 
     def __call__(self):
-
+        if self.ground_truth:
+            self.logger.info("Sample from true prior(s)")
+        else:
+            self.logger.info("Sample from prior(s)")
         prior_samples = sample_from_priors(
             self.init_priors, self.ground_truth, self.global_dict
         )

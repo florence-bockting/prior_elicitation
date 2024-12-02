@@ -5,9 +5,11 @@
 import tensorflow as tf
 import tensorflow_probability as tfp
 import bayesflow as bf
+import logging
 
 from elicit.functions.helper_functions import save_as_pkl
 from elicit.functions.loss_functions import norm_diff
+from elicit.functions import logging_config
 
 tfd = tfp.distributions
 bfn = bf.networks
@@ -37,6 +39,11 @@ def compute_loss_components(elicited_statistics, glob_dict, expert):
         the discrepancy.
 
     """
+    logger = logging.getLogger(__name__)
+    if expert:
+        logger.info("preprocess expert elicited statistics")
+    else:
+        logger.info("preprocess simulated statistics")
     # extract the target quantities section from the glob dict
     target_glob_dict = glob_dict["target_quantities"]
 
@@ -240,6 +247,8 @@ def compute_discrepancy(loss_components_expert, loss_components_training,
         list of loss value for each loss component
 
     """
+    logger = logging.getLogger(__name__)
+    logger.info("compute discrepancy")
     # import loss function
     loss_function = glob_dict["loss_function"]["loss"]
     # create dictionary for storing results

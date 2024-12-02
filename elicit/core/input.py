@@ -82,7 +82,9 @@ def global_dict(
          B=128,
          samples_from_prior=200,
          output_path="results",
-         progress_info=1
+         progress_info=1,
+         print_log=True,
+         save_log=False
          )):
     """
     User settings for prior elicitation tool
@@ -222,7 +224,9 @@ def global_dict(
              B=128,
              samples_from_prior=200,
              output_path="results",
-             progress_info=1
+             progress_info=1,
+             print_log=True,
+             save_log=False
              )
         )
     return global_dict

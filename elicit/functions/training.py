@@ -7,6 +7,7 @@ import tensorflow_probability as tfp
 import time
 import numpy as np
 import pandas as pd
+import logging
 
 from elicit.functions.helper_functions import (
     save_as_pkl,
@@ -57,6 +58,8 @@ def training_loop(
     dict_training = global_dict["training_settings"]
     dict_optimization = global_dict["optimization_settings"]
     for epoch in tf.range(dict_training["epochs"]):
+        if epoch > 0:
+            logging.disable(logging.INFO)
         # runtime of one epoch
         epoch_time_start = time.time()
         # initialize the adam optimizer
@@ -67,7 +70,7 @@ def training_loop(
         with tf.GradientTape() as tape:
             # generate simulations from model
             training_elicited_statistics = one_forward_simulation(
-                prior_model, global_dict
+                prior_model, global_dict,
             )
             # comput loss
             weighted_total_loss = compute_loss(

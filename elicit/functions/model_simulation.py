@@ -4,11 +4,12 @@
 
 import tensorflow as tf
 import tensorflow_probability as tfp
+import logging
 
+from elicit.functions import logging_config
 from elicit.functions.helper_functions import save_as_pkl
 
 tfd = tfp.distributions
-
 
 def softmax_gumbel_trick(model_simulations, global_dict):
     """
@@ -102,6 +103,12 @@ def simulate_from_generator(prior_samples, ground_truth, global_dict):
         simulated data from generative model.
 
     """
+    logger = logging.getLogger(__name__)
+    if ground_truth:
+        logger.info("simulate from true generative model")
+    else:
+        logger.info("simulate from generative model")
+
     # set seed
     tf.random.set_seed(global_dict["training_settings"]["seed"])
     # create subdictionaries for better readability

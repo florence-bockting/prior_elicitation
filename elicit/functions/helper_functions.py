@@ -6,6 +6,7 @@ import pickle
 import os
 import pandas as pd
 import tensorflow as tf
+import logging
 
 
 def save_as_pkl(variable, path_to_file):
@@ -119,3 +120,32 @@ def marginal_prior_moments(prior_samples, epoch, global_dict):
     path_res_dict = saving_path + "/res_dict.pkl"
     save_as_pkl(res_dict, path_res_dict)
     return res_dict
+
+
+def custom_logger(global_dict):
+    print_log = global_dict["training_settings"]["print_log"]
+    save_log = global_dict["training_settings"]["save_log"]
+
+    logger = logging.getLogger(__name__)
+    logger.setLevel("INFO")
+    formatter = logging.Formatter(
+        "{asctime} - {levelname} - {name} - {message}",
+         style="{",
+         datefmt="%Y-%m-%d %H:%M",
+    )
+    if print_log:
+        console_handler = logging.StreamHandler()
+        console_handler.setFormatter(formatter)
+        logger.addHandler(console_handler)
+    if save_log:
+        file_handler = logging.FileHandler("prior_elicitation.log", 
+                                           mode="w",
+                                           encoding="utf-8")
+        file_handler.setFormatter(formatter)
+        logger.addHandler(file_handler)
+    if (save_log is False and print_log is False):
+        logger = logging.getLogger()
+        logger.disabled = True
+    
+    logger.propagate = False
+    return logger

@@ -7,13 +7,14 @@ import tensorflow_probability as tfp
 import bayesflow as bf
 import inspect
 import pandas as pd
+import logging
 
+from elicit.functions import logging_config
 from elicit.functions.helper_functions import save_as_pkl
 from elicit.user.custom_functions import custom_correlation
 
 tfd = tfp.distributions
 bfn = bf.networks
-
 
 # TODO: Update Custom Target Function
 def use_custom_functions(custom_function, model_simulations, global_dict):
@@ -92,6 +93,11 @@ def computation_target_quantities(model_simulations, ground_truth,
     targets_res : dict
         computed target quantities.
     """
+    logger = logging.getLogger(__name__)
+    if ground_truth:
+        logger.info("Compute true target quantities")
+    else:
+        logger.info("Compute target quantities")
     # create sub-dictionaries for readability
     target_dict = global_dict["target_quantities"]
     # initialize dict for storing results
@@ -153,6 +159,11 @@ def computation_elicited_statistics(target_quantities, ground_truth,
         simulated elicited statistics.
 
     """
+    logger = logging.getLogger(__name__)
+    if ground_truth:
+        logger.info("Compute true elicited statistics")
+    else:
+        logger.info("Compute elicited statistics")
     # create sub-dictionaries for readability
     target_dict = global_dict["target_quantities"]
     # initialize dict for storing results
@@ -231,8 +242,7 @@ def computation_elicited_statistics(target_quantities, ground_truth,
                     assert mom in [
                         "sd",
                         "mean",
-                    ], "currently only 'mean' and 'sd' are supported as \
-                        moments"
+                    ], "currently only 'mean', 'sd' are supported as moments"
 
                     if mom == "mean":
                         computed_mean = tf.reduce_mean(
