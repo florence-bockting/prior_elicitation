@@ -9,7 +9,7 @@ import logging
 
 from elicit.functions.helper_functions import save_as_pkl
 from elicit.functions.loss_functions import norm_diff
-from elicit.functions import logging_config
+from elicit.functions import logging_config # noqa
 
 tfd = tfp.distributions
 bfn = bf.networks

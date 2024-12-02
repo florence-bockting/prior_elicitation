@@ -7,7 +7,6 @@ import tensorflow_probability as tfp
 import pandas as pd
 import logging
 
-from elicit.functions import logging_config
 from elicit.functions.prior_simulation import Priors
 from elicit.functions.model_simulation import simulate_from_generator
 from elicit.functions.targets_elicits_computation import (
@@ -19,7 +18,7 @@ from elicit.functions.loss_computation import (
     compute_discrepancy,
     dynamic_weight_averaging,
 )
-from elicit.functions.helper_functions import save_as_pkl, custom_logger
+from elicit.functions.helper_functions import save_as_pkl
 from elicit.functions.loss_functions import MMD_energy
 from elicit.functions.training import training_loop
 
@@ -27,8 +26,8 @@ from elicit.checks import check_run
 
 tfd = tfp.distributions
 
-def one_forward_simulation(prior_model, global_dict, 
-                           ground_truth=False):
+
+def one_forward_simulation(prior_model, global_dict, ground_truth=False):
     """
     One forward simulation from prior samples to elicited statistics.
 
@@ -599,7 +598,7 @@ def prior_elicitation(
     Learns the prior distributions
 
     """
-    
+
     logger = logging.getLogger(__name__)
     # %% HELPER VALUES
     num_params = len(
@@ -783,14 +782,14 @@ def prior_elicitation(
 
     # get expert data
     expert_elicited_statistics = load_expert_data(global_dict)
-    
+
     def pre_training(warmup):
         logger = logging.getLogger(__name__)
         if warmup is None:
             # prepare generative model
             init_prior_model = Priors(global_dict=global_dict,
                                       ground_truth=False)
-    
+
         else:
             logger.info("Pre-training phase (only first run)")
             loss_list, init_prior = burnin_phase(
@@ -799,14 +798,14 @@ def prior_elicitation(
                 compute_loss,
                 global_dict,
             )
-    
+
             # extract minimum loss out of all runs and corresponding set of
             # initial values
             min_index = tf.argmin(loss_list)
             init_prior_model = init_prior[min_index]
-        
+
         return (min_index, init_prior_model)
-    
+
     min_index, init_prior_model = pre_training(
         global_dict["training_settings"]["warmup_initializations"])
 

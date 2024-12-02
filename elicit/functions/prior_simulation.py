@@ -7,7 +7,7 @@ import tensorflow as tf
 import tensorflow_probability as tfp
 
 from bayesflow import networks
-from elicit.functions import logging_config
+from elicit.functions import logging_config # noqa
 from elicit.functions.helper_functions import save_as_pkl
 
 tfd = tfp.distributions

@@ -9,12 +9,13 @@ import inspect
 import pandas as pd
 import logging
 
-from elicit.functions import logging_config
+from elicit.functions import logging_config # noqa
 from elicit.functions.helper_functions import save_as_pkl
 from elicit.user.custom_functions import custom_correlation
 
 tfd = tfp.distributions
 bfn = bf.networks
+
 
 # TODO: Update Custom Target Function
 def use_custom_functions(custom_function, model_simulations, global_dict):
