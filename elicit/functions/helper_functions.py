@@ -6,7 +6,6 @@ import pickle
 import os
 import pandas as pd
 import tensorflow as tf
-import logging
 
 
 def save_as_pkl(variable, path_to_file):
