@@ -12,7 +12,7 @@ tfd = tfp.distributions
 
 
 
-def load_design_matrix_binomial(N):
+def load_design_matrix(N):
     X = tf.range(1.,N,1.)
     x_sd = tf.math.reduce_std(X)
     X_std = X/x_sd

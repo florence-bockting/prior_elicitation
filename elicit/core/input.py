@@ -74,6 +74,7 @@ def global_dict(
         ),
     initialization_settings=dict(
         method=None,
+        loss_quantile=None,
         number_of_iterations=10
         ),
     training_settings=dict(
@@ -217,6 +218,7 @@ def global_dict(
             ),
         initialization_settings=dict(
             method=None,
+            loss_quantile=None,
             number_of_iterations=10
             ),
         training_settings=dict(

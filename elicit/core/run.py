@@ -658,6 +658,7 @@ def prior_elicitation(
 
     _default_dict_initialization = dict(
         method=None,
+        loss_quantile=None,
         number_of_iterations=10
         )
 
@@ -789,11 +790,12 @@ def prior_elicitation(
             compute_loss,
             global_dict,
         )
-
+        loss_quantile = global_dict["initialization_settings"]["loss_quantile"]
         # extract minimum loss out of all runs and corresponding set of
         # initial values
-        min_index = tf.argmin(loss_list)
-        init_prior_model = init_prior[min_index]
+        index = tf.squeeze(tf.where(loss_list==tfp.stats.percentile(
+            loss_list, [loss_quantile])))
+        init_prior_model = init_prior[index]
     
     # run dag with optimal set of initial values
     training_loop(
