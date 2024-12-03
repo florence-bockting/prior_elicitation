@@ -76,6 +76,43 @@ class NormalModelSimple(tf.Module):
             )
 
 
+class NormalModelComplex(tf.Module):
+    def __call__(self, ground_truth, prior_samples, design_matrix):
+
+        epred = prior_samples[:, :, :-1] @ tf.transpose(design_matrix)
+        sigma = tf.abs(prior_samples[:, :, -1][:, :, None])
+
+        likelihood = tfd.Normal(loc=epred, scale=sigma)
+        ypred = likelihood.sample()
+
+        X0 = ypred[:,:,0]
+        X1 = ypred[:,:,1]
+
+        # R2
+        var_epred = tf.math.reduce_variance(epred, -1)
+        # variance of difference between ypred and epred
+        var_diff = tf.math.reduce_variance(tf.subtract(ypred, epred), -1)
+        var_total = var_epred + var_diff
+        # variance of linear predictor divided by total variance
+        log_R2 = tf.subtract(tf.math.log(var_epred), tf.math.log(var_total))
+
+        prior_samples = tf.concat(
+            [prior_samples[:, :, :-1],
+             tf.abs(prior_samples[:, :, -1][:, :, None])],
+            axis=-1,
+        )
+
+        return dict(
+            likelihood=likelihood,
+            ypred=ypred,
+            epred=epred,
+            prior_samples=prior_samples,
+            R2 = tf.exp(log_R2),
+            X0=X0,
+            X1=X1
+            )
+
+
 class NormalModel(tf.Module):
     def __call__(self, ground_truth, prior_samples, design_matrix):
 

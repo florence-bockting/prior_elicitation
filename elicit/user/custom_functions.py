@@ -35,6 +35,15 @@ class Normal_log:
         return tfd.Normal(loc, tf.exp(scale))
 
 
+class HalfNormal_log:
+    def _init__(self):
+        self.name = "HalfNormal_log_scale"
+        self.parameters = ["log_scale"]
+
+    def __call__(self, scale):
+        return tfd.HalfNormal(tf.exp(scale))
+
+
 def custom_correlation(prior_samples):
     corM = tfp.stats.correlation(prior_samples, sample_axis=1, event_axis=-1)
     tensor = tf.experimental.numpy.triu(corM, 1)

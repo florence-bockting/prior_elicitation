@@ -795,7 +795,7 @@ def prior_elicitation(
         # initial values
         index = tf.squeeze(tf.where(loss_list==tfp.stats.percentile(
             loss_list, [loss_quantile])))
-        init_prior_model = init_prior[index]
+        init_prior_model = init_prior[int(index)]
     
     # run dag with optimal set of initial values
     training_loop(
