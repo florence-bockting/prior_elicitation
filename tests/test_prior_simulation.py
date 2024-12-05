@@ -6,7 +6,7 @@ import tensorflow_probability as tfp
 import pytest
 import pandas as pd
 
-from elicit.functions.prior_simulation import intialize_priors
+from elicit.prior_simulation import intialize_priors
 from os import listdir
 
 tfd = tfp.distributions
