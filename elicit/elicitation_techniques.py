@@ -8,14 +8,12 @@ import bayesflow as bf
 import inspect
 import pandas as pd
 import logging
+import elicit.logs_config # noqa
 
-from elicit.helper_functions import logging_config  # noqa
 from elicit.helper_functions import save_as_pkl
 
 tfd = tfp.distributions
 bfn = bf.networks
-
-logging_config()
 
 
 # TODO: Update Custom Target Function

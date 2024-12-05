@@ -6,16 +6,62 @@ import tensorflow as tf
 import tensorflow_probability as tfp
 import logging
 
+import elicit.logs_config # noqa
 from elicit.prior_simulation import Priors
 from elicit.loss_computation import compute_total_loss
 from elicit.loss_functions import MMD_energy
 from elicit.optimization_process import sgd_training
 from elicit.initialization_methods import initialization_phase
 from elicit.expert_data import get_expert_data
-from elicit.helper_functions import save_as_pkl, one_forward_simulation
+from elicit.helper_functions import save_as_pkl
 from elicit.checks import check_run
+from elicit.model_simulation import simulate_from_generator
+from elicit.target_quantities import computation_target_quantities
+from elicit.elicitation_techniques import computation_elicited_statistics
 
 tfd = tfp.distributions
+
+
+def one_forward_simulation(prior_model, global_dict, ground_truth=False):
+    """
+    One forward simulation from prior samples to elicited statistics.
+
+    Parameters
+    ----------
+    prior_model : instance of Priors class objects
+        initialized prior distributions which can be used for sampling.
+    global_dict : dict
+        global dictionary with all user input specifications.
+    ground_truth : bool, optional
+        Is true if model should be learned with simulated data that
+        represent a pre-defined ground truth. The default is False.
+
+    Returns
+    -------
+    elicited_statistics : dict
+        dictionary containing the elicited statistics that can be used to
+        compute the loss components
+
+    """
+    # set seed
+    tf.random.set_seed(global_dict["training_settings"]["seed"])
+    # generate samples from initialized prior
+    prior_samples = prior_model()
+    # simulate prior predictive distribution based on prior samples
+    # and generative model
+    model_simulations = simulate_from_generator(
+        prior_samples, ground_truth, global_dict,
+    )
+    # compute the target quantities
+    target_quantities = computation_target_quantities(
+        model_simulations, ground_truth, global_dict
+    )
+    # compute the elicited statistics by applying a specific elicitation
+    # method on the target quantities
+    elicited_statistics = computation_elicited_statistics(
+        target_quantities, ground_truth, global_dict
+    )
+    return elicited_statistics
 
 
 def prior_elicitation(
@@ -445,7 +491,8 @@ def prior_elicitation(
     tf.random.set_seed(training_settings["seed"])
 
     # get expert data
-    expert_elicited_statistics = get_expert_data(global_dict)
+    expert_elicited_statistics = get_expert_data(global_dict,
+                                                 one_forward_simulation)
 
     def pre_training(warmup):
         logger = logging.getLogger(__name__)

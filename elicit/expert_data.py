@@ -4,12 +4,13 @@
 
 import logging
 import tensorflow as tf
+import elicit.logs_config # noqa
 
 from elicit.prior_simulation import Priors
-from elicit.helper_functions import one_forward_simulation
 
 
-def get_expert_data(global_dict, path_to_expert_data=None):
+def get_expert_data(global_dict, one_forward_simulation,
+                    path_to_expert_data=None):
     """
     Wrapper for loading the training data which can be expert data or
     data simulations using a pre-defined ground truth.

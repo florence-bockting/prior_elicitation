@@ -7,14 +7,13 @@ import tensorflow_probability as tfp
 import bayesflow as bf
 import pandas as pd
 import logging
+import elicit.logs_config # noqa
 
-from elicit.helper_functions import save_as_pkl, logging_config
+from elicit.helper_functions import save_as_pkl
 from elicit.loss_functions import norm_diff
 
 tfd = tfp.distributions
 bfn = bf.networks
-
-logging_config()
 
 
 def compute_loss_components(elicited_statistics, glob_dict, expert):

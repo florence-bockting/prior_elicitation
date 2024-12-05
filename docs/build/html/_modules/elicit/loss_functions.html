@@ -1,0 +1,555 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>elicit.loss_functions &#8212; Prior Learning</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=e645c8fa"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/elicit/loss_functions';</script>
+    <link rel="icon" href="../../_static/favicon-light.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/mmp-logo-light.png" class="logo__image only-light" alt="Prior Learning - Home"/>
+    <script>document.write(`<img src="../../_static/mmp-logo-dark.png" class="logo__image only-dark" alt="Prior Learning - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introductory_example.html">Tutorials</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/modules.html">API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/elicit.html">elicit package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../api/elicit.user.html">elicit.user package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/elicit.user.custom_functions.html">elicit.user.custom_functions module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/elicit.user.design_matrices.html">elicit.user.design_matrices module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/elicit.user.generative_models.html">elicit.user.generative_models module</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.elicitation_techniques.html">elicit.elicitation_techniques module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.expert_data.html">elicit.expert_data module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.helper_functions.html">elicit.helper_functions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.initialization_methods.html">elicit.initialization_methods module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.logs_config.html">elicit.logs_config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.loss_computation.html">elicit.loss_computation module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.loss_functions.html">elicit.loss_functions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.main.html">elicit.main module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.model_simulation.html">elicit.model_simulation module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.optimization_process.html">elicit.optimization_process module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.prior_simulation.html">elicit.prior_simulation module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.target_quantities.html">elicit.target_quantities module</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/florence-bockting/prior_elicitation" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for elicit.loss_functions</h1><div class="highlight"><pre>
+<span></span><span class="c1"># noqa SPDX-FileCopyrightText: 2024 Florence Bockting &lt;florence.bockting@tu-dortmund.de&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># noqa SPDX-License-Identifier: Apache-2.0</span>
+
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+
+
+<div class="viewcode-block" id="norm_diff">
+<a class="viewcode-back" href="../../api/elicit.loss_functions.html#elicit.loss_functions.norm_diff">[docs]</a>
+<span class="k">def</span> <span class="nf">norm_diff</span><span class="p">(</span><span class="n">correlation_training</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">ord</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper around tf.norm that computes the norm of the difference between</span>
+<span class="sd">    two tensors along the specified axis.</span>
+<span class="sd">    Used for the correlation loss when priors are assumed to be independent</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    correlation_training : A Tensor.</span>
+<span class="sd">    axis     : Any or None</span>
+<span class="sd">        Axis along which to compute the norm of the difference.</span>
+<span class="sd">        Default is None.</span>
+<span class="sd">    ord      : int or str</span>
+<span class="sd">        Order of the norm. Supports &#39;euclidean&#39; and other norms</span>
+<span class="sd">        supported by tf.norm. Default is &#39;euclidean&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">difference</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">correlation_training</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span>
+                             <span class="n">correlation_training</span><span class="p">)</span>
+    <span class="n">norm_values</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">difference</span><span class="p">,</span> <span class="nb">ord</span><span class="o">=</span><span class="nb">ord</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">norm_values</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="MmdEnergy">
+<a class="viewcode-back" href="../../api/elicit.loss_functions.html#elicit.loss_functions.MmdEnergy">[docs]</a>
+<span class="k">class</span> <span class="nc">MmdEnergy</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="MmdEnergy.__call__">
+<a class="viewcode-back" href="../../api/elicit.loss_functions.html#elicit.loss_functions.MmdEnergy.__call__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loss_component_expert</span><span class="p">,</span> <span class="n">loss_component_training</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the maximum-mean discrepancy between two samples.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        loss_component_expert : tf.Tensor</span>
+<span class="sd">            loss component based on expert input.</span>
+<span class="sd">        loss_component_training : tf.Tensor</span>
+<span class="sd">            loss component based on model simulations.</span>
+<span class="sd">        **kwargs : optional additional keyword arguments</span>
+<span class="sd">            optional: additional keyword arguments.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        mmd_loss : float</span>
+<span class="sd">            maximum mean discrepancy loss using an energy kernel</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># get batch size</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="n">loss_component_expert</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># dimensionality for expert input and model simulations</span>
+        <span class="n">dim_expert</span> <span class="o">=</span> <span class="n">loss_component_expert</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">dim_training</span> <span class="o">=</span> <span class="n">loss_component_training</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># expert samples and model simulation samples</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">loss_component_expert</span><span class="p">,</span> <span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">dim_expert</span><span class="p">)),</span>
+            <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">loss_component_training</span><span class="p">,</span> <span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">dim_training</span><span class="p">)),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_weights</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dim_expert</span><span class="p">)</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_weights</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dim_training</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel_loss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">dim_expert</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MmdEnergy.generate_weights">
+<a class="viewcode-back" href="../../api/elicit.loss_functions.html#elicit.loss_functions.MmdEnergy.generate_weights">[docs]</a>
+    <span class="k">def</span> <span class="nf">generate_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loss_component</span><span class="p">,</span> <span class="n">dim</span><span class="p">):</span>
+        <span class="n">B</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">loss_component</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">dim</span><span class="p">),</span>
+                                    <span class="n">dtype</span><span class="o">=</span><span class="n">loss_component</span><span class="o">.</span><span class="n">dtype</span><span class="p">),</span> <span class="n">dim</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">weights</span></div>
+
+
+    <span class="c1"># (x*x - 2xy + y*y)</span>
+<div class="viewcode-block" id="MmdEnergy.squared_distances">
+<a class="viewcode-back" href="../../api/elicit.loss_functions.html#elicit.loss_functions.MmdEnergy.squared_distances">[docs]</a>
+    <span class="k">def</span> <span class="nf">squared_distances</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loss_component_expert</span><span class="p">,</span>
+                          <span class="n">loss_component_training</span><span class="p">):</span>
+        <span class="c1"># (B, N, 1)</span>
+        <span class="n">distance_expert</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_sum</span><span class="p">(</span>
+                <span class="n">tf</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">loss_component_expert</span><span class="p">,</span> <span class="n">loss_component_expert</span><span class="p">),</span>
+                <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span>
+            <span class="p">),</span>
+            <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># (B, 1, M)</span>
+        <span class="n">distance_training</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_sum</span><span class="p">(</span>
+                <span class="n">tf</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">loss_component_training</span><span class="p">,</span> <span class="n">loss_component_training</span><span class="p">),</span>
+                <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span>
+            <span class="p">),</span>
+            <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># (B, N, M)</span>
+        <span class="n">distance_expert_training</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span>
+            <span class="n">loss_component_expert</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">loss_component_training</span><span class="p">,</span>
+                                                <span class="n">perm</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="p">)</span>
+        <span class="c1"># compute sq. distance</span>
+        <span class="n">squared_distance</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">distance_expert</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">distance_expert_training</span> <span class="o">+</span> <span class="n">distance_training</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">squared_distance</span></div>
+
+
+    <span class="c1"># -sqrt[(x*x - 2xy + y*y)]</span>
+<div class="viewcode-block" id="MmdEnergy.distances">
+<a class="viewcode-back" href="../../api/elicit.loss_functions.html#elicit.loss_functions.MmdEnergy.distances">[docs]</a>
+    <span class="k">def</span> <span class="nf">distances</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loss_component_expert</span><span class="p">,</span> <span class="n">loss_component_training</span><span class="p">):</span>
+        <span class="n">distance</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">clip_by_value</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">squared_distances</span><span class="p">(</span><span class="n">loss_component_expert</span><span class="p">,</span>
+                                       <span class="n">loss_component_training</span><span class="p">),</span>
+                <span class="n">clip_value_min</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span>
+                <span class="n">clip_value_max</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">1e10</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="c1"># energy distance as negative distance</span>
+        <span class="n">energy_distance</span> <span class="o">=</span> <span class="o">-</span><span class="n">distance</span>
+        <span class="k">return</span> <span class="n">energy_distance</span></div>
+
+
+    <span class="c1"># helper function</span>
+<div class="viewcode-block" id="MmdEnergy.scal">
+<a class="viewcode-back" href="../../api/elicit.loss_functions.html#elicit.loss_functions.MmdEnergy.scal">[docs]</a>
+    <span class="k">def</span> <span class="nf">scal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_sum</span><span class="p">(</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
+        <span class="p">)</span></div>
+
+
+    <span class="c1"># k(x,y)=0.5*sum_i sum_j a_i a_j k(x_i,x_j) -</span>
+    <span class="c1"># sum_i sum_j a_i b_j k(x_i,y_j) + 0.5*sum_i sum_j b_i b_j k(y_i, y_j)</span>
+<div class="viewcode-block" id="MmdEnergy.kernel_loss">
+<a class="viewcode-back" href="../../api/elicit.loss_functions.html#elicit.loss_functions.MmdEnergy.kernel_loss">[docs]</a>
+    <span class="k">def</span> <span class="nf">kernel_loss</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">loss_component_expert</span><span class="p">,</span> <span class="n">loss_component_training</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span>
+            <span class="n">dim_expert</span><span class="p">):</span>
+        <span class="n">K_expert</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distances</span><span class="p">(</span>
+            <span class="n">loss_component_expert</span><span class="p">,</span> <span class="n">loss_component_expert</span>
+        <span class="p">)</span>  <span class="c1"># (B,N,N)</span>
+        <span class="n">K_training</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distances</span><span class="p">(</span>
+            <span class="n">loss_component_training</span><span class="p">,</span> <span class="n">loss_component_training</span>
+        <span class="p">)</span>  <span class="c1"># (B,M,M)</span>
+        <span class="n">K_expert_training</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distances</span><span class="p">(</span>
+            <span class="n">loss_component_expert</span><span class="p">,</span> <span class="n">loss_component_training</span>
+        <span class="p">)</span>  <span class="c1"># (B,N,M)</span>
+
+        <span class="c1"># (B,N)</span>
+        <span class="n">a_x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">K_expert</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)))</span>
+        <span class="c1"># (B,M)</span>
+        <span class="n">b_y</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">K_training</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)))</span>
+        <span class="c1"># (B,N)</span>
+        <span class="n">b_x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">K_expert_training</span><span class="p">,</span>
+                                   <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)))</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">scal</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">a_x</span><span class="p">)</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">scal</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">b_y</span><span class="p">)</span>
+        <span class="n">C</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scal</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b_x</span><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">A</span> <span class="o">+</span> <span class="n">B</span> <span class="o">-</span> <span class="n">C</span>
+
+        <span class="c1"># average over batches</span>
+        <span class="n">mean_loss</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">mean_loss</span></div>
+</div>
+
+
+
+<span class="n">MMD_energy</span> <span class="o">=</span> <span class="n">MmdEnergy</span><span class="p">()</span>
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Florence Bockting
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024, Florence Bockting.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

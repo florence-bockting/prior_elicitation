@@ -5,13 +5,12 @@
 import logging
 import tensorflow as tf
 import tensorflow_probability as tfp
+import elicit.logs_config # noqa
 
 from bayesflow import networks
-from elicit.helper_functions import save_as_pkl, logging_config
+from elicit.helper_functions import save_as_pkl
 
 tfd = tfp.distributions
-
-logging_config()
 
 
 # initalize generator model

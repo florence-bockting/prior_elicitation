@@ -6,13 +6,8 @@ import pickle
 import os
 import pandas as pd
 import tensorflow as tf
-import logging
-import logging.config
 
 from pythonjsonlogger import jsonlogger # noqa
-from elicit.model_simulation import simulate_from_generator
-from elicit.target_quantities import computation_target_quantities
-from elicit.elicitation_techniques import computation_elicited_statistics
 
 
 def save_as_pkl(variable, path_to_file):
@@ -36,48 +31,6 @@ def save_as_pkl(variable, path_to_file):
     # save file to location as pickle
     with open(path_to_file, "wb") as df_file:
         pickle.dump(variable, file=df_file)
-
-
-def one_forward_simulation(prior_model, global_dict, ground_truth=False):
-    """
-    One forward simulation from prior samples to elicited statistics.
-
-    Parameters
-    ----------
-    prior_model : instance of Priors class objects
-        initialized prior distributions which can be used for sampling.
-    global_dict : dict
-        global dictionary with all user input specifications.
-    ground_truth : bool, optional
-        Is true if model should be learned with simulated data that
-        represent a pre-defined ground truth. The default is False.
-
-    Returns
-    -------
-    elicited_statistics : dict
-        dictionary containing the elicited statistics that can be used to
-        compute the loss components
-
-    """
-    # set seed
-    tf.random.set_seed(global_dict["training_settings"]["seed"])
-    # generate samples from initialized prior
-    prior_samples = prior_model()
-    # simulate prior predictive distribution based on prior samples
-    # and generative model
-    model_simulations = simulate_from_generator(
-        prior_samples, ground_truth, global_dict,
-    )
-    # compute the target quantities
-    target_quantities = computation_target_quantities(
-        model_simulations, ground_truth, global_dict
-    )
-    # compute the elicited statistics by applying a specific elicitation
-    # method on the target quantities
-    elicited_statistics = computation_elicited_statistics(
-        target_quantities, ground_truth, global_dict
-    )
-    return elicited_statistics
 
 
 def save_hyperparameters(generator, epoch, global_dict):
@@ -402,26 +355,3 @@ def print_res_summary(path_res, global_dict):
     print(create_output_summary(path_res, global_dict))
 
 
-def logging_config():
-    LOGGING = {
-        "version": 1,
-        "disable_existing_loggers": False,
-        "formatters": {
-            "json": {
-                "format": "%(asctime)s %(levelname)s %(name)s %(message)s",
-                "datefmt": "%Y-%m-%d %H:%M",
-                "class": "pythonjsonlogger.jsonlogger.JsonFormatter",
-            }
-        },
-        "handlers": {
-            "json_file": {
-                'level': 'INFO',
-                'class': 'logging.FileHandler',
-                'filename': 'logs.json',
-                'formatter': 'json',
-                }
-        },
-        "loggers": {"": {"handlers": ["json_file"], "level": "INFO"}},
-    }
-
-    return logging.config.dictConfig(LOGGING)
