@@ -9,12 +9,13 @@ import inspect
 import pandas as pd
 import logging
 
-from elicit.functions import logging_config # noqa
-from elicit.functions.helper_functions import save_as_pkl
-from elicit.user.custom_functions import custom_correlation
+from elicit.helper_functions import logging_config  # noqa
+from elicit.helper_functions import save_as_pkl
 
 tfd = tfp.distributions
 bfn = bf.networks
+
+logging_config()
 
 
 # TODO: Update Custom Target Function
@@ -74,70 +75,6 @@ def use_custom_functions(custom_function, model_simulations, global_dict):
     return custom_quantity
 
 
-def computation_target_quantities(model_simulations, ground_truth,
-                                  global_dict):
-    """
-    Computes target quantities from model simulations.
-
-    Parameters
-    ----------
-    model_simulations : dict
-        simulations from generative model.
-    ground_truth : bool
-        whether simulations are based on ground truth. Mainly used for saving
-        results in extra folder "expert" for later analysis.
-    global_dict : dict
-        dictionary including all user-input settings..
-
-    Returns
-    -------
-    targets_res : dict
-        computed target quantities.
-    """
-    logger = logging.getLogger(__name__)
-    if ground_truth:
-        logger.info("Compute true target quantities")
-    else:
-        logger.info("Compute target quantities")
-    # create sub-dictionaries for readability
-    target_dict = global_dict["target_quantities"]
-    # initialize dict for storing results
-    targets_res = dict()
-    # loop over target quantities
-    for i, tar in enumerate(target_dict):
-        # use custom function for target quantity if it has been defined
-        if (
-            target_dict[tar]["custom_target_function"]
-            is not None
-        ):
-            target_quantity = use_custom_functions(
-                target_dict[tar]["custom_target_function"],
-                model_simulations,
-                global_dict,
-            )
-        else:
-            target_quantity = model_simulations[tar]
-
-        # save target quantities
-        targets_res[tar] = target_quantity
-
-    if global_dict["model_parameters"]["independence"] is not None:
-        target_quantity = use_custom_functions(
-            {"function": custom_correlation, "additional_args": None},
-            model_simulations,
-            global_dict,
-        )
-        targets_res["correlation"] = target_quantity
-    # save file in object
-    saving_path = global_dict["training_settings"]["output_path"]
-    if ground_truth:
-        saving_path = saving_path + "/expert"
-    path = saving_path + "/target_quantities.pkl"
-    save_as_pkl(targets_res, path)
-    # return results
-    return targets_res
-
-
 def computation_elicited_statistics(target_quantities, ground_truth,
                                     global_dict):
     """
@@ -170,31 +107,21 @@ def computation_elicited_statistics(target_quantities, ground_truth,
     # initialize dict for storing results
     elicits_res = dict()
     # loop over elicitation techniques
-    for tar in sorted(
-            list(set(target_quantities).difference(set(["correlation"])))
-            ):
+    for tar in sorted(list(set(target_quantities).difference(
+            set(["correlation"])))):
         # use custom method if specified otherwise use built-in methods
-        if (
-            target_dict[tar]["custom_elicitation_method"]
-            is not None
-        ):
+        if target_dict[tar]["custom_elicitation_method"] is not None:
             elicited_statistic = use_custom_functions(
                 target_dict[tar]["custom_elicitation_method"],
                 target_quantities,
-                global_dict
+                global_dict,
             )
             elicits_res[f"custom_{tar}"] = elicited_statistic
 
         else:
-            if (
-                target_dict[tar]["elicitation_method"]
-                == "identity"
-            ):
+            if target_dict[tar]["elicitation_method"] == "identity":
                 elicits_res[f"identity_{tar}"] = target_quantities[tar]
-            if (
-                target_dict[tar]["elicitation_method"]
-                == "histogram"
-            ):
+            if target_dict[tar]["elicitation_method"] == "histogram":
                 quantiles_hist = list(tf.range(2, 100, 2))
                 target_hist = tfp.stats.percentile(
                     target_quantities[tar], q=quantiles_hist, axis=-1
@@ -202,10 +129,7 @@ def computation_elicited_statistics(target_quantities, ground_truth,
                 elicited_statistic = tf.einsum("ij...->ji...", target_hist)
                 elicits_res[f"histogram_{tar}"] = elicited_statistic
 
-            if (
-                target_dict[tar]["elicitation_method"]
-                == "quantiles"
-            ):
+            if target_dict[tar]["elicitation_method"] == "quantiles":
                 quantiles = target_dict[tar]["quantiles_specs"]
 
                 # reshape target quantity
@@ -230,10 +154,7 @@ def computation_elicited_statistics(target_quantities, ground_truth,
                                                computed_quantiles)
                 elicits_res[f"quantiles_{tar}"] = elicited_statistic
 
-            if (
-                target_dict[tar]["elicitation_method"]
-                == "moments"
-            ):
+            if target_dict[tar]["elicitation_method"] == "moments":
                 moments = target_dict[tar]["moments_specs"]
 
                 # for each moment
@@ -246,9 +167,8 @@ def computation_elicited_statistics(target_quantities, ground_truth,
                     ], "currently only 'mean', 'sd' are supported as moments"
 
                     if mom == "mean":
-                        computed_mean = tf.reduce_mean(
-                            target_quantities[tar], axis=-1
-                        )
+                        computed_mean = tf.reduce_mean(target_quantities[tar],
+                                                       axis=-1)
                         elicited_statistic = computed_mean
                     if mom == "sd":
                         computed_sd = tf.math.reduce_std(
@@ -256,9 +176,7 @@ def computation_elicited_statistics(target_quantities, ground_truth,
                         )
                         elicited_statistic = computed_sd
                     # save all moments in one tensor
-                    elicit = target_dict[tar][
-                        "elicitation_method"
-                    ]
+                    elicit = target_dict[tar]["elicitation_method"]
                     elicits_res[f"{elicit}.{mom}_{tar}"] = elicited_statistic
 
     if global_dict["model_parameters"]["independence"] is not None:

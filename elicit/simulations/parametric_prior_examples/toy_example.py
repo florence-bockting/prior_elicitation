@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 import pandas as pd
 
-from elicit.core.run import prior_elicitation
+from elicit.main import prior_elicitation
 from elicit.user.generative_models import ToyModel
 from elicit.user.custom_functions import Normal_log
 from elicit.plotting import func
@@ -44,9 +44,9 @@ prior_elicitation(
     ),
     expert_data=dict(
         data=expert_data,
-        from_ground_truth=False,
-        # simulator_specs = ground_truth,
-        # samples_from_prior = 10000
+        from_ground_truth=True,
+        simulator_specs = ground_truth,
+        samples_from_prior = 10000
     ),
     generative_model=dict(model=ToyModel, additional_model_args={"N": 200}),
     target_quantities=dict(
@@ -64,7 +64,7 @@ prior_elicitation(
         warmup_initializations=50,
         seed=0,
         view_ep=50,
-        epochs=500,
+        epochs=10,
     ),
 )
 

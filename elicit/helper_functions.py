@@ -2,8 +2,171 @@
 #
 # noqa SPDX-License-Identifier: Apache-2.0
 
+import pickle
+import os
 import pandas as pd
 import tensorflow as tf
+import logging.config
+
+from pythonjsonlogger import jsonlogger # noqa
+from elicit.model_simulation import simulate_from_generator
+from elicit.target_quantities import computation_target_quantities
+from elicit.elicitation_techniques import computation_elicited_statistics
+
+
+def save_as_pkl(variable, path_to_file):
+    """
+    Helper functions to save a file as pickle.
+
+    Parameters
+    ----------
+    variable : any
+        file that needs to be saved.
+    path_to_file : str
+        path indicating the file location.
+
+    Returns
+    -------
+    None.
+
+    """
+    # if directory does not exists, create it
+    os.makedirs(os.path.dirname(path_to_file), exist_ok=True)
+    # save file to location as pickle
+    with open(path_to_file, "wb") as df_file:
+        pickle.dump(variable, file=df_file)
+
+
+def one_forward_simulation(prior_model, global_dict, ground_truth=False):
+    """
+    One forward simulation from prior samples to elicited statistics.
+
+    Parameters
+    ----------
+    prior_model : instance of Priors class objects
+        initialized prior distributions which can be used for sampling.
+    global_dict : dict
+        global dictionary with all user input specifications.
+    ground_truth : bool, optional
+        Is true if model should be learned with simulated data that
+        represent a pre-defined ground truth. The default is False.
+
+    Returns
+    -------
+    elicited_statistics : dict
+        dictionary containing the elicited statistics that can be used to
+        compute the loss components
+
+    """
+    # set seed
+    tf.random.set_seed(global_dict["training_settings"]["seed"])
+    # generate samples from initialized prior
+    prior_samples = prior_model()
+    # simulate prior predictive distribution based on prior samples
+    # and generative model
+    model_simulations = simulate_from_generator(
+        prior_samples, ground_truth, global_dict,
+    )
+    # compute the target quantities
+    target_quantities = computation_target_quantities(
+        model_simulations, ground_truth, global_dict
+    )
+    # compute the elicited statistics by applying a specific elicitation
+    # method on the target quantities
+    elicited_statistics = computation_elicited_statistics(
+        target_quantities, ground_truth, global_dict
+    )
+    return elicited_statistics
+
+
+def save_hyperparameters(generator, epoch, global_dict):
+    """
+    extracts the learnable hyperparameter values from the model and saves them
+    in appropriate form for post-analysis
+
+    Parameters
+    ----------
+    generator : trainable tf.model
+        initialized prior model used for training.
+    epoch : int
+        Current epoch.
+    global_dict : dict
+        dictionary including all user-input settings.
+
+    Returns
+    -------
+    res_dict : dict
+        learned values for each hyperparameter and epoch.
+
+    """
+    saving_path = global_dict["training_settings"]["output_path"]
+    # extract learned hyperparameter values
+    hyperparams = generator.trainable_variables
+    if epoch == 0:
+        # prepare list for saving hyperparameter values
+        hyp_list = []
+        for i in range(len(hyperparams)):
+            hyp_list.append(hyperparams[i].name[:-2])
+        # create a dict with empty list for each hyperparameter
+        res_dict = {f"{k}": [] for k in hyp_list}
+    # read saved list to add new values
+    else:
+        path_res_dict = saving_path + "/res_dict.pkl"
+        res_dict = pd.read_pickle(rf"{path_res_dict}")
+    # save names and values of hyperparameters
+    vars_values = [
+        hyperparams[i].numpy().copy() for i in range(len(hyperparams))
+        ]
+    vars_names = [
+        hyperparams[i].name[:-2] for i in range(len(hyperparams))
+        ]
+    # create a final dict of hyperparameter values
+    for val, name in zip(vars_values, vars_names):
+        res_dict[name].append(val)
+    # save result dictionary
+    path_res_dict = saving_path + "/res_dict.pkl"
+    save_as_pkl(res_dict, path_res_dict)
+    return res_dict
+
+
+def marginal_prior_moments(prior_samples, epoch, global_dict):
+    """
+    Used for summarizing learned prior distributions in the case of
+    method='deep_prior'.
+    Computes mean and standard deviation of the sampled marginal prior
+    distributions for each epoch.
+
+    Parameters
+    ----------
+    prior_samples : dict
+        Samples from prior distributions.
+    epoch : int
+        current epoch.
+    global_dict : dict
+        dictionary including all user-input settings.
+
+    Returns
+    -------
+    res_dict : dict
+        returns mean (key:'means') and standard deviation (key:'stds')
+        for each sampled marginal prior distribution; for each epoch.
+
+    """
+    saving_path = global_dict["training_settings"]["output_path"]
+    if epoch == 0:
+        res_dict = {"means": [], "stds": []}
+    else:
+        path_res_dict = saving_path + "/res_dict.pkl"
+        res_dict = pd.read_pickle(rf"{path_res_dict}")
+
+    means = tf.reduce_mean(prior_samples, (0, 1))
+    sds = tf.reduce_mean(tf.math.reduce_std(prior_samples, 1), 0)
+    for val, name in zip([means, sds], ["means", "stds"]):
+        res_dict[name].append(val)
+    # save result dictionary
+    path_res_dict = saving_path + "/res_dict.pkl"
+    save_as_pkl(res_dict, path_res_dict)
+    return res_dict
 
 
 def create_output_summary(path_res, global_dict):
@@ -236,3 +399,28 @@ def print_res_summary(path_res, global_dict):
 
     """
     print(create_output_summary(path_res, global_dict))
+
+
+def logging_config():
+    LOGGING = {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "json": {
+                "format": "%(asctime)s %(levelname)s %(name)s %(message)s",
+                "datefmt": "%Y-%m-%d %H:%M",
+                "class": "pythonjsonlogger.jsonlogger.JsonFormatter",
+            }
+        },
+        "handlers": {
+            "json_file": {
+                'level': 'INFO',
+                'class': 'logging.FileHandler',
+                'filename': 'logs.json',
+                'formatter': 'json',
+                }
+        },
+        "loggers": {"": {"handlers": ["json_file"], "level": "INFO"}},
+    }
+
+    return logging.config.dictConfig(LOGGING)

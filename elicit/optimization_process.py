@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 import logging
 
-from elicit.functions.helper_functions import (
+from elicit.helper_functions import (
     save_as_pkl,
     save_hyperparameters,
     marginal_prior_moments,
@@ -18,7 +18,7 @@ from elicit.functions.helper_functions import (
 tfd = tfp.distributions
 
 
-def training_loop(
+def sgd_training(
     expert_elicited_statistics,
     prior_model_init,
     one_forward_simulation,

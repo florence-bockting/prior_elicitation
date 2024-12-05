@@ -5,14 +5,16 @@
 import tensorflow as tf
 import tensorflow_probability as tfp
 import bayesflow as bf
+import pandas as pd
 import logging
 
-from elicit.functions.helper_functions import save_as_pkl
-from elicit.functions.loss_functions import norm_diff
-from elicit.functions import logging_config # noqa
+from elicit.helper_functions import save_as_pkl, logging_config
+from elicit.loss_functions import norm_diff
 
 tfd = tfp.distributions
 bfn = bf.networks
+
+logging_config()
 
 
 def compute_loss_components(elicited_statistics, glob_dict, expert):
@@ -291,3 +293,157 @@ def compute_discrepancy(loss_components_expert, loss_components_training,
     path = saving_path + "/loss_per_component.pkl"
     save_as_pkl(loss_per_component, path)
     return loss_per_component
+
+
+def compute_total_loss(
+    training_elicited_statistics, expert_elicited_statistics, global_dict,
+    epoch
+):
+    """
+    Wrapper around the loss computation from elicited statistics to final
+    loss value.
+
+    Parameters
+    ----------
+    training_elicited_statistics : dict
+        dictionary containing the expert elicited statistics.
+    expert_elicited_statistics : dict
+        dictionary containing the model-simulated elicited statistics.
+    global_dict : dict
+        global dictionary with all user input specifications.
+    epoch : int
+        epoch .
+
+    Returns
+    -------
+    total_loss : float
+        total loss value.
+
+    """
+    # regularization term for preventing degenerated solutions in var
+    # collapse to zero used from Manderson and Goudie (2024)
+    def regulariser(prior_samples):
+        """
+        Regularizer term for loss function: minus log sd of each prior
+        distribution (priors with larger sds should be prefered)
+
+        Parameters
+        ----------
+        prior_samples : tf.Tensor
+            samples from prior distributions.
+
+        Returns
+        -------
+        float
+            the negative mean log std across all prior distributions.
+
+        """
+        log_sd = tf.math.log(tf.math.reduce_std(prior_samples, 1))
+        mean_log_sd = tf.reduce_mean(log_sd)
+        return -mean_log_sd
+
+    def compute_total_loss(epoch, loss_per_component, global_dict):
+        """
+        applies dynamic weight averaging for multi-objective loss function
+        if specified. If loss_weighting has been set to None, all weights
+        get an equal weight of 1.
+
+        Parameters
+        ----------
+        epoch : int
+            curernt epoch.
+        loss_per_component : list of floats
+            list of loss values per loss component.
+        global_dict : dict
+            global dictionary with all user input specifications.
+
+        Returns
+        -------
+        total_loss : float
+            total loss value (either weighted or unweighted).
+
+        """
+        logger = logging.getLogger(__name__)
+        logger.info("compute total loss")
+        loss_per_component_current = loss_per_component
+        # TODO: check whether indicated loss weighting input is implemented
+        # create subdictionary for better readability
+        dict_loss = global_dict["loss_function"]
+        if dict_loss["loss_weighting"] is None:
+            total_loss = tf.math.reduce_sum(loss_per_component)
+
+            if dict_loss["use_regularization"]:
+                # read from results (if not yet existing, create list)
+                try:
+                    pd.read_pickle(
+                        global_dict["training_settings"]["output_path"]
+                        + "/regularizer.pkl"
+                    )
+                except FileNotFoundError:
+                    regularizer_term = []
+                else:
+                    regularizer_term = pd.read_pickle(
+                        global_dict["training_settings"]["output_path"]
+                        + "/regularizer.pkl"
+                    )
+
+                # get prior samples
+                priorsamples = pd.read_pickle(
+                    global_dict["training_settings"]["output_path"]
+                    + "/model_simulations.pkl"
+                )["prior_samples"]
+                # compute regularization
+                regul_term = regulariser(priorsamples)
+                # save regularization
+                regularizer_term.append(regul_term)
+
+                path = (
+                    global_dict["training_settings"][
+                        "output_path"] + "/regularizer.pkl"
+                )
+                save_as_pkl(regularizer_term, path)
+
+                total_loss = total_loss + regul_term
+        else:
+            # apply selected loss weighting method
+            # TODO: Tests and Checks
+            if dict_loss["loss_weighting"]["method"] == "dwa":
+                # dwa needs information about the initial loss per component
+                if epoch == 0:
+                    dict_loss["loss_weighting"]["method_specs"][
+                        "loss_per_component_initial"
+                    ] = loss_per_component
+                # apply method
+                total_loss = dynamic_weight_averaging(
+                    epoch,
+                    loss_per_component_current,
+                    dict_loss["loss_weighting"]["method_specs"][
+                        "loss_per_component_initial"
+                    ],
+                    dict_loss["loss_weighting"]["method_specs"]["temperature"],
+                    global_dict["output_path"],
+                )
+
+            if dict_loss["loss_weighting"]["method"] == "custom":
+                total_loss = tf.math.reduce_sum(
+                    tf.multiply(
+                        loss_per_component,
+                        dict_loss["loss_weighting"]["weights"],
+                    )
+                )
+
+        return total_loss
+
+    loss_components_expert = compute_loss_components(
+        expert_elicited_statistics, global_dict, expert=True
+    )
+    loss_components_training = compute_loss_components(
+        training_elicited_statistics, global_dict, expert=False
+    )
+    loss_per_component = compute_discrepancy(
+        loss_components_expert, loss_components_training, global_dict
+    )
+    weighted_total_loss = compute_total_loss(epoch, loss_per_component,
+                                             global_dict)
+
+    return weighted_total_loss

@@ -7,18 +7,43 @@ import tensorflow as tf
 import tensorflow_probability as tfp
 
 from bayesflow import networks
-from elicit.functions import logging_config # noqa
-from elicit.functions.helper_functions import save_as_pkl
+from elicit.helper_functions import save_as_pkl, logging_config
 
 tfd = tfp.distributions
+
+logging_config()
 
 
 # initalize generator model
 class Priors(tf.Module):
     """
     Initializes the hyperparameters of the prior distributions.
+    
+    Attributes
+    ----------
+    ground_truth : bool
+        whether samples are drawn from a true prior ('oracle')
+    global_dict : dict
+        dictionary containing all user and default input settings
+    logger : logging method
+        retrieves module name for passing it to the logger
+    init_priors : dict
+        initialized hyperparameters (i.e., trainable variables);
+        None if ground_truth = True
     """
+
     def __init__(self, ground_truth, global_dict):
+        """
+        Initializes the hyperparameters (i.e., trainable variables)
+
+        Parameters
+        ----------
+        ground_truth : bool
+            whether samples are drawn from a true prior ('oracle')
+        global_dict : dict
+            dictionary containing all user and default input settings.
+        """
+
         self.global_dict = global_dict
         self.ground_truth = ground_truth
         self.logger = logging.getLogger(__name__)
@@ -34,6 +59,15 @@ class Priors(tf.Module):
             self.init_priors = None
 
     def __call__(self):
+        """
+        Samples from the initialized prior distribution(s).
+
+        Returns
+        -------
+        prior_samples : dict
+            Samples from prior distribution(s).
+
+        """
         if self.ground_truth:
             self.logger.info("Sample from true prior(s)")
         else:
@@ -51,7 +85,7 @@ def intialize_priors(global_dict):
     Parameters
     ----------
     global_dict : dict
-        dictionary including all user-input settings..
+        dictionary including all user-and default input settings.
 
     Returns
     -------

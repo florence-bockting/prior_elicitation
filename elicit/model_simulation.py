@@ -6,10 +6,11 @@ import tensorflow as tf
 import tensorflow_probability as tfp
 import logging
 
-from elicit.functions import logging_config # noqa
-from elicit.functions.helper_functions import save_as_pkl
+from elicit.helper_functions import logging_config, save_as_pkl # noqa
 
 tfd = tfp.distributions
+
+logging_config()
 
 
 def softmax_gumbel_trick(model_simulations, global_dict):
