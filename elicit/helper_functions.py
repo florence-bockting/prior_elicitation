@@ -353,5 +353,3 @@ def print_res_summary(path_res, global_dict):
 
     """
     print(create_output_summary(path_res, global_dict))
-
-

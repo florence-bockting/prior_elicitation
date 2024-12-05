@@ -174,8 +174,8 @@ def computation_elicited_statistics(target_quantities, ground_truth,
                         )
                         elicited_statistic = computed_sd
                     # save all moments in one tensor
-                    elicit = target_dict[tar]["elicitation_method"]
-                    elicits_res[f"{elicit}.{mom}_{tar}"] = elicited_statistic
+                    elicits = target_dict[tar]["elicitation_method"]
+                    elicits_res[f"{elicits}.{mom}_{tar}"] = elicited_statistic
 
     if global_dict["model_parameters"]["independence"] is not None:
         elicits_res["correlation"] = target_quantities["correlation"]
