@@ -18,7 +18,7 @@ logging_config()
 class Priors(tf.Module):
     """
     Initializes the hyperparameters of the prior distributions.
-    
+
     Attributes
     ----------
     ground_truth : bool
