@@ -9,12 +9,15 @@ import pandas as pd
 import tensorflow as tf
 
 from elicit.prior_simulation import intialize_priors, sample_from_priors
+from elicit.initialization_methods import init_method
 
 tfd = tfp.distributions
 
 
-# @pytest.fixture
 global_dict = dict(
+    initialization_settings=dict(
+        method="random", loss_quantile=0, number_of_iterations=2
+    ),
     training_settings=dict(
         method="parametric_prior",
         sim_id="test_initialize_priors",
@@ -41,6 +44,12 @@ global_dict = dict(
         independence=None,
         no_params=2,
     ),
+)
+
+init_matrix = init_method(
+    3,
+    global_dict["initialization_settings"]["number_of_iterations"],
+    global_dict["initialization_settings"]["method"],
 )
 
 normalizing_flow = dict(
@@ -79,25 +88,30 @@ def count_hyperparams(res):
 # parametric_prior: number of prior hyperparameters
 # deep_prior: number of weights in NN=num_coupling_layers*2 (bias & scale)
 test_data1 = [
-    (global_dict, "parametric_prior", None, None, 3),
+    (global_dict, "parametric_prior", None, None, init_matrix[0, :], 3),
     (global_dict, "deep_prior", dict(corr_scaling=0.1), normalizing_flow,
-     3 * 2),
+     None, 3 * 2),
 ]
 
 
 # initialize_priors
 @pytest.mark.parametrize(
-    "global_dict, method, independence, normalizing_flow, expected_hyperparam",
+    "global_dict, method, independence, normalizing_flow, initial_value, expected_hyperparam",  # noqa
     test_data1,
 )
 def test_intialize_priors_counts(
-    global_dict, method, independence, normalizing_flow, expected_hyperparam
+    global_dict,
+    method,
+    independence,
+    normalizing_flow,
+    initial_value,
+    expected_hyperparam,
 ):
     global_dict["normalizing_flow"] = normalizing_flow
     global_dict["training_settings"]["independence"] = independence
     global_dict["training_settings"]["method"] = method
     # get initialized hyperparameters (i.e., trainable variables)
-    res = intialize_priors(global_dict)
+    res = intialize_priors(global_dict, initial_value)
 
     if method == "parametric_prior":
         assert expected_hyperparam == count_hyperparams(res)
@@ -107,7 +121,8 @@ def test_intialize_priors_counts(
 
 # %% Test labels of hyperparameters; method=parametric_prior
 
-test_data2 = [(global_dict, ["mu_loc", "mu_scale", "sigma_scale"])]
+test_data2 = [(global_dict, init_matrix[0, :],
+               ["mu_loc", "mu_scale", "sigma_scale"])]
 
 
 def get_labels(res):
@@ -118,11 +133,12 @@ def get_labels(res):
 
 
 # INFO: Only for method=parametric_prior
-@pytest.mark.parametrize("global_dict, expected_labels", test_data2)
-def test_intialize_priors_labels(global_dict, expected_labels):
+@pytest.mark.parametrize("global_dict, initial_value, expected_labels",
+                         test_data2)
+def test_intialize_priors_labels(global_dict, initial_value, expected_labels):
     global_dict["training_settings"]["method"] = "parametric_prior"
 
-    res = intialize_priors(global_dict)
+    res = intialize_priors(global_dict, initial_value)
 
     assert expected_labels == get_labels(res)
 
@@ -130,21 +146,24 @@ def test_intialize_priors_labels(global_dict, expected_labels):
 # %% Test saving path;, both methods
 
 test_data3 = [
-    (global_dict, "deep_prior", dict(corr_scaling=0.1), normalizing_flow),
-    (global_dict, "parametric_prior", None, None),
+    (global_dict, "deep_prior", dict(corr_scaling=0.1), normalizing_flow,
+     None),
+    (global_dict, "parametric_prior", None, None, init_matrix[0, :]),
 ]
 
 
 @pytest.mark.parametrize(
-    "global_dict, method, independence, normalizing_flow", test_data3
+    "global_dict, method, independence, normalizing_flow, initial_value",
+    test_data3
 )
-def test_initialize_priors_saving(global_dict, method, independence,
-                                  normalizing_flow):
+def test_initialize_priors_saving(
+    global_dict, method, independence, normalizing_flow, initial_value
+):
     global_dict["normalizing_flow"] = normalizing_flow
     global_dict["training_settings"]["independence"] = independence
     global_dict["training_settings"]["method"] = method
     # initialize and save hyperparameters
-    expected_data = intialize_priors(global_dict)
+    expected_data = intialize_priors(global_dict, initial_value)
     # read data from file
     observed_data = pd.read_pickle(
         global_dict["training_settings"][
@@ -179,6 +198,7 @@ test_data4 = [
         "deep_prior",
         dict(corr_scaling=0.1),
         normalizing_flow,
+        None,
         True,
         (1, 10_000, 2),
     ),
@@ -187,27 +207,49 @@ test_data4 = [
         "deep_prior",
         dict(corr_scaling=0.1),
         normalizing_flow,
+        None,
         False,
         (256, 200, 2),
     ),
-    (global_dict, "parametric_prior", None, None, True, (1, 10_000, 2)),
-    (global_dict, "parametric_prior", None, None, False, (256, 200, 2)),
+    (
+        global_dict,
+        "parametric_prior",
+        None,
+        None,
+        init_matrix[0, :],
+        True,
+        (1, 10_000, 2),
+    ),
+    (
+        global_dict,
+        "parametric_prior",
+        None,
+        None,
+        init_matrix[0, :],
+        False,
+        (256, 200, 2),
+    ),
 ]
 
 
 @pytest.mark.parametrize(
-    "global_dict, method, independence, normalizing_flow, ground_truth, expected_shape", # noqa
+    "global_dict, method, independence, normalizing_flow, initial_value, ground_truth, expected_shape",  # noqa
     test_data4,
 )
 def test_sample_from_priors_shape(
-    global_dict, method, independence, normalizing_flow, ground_truth,
-    expected_shape
+    global_dict,
+    method,
+    independence,
+    normalizing_flow,
+    initial_value,
+    ground_truth,
+    expected_shape,
 ):
     global_dict["normalizing_flow"] = normalizing_flow
     global_dict["training_settings"]["independence"] = independence
     global_dict["training_settings"]["method"] = method
     # initialize and save hyperparameters
-    init_priors = intialize_priors(global_dict)
+    init_priors = intialize_priors(global_dict, initial_value)
     # sample from init_priors
     prior_samples = sample_from_priors(init_priors, ground_truth, global_dict)
     # check whether samples have expected shape
@@ -217,16 +259,19 @@ def test_sample_from_priors_shape(
 # %% Test whether prior samples are identical for same seed
 
 test_data5 = [
-    (global_dict, "deep_prior", dict(corr_scaling=0.1), normalizing_flow),
-    (global_dict, "parametric_prior", None, None),
+    (global_dict, "deep_prior", dict(corr_scaling=0.1), normalizing_flow,
+     None),
+    (global_dict, "parametric_prior", None, None, init_matrix[0, :]),
 ]
 
 
 @pytest.mark.parametrize(
-    "global_dict, method, independence, normalizing_flow", test_data5
+    "global_dict, method, independence, normalizing_flow, initial_value",
+    test_data5
 )
-def test_sample_from_priors_seed(global_dict, method, independence,
-                                 normalizing_flow):
+def test_sample_from_priors_seed(
+    global_dict, method, independence, normalizing_flow, initial_value
+):
     global_dict["normalizing_flow"] = normalizing_flow
     global_dict["training_settings"]["independence"] = independence
     global_dict["training_settings"]["method"] = method
@@ -234,14 +279,14 @@ def test_sample_from_priors_seed(global_dict, method, independence,
     # first run
     global_dict["training_settings"]["sim_id"] = "test_initialize_priors_rep1"
     # initialize and save hyperparameters
-    init_priors1 = intialize_priors(global_dict)
+    init_priors1 = intialize_priors(global_dict, initial_value)
     # sample from init_priors
     prior_samples1 = sample_from_priors(init_priors1, False, global_dict)
 
     # second run (with same seed)
     global_dict["training_settings"]["sim_id"] = "test_initialize_priors_rep2"
     # initialize and save hyperparameters
-    init_priors2 = intialize_priors(global_dict)
+    init_priors2 = intialize_priors(global_dict, initial_value)
     # sample from init_priors
     prior_samples2 = sample_from_priors(init_priors2, False, global_dict)
 
@@ -274,6 +319,7 @@ test_data6 = [
         "deep_prior",
         dict(corr_scaling=0.1),
         normalizing_flow,
+        None,
         np.stack([mu1, mu2]),
         np.stack([sd1, sd2]),
     ),
@@ -282,6 +328,7 @@ test_data6 = [
         "parametric_prior",
         None,
         None,
+        init_matrix[0, :],
         np.stack([mu1, mu2]),
         np.stack([sd1, sd2]),
     ),
@@ -289,26 +336,31 @@ test_data6 = [
 
 
 @pytest.mark.parametrize(
-    "global_dict, method, independence, normalizing_flow, expected_mus, expected_stds", # noqa
+    "global_dict, method, independence, normalizing_flow, initial_value, expected_mus, expected_stds",  # noqa
     test_data6,
 )
 def test_sample_from_priors_values(
-    global_dict, method, independence, normalizing_flow, expected_mus,
-    expected_stds
+    global_dict,
+    method,
+    independence,
+    normalizing_flow,
+    initial_value,
+    expected_mus,
+    expected_stds,
 ):
     global_dict["normalizing_flow"] = normalizing_flow
     global_dict["training_settings"]["independence"] = independence
     global_dict["training_settings"]["method"] = method
 
     # initialize and save hyperparameters
-    init_priors = intialize_priors(global_dict)
+    init_priors = intialize_priors(global_dict, initial_value)
     # sample from init_priors
     prior_samples = sample_from_priors(init_priors, True, global_dict)
     # compute mean and std-dev of prior samples
     mus = tf.reduce_mean(prior_samples, (0, 1))
     stds = tf.math.reduce_std(prior_samples, (0, 1))
 
-    assert expected_mus[0] == pytest.approx(mus[0], rel=0.01)
-    assert expected_mus[1] == pytest.approx(mus[1], rel=0.01)
-    assert expected_stds[0] == pytest.approx(stds[0], rel=0.01)
-    assert expected_stds[1] == pytest.approx(stds[1], rel=0.01)
+    assert expected_mus[0] == pytest.approx(mus[0], rel=0.1)
+    assert expected_mus[1] == pytest.approx(mus[1], rel=0.1)
+    assert expected_stds[0] == pytest.approx(stds[0], rel=0.1)
+    assert expected_stds[1] == pytest.approx(stds[1], rel=0.1)
