@@ -482,7 +482,7 @@ def prior_elicitation(
 
     # Section: initialization settings
     global_dict["initialization_settings"] = dict()
-    global_dict["initialization_settings"] = _default_dict_initialization.copy()
+    global_dict["initialization_settings"] = _default_dict_initialization.copy() # noqa
     global_dict["initialization_settings"].update(initialization_settings)
 
     # Section: training_settings
@@ -520,11 +520,12 @@ def prior_elicitation(
                 compute_total_loss,
                 global_dict,
             )
-    
+
             # extract pre-specified quantile loss out of all runs
             # get corresponding set of initial values
-            loss_quantile = global_dict["initialization_settings"]["loss_quantile"]
-            index = tf.squeeze(tf.where(loss_list==tfp.stats.percentile(
+            loss_quantile = global_dict["initialization_settings"][
+                "loss_quantile"]
+            index = tf.squeeze(tf.where(loss_list == tfp.stats.percentile(
                 loss_list, [loss_quantile])))
             init_prior_model = init_prior[int(index)]
         else:

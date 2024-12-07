@@ -25,25 +25,27 @@ def init_method(n_hypparam, n_warm_up, method):
     Returns
     -------
     mvdist : tf.tensor
-        samples from the multivariate prior (shape=(n_warm_up, n_hyperparameters).
+        samples from the multivariate prior
+        (shape=(n_warm_up, n_hyperparameters).
 
     """
-    assert method in ["random", "lhs", "sobol"], "The initialization method must be one of the following: 'sobol', 'lhs', 'random'"
+
+    assert method in ["random", "lhs", "sobol"], "The initialization method must be one of the following: 'sobol', 'lhs', 'random'"  # noqa
 
     if method == "random":
         print("init_method=random")
         mvdist = tfd.MultivariateNormalDiag(
-            tf.zeros(n_hypparam), 
+            tf.zeros(n_hypparam),
             tf.ones(n_hypparam)).sample(n_warm_up)
     elif method == "lhs":
         print("init_method=lhs")
         mvdist = tfd.MultivariateNormalDiag(
-            tf.zeros(n_hypparam), 
+            tf.zeros(n_hypparam),
             tf.ones(n_hypparam)).sample(n_warm_up)
     elif method == "sobol":
         print("init_method=sobol")
         mvdist = tfd.MultivariateNormalDiag(
-            tf.zeros(n_hypparam), 
+            tf.zeros(n_hypparam),
             tf.ones(n_hypparam)).sample(n_warm_up)
 
     return mvdist
@@ -108,12 +110,13 @@ def initialization_phase(
         "output_path"] + "/initialization_matrix.pkl"
     save_as_pkl(init_matrix, path)
 
-    for i in range(dict_copy["initialization_settings"]["number_of_iterations"]):
+    for i in range(dict_copy["initialization_settings"][
+            "number_of_iterations"]):
         dict_copy["training_settings"]["seed"] = (
             dict_copy["training_settings"]["seed"] + i
         )
         # create init-matrix-slice
-        init_matrix_slice = init_matrix[i,:]
+        init_matrix_slice = init_matrix[i, :]
         # prepare generative model
         prior_model = Priors(global_dict=dict_copy,
                              ground_truth=False,

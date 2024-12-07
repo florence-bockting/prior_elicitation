@@ -117,8 +117,9 @@ def intialize_priors(global_dict, init_matrix_slice):
 
             initialized_hyperparam = dict()
             for name in get_hyp_dict:
-                if global_dict["initialization_settings"]["method"] is not None:
-                    initial_value=init_matrix_slice[j]
+                if global_dict["initialization_settings"][
+                        "method"] is not None:
+                    initial_value = init_matrix_slice[j]
                     # increase j
                     j += 1
                 else:
