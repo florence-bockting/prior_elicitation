@@ -6,14 +6,16 @@ import tensorflow as tf
 import tensorflow_probability as tfp
 import logging
 
+import elicit.save_config
 import elicit.logs_config # noqa
+
 from elicit.prior_simulation import Priors
 from elicit.loss_computation import compute_total_loss
 from elicit.loss_functions import MMD_energy
 from elicit.optimization_process import sgd_training
 from elicit.initialization_methods import initialization_phase
 from elicit.expert_data import get_expert_data
-from elicit.helper_functions import save_as_pkl
+from elicit.helper_functions import save_as_pkl, remove_unneeded_files
 from elicit.checks import check_run
 from elicit.model_simulation import simulate_from_generator
 from elicit.target_quantities import computation_target_quantities
@@ -72,6 +74,7 @@ def prior_elicitation(
     training_settings: dict,
     normalizing_flow: dict or bool = False,
     loss_function: dict or None = None,
+    initialization_settings: dict or None = None,
     optimization_settings: dict or None = None,
 ):
     """
@@ -334,18 +337,20 @@ def prior_elicitation(
     _default_dict_independence = dict(corr_scaling=0.1)
 
     _default_dict_normalizing_flow = dict(
-        num_coupling_layers=3,
-        coupling_design="affine",
-        coupling_settings={
-            "dropout": False,
-            "dense_args": {
-                "units": 128,
-                "activation": "relu",
-                "kernel_regularizer": None,
+        coupling_flow=dict(
+            num_coupling_layers=3,
+            coupling_design="affine",
+            coupling_settings={
+                "dropout": False,
+                "dense_args": {
+                    "units": 128,
+                    "activation": "relu",
+                    "kernel_regularizer": None,
+                },
+                "num_dense": 2,
             },
-            "num_dense": 2,
-        },
-        permutation="fixed",
+            permutation="fixed",
+        ),
         base_distribution=tfd.MultivariateNormalTriL(
             loc=tf.zeros(num_params),
             scale_tril=tf.linalg.cholesky(tf.eye(num_params))
@@ -381,12 +386,17 @@ def prior_elicitation(
         optimizer_specs={"learning_rate": 0.0001, "clipnorm": 1.0},
     )
 
+    _default_dict_initialization = dict(
+        method="random",
+        loss_quantile=0,
+        number_of_iterations=200
+    )
+
     _default_dict_training = dict(
         method=None,
         sim_id=None,
         B=128,
         samples_from_prior=200,
-        warmup_initializations=None,
         epochs=None,
         output_path="results",
         progress_info=1,
@@ -470,6 +480,11 @@ def prior_elicitation(
     if optimization_settings is not None:
         global_dict["optimization_settings"].update(optimization_settings)
 
+    # Section: initialization settings
+    global_dict["initialization_settings"] = dict()
+    global_dict["initialization_settings"] = _default_dict_initialization.copy()
+    global_dict["initialization_settings"].update(initialization_settings)
+
     # Section: training_settings
     # TODO-Test: include test optimization_setting is None
     global_dict["training_settings"] = dict()
@@ -494,14 +509,10 @@ def prior_elicitation(
     expert_elicited_statistics = get_expert_data(global_dict,
                                                  one_forward_simulation)
 
-    def pre_training(warmup):
+    def pre_training(global_dict):
         logger = logging.getLogger(__name__)
-        if warmup is None:
-            # prepare generative model
-            init_prior_model = Priors(global_dict=global_dict,
-                                      ground_truth=False)
 
-        else:
+        if global_dict["training_settings"] == "parametric_prior":
             logger.info("Pre-training phase (only first run)")
             loss_list, init_prior = initialization_phase(
                 expert_elicited_statistics,
@@ -509,16 +520,22 @@ def prior_elicitation(
                 compute_total_loss,
                 global_dict,
             )
+    
+            # extract pre-specified quantile loss out of all runs
+            # get corresponding set of initial values
+            loss_quantile = global_dict["initialization_settings"]["loss_quantile"]
+            index = tf.squeeze(tf.where(loss_list==tfp.stats.percentile(
+                loss_list, [loss_quantile])))
+            init_prior_model = init_prior[int(index)]
+        else:
+            # prepare generative model
+            init_prior_model = Priors(global_dict=global_dict,
+                                      ground_truth=False,
+                                      init_matrix_slice=None)
 
-            # extract minimum loss out of all runs and corresponding set of
-            # initial values
-            min_index = tf.argmin(loss_list)
-            init_prior_model = init_prior[min_index]
+        return init_prior_model
 
-        return (min_index, init_prior_model)
-
-    min_index, init_prior_model = pre_training(
-        global_dict["training_settings"]["warmup_initializations"])
+    init_prior_model = pre_training(global_dict)
 
     # run dag with optimal set of initial values
     logger.info("Training Phase (only first epoch)")
@@ -530,3 +547,6 @@ def prior_elicitation(
         global_dict,
         training_settings["seed"],
     )
+
+    # remove saved files that are not of interest for follow-up analysis
+    remove_unneeded_files(global_dict, elicit.save_config.save_results)

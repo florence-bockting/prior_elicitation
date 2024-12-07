@@ -11,6 +11,44 @@ from elicit.prior_simulation import Priors
 tfd = tfp.distributions
 
 
+def init_method(n_hypparam, n_warm_up, method):
+    """
+    Initialize multivariate normal prior over hyperparameter values
+
+    Parameters
+    ----------
+    n_hypparam : int
+        Number of hyperparameters.
+    n_warm_up : int
+        number of warmup iterations.
+
+    Returns
+    -------
+    mvdist : tf.tensor
+        samples from the multivariate prior (shape=(n_warm_up, n_hyperparameters).
+
+    """
+    assert method in ["random", "lhs", "sobol"], "The initialization method must be one of the following: 'sobol', 'lhs', 'random'"
+
+    if method == "random":
+        print("init_method=random")
+        mvdist = tfd.MultivariateNormalDiag(
+            tf.zeros(n_hypparam), 
+            tf.ones(n_hypparam)).sample(n_warm_up)
+    elif method == "lhs":
+        print("init_method=lhs")
+        mvdist = tfd.MultivariateNormalDiag(
+            tf.zeros(n_hypparam), 
+            tf.ones(n_hypparam)).sample(n_warm_up)
+    elif method == "sobol":
+        print("init_method=sobol")
+        mvdist = tfd.MultivariateNormalDiag(
+            tf.zeros(n_hypparam), 
+            tf.ones(n_hypparam)).sample(n_warm_up)
+
+    return mvdist
+
+
 def initialization_phase(
     expert_elicited_statistics, one_forward_simulation, compute_loss,
     global_dict,
@@ -50,12 +88,6 @@ def initialization_phase(
     save_prior = []
     dict_copy = dict(global_dict)
 
-    def init_method(n_hypparam, n_warm_up):
-        mvdist = tfd.MultivariateNormalDiag(
-            tf.zeros(n_hypparam), tf.ones(n_hypparam)
-        ).sample(n_warm_up)
-        return mvdist
-
     # get number of hyperparameters
     n_hypparam = 0
     param_names = set(global_dict["model_parameters"]).difference(
@@ -67,23 +99,30 @@ def initialization_phase(
         )
     # create initializations
     init_matrix = init_method(
-        n_hypparam, dict_copy["training_settings"]["warmup_initializations"]
-    )
+        n_hypparam,
+        dict_copy["initialization_settings"]["number_of_iterations"],
+        global_dict["initialization_settings"]["method"]
+        )
 
     path = dict_copy["training_settings"][
         "output_path"] + "/initialization_matrix.pkl"
     save_as_pkl(init_matrix, path)
 
-    for i in range(dict_copy["training_settings"]["warmup_initializations"]):
+    for i in range(dict_copy["initialization_settings"]["number_of_iterations"]):
         dict_copy["training_settings"]["seed"] = (
             dict_copy["training_settings"]["seed"] + i
         )
+        # create init-matrix-slice
+        init_matrix_slice = init_matrix[i,:]
         # prepare generative model
         prior_model = Priors(global_dict=dict_copy,
-                             ground_truth=False)
+                             ground_truth=False,
+                             init_matrix_slice=init_matrix_slice)
+
         # generate simulations from model
         training_elicited_statistics = one_forward_simulation(prior_model,
                                                               dict_copy)
+
         # compute loss for each set of initial values
         weighted_total_loss = compute_loss(
             training_elicited_statistics,

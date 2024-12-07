@@ -31,7 +31,7 @@ class Priors(tf.Module):
         None if ground_truth = True
     """
 
-    def __init__(self, ground_truth, global_dict):
+    def __init__(self, ground_truth, global_dict, init_matrix_slice):
         """
         Initializes the hyperparameters (i.e., trainable variables)
 
@@ -45,6 +45,7 @@ class Priors(tf.Module):
 
         self.global_dict = global_dict
         self.ground_truth = ground_truth
+        self.init_matrix_slice = init_matrix_slice
         self.logger = logging.getLogger(__name__)
         # set seed
         tf.random.set_seed(global_dict["training_settings"]["seed"])
@@ -52,7 +53,8 @@ class Priors(tf.Module):
         # are given, no initialization is needed)
         if not self.ground_truth:
             self.logger.info("Initialize prior hyperparameters")
-            self.init_priors = intialize_priors(self.global_dict)
+            self.init_priors = intialize_priors(self.global_dict,
+                                                self.init_matrix_slice)
         else:
             self.logger.info("Set true prior hyperparameters")
             self.init_priors = None
@@ -77,7 +79,7 @@ class Priors(tf.Module):
         return prior_samples
 
 
-def intialize_priors(global_dict):
+def intialize_priors(global_dict, init_matrix_slice):
     """
     Initialize prior distributions.
 
@@ -98,6 +100,9 @@ def intialize_priors(global_dict):
     if global_dict["training_settings"]["method"] == "parametric_prior":
         # list for saving initialize hyperparameter values
         init_hyperparam_list = []
+        # initialize j counting number of hyperparameters
+        j = 0
+
         # loop over model parameter and initialize each hyperparameter
         for model_param in sorted(
             list(
@@ -112,15 +117,12 @@ def intialize_priors(global_dict):
 
             initialized_hyperparam = dict()
             for name in get_hyp_dict:
-                # check whether initial value is a distributions
-                # TODO currently we silently assume that we have either a
-                # value or a tfd.distribution object
-                try:
-                    get_hyp_dict[name].reparameterization_type
-                except AttributeError:
-                    initial_value = get_hyp_dict[name]
+                if global_dict["initialization_settings"]["method"] is not None:
+                    initial_value=init_matrix_slice[j]
+                    # increase j
+                    j += 1
                 else:
-                    initial_value = get_hyp_dict[name].sample()
+                    initial_value = get_hyp_dict[name]
 
                 # initialize hyperparameter
                 initialized_hyperparam[f"{name}"] = tf.Variable(
@@ -129,18 +131,18 @@ def intialize_priors(global_dict):
                     name=f"{name}",
                 )
             init_hyperparam_list.append(initialized_hyperparam)
+
         # save initialized priors
         init_prior = init_hyperparam_list
         # save file in object
         output_path = global_dict["training_settings"]["output_path"]
-        path = output_path + "/init_prior.pkl"
+        path = output_path + "/init_hyperparameters.pkl"
         save_as_pkl(init_prior, path)
 
     if global_dict["training_settings"]["method"] == "deep_prior":
         # for more information see BayesFlow documentation
         # https://bayesflow.org/api/bayesflow.inference_networks.html
-        input_INN = dict(global_dict["normalizing_flow"])
-        input_INN.pop("base_distribution")
+        input_INN = global_dict["normalizing_flow"]["coupling_flow"]
 
         invertible_neural_network = networks.InvertibleNetwork(
             num_params=global_dict["model_parameters"]["no_params"],
@@ -148,6 +150,10 @@ def intialize_priors(global_dict):
         )
         # save initialized priors
         init_prior = invertible_neural_network
+        # save file in object
+        output_path = global_dict["training_settings"]["output_path"]
+        path = output_path + "/init_hyperparameters.pkl"
+        save_as_pkl(init_prior.trainable_variables, path)
 
     return init_prior
 

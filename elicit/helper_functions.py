@@ -9,7 +9,6 @@ import tensorflow as tf
 
 from pythonjsonlogger import jsonlogger # noqa
 
-
 def save_as_pkl(variable, path_to_file):
     """
     Helper functions to save a file as pickle.
@@ -31,6 +30,15 @@ def save_as_pkl(variable, path_to_file):
     # save file to location as pickle
     with open(path_to_file, "wb") as df_file:
         pickle.dump(variable, file=df_file)
+
+
+def remove_unneeded_files(global_dict, save_results):
+    path=global_dict["training_settings"]["output_path"]
+
+    if not save_results["init_hyperparameters"]:
+        os.remove(path + "/init_hyperparameters.pkl")
+    if not save_results["init_hyperparameters"]:
+        os.remove(path + "/prior_samples.pkl")
 
 
 def save_hyperparameters(generator, epoch, global_dict):

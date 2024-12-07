@@ -1,6 +1,6 @@
 import tensorflow_probability as tfp
 
-from elicit.core.run import prior_elicitation
+from elicit.main import prior_elicitation
 from elicit.user.generative_models import ToyModel
 
 tfd = tfp.distributions
@@ -35,10 +35,15 @@ prior_elicitation(
             "clipnorm": 1.0,
         }
     ),
+    initialization_settings=dict(
+        method=None,
+        loss_quantile=0,
+        number_of_iterations=10,
+        ),
     training_settings=dict(
         method="deep_prior",
         sim_id="toy_example",
         seed=2,
-        epochs=10,  # 500
+        epochs=2,  # 500
     ),
 )

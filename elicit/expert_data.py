@@ -37,7 +37,8 @@ def get_expert_data(global_dict, one_forward_simulation,
         tf.random.set_seed(global_dict["training_settings"]["seed"])
         # sample from true priors
         prior_model = Priors(global_dict=global_dict,
-                             ground_truth=True)
+                             ground_truth=True,
+                             init_matrix_slice=None)
         expert_data = one_forward_simulation(
             prior_model, global_dict, ground_truth=True
         )
