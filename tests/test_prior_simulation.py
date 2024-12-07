@@ -277,14 +277,14 @@ test_data5 = [
 #     global_dict["training_settings"]["method"] = method
 
 #     # first run
-#     global_dict["training_settings"]["sim_id"] = "test_initialize_priors_rep1"
+#     global_dict["training_settings"]["sim_id"] = "test_initialize_priors_rep1"  # noqa
 #     # initialize and save hyperparameters
 #     init_priors1 = intialize_priors(global_dict, initial_value)
 #     # sample from init_priors
 #     prior_samples1 = sample_from_priors(init_priors1, False, global_dict)
 
 #     # second run (with same seed)
-#     global_dict["training_settings"]["sim_id"] = "test_initialize_priors_rep2"
+#     global_dict["training_settings"]["sim_id"] = "test_initialize_priors_rep2"  # noqa
 #     # initialize and save hyperparameters
 #     init_priors2 = intialize_priors(global_dict, initial_value)
 #     # sample from init_priors
