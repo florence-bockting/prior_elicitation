@@ -45,5 +45,7 @@ def get_expert_data(global_dict, one_forward_simulation,
     else:
         logger.info("Read expert data")
         # load expert data from file
+        # TODO Expert data must have same name and structure as sim-based
+        # elicited statistics
         expert_data = global_dict["expert_data"]["data"]
     return expert_data

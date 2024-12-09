@@ -140,7 +140,7 @@ def initialization_phase(
         loss_list.append(weighted_total_loss.numpy())
 
     path = dict_copy["training_settings"][
-        "output_path"] + "/initialization_phase.pkl"
+        "output_path"] + "/pre_training_results.pkl"
     save_as_pkl((loss_list, save_prior), path)
 
     print(" ")

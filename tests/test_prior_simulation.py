@@ -360,7 +360,7 @@ def test_sample_from_priors_values(
     mus = tf.reduce_mean(prior_samples, (0, 1))
     stds = tf.math.reduce_std(prior_samples, (0, 1))
 
-    # FIXME: difficult to say what a reasonable tolerance value is
+    # TODO: difficult to say what a reasonable tolerance value is
     assert expected_mus[0] == pytest.approx(mus[0], rel=0.1)
     assert expected_mus[1] == pytest.approx(mus[1], rel=0.1)
     assert expected_stds[0] == pytest.approx(stds[0], rel=0.1)
