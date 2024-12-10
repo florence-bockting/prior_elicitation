@@ -147,6 +147,9 @@ Contents
    :maxdepth: 2
 
    Home <self>
-   Tutorials <introductory_example>
    API <api/modules>
+   Tutorials <introductory_example>
+   How-To <howto/index>
+   Explanation <explanation/index>
+   References <references>
 

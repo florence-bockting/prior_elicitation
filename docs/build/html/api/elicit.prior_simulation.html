@@ -160,7 +160,6 @@
     <div class="bd-toc-item navbar-nav active">
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../introductory_example.html">Tutorials</a></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="modules.html">API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="elicit.html">elicit package</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3 has-children"><a class="reference internal" href="elicit.user.html">elicit.user package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -185,6 +184,18 @@
 </details></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="../introductory_example.html">Tutorials</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../howto/index.html">How-To</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../howto/expert_data.html">... specify the expert data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../howto/generative_model.html">... specify the generative model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../howto/target_quantities.html">... specify the target quantities &amp; elicitation techniques</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../explanation/index.html">Explanation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../explanation/prior_elicitation.html">* prior_elicitation function</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
 </ul>
 
     </div>
@@ -370,7 +381,7 @@ document.write(`
 <span id="elicit-prior-simulation-module"></span><h1>elicit.prior_simulation module<a class="headerlink" href="#module-elicit.prior_simulation" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="elicit.prior_simulation.Priors">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">elicit.prior_simulation.</span></span><span class="sig-name descname"><span class="pre">Priors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/prior_simulation.html#Priors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.prior_simulation.Priors" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">elicit.prior_simulation.</span></span><span class="sig-name descname"><span class="pre">Priors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_matrix_slice</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/prior_simulation.html#Priors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.prior_simulation.Priors" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <p>Initializes the hyperparameters of the prior distributions.</p>
 <dl class="field-list simple">
@@ -401,7 +412,7 @@ None if ground_truth = True</p>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.prior_simulation.Priors.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/prior_simulation.html#Priors.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.prior_simulation.Priors.__init__" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_matrix_slice</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/prior_simulation.html#Priors.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.prior_simulation.Priors.__init__" title="Link to this definition">#</a></dt>
 <dd><p>Initializes the hyperparameters (i.e., trainable variables)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -433,7 +444,7 @@ None if ground_truth = True</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.prior_simulation.intialize_priors">
-<span class="sig-prename descclassname"><span class="pre">elicit.prior_simulation.</span></span><span class="sig-name descname"><span class="pre">intialize_priors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">global_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/prior_simulation.html#intialize_priors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.prior_simulation.intialize_priors" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.prior_simulation.</span></span><span class="sig-name descname"><span class="pre">intialize_priors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">global_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_matrix_slice</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/prior_simulation.html#intialize_priors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.prior_simulation.intialize_priors" title="Link to this definition">#</a></dt>
 <dd><p>Initialize prior distributions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

@@ -45,7 +45,7 @@
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/binomial_joint';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/binomial_independent';</script>
     <link rel="icon" href="../_static/favicon-light.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -162,7 +162,6 @@
     <div class="bd-toc-item navbar-nav active">
         <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../introductory_example.html">Tutorials</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../api/modules.html">API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../api/elicit.html">elicit package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../api/elicit.user.html">elicit.user package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -187,6 +186,18 @@
 </details></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="../introductory_example.html">Tutorials</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../howto/index.html">How-To</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../howto/expert_data.html">... specify the expert data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../howto/generative_model.html">... specify the generative model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../howto/target_quantities.html">... specify the target quantities &amp; elicitation techniques</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../explanation/index.html">Explanation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../explanation/prior_elicitation.html">* prior_elicitation function</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
 </ul>
 
     </div>
@@ -256,7 +267,7 @@
       
       
       
-      <li><a href="../_sources/notebooks/binomial_joint.ipynb" target="_blank"
+      <li><a href="../_sources/notebooks/binomial_independent.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -358,11 +369,10 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training">Training</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sensitivity-analysis">Sensitivity Analysis</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#convergence-check-and-learned-priors">Convergence Check and Learned Priors</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Elicited statistics</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convergence-diagnostics-a">Convergence diagnostics (a)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#learned-prior-distributions-b">Learned prior distributions (b)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convergence-diagnostics">Convergence diagnostics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#learned-prior-distributions">Learned prior distributions</a></li>
 </ul>
 </li>
 </ul>
@@ -388,21 +398,27 @@ document.write(`
 <span class="kn">from</span> <span class="nn">elicit.core.run</span> <span class="kn">import</span> <span class="n">prior_elicitation</span>
 <span class="kn">from</span> <span class="nn">elicit.user.design_matrices</span> <span class="kn">import</span> <span class="n">load_design_matrix_binomial</span>
 <span class="kn">from</span> <span class="nn">elicit.user.generative_models</span> <span class="kn">import</span> <span class="n">BinomialModel</span>
-<span class="kn">from</span> <span class="nn">elicit.user.custom_functions</span> <span class="kn">import</span> <span class="n">quantiles_per_ypred</span>
+<span class="kn">from</span> <span class="nn">elicit.user.custom_functions</span> <span class="kn">import</span> <span class="n">quantiles_per_ypred</span><span class="p">,</span> <span class="n">Normal_log</span>
 
 <span class="kn">from</span> <span class="nn">elicit.manuscript_non_parametric_joint_prior.functions.independent_binomial_prior_checks</span> <span class="kn">import</span> <span class="n">run_sensitivity_binom</span><span class="p">,</span> <span class="n">prep_sensitivity_res</span><span class="p">,</span> <span class="n">plot_sensitivity_binom</span>
 <span class="kn">from</span> <span class="nn">elicit.manuscript_non_parametric_joint_prior.functions.convergence_diagnostics</span> <span class="kn">import</span> <span class="n">plot_conv_diagnostics</span>
 <span class="kn">from</span> <span class="nn">elicit.manuscript_non_parametric_joint_prior.functions.preprocess_sim_res_binom</span> <span class="kn">import</span> <span class="n">prep_sim_res_binom</span>
 <span class="kn">from</span> <span class="nn">elicit.manuscript_non_parametric_joint_prior.functions.binomial_model_averaging</span> <span class="kn">import</span> <span class="n">run_model_averaging</span><span class="p">,</span> <span class="n">plot_learned_priors</span>
-<span class="kn">from</span> <span class="nn">elicit.plotting.sensitivity_func</span> <span class="kn">import</span> <span class="n">plot_elicited_stats_binom</span><span class="p">,</span> <span class="n">plot_loss_binom</span><span class="p">,</span> <span class="n">plot_prior_binom</span>
+<span class="kn">from</span> <span class="nn">elicit.plotting.sensitivity_func</span> <span class="kn">import</span> <span class="n">plot_elicited_stats_binom_independent</span><span class="p">,</span> <span class="n">plot_loss_binom_independent</span><span class="p">,</span> <span class="n">plot_prior_binom_independent</span>
+
+<span class="n">normal_log</span> <span class="o">=</span> <span class="n">Normal_log</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
 <section class="tex2jax_ignore mathjax_ignore" id="binomial-model">
 <h1>Binomial model<a class="headerlink" href="#binomial-model" title="Link to this heading">#</a></h1>
-<p>This notebooks implements Simulation Study 1 in Bockting et al. (2024). Please consult this reference for further details about the setup.</p>
-<p>Bockting, F., Radev S. T., &amp; Bürkner P. C. (2024) Expert-elicitation method for non-parametric joint priors using normalizing flows. Preprint at <a class="reference external" href="https://arxiv.org/abs/2411.15826">https://arxiv.org/abs/2411.15826</a></p>
+<p>This notebooks implements Simulation Study 1 in Bockting et al. (2024a). Please consult this reference for further details about the setup.</p>
+<p>We deviate from the reference in one important aspect: Instead of learning a non-parametric joint prior on the model parameters, we learn in this example <strong>independent parametric prior distributions</strong>. This method is introduced in Bockting et al. (2024b)</p>
+<ul class="simple">
+<li><p>Bockting, F., Radev S. T., &amp; Bürkner P. C. (2024a) Expert-elicitation method for non-parametric joint priors using normalizing flows. Preprint at <a class="reference external" href="https://arxiv.org/abs/2411.15826">https://arxiv.org/abs/2411.15826</a></p></li>
+<li><p>Bockting, F., Radev, S. T. &amp; Bürkner, P. C. (2024b). Simulation-based prior knowledge elicitation for parametric Bayesian models. Scientific Reports 14, 17330 (2024). https://doi.org/10.1038/s41598-024-68090-7</p></li>
+</ul>
 <section id="preparation">
 <h2>Preparation<a class="headerlink" href="#preparation" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
@@ -410,10 +426,8 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set seed</span>
 <span class="n">seed</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="c1"># set path to oracle data and to simulation results</span>
-<span class="n">path_sim_res</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;elicit/results/deep_prior/binomial_model_</span><span class="si">{</span><span class="n">seed</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="n">path_expert</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;elicit/results/deep_prior/binomial_model_</span><span class="si">{</span><span class="n">seed</span><span class="si">}</span><span class="s2">/expert&quot;</span>
-<span class="c1"># set path for saving sensitivity results</span>
-<span class="n">path_sensitivity_res</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;elicit/elicit/results/deep_prior/binomial_model_</span><span class="si">{</span><span class="n">seed</span><span class="si">}</span><span class="s2">/sensitivity_results&quot;</span>
+<span class="n">path_sim_res</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;elicit/results/parametric_prior/binomial_model_</span><span class="si">{</span><span class="n">seed</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="n">path_expert</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;elicit/results/parametric_prior/binomial_model_</span><span class="si">{</span><span class="n">seed</span><span class="si">}</span><span class="s2">/expert&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -424,16 +438,17 @@ document.write(`
 <section id="generative-model">
 <h3>Generative model<a class="headerlink" href="#generative-model" title="Link to this heading">#</a></h3>
 <p>Binomial model with a logit link (sigmoid response function) and one continuous predictor~<span class="math notranslate nohighlight">\(x=1,\ldots,50\)</span>, scaled by its standard deviation:</p>
-<div class="amsmath math notranslate nohighlight" id="equation-161f0082-f014-46b4-8690-e1c07de5eb51">
-<span class="eqno">(1)<a class="headerlink" href="#equation-161f0082-f014-46b4-8690-e1c07de5eb51" title="Permalink to this equation">#</a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-669bd4d0-50ff-4d90-9b14-43af10d38c66">
+<span class="eqno">(1)<a class="headerlink" href="#equation-669bd4d0-50ff-4d90-9b14-43af10d38c66" title="Permalink to this equation">#</a></span>\[\begin{align}
     \begin{split}
         y_i &amp;\sim \text{Binomial}(p_i, 30)\\
         p_i &amp;= \text{sigmoid}(\beta_0+\beta_1x_i)\\
-        \beta_0, \beta_1 &amp;\sim p_\lambda(\beta_0, \beta_1) \\
-        \theta &amp;\equiv (\beta_0,\beta_1) 
+        \beta_0 &amp;\sim \text{Normal}(\mu_0,\sigma_0) \\
+        \beta_1 &amp;\sim \text{Normal}(\mu_1,\sigma_1) \\
+        \lambda &amp;\equiv (\mu_0,\mu_1, \sigma_0, \sigma_1) 
     \end{split}
 \end{align}\]</div>
-<p>The goal is to learn a joint prior for the model parameters <span class="math notranslate nohighlight">\(\beta_0\)</span> (intercept) and <span class="math notranslate nohighlight">\(\beta_1\)</span> (slope), assuming independence between these parameters.</p>
+<p>The goal is to learn the set of hyperparameters <span class="math notranslate nohighlight">\(\lambda\)</span> of the parametric priors of the model parameters.</p>
 </section>
 <section id="elicited-statistics">
 <h3>Elicited statistics<a class="headerlink" href="#elicited-statistics" title="Link to this heading">#</a></h3>
@@ -449,11 +464,23 @@ document.write(`
 
     <span class="n">prior_elicitation</span><span class="p">(</span>
         <span class="n">model_parameters</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-            <span class="n">b0</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">param_scaling</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
-            <span class="n">b1</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">param_scaling</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
-            <span class="n">independence</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">corr_scaling</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+            <span class="n">b0</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">family</span><span class="o">=</span><span class="n">normal_log</span><span class="p">,</span> 
+                <span class="n">hyperparams_dict</span><span class="o">=</span><span class="p">{</span>
+                      <span class="s2">&quot;mu0&quot;</span><span class="p">:</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span><span class="mf">1.</span><span class="p">),</span>
+                      <span class="s2">&quot;log_sigma0&quot;</span><span class="p">:</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                      <span class="p">},</span>
+                <span class="n">param_scaling</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
+            <span class="n">b1</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">family</span><span class="o">=</span><span class="n">normal_log</span><span class="p">,</span> 
+                <span class="n">hyperparams_dict</span><span class="o">=</span><span class="p">{</span>
+                      <span class="s2">&quot;mu1&quot;</span><span class="p">:</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span><span class="mf">1.</span><span class="p">),</span>
+                      <span class="s2">&quot;log_sigma1&quot;</span><span class="p">:</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>
+                      <span class="p">},</span>
+                <span class="n">param_scaling</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
+            <span class="n">independence</span><span class="o">=</span><span class="kc">None</span>
         <span class="p">),</span>
-        <span class="n">normalizing_flow</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">normalizing_flow</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">expert_data</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
             <span class="n">from_ground_truth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">simulator_specs</span><span class="o">=</span><span class="p">{</span>
@@ -488,13 +515,14 @@ document.write(`
         <span class="p">),</span>
         <span class="n">optimization_settings</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
             <span class="n">optimizer_specs</span><span class="o">=</span><span class="p">{</span>
-                <span class="s2">&quot;learning_rate&quot;</span><span class="p">:</span> <span class="mf">0.0001</span><span class="p">,</span>
+                <span class="s2">&quot;learning_rate&quot;</span><span class="p">:</span> <span class="mf">0.005</span><span class="p">,</span>
                 <span class="s2">&quot;clipnorm&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">),</span>
         <span class="n">training_settings</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;deep_prior&quot;</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;parametric_prior&quot;</span><span class="p">,</span>
             <span class="n">sim_id</span><span class="o">=</span><span class="s2">&quot;binomial_model&quot;</span><span class="p">,</span>
+            <span class="n">warmup_initializations</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
             <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
             <span class="n">epochs</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span>
             <span class="n">view_ep</span><span class="o">=</span><span class="mi">100</span>
@@ -521,34 +549,29 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>epoch_time: 1.908 sec
-Epoch: 0, loss: 2.86908,                      lr: 0.000100
-epoch_time: 2.106 sec
-Epoch: 100, loss: 2.11467,                      lr: 0.000100
-Estimated time until completion: 00:15:03
-epoch_time: 1.781 sec
-Epoch: 200, loss: 1.29210,                      lr: 0.000100
-Estimated time until completion: 00:12:19
-epoch_time: 1.852 sec
-Epoch: 300, loss: 0.34678,                      lr: 0.000100
-Estimated time until completion: 00:09:04
-epoch_time: 0.975 sec
-Epoch: 400, loss: 0.19176,                      lr: 0.000100
-Estimated time until completion: 00:05:43
-epoch_time: 1.015 sec
-Epoch: 500, loss: 0.18815,                      lr: 0.000100
-Estimated time until completion: 00:02:36
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(0) 7.9 (1) 13.2 (2) 6.3 (3) 20.7 (4) 6.2 (5) 6.8 (6) 3.8 (7) 2.8 (8) 5.3 (9) 8.2 (10) 1.3 (11) 7.4 (12) 6.5 (13) 6.3 (14) 5.6 (15) 5.7 (16) 11.2 (17) 9.1 (18) 3.3 (19) 9.6 (20) 1.3 (21) 8.2 (22) 6.1 (23) 7.0 (24) 3.9 (25) 9.7 (26) 8.1 (27) 5.6 (28) 6.6 (29) 7.4  
+epoch_time: 0.400 sec
+Epoch: 0, loss: 1.28694,                      lr: 0.005000
+epoch_time: 0.275 sec
+Epoch: 100, loss: 0.44993,                      lr: 0.005000
+Estimated time until completion: 00:02:21
+epoch_time: 0.273 sec
+Epoch: 200, loss: 0.15040,                      lr: 0.005000
+Estimated time until completion: 00:01:52
+epoch_time: 0.272 sec
+Epoch: 300, loss: 0.14077,                      lr: 0.005000
+Estimated time until completion: 00:01:24
+epoch_time: 0.278 sec
+Epoch: 400, loss: 0.14077,                      lr: 0.005000
+Estimated time until completion: 00:00:56
+epoch_time: 0.280 sec
+Epoch: 500, loss: 0.14077,                      lr: 0.005000
+Estimated time until completion: 00:00:28
 Done :)
 </pre></div>
 </div>
 </div>
 </div>
-</section>
-<section id="sensitivity-analysis">
-<h2>Sensitivity Analysis<a class="headerlink" href="#sensitivity-analysis" title="Link to this heading">#</a></h2>
-<p>To assess the <em>informativeness</em> of the selected set of elicited statistics, we conduct a sensitivity analysis.
-In this context, <em>informativeness</em> refers to the relevance of the elicited statistics for learning the prior distributions.</p>
-<p>In a sensitivity analysis, we systematically vary one aspect of the prior distribution at a time while keeping all other aspects constant. For each specific change in the prior, we run the generative model in forward mode by sampling from the prior, then from the likelihood, and subsequently computing the target quantities and elicited statistics. Sensitivity analysis enables us to assess how changes in one aspect of the prior distribution impact each elicited statistic. If we observe no variation in a particular elicited statistic for a given prior variation, this statistic does not provide any useful information for the learning algorithm to determine the corresponding aspect of the prior. This approach can help inform the selection of elicited statistics and identify which aspects of the prior are most likely to remain unidentifiable given the current set of expert information.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># variation of hyperparameter values</span>
@@ -561,6 +584,70 @@ In this context, <em>informativeness</em> refers to the relevance of the elicite
 <span class="n">run_sensitivity_binom</span><span class="p">(</span>
     <span class="n">seed</span><span class="p">,</span> <span class="n">path_sensitivity_res</span><span class="p">,</span> <span class="n">mu0_seq</span><span class="p">,</span> <span class="n">mu1_seq</span><span class="p">,</span> <span class="n">sigma0_seq</span><span class="p">,</span> <span class="n">sigma1_seq</span>
 <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>epoch_time: 1.486 sec
+Epoch: 0, loss: 3.80277,                      lr: 0.000100
+Done :)
+epoch_time: 1.091 sec
+Epoch: 0, loss: 3.26382,                      lr: 0.000100
+Done :)
+epoch_time: 1.199 sec
+Epoch: 0, loss: 2.94007,                      lr: 0.000100
+Done :)
+epoch_time: 1.032 sec
+Epoch: 0, loss: 2.84604,                      lr: 0.000100
+Done :)
+epoch_time: 1.095 sec
+Epoch: 0, loss: 2.96492,                      lr: 0.000100
+Done :)
+epoch_time: 1.123 sec
+Epoch: 0, loss: 2.93403,                      lr: 0.000100
+Done :)
+epoch_time: 0.999 sec
+Epoch: 0, loss: 2.86908,                      lr: 0.000100
+Done :)
+epoch_time: 1.054 sec
+Epoch: 0, loss: 2.46329,                      lr: 0.000100
+Done :)
+epoch_time: 1.060 sec
+Epoch: 0, loss: 1.71961,                      lr: 0.000100
+Done :)
+epoch_time: 1.055 sec
+Epoch: 0, loss: 1.02844,                      lr: 0.000100
+Done :)
+epoch_time: 1.017 sec
+Epoch: 0, loss: 3.95087,                      lr: 0.000100
+Done :)
+epoch_time: 1.020 sec
+Epoch: 0, loss: 3.06196,                      lr: 0.000100
+Done :)
+epoch_time: 1.025 sec
+Epoch: 0, loss: 2.82246,                      lr: 0.000100
+Done :)
+epoch_time: 1.047 sec
+Epoch: 0, loss: 3.31087,                      lr: 0.000100
+Done :)
+epoch_time: 1.033 sec
+Epoch: 0, loss: 4.38791,                      lr: 0.000100
+Done :)
+epoch_time: 1.011 sec
+Epoch: 0, loss: 5.12139,                      lr: 0.000100
+Done :)
+epoch_time: 1.033 sec
+Epoch: 0, loss: 4.61522,                      lr: 0.000100
+Done :)
+epoch_time: 1.033 sec
+Epoch: 0, loss: 2.86609,                      lr: 0.000100
+Done :)
+epoch_time: 1.014 sec
+Epoch: 0, loss: 1.32248,                      lr: 0.000100
+Done :)
+epoch_time: 1.075 sec
+Epoch: 0, loss: 0.60651,                      lr: 0.000100
+Done :)
 </pre></div>
 </div>
 </div>
@@ -583,7 +670,7 @@ In this context, <em>informativeness</em> refers to the relevance of the elicite
 <h2>Convergence Check and Learned Priors<a class="headerlink" href="#convergence-check-and-learned-priors" title="Link to this heading">#</a></h2>
 <section id="id1">
 <h3>Elicited statistics<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
-<p>The final learned elicited statistics are shown in the first two plots from the left. Each true quantile (x-axis) is plotted against its corresponding learned quantile (y-axis). Points that align perfectly with the diagonal dashed line represent a perfect match between true and learned quantiles. Points above the diagonal indicate that the learned quantiles are higher than the true ones (and vice versa for lower points). Additionally, in the rightmost plot, we present the true (red) and learned (orange) correlations between the marginal priors. Results indicate that the elicited statistics, including the correlations, are accurately learned.</p>
+<p>Each true quantile (x-axis) is plotted against its corresponding learned quantile (y-axis). Points that align perfectly with the diagonal dashed line represent a perfect match between true and learned quantiles. Points above the diagonal indicate that the learned quantiles are higher than the true ones (and vice versa for lower points). Results indicate that the elicited statistics are accurately learned.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># read oracle data and extract simulation results</span>
@@ -594,42 +681,51 @@ In this context, <em>informativeness</em> refers to the relevance of the elicite
 <span class="n">elicit_res_agg</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span>
     <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">path_sim_res</span><span class="o">+</span><span class="s2">&quot;/elicited_statistics.pkl&quot;</span><span class="p">)[</span><span class="s2">&quot;custom_ypred&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">,:,:],</span> 
     <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">cor_res_agg</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span>
-    <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">path_sim_res</span><span class="o">+</span><span class="s2">&quot;/elicited_statistics.pkl&quot;</span><span class="p">)[</span><span class="s2">&quot;correlation&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">,:],</span> 
-    <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="c1"># plot elicited statistics</span>
-<span class="n">plot_elicited_stats_binom</span><span class="p">(</span>
+<span class="n">plot_elicited_stats_binom_independent</span><span class="p">(</span>
     <span class="n">prior_expert</span><span class="p">,</span> <span class="n">path_expert</span><span class="p">,</span> <span class="n">path_sim_res</span><span class="p">,</span> <span class="n">elicit_res_agg</span><span class="p">,</span>
-    <span class="n">prior_res_agg</span><span class="p">,</span> <span class="n">cor_res_agg</span><span class="p">,</span> <span class="n">save_fig</span><span class="o">=</span><span class="kc">False</span>
+    <span class="n">prior_res_agg</span><span class="p">,</span> <span class="n">save_fig</span><span class="o">=</span><span class="kc">False</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/2e5e6e06502809f5a753484087fb78cc6fe902755611cf6c63f16a34931c6820.png" src="../_images/2e5e6e06502809f5a753484087fb78cc6fe902755611cf6c63f16a34931c6820.png" />
+<img alt="../_images/40bfdb05fc637270e19bd629fa4fa7174959b0bb25d208ffb3e4e918a5b0273f.png" src="../_images/40bfdb05fc637270e19bd629fa4fa7174959b0bb25d208ffb3e4e918a5b0273f.png" />
 </div>
 </div>
 </section>
-<section id="convergence-diagnostics-a">
-<h3>Convergence diagnostics (a)<a class="headerlink" href="#convergence-diagnostics-a" title="Link to this heading">#</a></h3>
-<p>A visual inspection of the learning trajectories indicates satisfactory convergence for all quantities of interest. This includes the total loss, the individual loss components (upper row), as well as the means and standard deviations of the marginal priors (lower row). Overall, we conclude that the training process was successful.</p>
-</section>
-<section id="learned-prior-distributions-b">
-<h3>Learned prior distributions (b)<a class="headerlink" href="#learned-prior-distributions-b" title="Link to this heading">#</a></h3>
-<p>The learned marginals closely align with the ground truth (indicated in red).</p>
+<section id="convergence-diagnostics">
+<h3>Convergence diagnostics<a class="headerlink" href="#convergence-diagnostics" title="Link to this heading">#</a></h3>
+<p>A visual inspection of the learning trajectories of all quantities of interest, which include the total loss, the individual loss components (upper row), as well as the location and scale hyperparameter of the priors (lower row). Overall, we conclude that the training process was successful.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot convergence of all quantities of interest and learned prior for seed with highest slope</span>
-<span class="n">plot_prior_binom</span><span class="p">(</span>
+<span class="n">plot_loss_binom_independent</span><span class="p">(</span>
     <span class="n">path_sim_res</span><span class="p">,</span> <span class="n">path_expert</span><span class="p">,</span> 
-    <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">save_fig</span><span class="o">=</span><span class="kc">False</span>
+    <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_fig</span><span class="o">=</span><span class="kc">False</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/a7222492e9b253540fc42a024f26f370ddae16018910cbb310ee0597c806d5eb.png" src="../_images/a7222492e9b253540fc42a024f26f370ddae16018910cbb310ee0597c806d5eb.png" />
+<img alt="../_images/1dc5b69b2af2fb130db00c4a6029d3b49039a2f7ca660f49239f2d2556377b40.png" src="../_images/1dc5b69b2af2fb130db00c4a6029d3b49039a2f7ca660f49239f2d2556377b40.png" />
+</div>
+</div>
+</section>
+<section id="learned-prior-distributions">
+<h3>Learned prior distributions<a class="headerlink" href="#learned-prior-distributions" title="Link to this heading">#</a></h3>
+<p>We see some deviation from the ground truth for the variation in the intercept parameter.
+This deviation results from non-identifiability, that is, we provide the model with too little data in order to learn <span class="math notranslate nohighlight">\(\sigma_0\)</span> exactly.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot learned priors</span>
+<span class="n">plot_prior_binom_independent</span><span class="p">(</span><span class="n">path_sim_res</span><span class="p">,</span> <span class="n">seed</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/aad509d9124391a19983ac5d4fc105342559920b01f5fecef8bb5cada4ddadea.png" src="../_images/aad509d9124391a19983ac5d4fc105342559920b01f5fecef8bb5cada4ddadea.png" />
 </div>
 </div>
 </section>
@@ -671,11 +767,10 @@ In this context, <em>informativeness</em> refers to the relevance of the elicite
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training">Training</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sensitivity-analysis">Sensitivity Analysis</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#convergence-check-and-learned-priors">Convergence Check and Learned Priors</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Elicited statistics</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convergence-diagnostics-a">Convergence diagnostics (a)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#learned-prior-distributions-b">Learned prior distributions (b)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convergence-diagnostics">Convergence diagnostics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#learned-prior-distributions">Learned prior distributions</a></li>
 </ul>
 </li>
 </ul>

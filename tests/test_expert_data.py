@@ -66,13 +66,13 @@ global_dict = dict(
             elicitation_method="identity",
             loss_components="all",
             custom_target_function=None,
-            custom_elicitation_method=None,
+            custom_elicitation_function=None,
         ),
         sigma=dict(
             elicitation_method="identity",
             loss_components="all",
             custom_target_function=None,
-            custom_elicitation_method=None,
+            custom_elicitation_function=None,
         ),
     ),
     expert_data=dict(
@@ -120,9 +120,9 @@ test_data1 = [
         "deep_prior",
         dict(corr_scaling=0.1),
         normalizing_flow,
-        (1, 10_000, 1),
+        (1, 10_000),
     ),
-    (global_dict, "parametric_prior", None, None, (1, 10_000, 1)),
+    (global_dict, "parametric_prior", None, None, (1, 10_000)),
 ]
 
 
@@ -137,12 +137,11 @@ def test_expert_data_shape(
     global_dict["training_settings"]["independence"] = independence
     global_dict["training_settings"]["method"] = method
 
-    dat = get_expert_data(global_dict, one_forward_simulation,
-                          path_to_expert_data=None)
+    dat = get_expert_data(global_dict, one_forward_simulation)
 
     # expected shape
-    dat["identity_mu"].shape == expected_shape
-    dat["identity_sigma"].shape == expected_shape
+    assert dat["identity_mu"].shape == expected_shape
+    assert dat["identity_sigma"].shape == expected_shape
 
 
 # %% Test whether true priors correspond to oracle specification
@@ -179,8 +178,7 @@ def test_expert_data_numeric(
     global_dict["training_settings"]["independence"] = independence
     global_dict["training_settings"]["method"] = method
 
-    dat = get_expert_data(global_dict, one_forward_simulation,
-                          path_to_expert_data=None)
+    dat = get_expert_data(global_dict, one_forward_simulation)
 
     # sample from true distribution
     true_mu = true_mu_func.sample(10_000)
@@ -189,14 +187,15 @@ def test_expert_data_numeric(
     # mu: expected and observed mean and sd
     mu_exp_m, mu_exp_sd = comp_mean_sd(true_mu)
     mu_obs_m, mu_obs_sd = comp_mean_sd(dat["identity_mu"])
-    mu_exp_m.numpy() == pytest.approx(mu_obs_m.numpy(), rel=0.05)
-    mu_exp_sd.numpy() == pytest.approx(mu_obs_sd.numpy(), rel=0.05)
+    assert mu_exp_m.numpy() == pytest.approx(mu_obs_m.numpy(), rel=0.05)
+    assert mu_exp_sd.numpy() == pytest.approx(mu_obs_sd.numpy(), rel=0.05)
 
     # sigma: expected and observed mean and sd
     sigma_exp_m, sigma_exp_sd = comp_mean_sd(true_sigma)
     sigma_obs_m, sigma_obs_sd = comp_mean_sd(dat["identity_sigma"])
-    sigma_exp_m.numpy() == pytest.approx(sigma_obs_m.numpy(), rel=0.05)
-    sigma_exp_sd.numpy() == pytest.approx(sigma_obs_sd.numpy(), rel=0.05)
+    assert sigma_exp_m.numpy() == pytest.approx(sigma_obs_m.numpy(), rel=0.05)
+    assert sigma_exp_sd.numpy() == pytest.approx(sigma_obs_sd.numpy(),
+                                                 rel=0.05)
 
 
 # %% Test correct saving location
@@ -216,8 +215,7 @@ def test_expert_data_saving(global_dict, method, independence,
     global_dict["training_settings"]["independence"] = independence
     global_dict["training_settings"]["method"] = method
 
-    dat = get_expert_data(global_dict, one_forward_simulation,
-                          path_to_expert_data=None)
+    dat = get_expert_data(global_dict, one_forward_simulation)
 
     # read data from file
     elicited_stats = pd.read_pickle(
@@ -225,7 +223,50 @@ def test_expert_data_saving(global_dict, method, independence,
         + "/expert/elicited_statistics.pkl"
     )
 
-    tf.reduce_all(tf.equal(dat["identity_mu"],
-                           elicited_stats["identity_mu"]))
-    tf.reduce_all(tf.equal(dat["identity_sigma"],
-                           elicited_stats["identity_sigma"]))
+    assert tf.reduce_all(tf.equal(dat["identity_mu"],
+                                  elicited_stats["identity_mu"]))
+    assert tf.reduce_all(
+        tf.equal(dat["identity_sigma"], elicited_stats["identity_sigma"])
+    )
+
+
+# %% Test specification of expert data (without use of oracle)
+
+expert_data = dict(
+    identity_mu=tf.ones(shape=(1, 10_000)),
+    identity_sigma=tf.ones(shape=(1, 10_000))
+)
+
+# copy global dict and change oracle to expert input
+global_dict2 = global_dict.copy()
+global_dict2.update(expert_data=dict(from_ground_truth=False,
+                                     data=expert_data))
+
+test_data4 = [
+    (global_dict, global_dict2, "deep_prior", dict(corr_scaling=0.1),
+     normalizing_flow),
+    (global_dict, global_dict2, "parametric_prior", None, None),
+]
+
+
+@pytest.mark.parametrize(
+    "global_dict, global_dict2, method, independence, normalizing_flow",
+    test_data4
+)
+def test_expert_data_input(
+    global_dict, global_dict2, method, independence, normalizing_flow
+):
+    global_dict["normalizing_flow"] = normalizing_flow
+    global_dict["training_settings"]["independence"] = independence
+    global_dict["training_settings"]["method"] = method
+
+    # elicited statistics from oracle
+    dat = get_expert_data(global_dict, one_forward_simulation)
+    # input data by expert
+    dat2 = get_expert_data(global_dict2, one_forward_simulation)
+
+    # check whether keys are correct
+    assert dat.keys() == dat2.keys()
+    # check whether shapes are correct
+    for k in dat:
+        assert dat[k].shape == dat2[k].shape

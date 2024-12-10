@@ -159,7 +159,6 @@
     <div class="bd-toc-item navbar-nav active">
         <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Home</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../introductory_example.html">Tutorials</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/modules.html">API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../api/elicit.html">elicit package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../api/elicit.user.html">elicit.user package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -184,6 +183,18 @@
 </details></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introductory_example.html">Tutorials</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../howto/index.html">How-To</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../howto/expert_data.html">... specify the expert data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../howto/generative_model.html">... specify the generative model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../howto/target_quantities.html">... specify the target quantities &amp; elicitation techniques</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../explanation/index.html">Explanation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../explanation/prior_elicitation.html">* prior_elicitation function</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a></li>
 </ul>
 
     </div>
@@ -315,6 +326,49 @@ document.write(`
 <span class="n">tfd</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">distributions</span>
 
 
+<div class="viewcode-block" id="init_method">
+<a class="viewcode-back" href="../../api/elicit.initialization_methods.html#elicit.initialization_methods.init_method">[docs]</a>
+<span class="k">def</span> <span class="nf">init_method</span><span class="p">(</span><span class="n">n_hypparam</span><span class="p">,</span> <span class="n">n_warm_up</span><span class="p">,</span> <span class="n">method</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initialize multivariate normal prior over hyperparameter values</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n_hypparam : int</span>
+<span class="sd">        Number of hyperparameters.</span>
+<span class="sd">    n_warm_up : int</span>
+<span class="sd">        number of warmup iterations.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    mvdist : tf.tensor</span>
+<span class="sd">        samples from the multivariate prior</span>
+<span class="sd">        (shape=(n_warm_up, n_hyperparameters).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">assert</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;random&quot;</span><span class="p">,</span> <span class="s2">&quot;lhs&quot;</span><span class="p">,</span> <span class="s2">&quot;sobol&quot;</span><span class="p">],</span> <span class="s2">&quot;The initialization method must be one of the following: &#39;sobol&#39;, &#39;lhs&#39;, &#39;random&#39;&quot;</span>  <span class="c1"># noqa</span>
+
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;random&quot;</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;init_method=random&quot;</span><span class="p">)</span>
+        <span class="n">mvdist</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">MultivariateNormalDiag</span><span class="p">(</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_hypparam</span><span class="p">),</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_hypparam</span><span class="p">))</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n_warm_up</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;lhs&quot;</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;init_method=lhs&quot;</span><span class="p">)</span>
+        <span class="n">mvdist</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">MultivariateNormalDiag</span><span class="p">(</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_hypparam</span><span class="p">),</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_hypparam</span><span class="p">))</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n_warm_up</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;sobol&quot;</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;init_method=sobol&quot;</span><span class="p">)</span>
+        <span class="n">mvdist</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">MultivariateNormalDiag</span><span class="p">(</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_hypparam</span><span class="p">),</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_hypparam</span><span class="p">))</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n_warm_up</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">mvdist</span></div>
+
+
+
 <div class="viewcode-block" id="initialization_phase">
 <a class="viewcode-back" href="../../api/elicit.initialization_methods.html#elicit.initialization_methods.initialization_phase">[docs]</a>
 <span class="k">def</span> <span class="nf">initialization_phase</span><span class="p">(</span>
@@ -356,12 +410,6 @@ document.write(`
     <span class="n">save_prior</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">dict_copy</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">global_dict</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">init_method</span><span class="p">(</span><span class="n">n_hypparam</span><span class="p">,</span> <span class="n">n_warm_up</span><span class="p">):</span>
-        <span class="n">mvdist</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">MultivariateNormalDiag</span><span class="p">(</span>
-            <span class="n">tf</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_hypparam</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_hypparam</span><span class="p">)</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n_warm_up</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">mvdist</span>
-
     <span class="c1"># get number of hyperparameters</span>
     <span class="n">n_hypparam</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">param_names</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;model_parameters&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span>
@@ -373,23 +421,31 @@ document.write(`
         <span class="p">)</span>
     <span class="c1"># create initializations</span>
     <span class="n">init_matrix</span> <span class="o">=</span> <span class="n">init_method</span><span class="p">(</span>
-        <span class="n">n_hypparam</span><span class="p">,</span> <span class="n">dict_copy</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;warmup_initializations&quot;</span><span class="p">]</span>
-    <span class="p">)</span>
+        <span class="n">n_hypparam</span><span class="p">,</span>
+        <span class="n">dict_copy</span><span class="p">[</span><span class="s2">&quot;initialization_settings&quot;</span><span class="p">][</span><span class="s2">&quot;number_of_iterations&quot;</span><span class="p">],</span>
+        <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;initialization_settings&quot;</span><span class="p">][</span><span class="s2">&quot;method&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
 
     <span class="n">path</span> <span class="o">=</span> <span class="n">dict_copy</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span>
         <span class="s2">&quot;output_path&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/initialization_matrix.pkl&quot;</span>
     <span class="n">save_as_pkl</span><span class="p">(</span><span class="n">init_matrix</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dict_copy</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;warmup_initializations&quot;</span><span class="p">]):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dict_copy</span><span class="p">[</span><span class="s2">&quot;initialization_settings&quot;</span><span class="p">][</span>
+            <span class="s2">&quot;number_of_iterations&quot;</span><span class="p">]):</span>
         <span class="n">dict_copy</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;seed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">dict_copy</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;seed&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">i</span>
         <span class="p">)</span>
+        <span class="c1"># create init-matrix-slice</span>
+        <span class="n">init_matrix_slice</span> <span class="o">=</span> <span class="n">init_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span>
         <span class="c1"># prepare generative model</span>
         <span class="n">prior_model</span> <span class="o">=</span> <span class="n">Priors</span><span class="p">(</span><span class="n">global_dict</span><span class="o">=</span><span class="n">dict_copy</span><span class="p">,</span>
-                             <span class="n">ground_truth</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                             <span class="n">ground_truth</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                             <span class="n">init_matrix_slice</span><span class="o">=</span><span class="n">init_matrix_slice</span><span class="p">)</span>
+
         <span class="c1"># generate simulations from model</span>
         <span class="n">training_elicited_statistics</span> <span class="o">=</span> <span class="n">one_forward_simulation</span><span class="p">(</span><span class="n">prior_model</span><span class="p">,</span>
                                                               <span class="n">dict_copy</span><span class="p">)</span>
+
         <span class="c1"># compute loss for each set of initial values</span>
         <span class="n">weighted_total_loss</span> <span class="o">=</span> <span class="n">compute_loss</span><span class="p">(</span>
             <span class="n">training_elicited_statistics</span><span class="p">,</span>
@@ -404,7 +460,7 @@ document.write(`
         <span class="n">loss_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">weighted_total_loss</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
 
     <span class="n">path</span> <span class="o">=</span> <span class="n">dict_copy</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span>
-        <span class="s2">&quot;output_path&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/initialization_phase.pkl&quot;</span>
+        <span class="s2">&quot;output_path&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/pre_training_results.pkl&quot;</span>
     <span class="n">save_as_pkl</span><span class="p">((</span><span class="n">loss_list</span><span class="p">,</span> <span class="n">save_prior</span><span class="p">),</span> <span class="n">path</span><span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>

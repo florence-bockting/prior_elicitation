@@ -108,9 +108,9 @@ def computation_elicited_statistics(target_quantities, ground_truth,
     for tar in sorted(list(set(target_quantities).difference(
             set(["correlation"])))):
         # use custom method if specified otherwise use built-in methods
-        if target_dict[tar]["custom_elicitation_method"] is not None:
+        if target_dict[tar]["custom_elicitation_function"] is not None:
             elicited_statistic = use_custom_functions(
-                target_dict[tar]["custom_elicitation_method"],
+                target_dict[tar]["custom_elicitation_function"],
                 target_quantities,
                 global_dict,
             )

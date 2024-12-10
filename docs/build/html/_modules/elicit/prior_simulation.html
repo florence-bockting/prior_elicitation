@@ -159,7 +159,6 @@
     <div class="bd-toc-item navbar-nav active">
         <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Home</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../introductory_example.html">Tutorials</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/modules.html">API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../api/elicit.html">elicit package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../api/elicit.user.html">elicit.user package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -184,6 +183,18 @@
 </details></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introductory_example.html">Tutorials</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../howto/index.html">How-To</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../howto/expert_data.html">... specify the expert data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../howto/generative_model.html">... specify the generative model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../howto/target_quantities.html">... specify the target quantities &amp; elicitation techniques</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../explanation/index.html">Explanation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../explanation/prior_elicitation.html">* prior_elicitation function</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a></li>
 </ul>
 
     </div>
@@ -339,7 +350,7 @@ document.write(`
 
 <div class="viewcode-block" id="Priors.__init__">
 <a class="viewcode-back" href="../../api/elicit.prior_simulation.html#elicit.prior_simulation.Priors.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">,</span> <span class="n">init_matrix_slice</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initializes the hyperparameters (i.e., trainable variables)</span>
 
@@ -353,6 +364,7 @@ document.write(`
 
         <span class="bp">self</span><span class="o">.</span><span class="n">global_dict</span> <span class="o">=</span> <span class="n">global_dict</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ground_truth</span> <span class="o">=</span> <span class="n">ground_truth</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_matrix_slice</span> <span class="o">=</span> <span class="n">init_matrix_slice</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
         <span class="c1"># set seed</span>
         <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;seed&quot;</span><span class="p">])</span>
@@ -360,7 +372,8 @@ document.write(`
         <span class="c1"># are given, no initialization is needed)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">ground_truth</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Initialize prior hyperparameters&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">init_priors</span> <span class="o">=</span> <span class="n">intialize_priors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_dict</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">init_priors</span> <span class="o">=</span> <span class="n">intialize_priors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_dict</span><span class="p">,</span>
+                                                <span class="bp">self</span><span class="o">.</span><span class="n">init_matrix_slice</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Set true prior hyperparameters&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">init_priors</span> <span class="o">=</span> <span class="kc">None</span></div>
@@ -392,7 +405,7 @@ document.write(`
 
 <div class="viewcode-block" id="intialize_priors">
 <a class="viewcode-back" href="../../api/elicit.prior_simulation.html#elicit.prior_simulation.intialize_priors">[docs]</a>
-<span class="k">def</span> <span class="nf">intialize_priors</span><span class="p">(</span><span class="n">global_dict</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">intialize_priors</span><span class="p">(</span><span class="n">global_dict</span><span class="p">,</span> <span class="n">init_matrix_slice</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Initialize prior distributions.</span>
 
@@ -413,6 +426,9 @@ document.write(`
     <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;parametric_prior&quot;</span><span class="p">:</span>
         <span class="c1"># list for saving initialize hyperparameter values</span>
         <span class="n">init_hyperparam_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># initialize j counting number of hyperparameters</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+
         <span class="c1"># loop over model parameter and initialize each hyperparameter</span>
         <span class="k">for</span> <span class="n">model_param</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span>
             <span class="nb">list</span><span class="p">(</span>
@@ -427,15 +443,13 @@ document.write(`
 
             <span class="n">initialized_hyperparam</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
             <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">get_hyp_dict</span><span class="p">:</span>
-                <span class="c1"># check whether initial value is a distributions</span>
-                <span class="c1"># TODO currently we silently assume that we have either a</span>
-                <span class="c1"># value or a tfd.distribution object</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">get_hyp_dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">reparameterization_type</span>
-                <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-                    <span class="n">initial_value</span> <span class="o">=</span> <span class="n">get_hyp_dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;initialization_settings&quot;</span><span class="p">][</span>
+                        <span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">initial_value</span> <span class="o">=</span> <span class="n">init_matrix_slice</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                    <span class="c1"># increase j</span>
+                    <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">initial_value</span> <span class="o">=</span> <span class="n">get_hyp_dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+                    <span class="n">initial_value</span> <span class="o">=</span> <span class="n">get_hyp_dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
 
                 <span class="c1"># initialize hyperparameter</span>
                 <span class="n">initialized_hyperparam</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span>
@@ -444,18 +458,18 @@ document.write(`
                     <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="n">init_hyperparam_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">initialized_hyperparam</span><span class="p">)</span>
+
         <span class="c1"># save initialized priors</span>
         <span class="n">init_prior</span> <span class="o">=</span> <span class="n">init_hyperparam_list</span>
         <span class="c1"># save file in object</span>
         <span class="n">output_path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="n">output_path</span> <span class="o">+</span> <span class="s2">&quot;/init_prior.pkl&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">output_path</span> <span class="o">+</span> <span class="s2">&quot;/init_hyperparameters.pkl&quot;</span>
         <span class="n">save_as_pkl</span><span class="p">(</span><span class="n">init_prior</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;deep_prior&quot;</span><span class="p">:</span>
         <span class="c1"># for more information see BayesFlow documentation</span>
         <span class="c1"># https://bayesflow.org/api/bayesflow.inference_networks.html</span>
-        <span class="n">input_INN</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;normalizing_flow&quot;</span><span class="p">])</span>
-        <span class="n">input_INN</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;base_distribution&quot;</span><span class="p">)</span>
+        <span class="n">input_INN</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;normalizing_flow&quot;</span><span class="p">][</span><span class="s2">&quot;coupling_flow&quot;</span><span class="p">]</span>
 
         <span class="n">invertible_neural_network</span> <span class="o">=</span> <span class="n">networks</span><span class="o">.</span><span class="n">InvertibleNetwork</span><span class="p">(</span>
             <span class="n">num_params</span><span class="o">=</span><span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;model_parameters&quot;</span><span class="p">][</span><span class="s2">&quot;no_params&quot;</span><span class="p">],</span>
@@ -463,6 +477,10 @@ document.write(`
         <span class="p">)</span>
         <span class="c1"># save initialized priors</span>
         <span class="n">init_prior</span> <span class="o">=</span> <span class="n">invertible_neural_network</span>
+        <span class="c1"># save file in object</span>
+        <span class="n">output_path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">output_path</span> <span class="o">+</span> <span class="s2">&quot;/init_hyperparameters.pkl&quot;</span>
+        <span class="n">save_as_pkl</span><span class="p">(</span><span class="n">init_prior</span><span class="o">.</span><span class="n">trainable_variables</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">init_prior</span></div>
 

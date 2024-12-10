@@ -159,7 +159,6 @@
     <div class="bd-toc-item navbar-nav active">
         <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a></li>
-<li class="toctree-l1"><a class="reference internal" href="introductory_example.html">Tutorials</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="api/modules.html">API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="api/elicit.html">elicit package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="api/elicit.user.html">elicit.user package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -184,6 +183,18 @@
 </details></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="introductory_example.html">Tutorials</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="howto/index.html">How-To</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="howto/expert_data.html">... specify the expert data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto/generative_model.html">... specify the generative model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto/target_quantities.html">... specify the target quantities &amp; elicitation techniques</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="explanation/index.html">Explanation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="explanation/prior_elicitation.html">* prior_elicitation function</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
 </ul>
 
     </div>
@@ -319,6 +330,7 @@ document.write(`
  | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#Q"><strong>Q</strong></a>
+ | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
  | <a href="#U"><strong>U</strong></a>
@@ -495,6 +507,13 @@ document.write(`
 </li>
       </ul></li>
       <li>
+    elicit.save_config
+
+      <ul>
+        <li><a href="api/elicit.save_config.html#module-elicit.save_config">module</a>
+</li>
+      </ul></li>
+      <li>
     elicit.target_quantities
 
       <ul>
@@ -547,10 +566,12 @@ document.write(`
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/elicit.initialization_methods.html#elicit.initialization_methods.initialization_phase">initialization_phase() (in module elicit.initialization_methods)</a>
+      <li><a href="api/elicit.initialization_methods.html#elicit.initialization_methods.init_method">init_method() (in module elicit.initialization_methods)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/elicit.initialization_methods.html#elicit.initialization_methods.initialization_phase">initialization_phase() (in module elicit.initialization_methods)</a>
+</li>
       <li><a href="api/elicit.prior_simulation.html#elicit.prior_simulation.intialize_priors">intialize_priors() (in module elicit.prior_simulation)</a>
 </li>
   </ul></td>
@@ -615,6 +636,8 @@ document.write(`
 </li>
         <li><a href="api/elicit.prior_simulation.html#module-elicit.prior_simulation">elicit.prior_simulation</a>
 </li>
+        <li><a href="api/elicit.save_config.html#module-elicit.save_config">elicit.save_config</a>
+</li>
         <li><a href="api/elicit.target_quantities.html#module-elicit.target_quantities">elicit.target_quantities</a>
 </li>
         <li><a href="api/elicit.user.html#module-elicit.user">elicit.user</a>
@@ -671,6 +694,14 @@ document.write(`
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/elicit.user.custom_functions.html#elicit.user.custom_functions.quantiles_per_ypred">quantiles_per_ypred() (in module elicit.user.custom_functions)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/elicit.helper_functions.html#elicit.helper_functions.remove_unneeded_files">remove_unneeded_files() (in module elicit.helper_functions)</a>
 </li>
   </ul></td>
 </tr></table>

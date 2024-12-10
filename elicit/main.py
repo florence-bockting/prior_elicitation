@@ -161,17 +161,19 @@ def prior_elicitation(
             }
 
         The keywords have the following interpretation:
-            * from_ground_truth: bool, True if simulating from ground truth
+            * ``from_ground_truth``: bool, True if simulating from ground truth
             otherwise False
 
-            * expert_data: read file with expert data; must have the same
+            * ``expert_data``: read file with expert data; must have the same
             format as the model-simulated elicited statistics
 
-            * simulator_specs: dict, specifies the true prior distributions
+            * ``simulator_specs``: dict, specifies the true prior distributions
             of the model parameters
 
-            * samples_from_prior: int, number of samples drawn from each prior
-            distribution
+            * ``samples_from_prior``: int, number of samples drawn from each
+            prior distribution
+
+        See for details :ref:`expert_data_howto`
 
     generative_model : dict
         Specification of the generative model.
@@ -230,7 +232,7 @@ def prior_elicitation(
                         custom_target_function=None,          \
                             # optional if user-specific target quantity should
                             be used
-                        custom_elicitation_method=None
+                        custom_elicitation_function=None
                         )
             }
 
@@ -374,7 +376,7 @@ def prior_elicitation(
         moments_specs=None,
         loss_components="all",
         custom_target_function=None,
-        custom_elicitation_method=None,
+        custom_elicitation_function=None,
     )
 
     _default_dict_loss = dict(
