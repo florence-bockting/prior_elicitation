@@ -178,13 +178,19 @@
 <li class="toctree-l3 current active"><a class="current reference internal" href="#">elicit.main module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.model_simulation.html">elicit.model_simulation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.optimization_process.html">elicit.optimization_process module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.prior_elicitation.html">elicit.prior_elicitation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.prior_simulation.html">elicit.prior_simulation module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.save_config.html">elicit.save_config module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.target_quantities.html">elicit.target_quantities module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../introductory_example.html">Tutorials</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorials/index.html">Tutorials</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/binomial_independent.html">Binomial model with parametric priors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/binomial_joint.html">Binomial model with joint prior</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../howto/index.html">How-To</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../howto/expert_data.html">... specify the expert data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../howto/generative_model.html">... specify the generative model</a></li>
@@ -192,7 +198,7 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../explanation/index.html">Explanation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../explanation/prior_elicitation.html">* prior_elicitation function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../explanation/prior_elicitation.html">&gt; prior_elicitation function</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
@@ -360,7 +366,8 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.main.one_forward_simulation"><code class="docutils literal notranslate"><span class="pre">one_forward_simulation()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.main.prior_elicitation"><code class="docutils literal notranslate"><span class="pre">prior_elicitation()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.main.pre_training"><code class="docutils literal notranslate"><span class="pre">pre_training()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.main.run"><code class="docutils literal notranslate"><span class="pre">run()</span></code></a></li>
 </ul>
             </nav>
         </div>
@@ -401,248 +408,14 @@ compute the loss components</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="elicit.main.prior_elicitation">
-<span class="sig-prename descclassname"><span class="pre">elicit.main.</span></span><span class="sig-name descname"><span class="pre">prior_elicitation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expert_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generative_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_quantities</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">training_settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalizing_flow</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_function</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialization_settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimization_settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/main.html#prior_elicitation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.main.prior_elicitation" title="Link to this definition">#</a></dt>
-<dd><p>Performes prior learning based on expert knowledge</p>
-<dl class="field-list">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl>
-<dt><strong>model_parameters</strong><span class="classifier">dict</span></dt><dd></dd>
-<dt><strong>Specify a dictionary for each model parameter</strong></dt><dd><ul class="simple">
-<li><p>if method=parametric_prior: dictionary per model parameter</p></li>
-</ul>
-<p>(here: param1, param2) with</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>family: tfd.distribution, specification of the prior distribution</p></li>
-</ul>
-<p>family per parameter</p>
-<ul class="simple">
-<li><p>hyperparams_dict: dict, keys: name of hyperparameter of parametric # noqa</p></li>
-</ul>
-<p>prior distribution family and values representing the initialization # noqa
-which can be done via distribution or integer</p>
-<ul class="simple">
-<li><p>param_scaling: float, scaling of samples after being sampled from</p></li>
-</ul>
-<p>prior distributions</p>
-<ul class="simple">
-<li><p>independence: include correlation between priors in loss computation # noqa</p></li>
-</ul>
-<p>with specified scaling; or ignore correlation when None</p>
-</div></blockquote>
-<p><strong>Code example</strong>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="n">param1</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-        <span class="n">family</span><span class="o">=</span><span class="n">tfd</span><span class="o">.</span><span class="n">distribution</span><span class="p">,</span>
-        <span class="n">hyperparams_dict</span><span class="o">=</span><span class="p">{</span>
-            <span class="n">hyperparam1</span><span class="o">=</span><span class="n">tfd</span><span class="o">.</span><span class="n">distribution</span> <span class="ow">or</span> <span class="nb">int</span><span class="p">,</span>
-            <span class="n">hyperparam2</span><span class="o">=</span><span class="n">tfd</span><span class="o">.</span><span class="n">distribution</span> <span class="ow">or</span> <span class="nb">int</span><span class="p">,</span>
-            <span class="c1"># ...</span>
-            <span class="p">},</span>
-         <span class="n">param_scaling</span><span class="o">=</span><span class="mf">1.</span><span class="p">),</span>
-    <span class="n">param2</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-        <span class="n">family</span><span class="o">=</span><span class="n">tfd</span><span class="o">.</span><span class="n">distribution</span><span class="p">,</span>
-        <span class="c1"># ... (see above)</span>
-        <span class="p">),</span>
-    <span class="n">independence</span><span class="o">=</span><span class="p">{</span><span class="n">cor_scaling</span><span class="o">=</span><span class="mf">0.1</span><span class="p">}</span> <span class="ow">or</span> <span class="kc">None</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<ul class="simple">
-<li><p>if method=deep_prior: dictionary per model parameter</p></li>
-</ul>
-<p>(here: param1, param2) with</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>param_scaling: float, scaling of samples after being sampled from</p></li>
-</ul>
-<p>prior distributions</p>
-<ul class="simple">
-<li><p>independence: include correlation between priors in loss computation # noqa</p></li>
-</ul>
-<p>with specified scaling; or ignore correlation when None</p>
-</div></blockquote>
-<p><strong>Code example</strong>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="n">param1</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">param_scaling</span><span class="o">=</span><span class="mf">1.</span><span class="p">),</span>
-    <span class="n">param2</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">param_sacling</span><span class="o">=</span><span class="mf">1.</span><span class="p">),</span>
-    <span class="n">independence</span><span class="o">=</span><span class="p">{</span><span class="n">corr_scaling</span><span class="o">=</span><span class="mf">0.1</span><span class="p">}</span> <span class="ow">or</span> <span class="kc">None</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</dd>
-<dt><strong>expert_data</strong><span class="classifier">dict</span></dt><dd><p>Specify the expert information. There are two possibilities: Either
-you pass elicited expert data or you simulate from a pre-specified
-ground truth.
-If you have expert data:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="n">from_ground_truth</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">expert_data</span><span class="o">=</span><span class="n">read</span><span class="o">-</span><span class="n">file</span><span class="o">-</span><span class="k">with</span><span class="o">-</span><span class="n">expert</span><span class="o">-</span><span class="n">data</span>
+<dt class="sig sig-object py" id="elicit.main.pre_training">
+<span class="sig-prename descclassname"><span class="pre">elicit.main.</span></span><span class="sig-name descname"><span class="pre">pre_training</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">global_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expert_elicited_statistics</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/main.html#pre_training"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.main.pre_training" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
 
-<span class="p">}</span>
-</pre></div>
-</div>
-<p>If you simulate from a pre-specified ground truth:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="n">from_ground_truth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">simulator_specs</span><span class="o">=</span><span class="p">{</span>
-        <span class="n">param1</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span>
-        <span class="n">param2</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">)</span>
-        <span class="p">},</span>
-    <span class="n">samples_from_prior</span><span class="o">=</span><span class="mi">10_000</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<dl>
-<dt>The keywords have the following interpretation:</dt><dd><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">from_ground_truth</span></code>: bool, True if simulating from ground truth</p></li>
-</ul>
-<p>otherwise False</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">expert_data</span></code>: read file with expert data; must have the same</p></li>
-</ul>
-<p>format as the model-simulated elicited statistics</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">simulator_specs</span></code>: dict, specifies the true prior distributions</p></li>
-</ul>
-<p>of the model parameters</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">samples_from_prior</span></code>: int, number of samples drawn from each</p></li>
-</ul>
-<p>prior distribution</p>
-</dd>
-</dl>
-<p>See for details <a class="reference internal" href="../howto/expert_data.html#expert-data-howto"><span class="std std-ref">How-To specify the expert_data?</span></a></p>
-</dd>
-<dt><strong>generative_model</strong><span class="classifier">dict</span></dt><dd><p>Specification of the generative model.</p>
-<p><strong>Code example</strong>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="n">model</span><span class="o">=</span><span class="n">ExampleModel</span><span class="p">,</span>
-    <span class="n">additional_model_args</span><span class="o">=</span><span class="p">{</span>
-        <span class="n">design_matrix</span><span class="o">=</span><span class="n">design</span><span class="o">-</span><span class="n">matrix</span><span class="o">-</span><span class="n">file</span><span class="p">,</span>
-        <span class="c1">#...</span>
-        <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<dl>
-<dt>With the following definitions:</dt><dd><ul class="simple">
-<li><p>model: class, class definition of the generative model</p></li>
-</ul>
-<p>(see example below)</p>
-<ul class="simple">
-<li><p>additional_model_args: all input arguments of the generative</p></li>
-</ul>
-<p>model</p>
-</dd>
-</dl>
-<p><strong>Code example</strong> of an example model:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ExampleModel</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                 <span class="n">ground_truth</span><span class="p">,</span>  <span class="c1"># required argument</span>
-                 <span class="n">prior_samples</span><span class="p">,</span> <span class="c1"># required argument</span>
-                 <span class="n">X</span><span class="p">,</span>             <span class="c1"># additional model args</span>
-                 <span class="n">N</span>              <span class="c1"># additional model args</span>
-                 <span class="p">):</span>
-        <span class="n">epred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">],</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">@</span> <span class="n">X</span>
-        <span class="n">likelihood</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span>
-            <span class="n">loc</span><span class="o">=</span><span class="n">epred</span><span class="p">,</span>
-            <span class="n">scale</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">],</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
-        <span class="n">ypred</span> <span class="o">=</span> <span class="n">likelihood</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
-
-        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">likelihood</span> <span class="o">=</span> <span class="n">likelihood</span><span class="p">,</span>      <span class="c1"># required</span>
-                    <span class="n">ypred</span> <span class="o">=</span> <span class="n">ypred</span><span class="p">,</span>                <span class="c1"># required</span>
-                    <span class="n">epred</span> <span class="o">=</span> <span class="n">epred</span>                 <span class="c1"># required</span>
-                    <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">prior_samples</span> <span class="c1"># required</span>
-                    <span class="p">)</span>
-</pre></div>
-</div>
-</dd>
-<dt><strong>target_quantities</strong><span class="classifier">dict</span></dt><dd><p><strong>Code example</strong>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="n">ypred</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-            <span class="n">elicitation_method</span><span class="o">=</span><span class="s2">&quot;quantiles&quot;</span><span class="p">,</span>                                   <span class="c1"># &quot;quantiles&quot;, &quot;moments&quot;, &quot;histogram&quot;</span>
-            <span class="n">quantiles_specs</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">95</span><span class="p">),</span>                              <span class="c1"># only if elicitation_method=&quot;quantiles&quot;</span>
-            <span class="n">moments_specs</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span><span class="s2">&quot;sd&quot;</span><span class="p">),</span>                                      <span class="c1"># only if elicitation_method=&quot;moments&quot;</span>
-            <span class="n">loss_components</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>                                          <span class="c1"># &quot;all&quot;,&quot;by-group&quot;</span>
-            <span class="n">custom_target_function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>                                      <span class="c1"># optional if user-specific target quantity should</span>
-                <span class="n">be</span> <span class="n">used</span>
-            <span class="n">custom_elicitation_function</span><span class="o">=</span><span class="kc">None</span>
-            <span class="p">)</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</dd>
-<dt><strong>training_settings</strong><span class="classifier">dict</span></dt><dd><p><strong>Code example</strong>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;parametric_prior&quot;</span><span class="p">,</span>                         <span class="c1"># &quot;parametric_prior&quot;, &quot;deep_prior&quot;</span>
-    <span class="n">sim_id</span><span class="o">=</span><span class="s2">&quot;toy_example&quot;</span><span class="p">,</span>                              <span class="c1"># individual id</span>
-    <span class="n">warmup_initializations</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>                         <span class="c1"># only for method=&quot;parametric_prior&quot;; search for best initialization # noqa</span>
-    <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-    <span class="n">view_ep</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>                                        <span class="c1"># how often should the progress_info be printed during training # noqa</span>
-    <span class="n">epochs</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
-    <span class="n">B</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>                                             <span class="c1"># number of batches</span>
-    <span class="n">samples_from_prior</span><span class="o">=</span><span class="mi">200</span>                             <span class="c1"># number of samples from the prior distributions</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</dd>
-<dt><strong>normalizing_flow</strong><span class="classifier">dict or bool, optional</span></dt><dd><p>Architecture of the normalizing flow. The default is False.</p>
-<p><strong>Code Example</strong>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-     <span class="n">num_coupling_layers</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-     <span class="n">coupling_design</span><span class="o">=</span><span class="s2">&quot;affine&quot;</span><span class="p">,</span>
-     <span class="n">coupling_settings</span><span class="o">=</span><span class="p">{</span>
-         <span class="s2">&quot;dropout&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-         <span class="s2">&quot;dense_args&quot;</span><span class="p">:</span> <span class="p">{</span>
-             <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="mi">128</span><span class="p">,</span>
-             <span class="s2">&quot;activation&quot;</span><span class="p">:</span> <span class="s2">&quot;relu&quot;</span><span class="p">,</span>
-             <span class="s2">&quot;kernel_regularizer&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-         <span class="p">},</span>
-         <span class="s2">&quot;num_dense&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-     <span class="p">},</span>
-     <span class="n">permutation</span><span class="o">=</span><span class="s2">&quot;fixed&quot;</span><span class="p">,</span>
-     <span class="n">base_distribution</span><span class="o">=</span><span class="n">tfd</span><span class="o">.</span><span class="n">MultivariateNormalTriL</span><span class="p">(</span>
-             <span class="n">loc</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_params</span><span class="p">),</span>
-             <span class="n">scale_tril</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">num_params</span><span class="p">))</span>
-             <span class="p">)</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</dd>
-<dt><strong>loss_function</strong><span class="classifier">dict or None, optional</span></dt><dd><p>Specification of the loss function. The default is None.</p>
-<p><strong>Code Example</strong>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-      <span class="n">loss</span><span class="o">=</span><span class="n">MMD_energy</span><span class="p">,</span>                                  <span class="c1"># default discrepancy measure MMD</span>
-      <span class="n">loss_weighting</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>                              <span class="c1"># if loss-balancing method is applied</span>
-      <span class="n">use_regularization</span><span class="o">=</span><span class="kc">False</span>                          <span class="c1"># if regularizer is added to the loss function</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</dd>
-<dt><strong>optimization_settings</strong><span class="classifier">dict or None, optional</span></dt><dd><p>Specification of the optimizer used for SGD training.
-The default is None.</p>
-<p><strong>Code Example</strong>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">,</span>
-    <span class="n">optimizer_specs</span><span class="o">=</span><span class="p">{</span>
-        <span class="s2">&quot;learning_rate&quot;</span><span class="p">:</span> <span class="mf">0.0001</span><span class="p">,</span>
-        <span class="s2">&quot;clipnorm&quot;</span><span class="p">:</span> <span class="mf">1.0</span>
-        <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>Learns the prior distributions</dt><dd></dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="elicit.main.run">
+<span class="sig-prename descclassname"><span class="pre">elicit.main.</span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">global_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/main.html#run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.main.run" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
 
 </section>
 
@@ -692,7 +465,8 @@ The default is None.</p>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.main.one_forward_simulation"><code class="docutils literal notranslate"><span class="pre">one_forward_simulation()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.main.prior_elicitation"><code class="docutils literal notranslate"><span class="pre">prior_elicitation()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.main.pre_training"><code class="docutils literal notranslate"><span class="pre">pre_training()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.main.run"><code class="docutils literal notranslate"><span class="pre">run()</span></code></a></li>
 </ul>
   </nav></div>
 

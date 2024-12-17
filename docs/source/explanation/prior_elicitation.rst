@@ -25,14 +25,13 @@ Model parameters
 
             model_parameters=dict(
                 {parameter_name}=dict(
-                    param_scaling=1.0, 
                     family=<callable_function>,
-                    hyperparams_dict=dict(
-                        {hyperparameter_name}=<callable_function>
-                        )
-                    ),
-                independence=None,
-                )
+                    hyperparams=[
+                        {hyperparameter_name1},
+                        {hyperparameter_name2}
+                        ]
+                ),
+            )
 
     .. tab-item:: deep_prior
         :sync: key2
@@ -41,12 +40,10 @@ Model parameters
 
             model_parameters=dict(
                 {parameter_name}=dict(
-                    param_scaling=1.0
-                    ),
-                independence=dict(
-                    corr_scaling=0.1
-                    ),
-                )
+                    family=None,
+                    hyperparams=None
+                ),
+            )
 
 Normalizing flow
 ****************
@@ -140,6 +137,11 @@ Generative model
         model=<callable_class>, 
         additional_model_args=dict(
             {argument_name}={argument_value}
+        ),
+        discrete_likelihood=False,
+        softmax_gumble_specs=dict(
+            temperature=1.6,  # FIXME look up correct value
+            upper_threshold=None
         )
     )
 
@@ -150,17 +152,19 @@ Target quantities & elicitation techniques
 
 + ``{target_quantity}`` indicates a placeholder for the name of the target quantity (see for details :ref:`target_quantities_howto`)
 + ToDo
-+ restructure input: Allow only for "quantiles" and "identity"
++ restructure input: Allow only for "quantiles", "identity", or "pearson_correlation"
 + remove the loss_components argument
 
 .. code-block:: python
 
     target_quantities=dict(
         {target_quantity}=dict(
-            elicitation_method="quantiles",  # or "identity"
+            elicitation_method="quantiles",  # or "identity", "pearson_correlation"
             quantiles_specs=(5, 25, 50, 75, 95),  # if elicitation_method="quantiles"
             custom_elicitation_function=None,
             custom_target_function=None,
+            loss=None,
+            loss_weight=1.
         )
     )
 
@@ -169,15 +173,7 @@ Loss settings
 
 **Notes:**
 
-+ ToDo
-
-.. code-block:: python
-
-    loss_settings = dict(
-        loss=<callable_class>,  # default is MMD_energy imported from elicit.loss_functions
-        loss_weighting=None, 
-        use_regularization=False
-    )
++ Currently removed from implementation
 
 Optimization settings
 *********************
@@ -207,7 +203,7 @@ Initialization settings
 
 .. code-block:: python
 
-    initialization = dict(
+    initialization_settings = dict(
         method="random",  # or "sobol" , "lhs"
         loss_quantile=0,
         number_of_iterations=200
@@ -275,13 +271,12 @@ Full ``prior_elicitation`` function
             prior_elicitation(
                 model_parameters=dict(
                     {parameter_name}=dict(
-                        param_scaling=1.0, 
                         family=<callable_function>,
-                        hyperparams_dict=dict(
-                            {hyperparameter_name}=<callable_function>
-                        )
-                    ),
-                    independence=None,
+                        hyperparams_dict=[
+                            {hyperparameter_name1},
+                            {hyperparameter_name2}
+                            ]
+                    )
                 ),
                 normalizing_flow=False,
                 expert_data=dict(
@@ -296,6 +291,11 @@ Full ``prior_elicitation`` function
                     model=<callable_class>, 
                     additional_model_args=dict(
                         {argument_name}={argument_value}
+                    ),
+                    discrete_likelihood=False,
+                    softmax_gumble_specs=dict(
+                        temperature=1.6,  # FIXME look up correct value
+                        upper_threshold=None
                     )
                 ),
                 target_quantities=dict(
@@ -304,12 +304,9 @@ Full ``prior_elicitation`` function
                         quantiles_specs=(5, 25, 50, 75, 95),  # if elicitation_method="quantiles"
                         custom_elicitation_function=None,
                         custom_target_function=None,
+                        loss=None,
+                        loss_weight=1.0
                     )
-                ),
-                loss_settings = dict(
-                    loss=<callable_class>,  # default is MMD_energy imported from elicit.loss_functions
-                    loss_weighting=None, 
-                    use_regularization=False
                 ),
                 optimization_settings=dict(
                     optimizer=tf.keras.optimizers.Adam,
@@ -318,7 +315,7 @@ Full ``prior_elicitation`` function
                         clipnorm=1.0
                     )
                 ),
-                initialization = dict(
+                initialization_settings = dict(
                     method="random",  # or "sobol" , "lhs"
                     loss_quantile=0,
                     number_of_iterations=200
@@ -346,10 +343,8 @@ Full ``prior_elicitation`` function
             prior_elicitation(
                 model_parameters=dict(
                     {parameter_name}=dict(
-                        param_scaling=1.0
-                    ),
-                    independence=dict(
-                        corr_scaling=0.1
+                        family=None,
+                        hyperparams=None
                     ),
                 ),
                 normalizing_flow=dict(
@@ -384,6 +379,11 @@ Full ``prior_elicitation`` function
                     model=<callable_class>, 
                     additional_model_args=dict(
                         {argument_name}={argument_value}
+                    ),
+                    discrete_likelihood=False,
+                    softmax_gumble_specs=dict(
+                        temperature=1.6,  # FIXME look up correct value
+                        upper_threshold=None
                     )
                 ),
                 target_quantities=dict(
@@ -392,12 +392,14 @@ Full ``prior_elicitation`` function
                         quantiles_specs=(5, 25, 50, 75, 95),  # if elicitation_method="quantiles"
                         custom_elicitation_function=None,
                         custom_target_function=None,
+                        loss=None,
+                        loss_weight=1.0
+                    ),
+                    correlation=dict(
+                        elicitation_method="pearson_correlation",
+                        loss=None,
+                        loss_weight=0.1
                     )
-                ),
-                loss_settings = dict(
-                    loss=<callable_class>,  # default is MMD_energy imported from elicit.loss_functions
-                    loss_weighting=None, 
-                    use_regularization=False
                 ),
                 optimization_settings=dict(
                     optimizer=tf.keras.optimizers.Adam,
@@ -406,7 +408,7 @@ Full ``prior_elicitation`` function
                         clipnorm=1.0
                     )
                 ),
-                initialization = dict(
+                initialization_settings = dict(
                     method="random",  # or "sobol" , "lhs"
                     loss_quantile=0,
                     number_of_iterations=200

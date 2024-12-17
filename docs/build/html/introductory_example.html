@@ -47,8 +47,6 @@
     <link rel="icon" href="_static/favicon-light.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Contents" href="howto/index.html" />
-    <link rel="prev" title="elicit.target_quantities module" href="api/elicit.target_quantities.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -111,6 +109,8 @@
       
       
       
+        
+      
       <div class="bd-sidebar-primary bd-sidebar">
         
 
@@ -158,7 +158,7 @@
  </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        <ul class="current nav bd-sidenav">
+        <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="api/modules.html">API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="api/elicit.html">elicit package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -178,13 +178,19 @@
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.main.html">elicit.main module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.model_simulation.html">elicit.model_simulation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.optimization_process.html">elicit.optimization_process module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/elicit.prior_elicitation.html">elicit.prior_elicitation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.prior_simulation.html">elicit.prior_simulation module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/elicit.save_config.html">elicit.save_config module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.target_quantities.html">elicit.target_quantities module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Tutorials</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="tutorials/index.html">Tutorials</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/binomial_independent.html">Binomial model with parametric priors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/binomial_joint.html">Binomial model with joint prior</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="howto/index.html">How-To</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="howto/expert_data.html">... specify the expert data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="howto/generative_model.html">... specify the generative model</a></li>
@@ -192,7 +198,7 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="explanation/index.html">Explanation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="explanation/prior_elicitation.html">* prior_elicitation function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="explanation/prior_elicitation.html">&gt; prior_elicitation function</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
@@ -379,14 +385,14 @@ Please note that the tutorials are currently being developed and updated.</p>
 <section id="learning-a-joint-non-parametric-prior">
 <h2>Learning a joint, non-parametric prior<a class="headerlink" href="#learning-a-joint-non-parametric-prior" title="Link to this heading">#</a></h2>
 <ol class="arabic simple">
-<li><p><a class="reference internal" href="notebooks/binomial_joint.html"><span class="doc">Binomial model</span></a></p></li>
+<li><p><span class="xref std std-doc">Binomial model</span></p></li>
 <li><p>Normal model (coming soon)</p></li>
 </ol>
 </section>
 <section id="learning-independent-parametric-priors">
 <h2>Learning independent, parametric priors<a class="headerlink" href="#learning-independent-parametric-priors" title="Link to this heading">#</a></h2>
 <ol class="arabic simple">
-<li><p><a class="reference internal" href="notebooks/binomial_independent.html"><span class="doc">Binomial model</span></a></p></li>
+<li><p><span class="xref std std-doc">Binomial model</span></p></li>
 <li><p>Poisson model (coming soon)</p></li>
 <li><p>Normal model (coming soon)</p></li>
 <li><p>Hierarchical model (coming soon)</p></li>
@@ -405,24 +411,6 @@ Please note that the tutorials are currently being developed and updated.</p>
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="api/elicit.target_quantities.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">elicit.target_quantities module</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="howto/index.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Contents</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               

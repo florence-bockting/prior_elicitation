@@ -7,7 +7,6 @@ import tensorflow as tf
 import tensorflow_probability as tfp
 import elicit.logs_config # noqa
 
-from bayesflow import networks
 from elicit.helper_functions import save_as_pkl
 
 tfd = tfp.distributions
@@ -100,36 +99,20 @@ def intialize_priors(global_dict, init_matrix_slice):
     if global_dict["training_settings"]["method"] == "parametric_prior":
         # list for saving initialize hyperparameter values
         init_hyperparam_list = []
-        # initialize j counting number of hyperparameters
-        j = 0
 
         # loop over model parameter and initialize each hyperparameter
-        for model_param in sorted(
-            list(
-                set(global_dict["model_parameters"].keys()).difference(
-                    set(["independence", "no_params"])
-                )
-            )
-        ):
-            get_hyp_dict = global_dict["model_parameters"][model_param][
-                "hyperparams_dict"
-            ]
+        for i in range(len(global_dict["model_parameters"])):
+            get_hyp_dict = global_dict["model_parameters"][i]["hyperparams"]
 
             initialized_hyperparam = dict()
             for name in get_hyp_dict:
-                if global_dict["initialization_settings"][
-                        "method"] is not None:
-                    initial_value = init_matrix_slice[j]
-                    # increase j
-                    j += 1
-                else:
-                    initial_value = get_hyp_dict[name]
+                initial_value = init_matrix_slice[get_hyp_dict[name]['name']]
 
                 # initialize hyperparameter
                 initialized_hyperparam[f"{name}"] = tf.Variable(
-                    initial_value=initial_value,
+                    initial_value=get_hyp_dict[name]["constraint"](initial_value),
                     trainable=True,
-                    name=f"{name}",
+                    name=f"{get_hyp_dict[name]['name']}",
                 )
             init_hyperparam_list.append(initialized_hyperparam)
 
@@ -143,12 +126,12 @@ def intialize_priors(global_dict, init_matrix_slice):
     if global_dict["training_settings"]["method"] == "deep_prior":
         # for more information see BayesFlow documentation
         # https://bayesflow.org/api/bayesflow.inference_networks.html
-        input_INN = global_dict["normalizing_flow"]["coupling_flow"]
+        INN = global_dict["normalizing_flow"]["inference_network"]
 
-        invertible_neural_network = networks.InvertibleNetwork(
-            num_params=global_dict["model_parameters"]["no_params"],
-            **input_INN
+        invertible_neural_network = INN(
+            **global_dict["normalizing_flow"]["network_specs"]
         )
+
         # save initialized priors
         init_prior = invertible_neural_network
         # save file in object
@@ -208,17 +191,9 @@ def sample_from_priors(initialized_priors, ground_truth, global_dict):
     ):
 
         priors = []
-        for i, param in enumerate(
-            sorted(
-                list(
-                    set(global_dict["model_parameters"].keys()).difference(
-                        set(["independence", "no_params"])
-                    )
-                )
-            )
-        ):
+        for i in range(len(global_dict["model_parameters"])):
             # get the prior distribution family as specified by the user
-            prior_family = global_dict["model_parameters"][param]["family"]
+            prior_family = global_dict["model_parameters"][i]["family"]
 
             # sample from the prior distribution
             priors.append(
@@ -238,23 +213,6 @@ def sample_from_priors(initialized_priors, ground_truth, global_dict):
         u = base_dist.sample((B, S))
         # apply transformation function to samples from base distr.
         prior_samples, _ = initialized_priors(u, condition=None, inverse=False)
-
-    # scaling of prior distributions according to param_scaling
-    if not ground_truth:
-        scaled_priors = []
-        for i, param in enumerate(
-            sorted(
-                list(
-                    set(global_dict["model_parameters"].keys()).difference(
-                        set(["independence", "no_params"])
-                    )
-                )
-            )
-        ):
-            factor = global_dict["model_parameters"][param]["param_scaling"]
-            scaled_priors.append(prior_samples[:, :, i] * factor)
-
-        prior_samples = tf.stack(scaled_priors, -1)
 
     # save results
     saving_path = global_dict["training_settings"]["output_path"]

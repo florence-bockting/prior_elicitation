@@ -24,7 +24,6 @@ def sgd_training(
     one_forward_simulation,
     compute_loss,
     global_dict,
-    seed,
 ):
     """
     Wrapper that runs the optimization algorithms for E epochs.
@@ -169,7 +168,7 @@ def sgd_training(
         "loss_component": component_losses,
         "hyperparameter": res_dict,
         "time_epoch": time_per_epoch,
-        "seed": seed,
+        "seed": global_dict["training_settings"]["seed"],
         "nf_weights": train_var
     }
 

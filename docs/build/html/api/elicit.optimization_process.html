@@ -47,7 +47,7 @@
     <link rel="icon" href="../_static/favicon-light.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="elicit.prior_simulation module" href="elicit.prior_simulation.html" />
+    <link rel="next" title="elicit.prior_elicitation module" href="elicit.prior_elicitation.html" />
     <link rel="prev" title="elicit.model_simulation module" href="elicit.model_simulation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -178,13 +178,19 @@
 <li class="toctree-l3"><a class="reference internal" href="elicit.main.html">elicit.main module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.model_simulation.html">elicit.model_simulation module</a></li>
 <li class="toctree-l3 current active"><a class="current reference internal" href="#">elicit.optimization_process module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.prior_elicitation.html">elicit.prior_elicitation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.prior_simulation.html">elicit.prior_simulation module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.save_config.html">elicit.save_config module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.target_quantities.html">elicit.target_quantities module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../introductory_example.html">Tutorials</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorials/index.html">Tutorials</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/binomial_independent.html">Binomial model with parametric priors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/binomial_joint.html">Binomial model with joint prior</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../howto/index.html">How-To</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../howto/expert_data.html">... specify the expert data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../howto/generative_model.html">... specify the generative model</a></li>
@@ -192,7 +198,7 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../explanation/index.html">Explanation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../explanation/prior_elicitation.html">* prior_elicitation function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../explanation/prior_elicitation.html">&gt; prior_elicitation function</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
@@ -375,7 +381,7 @@ document.write(`
 <span id="elicit-optimization-process-module"></span><h1>elicit.optimization_process module<a class="headerlink" href="#module-elicit.optimization_process" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.optimization_process.sgd_training">
-<span class="sig-prename descclassname"><span class="pre">elicit.optimization_process.</span></span><span class="sig-name descname"><span class="pre">sgd_training</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expert_elicited_statistics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_model_init</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">one_forward_simulation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute_loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/optimization_process.html#sgd_training"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.optimization_process.sgd_training" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.optimization_process.</span></span><span class="sig-name descname"><span class="pre">sgd_training</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expert_elicited_statistics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_model_init</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">one_forward_simulation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute_loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/optimization_process.html#sgd_training"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.optimization_process.sgd_training" title="Link to this definition">#</a></dt>
 <dd><p>Wrapper that runs the optimization algorithms for E epochs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -423,11 +429,11 @@ compute total loss.</p>
       </div>
     </a>
     <a class="right-next"
-       href="elicit.prior_simulation.html"
+       href="elicit.prior_elicitation.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">elicit.prior_simulation module</p>
+        <p class="prev-next-title">elicit.prior_elicitation module</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

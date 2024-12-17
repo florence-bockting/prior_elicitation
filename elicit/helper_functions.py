@@ -6,6 +6,7 @@ import pickle
 import os
 import pandas as pd
 import tensorflow as tf
+import numpy as np
 
 from pythonjsonlogger import jsonlogger # noqa
 
@@ -362,3 +363,40 @@ def print_res_summary(path_res, global_dict):
 
     """
     print(create_output_summary(path_res, global_dict))
+
+
+def identity(x):
+    return x
+
+class DoubleBound:
+    def __init__(self, lower, upper):
+        self.lower=lower
+        self.upper=upper
+
+    def logit(self, x):
+        return tf.cast(np.log(x) - np.log(1 - x), dtype=tf.float32)
+
+    def inv_logit(self, x):
+        return tf.cast(np.exp(x) / (1 + np.exp(x)), dtype=tf.float32)
+
+    def forward(self, x):
+        return tf.cast(self.logit((x-self.lower)/(self.upper-self.lower)), dtype=tf.float32)
+
+    def inverse(self, x):
+        return tf.cast(self.lower+(self.upper-self.lower)*self.inv_logit(x), dtype=tf.float32)
+
+class LowerBound:
+    def __init__(self, lower):
+        self.lower=lower
+    def forward(self, x):
+        return tf.cast(np.log(x-self.lower), dtype=tf.float32)
+    def inverse(self, x):
+        return tf.cast(np.exp(x)+self.lower, dtype=tf.float32)
+    
+class UpperBound:
+    def __init__(self, upper):
+        self.upper=upper
+    def forward(self, x):
+        return tf.cast(np.log(self.upper-x), dtype=tf.float32)
+    def inverse(self, x):
+        return tf.cast(self.upper-np.exp(x), dtype=tf.float32)

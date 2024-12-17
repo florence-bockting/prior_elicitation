@@ -148,7 +148,7 @@ Contents
 
    Home <self>
    API <api/modules>
-   Tutorials <introductory_example>
+   Tutorials <tutorials/index>
    How-To <howto/index>
    Explanation <explanation/index>
    References <references>

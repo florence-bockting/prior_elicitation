@@ -178,13 +178,19 @@
 <li class="toctree-l3"><a class="reference internal" href="../api/elicit.main.html">elicit.main module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/elicit.model_simulation.html">elicit.model_simulation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/elicit.optimization_process.html">elicit.optimization_process module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.prior_elicitation.html">elicit.prior_elicitation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/elicit.prior_simulation.html">elicit.prior_simulation module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.save_config.html">elicit.save_config module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/elicit.target_quantities.html">elicit.target_quantities module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../introductory_example.html">Tutorials</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorials/index.html">Tutorials</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/binomial_independent.html">Binomial model with parametric priors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/binomial_joint.html">Binomial model with joint prior</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../howto/index.html">How-To</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../howto/expert_data.html">... specify the expert data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../howto/generative_model.html">... specify the generative model</a></li>
@@ -192,7 +198,7 @@
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Explanation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">* prior_elicitation function</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">&gt; prior_elicitation function</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
@@ -396,14 +402,13 @@ document.write(`
 parametric_prior</label><div class="sd-tab-content docutils">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model_parameters</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
     <span class="p">{</span><span class="n">parameter_name</span><span class="p">}</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-        <span class="n">param_scaling</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
         <span class="n">family</span><span class="o">=&lt;</span><span class="n">callable_function</span><span class="o">&gt;</span><span class="p">,</span>
-        <span class="n">hyperparams_dict</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-            <span class="p">{</span><span class="n">hyperparameter_name</span><span class="p">}</span><span class="o">=&lt;</span><span class="n">callable_function</span><span class="o">&gt;</span>
-            <span class="p">)</span>
-        <span class="p">),</span>
-    <span class="n">independence</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="p">)</span>
+        <span class="n">hyperparams</span><span class="o">=</span><span class="p">[</span>
+            <span class="p">{</span><span class="n">hyperparameter_name1</span><span class="p">},</span>
+            <span class="p">{</span><span class="n">hyperparameter_name2</span><span class="p">}</span>
+            <span class="p">]</span>
+    <span class="p">),</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -412,12 +417,10 @@ parametric_prior</label><div class="sd-tab-content docutils">
 deep_prior</label><div class="sd-tab-content docutils">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model_parameters</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
     <span class="p">{</span><span class="n">parameter_name</span><span class="p">}</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-        <span class="n">param_scaling</span><span class="o">=</span><span class="mf">1.0</span>
-        <span class="p">),</span>
-    <span class="n">independence</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-        <span class="n">corr_scaling</span><span class="o">=</span><span class="mf">0.1</span>
-        <span class="p">),</span>
-    <span class="p">)</span>
+        <span class="n">family</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">hyperparams</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">),</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -515,6 +518,11 @@ deep_prior</label><div class="sd-tab-content docutils">
     <span class="n">model</span><span class="o">=&lt;</span><span class="n">callable_class</span><span class="o">&gt;</span><span class="p">,</span>
     <span class="n">additional_model_args</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
         <span class="p">{</span><span class="n">argument_name</span><span class="p">}</span><span class="o">=</span><span class="p">{</span><span class="n">argument_value</span><span class="p">}</span>
+    <span class="p">),</span>
+    <span class="n">discrete_likelihood</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">softmax_gumble_specs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">temperature</span><span class="o">=</span><span class="mf">1.6</span><span class="p">,</span>  <span class="c1"># FIXME look up correct value</span>
+        <span class="n">upper_threshold</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">)</span>
 <span class="p">)</span>
 </pre></div>
@@ -526,15 +534,17 @@ deep_prior</label><div class="sd-tab-content docutils">
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">{target_quantity}</span></code> indicates a placeholder for the name of the target quantity (see for details <a class="reference internal" href="../howto/target_quantities.html#target-quantities-howto"><span class="std std-ref">How-To specify the target_quantities?</span></a>)</p></li>
 <li><p>ToDo</p></li>
-<li><p>restructure input: Allow only for “quantiles” and “identity”</p></li>
+<li><p>restructure input: Allow only for “quantiles”, “identity”, or “pearson_correlation”</p></li>
 <li><p>remove the loss_components argument</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">target_quantities</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
     <span class="p">{</span><span class="n">target_quantity</span><span class="p">}</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-        <span class="n">elicitation_method</span><span class="o">=</span><span class="s2">&quot;quantiles&quot;</span><span class="p">,</span>  <span class="c1"># or &quot;identity&quot;</span>
+        <span class="n">elicitation_method</span><span class="o">=</span><span class="s2">&quot;quantiles&quot;</span><span class="p">,</span>  <span class="c1"># or &quot;identity&quot;, &quot;pearson_correlation&quot;</span>
         <span class="n">quantiles_specs</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">95</span><span class="p">),</span>  <span class="c1"># if elicitation_method=&quot;quantiles&quot;</span>
         <span class="n">custom_elicitation_function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">custom_target_function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">loss</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">loss_weight</span><span class="o">=</span><span class="mf">1.</span>
     <span class="p">)</span>
 <span class="p">)</span>
 </pre></div>
@@ -544,15 +554,8 @@ deep_prior</label><div class="sd-tab-content docutils">
 <h2>Loss settings<a class="headerlink" href="#loss-settings" title="Link to this heading">#</a></h2>
 <p><strong>Notes:</strong></p>
 <ul class="simple">
-<li><p>ToDo</p></li>
+<li><p>Currently removed from implementation</p></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">loss_settings</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-    <span class="n">loss</span><span class="o">=&lt;</span><span class="n">callable_class</span><span class="o">&gt;</span><span class="p">,</span>  <span class="c1"># default is MMD_energy imported from elicit.loss_functions</span>
-    <span class="n">loss_weighting</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">use_regularization</span><span class="o">=</span><span class="kc">False</span>
-<span class="p">)</span>
-</pre></div>
-</div>
 </section>
 <section id="optimization-settings">
 <h2>Optimization settings<a class="headerlink" href="#optimization-settings" title="Link to this heading">#</a></h2>
@@ -583,7 +586,7 @@ deep_prior</label><div class="sd-tab-content docutils">
 <ul class="simple">
 <li><p>ToDo</p></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">initialization</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">initialization_settings</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
     <span class="n">method</span><span class="o">=</span><span class="s2">&quot;random&quot;</span><span class="p">,</span>  <span class="c1"># or &quot;sobol&quot; , &quot;lhs&quot;</span>
     <span class="n">loss_quantile</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
     <span class="n">number_of_iterations</span><span class="o">=</span><span class="mi">200</span>
@@ -645,13 +648,12 @@ parametric_prior</label><div class="sd-tab-content docutils">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">prior_elicitation</span><span class="p">(</span>
     <span class="n">model_parameters</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
         <span class="p">{</span><span class="n">parameter_name</span><span class="p">}</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-            <span class="n">param_scaling</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
             <span class="n">family</span><span class="o">=&lt;</span><span class="n">callable_function</span><span class="o">&gt;</span><span class="p">,</span>
-            <span class="n">hyperparams_dict</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-                <span class="p">{</span><span class="n">hyperparameter_name</span><span class="p">}</span><span class="o">=&lt;</span><span class="n">callable_function</span><span class="o">&gt;</span>
-            <span class="p">)</span>
-        <span class="p">),</span>
-        <span class="n">independence</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">hyperparams_dict</span><span class="o">=</span><span class="p">[</span>
+                <span class="p">{</span><span class="n">hyperparameter_name1</span><span class="p">},</span>
+                <span class="p">{</span><span class="n">hyperparameter_name2</span><span class="p">}</span>
+                <span class="p">]</span>
+        <span class="p">)</span>
     <span class="p">),</span>
     <span class="n">normalizing_flow</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">expert_data</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
@@ -666,6 +668,11 @@ parametric_prior</label><div class="sd-tab-content docutils">
         <span class="n">model</span><span class="o">=&lt;</span><span class="n">callable_class</span><span class="o">&gt;</span><span class="p">,</span>
         <span class="n">additional_model_args</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
             <span class="p">{</span><span class="n">argument_name</span><span class="p">}</span><span class="o">=</span><span class="p">{</span><span class="n">argument_value</span><span class="p">}</span>
+        <span class="p">),</span>
+        <span class="n">discrete_likelihood</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">softmax_gumble_specs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">temperature</span><span class="o">=</span><span class="mf">1.6</span><span class="p">,</span>  <span class="c1"># FIXME look up correct value</span>
+            <span class="n">upper_threshold</span><span class="o">=</span><span class="kc">None</span>
         <span class="p">)</span>
     <span class="p">),</span>
     <span class="n">target_quantities</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
@@ -674,12 +681,9 @@ parametric_prior</label><div class="sd-tab-content docutils">
             <span class="n">quantiles_specs</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">95</span><span class="p">),</span>  <span class="c1"># if elicitation_method=&quot;quantiles&quot;</span>
             <span class="n">custom_elicitation_function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">custom_target_function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">loss</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">loss_weight</span><span class="o">=</span><span class="mf">1.0</span>
         <span class="p">)</span>
-    <span class="p">),</span>
-    <span class="n">loss_settings</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-        <span class="n">loss</span><span class="o">=&lt;</span><span class="n">callable_class</span><span class="o">&gt;</span><span class="p">,</span>  <span class="c1"># default is MMD_energy imported from elicit.loss_functions</span>
-        <span class="n">loss_weighting</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">use_regularization</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">),</span>
     <span class="n">optimization_settings</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
         <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">,</span>
@@ -688,7 +692,7 @@ parametric_prior</label><div class="sd-tab-content docutils">
             <span class="n">clipnorm</span><span class="o">=</span><span class="mf">1.0</span>
         <span class="p">)</span>
     <span class="p">),</span>
-    <span class="n">initialization</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+    <span class="n">initialization_settings</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">method</span><span class="o">=</span><span class="s2">&quot;random&quot;</span><span class="p">,</span>  <span class="c1"># or &quot;sobol&quot; , &quot;lhs&quot;</span>
         <span class="n">loss_quantile</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="n">number_of_iterations</span><span class="o">=</span><span class="mi">200</span>
@@ -715,10 +719,8 @@ deep_prior</label><div class="sd-tab-content docutils">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">prior_elicitation</span><span class="p">(</span>
     <span class="n">model_parameters</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
         <span class="p">{</span><span class="n">parameter_name</span><span class="p">}</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-            <span class="n">param_scaling</span><span class="o">=</span><span class="mf">1.0</span>
-        <span class="p">),</span>
-        <span class="n">independence</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-            <span class="n">corr_scaling</span><span class="o">=</span><span class="mf">0.1</span>
+            <span class="n">family</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">hyperparams</span><span class="o">=</span><span class="kc">None</span>
         <span class="p">),</span>
     <span class="p">),</span>
     <span class="n">normalizing_flow</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
@@ -753,6 +755,11 @@ deep_prior</label><div class="sd-tab-content docutils">
         <span class="n">model</span><span class="o">=&lt;</span><span class="n">callable_class</span><span class="o">&gt;</span><span class="p">,</span>
         <span class="n">additional_model_args</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
             <span class="p">{</span><span class="n">argument_name</span><span class="p">}</span><span class="o">=</span><span class="p">{</span><span class="n">argument_value</span><span class="p">}</span>
+        <span class="p">),</span>
+        <span class="n">discrete_likelihood</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">softmax_gumble_specs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">temperature</span><span class="o">=</span><span class="mf">1.6</span><span class="p">,</span>  <span class="c1"># FIXME look up correct value</span>
+            <span class="n">upper_threshold</span><span class="o">=</span><span class="kc">None</span>
         <span class="p">)</span>
     <span class="p">),</span>
     <span class="n">target_quantities</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
@@ -761,12 +768,14 @@ deep_prior</label><div class="sd-tab-content docutils">
             <span class="n">quantiles_specs</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">95</span><span class="p">),</span>  <span class="c1"># if elicitation_method=&quot;quantiles&quot;</span>
             <span class="n">custom_elicitation_function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">custom_target_function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">loss</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">loss_weight</span><span class="o">=</span><span class="mf">1.0</span>
+        <span class="p">),</span>
+        <span class="n">correlation</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">elicitation_method</span><span class="o">=</span><span class="s2">&quot;pearson_correlation&quot;</span><span class="p">,</span>
+            <span class="n">loss</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">loss_weight</span><span class="o">=</span><span class="mf">0.1</span>
         <span class="p">)</span>
-    <span class="p">),</span>
-    <span class="n">loss_settings</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-        <span class="n">loss</span><span class="o">=&lt;</span><span class="n">callable_class</span><span class="o">&gt;</span><span class="p">,</span>  <span class="c1"># default is MMD_energy imported from elicit.loss_functions</span>
-        <span class="n">loss_weighting</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">use_regularization</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">),</span>
     <span class="n">optimization_settings</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
         <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">,</span>
@@ -775,7 +784,7 @@ deep_prior</label><div class="sd-tab-content docutils">
             <span class="n">clipnorm</span><span class="o">=</span><span class="mf">1.0</span>
         <span class="p">)</span>
     <span class="p">),</span>
-    <span class="n">initialization</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+    <span class="n">initialization_settings</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">method</span><span class="o">=</span><span class="s2">&quot;random&quot;</span><span class="p">,</span>  <span class="c1"># or &quot;sobol&quot; , &quot;lhs&quot;</span>
         <span class="n">loss_quantile</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="n">number_of_iterations</span><span class="o">=</span><span class="mi">200</span>

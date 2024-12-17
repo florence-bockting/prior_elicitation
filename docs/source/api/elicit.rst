@@ -25,7 +25,9 @@ Submodules
    elicit.main
    elicit.model_simulation
    elicit.optimization_process
+   elicit.prior_elicitation
    elicit.prior_simulation
+   elicit.save_config
    elicit.target_quantities
 
 Module contents

@@ -30,11 +30,18 @@ def plot_loss(path):
 
 def plot_convergence(path):
     hyp = pd.read_pickle(path+"/final_results.pkl")["hyperparameter"]
+    hypnames = list(hyp.keys())
     hyp_val = tf.stack([hyp[k] for k in hyp], -1)
     hyp_key = [k for k in list(hyp.keys())]
-    _, axs = plt.subplots(1, hyp_val.shape[-1], constrained_layout=True,
-                          figsize=(6, 3), sharex=True)
-    [axs[i].plot(hyp_val[:, i]) for i in range(hyp_val.shape[-1])]
+
+    _, axs = plt.subplots(1, hyp_val.shape[-1],
+                          constrained_layout=True,
+                          figsize=(8, 3), sharex=True)
+    for k, name in enumerate(hypnames):
+        if name.startswith("log_"):
+            axs[k].plot(tf.exp(hyp_val[:, k]))
+        else:
+            axs[k].plot(hyp_val[:, k])
     [axs[i].set_title(hyp_key[i]) for i in range(hyp_val.shape[-1])]
     [axs[i].set_xlabel("epochs") for i in range(hyp_val.shape[-1])]
     plt.show()

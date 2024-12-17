@@ -5,7 +5,8 @@
 import tensorflow as tf
 
 
-def norm_diff(correlation_training, axis=None, ord="euclidean"):
+def L2(loss_component_expert, loss_component_training,
+              axis=None, ord="euclidean"):
     """
     Wrapper around tf.norm that computes the norm of the difference between
     two tensors along the specified axis.
@@ -21,8 +22,8 @@ def norm_diff(correlation_training, axis=None, ord="euclidean"):
         Order of the norm. Supports 'euclidean' and other norms
         supported by tf.norm. Default is 'euclidean'.
     """
-    difference = tf.subtract(tf.zeros(correlation_training.shape),
-                             correlation_training)
+    difference = tf.subtract(loss_component_expert,
+                             loss_component_training)
     norm_values = tf.norm(difference, ord=ord, axis=axis)
     return tf.reduce_mean(norm_values)
 

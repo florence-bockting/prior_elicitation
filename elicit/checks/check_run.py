@@ -21,12 +21,9 @@ def check_model_parameters(training_settings, model_parameters, num_params):
             for k in model_parameters[arg_name].keys():
                 assert k in [
                     "family",
-                    "hyperparams_dict",
-                    "param_scaling",
-                    "corr_scaling",
+                    "hyperparams",
                 ], f"Have you misspelled '{k}' in the parameter settings? \
-                    Only ['family', 'hyperparam_dict', 'param_scaling'] are \
-                        valid argument names."
+                    Only ['family', 'hyperparams'] are valid argument names."
     # check whether non-optional arguments are specified
     # TODO-Test: include test with missing non-optional argument
     if training_settings["method"] == "parametric_prior":
@@ -35,10 +32,10 @@ def check_model_parameters(training_settings, model_parameters, num_params):
                 set(model_parameters.keys()).difference(set(["independence"]))
                 )
         ):
-            assert set(["family", "hyperparams_dict"]) <= set(
+            assert set(["family", "hyperparams"]) <= set(
                 model_parameters[param_name].keys()
             ), f"For parameter {param_name} one of the non-optinal arguments \
-                ['family', 'hyperparams_dict'] is missing."
+                ['family', 'hyperparams'] is missing."
     if training_settings["method"] == "deep_prior":
         assert (
             num_params > 1
@@ -108,14 +105,11 @@ def check_target_quantities(target_quantities):
             assert k2 in [
                 "elicitation_method",
                 "quantiles_specs",
-                "moments_specs",
-                "loss_components",
+                "loss",
+                "loss_weight",
                 "custom_target_function",
-                "custom_elicitation_method",
-            ], f'Have you misspelled "{k}" in the parameter settings? Only \
-                ["elicitation_method", "quantiles_specs" , "moments_specs", \
-                 "loss_components", "custom_target_function", \
-                     "custom_elicitation_method"] are valid argument names.'
+                "custom_elicitation_function",
+            ], f'Have you misspelled "{k2}" in the parameter settings? Only ["elicitation_method", "quantiles_specs" , "loss","loss_weight", "custom_target_function","custom_elicitation_function"] are valid argument names.'  # noqa
         try:
             target_quantities[k]["elicitation_method"]
         except KeyError:
@@ -134,21 +128,12 @@ def check_target_quantities(target_quantities):
                 assert (
                     target_quantities[k]["quantiles_specs"][-1] > 1
                 ), "quantiles must be specified as values between [0, 100]"
-            if target_quantities[k]["elicitation_method"] == "moments":
-                assert (
-                    "moments_specs" in target_quantities[k].keys()
-                ), "The method 'moments' requires the additional argument \
-                    'moments_specs'"
             if target_quantities[k]["elicitation_method"] is None:
                 assert (
                     target_quantities[k]["custom_elicitation_method"] is not
                     None
                 ), "Both custom_elicitation_method and elicitation_method \
                     can't be simultaneously None."
-        try:
-            target_quantities[k]["loss_components"]
-        except KeyError:
-            print("The non-optional argument 'loss_components' is missing.")
         try:
             target_quantities[k]["custom_elicitation_method"]
         except KeyError:
@@ -202,24 +187,17 @@ def check_training_settings(training_settings):
             "B",
             "samples_from_prior",
             "seed",
-            "warmup_initializations",
             "epochs",
             "output_path",
             "progress_info",
             "view_ep",
-            "print_log",
             "save_log"
         ], f'Have you misspelled "{k}" in the parameter settings? Only \
             ["method", "sim_id","B","samples_from_prior","seed",\
-             "warmup_initializations","epochs","output_path","progress_info",\
-             "view_ep", "print_log", "save_log"] are valid argument names.'
+             "epochs","output_path","progress_info",\
+             "view_ep", "save_log"] are valid argument names.'
     for k in training_settings.keys():
         assert set(["method", "sim_id", "seed", "epochs"]) <= set(
             training_settings.keys()
         ), 'At least one of the non-optional arguments "method","sim_id",\
             "seed","epochs"] is missing.'
-    if training_settings["method"] == "parametric_prior":
-        assert "warmup_initializations" in list(
-            training_settings.keys()
-        ), "If method is parametric_prior, warmup_initializations has to be \
-            specified."

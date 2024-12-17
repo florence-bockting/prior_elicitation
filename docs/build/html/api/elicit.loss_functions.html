@@ -178,13 +178,19 @@
 <li class="toctree-l3"><a class="reference internal" href="elicit.main.html">elicit.main module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.model_simulation.html">elicit.model_simulation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.optimization_process.html">elicit.optimization_process module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.prior_elicitation.html">elicit.prior_elicitation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.prior_simulation.html">elicit.prior_simulation module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.save_config.html">elicit.save_config module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.target_quantities.html">elicit.target_quantities module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../introductory_example.html">Tutorials</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorials/index.html">Tutorials</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/binomial_independent.html">Binomial model with parametric priors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/binomial_joint.html">Binomial model with joint prior</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../howto/index.html">How-To</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../howto/expert_data.html">... specify the expert data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../howto/generative_model.html">... specify the generative model</a></li>
@@ -192,7 +198,7 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../explanation/index.html">Explanation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../explanation/prior_elicitation.html">* prior_elicitation function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../explanation/prior_elicitation.html">&gt; prior_elicitation function</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
@@ -359,7 +365,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.loss_functions.norm_diff"><code class="docutils literal notranslate"><span class="pre">norm_diff()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.loss_functions.L2"><code class="docutils literal notranslate"><span class="pre">L2()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.loss_functions.MmdEnergy"><code class="docutils literal notranslate"><span class="pre">MmdEnergy</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.loss_functions.MmdEnergy.__call__"><code class="docutils literal notranslate"><span class="pre">MmdEnergy.__call__()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.loss_functions.MmdEnergy.generate_weights"><code class="docutils literal notranslate"><span class="pre">MmdEnergy.generate_weights()</span></code></a></li>
@@ -383,8 +389,8 @@ document.write(`
   <section id="module-elicit.loss_functions">
 <span id="elicit-loss-functions-module"></span><h1>elicit.loss_functions module<a class="headerlink" href="#module-elicit.loss_functions" title="Link to this heading">#</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="elicit.loss_functions.norm_diff">
-<span class="sig-prename descclassname"><span class="pre">elicit.loss_functions.</span></span><span class="sig-name descname"><span class="pre">norm_diff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">correlation_training</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ord</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/loss_functions.html#norm_diff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.loss_functions.norm_diff" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="elicit.loss_functions.L2">
+<span class="sig-prename descclassname"><span class="pre">elicit.loss_functions.</span></span><span class="sig-name descname"><span class="pre">L2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loss_component_expert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_component_training</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ord</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/loss_functions.html#L2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.loss_functions.L2" title="Link to this definition">#</a></dt>
 <dd><p>Wrapper around tf.norm that computes the norm of the difference between
 two tensors along the specified axis.
 Used for the correlation loss when priors are assumed to be independent</p>
@@ -505,7 +511,7 @@ supported by tf.norm. Default is ‘euclidean’.</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.loss_functions.norm_diff"><code class="docutils literal notranslate"><span class="pre">norm_diff()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.loss_functions.L2"><code class="docutils literal notranslate"><span class="pre">L2()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.loss_functions.MmdEnergy"><code class="docutils literal notranslate"><span class="pre">MmdEnergy</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.loss_functions.MmdEnergy.__call__"><code class="docutils literal notranslate"><span class="pre">MmdEnergy.__call__()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.loss_functions.MmdEnergy.generate_weights"><code class="docutils literal notranslate"><span class="pre">MmdEnergy.generate_weights()</span></code></a></li>

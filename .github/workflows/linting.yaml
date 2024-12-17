@@ -3,7 +3,7 @@ name: Linter
 on:
   push:
     branches:
-      - main
+      - release
 
 jobs:
   linting:

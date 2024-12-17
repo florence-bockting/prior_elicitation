@@ -6,4 +6,4 @@ Contents
 
    Explanation
 
-   * prior_elicitation function <prior_elicitation>
+   > prior_elicitation function <prior_elicitation>

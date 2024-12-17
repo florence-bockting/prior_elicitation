@@ -103,30 +103,25 @@ def computation_target_quantities(model_simulations, ground_truth,
     # initialize dict for storing results
     targets_res = dict()
     # loop over target quantities
-    for i, tar in enumerate(target_dict):
+    for i in range(len(target_dict)):
+        tar = target_dict[i]
         # use custom function for target quantity if it has been defined
-        if (
-            target_dict[tar]["custom_target_function"]
-            is not None
+        if tar["name"] == "correlation":
+            target_quantity = model_simulations["prior_samples"]
+        elif (
+            tar["custom_target_function"] is not None
         ):
             target_quantity = use_custom_functions(
-                target_dict[tar]["custom_target_function"],
+                tar["custom_target_function"],
                 model_simulations,
                 global_dict,
             )
         else:
-            target_quantity = model_simulations[tar]
+            target_quantity = model_simulations[tar["name"]]
 
         # save target quantities
-        targets_res[tar] = target_quantity
+        targets_res[tar["name"]] = target_quantity
 
-    if global_dict["model_parameters"]["independence"] is not None:
-        target_quantity = use_custom_functions(
-            {"function": custom_correlation, "additional_args": None},
-            model_simulations,
-            global_dict,
-        )
-        targets_res["correlation"] = target_quantity
     # save file in object
     saving_path = global_dict["training_settings"]["output_path"]
     if ground_truth:

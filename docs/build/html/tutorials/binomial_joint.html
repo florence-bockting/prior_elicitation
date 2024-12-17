@@ -45,10 +45,12 @@
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/binomial_joint';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/binomial_joint';</script>
     <link rel="icon" href="../_static/favicon-light.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Contents" href="../howto/index.html" />
+    <link rel="prev" title="Binomial model" href="binomial_independent.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -111,8 +113,6 @@
       
       
       
-        
-      
       <div class="bd-sidebar-primary bd-sidebar">
         
 
@@ -160,7 +160,7 @@
  </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        <ul class="nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../api/modules.html">API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../api/elicit.html">elicit package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -180,13 +180,19 @@
 <li class="toctree-l3"><a class="reference internal" href="../api/elicit.main.html">elicit.main module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/elicit.model_simulation.html">elicit.model_simulation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/elicit.optimization_process.html">elicit.optimization_process module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.prior_elicitation.html">elicit.prior_elicitation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/elicit.prior_simulation.html">elicit.prior_simulation module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.save_config.html">elicit.save_config module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/elicit.target_quantities.html">elicit.target_quantities module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../introductory_example.html">Tutorials</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Tutorials</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="binomial_independent.html">Binomial model with parametric priors</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Binomial model with joint prior</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../howto/index.html">How-To</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../howto/expert_data.html">... specify the expert data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../howto/generative_model.html">... specify the generative model</a></li>
@@ -194,7 +200,7 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../explanation/index.html">Explanation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../explanation/prior_elicitation.html">* prior_elicitation function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../explanation/prior_elicitation.html">&gt; prior_elicitation function</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
@@ -267,7 +273,7 @@
       
       
       
-      <li><a href="../_sources/notebooks/binomial_joint.ipynb" target="_blank"
+      <li><a href="../_sources/tutorials/binomial_joint.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -435,8 +441,8 @@ document.write(`
 <section id="generative-model">
 <h3>Generative model<a class="headerlink" href="#generative-model" title="Link to this heading">#</a></h3>
 <p>Binomial model with a logit link (sigmoid response function) and one continuous predictor~<span class="math notranslate nohighlight">\(x=1,\ldots,50\)</span>, scaled by its standard deviation:</p>
-<div class="amsmath math notranslate nohighlight" id="equation-b0f5f1d2-b95c-49f2-90b3-548988038d3d">
-<span class="eqno">(1)<a class="headerlink" href="#equation-b0f5f1d2-b95c-49f2-90b3-548988038d3d" title="Permalink to this equation">#</a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-08213b9d-3c9c-4459-b498-4987a8451a78">
+<span class="eqno">(1)<a class="headerlink" href="#equation-08213b9d-3c9c-4459-b498-4987a8451a78" title="Permalink to this equation">#</a></span>\[\begin{align}
     \begin{split}
         y_i &amp;\sim \text{Binomial}(p_i, 30)\\
         p_i &amp;= \text{sigmoid}(\beta_0+\beta_1x_i)\\
@@ -658,6 +664,24 @@ In this context, <em>informativeness</em> refers to the relevance of the elicite
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="binomial_independent.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Binomial model</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../howto/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Contents</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               

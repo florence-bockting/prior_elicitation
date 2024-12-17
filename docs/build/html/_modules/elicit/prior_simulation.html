@@ -177,13 +177,19 @@
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.main.html">elicit.main module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.model_simulation.html">elicit.model_simulation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.optimization_process.html">elicit.optimization_process module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.prior_elicitation.html">elicit.prior_elicitation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.prior_simulation.html">elicit.prior_simulation module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.save_config.html">elicit.save_config module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.target_quantities.html">elicit.target_quantities module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../../introductory_example.html">Tutorials</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/index.html">Tutorials</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/binomial_independent.html">Binomial model with parametric priors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/binomial_joint.html">Binomial model with joint prior</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../howto/index.html">How-To</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../howto/expert_data.html">... specify the expert data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../howto/generative_model.html">... specify the generative model</a></li>
@@ -191,7 +197,7 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../explanation/index.html">Explanation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../explanation/prior_elicitation.html">* prior_elicitation function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../explanation/prior_elicitation.html">&gt; prior_elicitation function</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a></li>
@@ -430,32 +436,20 @@ document.write(`
         <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="c1"># loop over model parameter and initialize each hyperparameter</span>
-        <span class="k">for</span> <span class="n">model_param</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span>
-            <span class="nb">list</span><span class="p">(</span>
-                <span class="nb">set</span><span class="p">(</span><span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;model_parameters&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span>
-                    <span class="nb">set</span><span class="p">([</span><span class="s2">&quot;independence&quot;</span><span class="p">,</span> <span class="s2">&quot;no_params&quot;</span><span class="p">])</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
-        <span class="p">):</span>
-            <span class="n">get_hyp_dict</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;model_parameters&quot;</span><span class="p">][</span><span class="n">model_param</span><span class="p">][</span>
-                <span class="s2">&quot;hyperparams_dict&quot;</span>
-            <span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;model_parameters&quot;</span><span class="p">])):</span>
+            <span class="n">get_hyp_dict</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;model_parameters&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;hyperparams&quot;</span><span class="p">]</span>
 
             <span class="n">initialized_hyperparam</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
             <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">get_hyp_dict</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;initialization_settings&quot;</span><span class="p">][</span>
-                        <span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">initial_value</span> <span class="o">=</span> <span class="n">init_matrix_slice</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
-                    <span class="c1"># increase j</span>
-                    <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">initial_value</span> <span class="o">=</span> <span class="n">get_hyp_dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+                <span class="n">initial_value</span> <span class="o">=</span> <span class="n">init_matrix_slice</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="c1"># increase j</span>
+                <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
 
                 <span class="c1"># initialize hyperparameter</span>
                 <span class="n">initialized_hyperparam</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span>
-                    <span class="n">initial_value</span><span class="o">=</span><span class="n">initial_value</span><span class="p">,</span>
+                    <span class="n">initial_value</span><span class="o">=</span><span class="n">get_hyp_dict</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s2">&quot;constraint&quot;</span><span class="p">](</span><span class="n">initial_value</span><span class="p">),</span>
                     <span class="n">trainable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                    <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">get_hyp_dict</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="n">init_hyperparam_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">initialized_hyperparam</span><span class="p">)</span>
 
@@ -537,17 +531,9 @@ document.write(`
     <span class="p">):</span>
 
         <span class="n">priors</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
-            <span class="nb">sorted</span><span class="p">(</span>
-                <span class="nb">list</span><span class="p">(</span>
-                    <span class="nb">set</span><span class="p">(</span><span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;model_parameters&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span>
-                        <span class="nb">set</span><span class="p">([</span><span class="s2">&quot;independence&quot;</span><span class="p">,</span> <span class="s2">&quot;no_params&quot;</span><span class="p">])</span>
-                    <span class="p">)</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
-        <span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;model_parameters&quot;</span><span class="p">])):</span>
             <span class="c1"># get the prior distribution family as specified by the user</span>
-            <span class="n">prior_family</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;model_parameters&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="s2">&quot;family&quot;</span><span class="p">]</span>
+            <span class="n">prior_family</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;model_parameters&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;family&quot;</span><span class="p">]</span>
 
             <span class="c1"># sample from the prior distribution</span>
             <span class="n">priors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
@@ -567,23 +553,6 @@ document.write(`
         <span class="n">u</span> <span class="o">=</span> <span class="n">base_dist</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">B</span><span class="p">,</span> <span class="n">S</span><span class="p">))</span>
         <span class="c1"># apply transformation function to samples from base distr.</span>
         <span class="n">prior_samples</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">initialized_priors</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">condition</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-    <span class="c1"># scaling of prior distributions according to param_scaling</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">ground_truth</span><span class="p">:</span>
-        <span class="n">scaled_priors</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
-            <span class="nb">sorted</span><span class="p">(</span>
-                <span class="nb">list</span><span class="p">(</span>
-                    <span class="nb">set</span><span class="p">(</span><span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;model_parameters&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span>
-                        <span class="nb">set</span><span class="p">([</span><span class="s2">&quot;independence&quot;</span><span class="p">,</span> <span class="s2">&quot;no_params&quot;</span><span class="p">])</span>
-                    <span class="p">)</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
-        <span class="p">):</span>
-            <span class="n">factor</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;model_parameters&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="s2">&quot;param_scaling&quot;</span><span class="p">]</span>
-            <span class="n">scaled_priors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">factor</span><span class="p">)</span>
-
-        <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">scaled_priors</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="c1"># save results</span>
     <span class="n">saving_path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span>

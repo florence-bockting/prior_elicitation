@@ -181,13 +181,19 @@
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.main.html">elicit.main module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.model_simulation.html">elicit.model_simulation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.optimization_process.html">elicit.optimization_process module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/elicit.prior_elicitation.html">elicit.prior_elicitation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.prior_simulation.html">elicit.prior_simulation module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/elicit.save_config.html">elicit.save_config module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.target_quantities.html">elicit.target_quantities module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="introductory_example.html">Tutorials</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="tutorials/index.html">Tutorials</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/binomial_independent.html">Binomial model with parametric priors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/binomial_joint.html">Binomial model with joint prior</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="howto/index.html">How-To</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="howto/expert_data.html">... specify the expert data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="howto/generative_model.html">... specify the generative model</a></li>
@@ -195,7 +201,7 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="explanation/index.html">Explanation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="explanation/prior_elicitation.html">* prior_elicitation function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="explanation/prior_elicitation.html">&gt; prior_elicitation function</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
@@ -468,7 +474,7 @@ For visualization, <a class="reference external" href="https://matplotlib.org/">
 <summary class="sd-summary-title sd-card-header sd-bg-primary sd-bg-text-primary">
 <span class="sd-summary-text">Learning a joint, non-parametric prior for all model parameters</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
 <ol class="arabic simple">
-<li><p class="sd-card-text"><a class="reference internal" href="notebooks/binomial_joint.html"><span class="doc">Binomial model</span></a></p></li>
+<li><p class="sd-card-text"><span class="xref std std-doc">Binomial model</span></p></li>
 <li><p class="sd-card-text">Normal model (coming soon)</p></li>
 </ol>
 </div>
@@ -476,7 +482,7 @@ For visualization, <a class="reference external" href="https://matplotlib.org/">
 <summary class="sd-summary-title sd-card-header sd-bg-primary sd-bg-text-primary">
 <span class="sd-summary-text">Learning independent, parametric priors for each model parameter</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
 <ol class="arabic simple">
-<li><p class="sd-card-text"><a class="reference internal" href="notebooks/binomial_independent.html"><span class="doc">Binomial model</span></a></p></li>
+<li><p class="sd-card-text"><span class="xref std std-doc">Binomial model</span></p></li>
 <li><p class="sd-card-text">Poisson model (coming soon)</p></li>
 <li><p class="sd-card-text">Normal model (coming soon)</p></li>
 <li><p class="sd-card-text">Hierarchical model (coming soon)</p></li>
@@ -510,9 +516,9 @@ For visualization, <a class="reference external" href="https://matplotlib.org/">
 <li class="toctree-l2"><a class="reference internal" href="api/elicit.html">elicit package</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="introductory_example.html">Tutorials</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="introductory_example.html#learning-a-joint-non-parametric-prior">Learning a joint, non-parametric prior</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introductory_example.html#learning-independent-parametric-priors">Learning independent, parametric priors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/binomial_independent.html">Binomial model with parametric priors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/binomial_joint.html">Binomial model with joint prior</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="howto/index.html">How-To</a><ul>
@@ -522,7 +528,7 @@ For visualization, <a class="reference external" href="https://matplotlib.org/">
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="explanation/index.html">Explanation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="explanation/prior_elicitation.html">* prior_elicitation function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="explanation/prior_elicitation.html">&gt; prior_elicitation function</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>

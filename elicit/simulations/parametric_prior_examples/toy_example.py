@@ -6,18 +6,18 @@ import tensorflow_probability as tfp
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import pandas as pd
+import elicit.prior_elicitation as pe
 
-from elicit.main import prior_elicitation
+from elicit.main import run
 from elicit.user.generative_models import ToyModel
-from elicit.user.custom_functions import Normal_log
 from elicit.plotting import func
+from elicit.loss_functions import MMD_energy
 
 tfd = tfp.distributions
 
-normal_log = Normal_log()
 
 ground_truth = {
-    "mu": tfd.Normal(loc=170, scale=2),
+    "mu": tfd.Normal(loc=5, scale=2),
     "sigma": tfd.HalfNormal(scale=10.0),
 }
 
@@ -25,55 +25,75 @@ expert_data = pd.read_pickle(
     "elicit/simulations/parametric_prior_examples/expert_data/toy-example/elicited_statistics.pkl"
 )
 
-prior_elicitation(
-    model_parameters=dict(
-        mu=dict(
-            family=normal_log,
-            hyperparams_dict={
-                "mu_loc": tfd.Uniform(100.0, 300.0),
-                "log_mu_scale": tfd.Uniform(0.0, 5.0),
-            },
-            param_scaling=1.0,
+global_dict = pe.prior_elicitation(
+    generative_model=pe.generator(
+        model=ToyModel,
+        additional_model_args=dict(
+            N=200
+            )
         ),
-        sigma=dict(
+    model_parameters=[
+        pe.par(
+            name="mu",
+            family=tfd.Normal,
+            hyperparams=dict(
+                loc=pe.hyppar("mu0"),
+                scale=pe.hyppar("log_sigma0", lower=0)
+                )
+        ),
+        pe.par(
+            name="sigma",
             family=tfd.HalfNormal,
-            hyperparams_dict={"sigma_scale": tfd.Uniform(1.0, 50.0)},
-            param_scaling=1.0,
+            hyperparams=dict(
+                scale=pe.hyppar("log_sigma1", lower=0)
+                )
         ),
-        independence=None,
-    ),
-    expert_data=dict(
-        data=expert_data,
-        from_ground_truth=True,
-        simulator_specs = ground_truth,
-        samples_from_prior = 10000
-    ),
-    generative_model=dict(model=ToyModel, additional_model_args={"N": 200}),
-    target_quantities=dict(
-        ypred=dict(
+    ],
+    target_quantities=[
+        pe.tar(
+            name="ypred",
             elicitation_method="quantiles",
             quantiles_specs=(5, 25, 50, 75, 95),
-            loss_components="all",
+            loss=MMD_energy,
+            loss_weight=1.0
         )
+    ],
+    expert_data=pe.expert_input(
+        data=None,
+        from_ground_truth=True,
+        simulator_specs = ground_truth,
+        samples_from_prior = 10_000
     ),
-    optimization_settings=dict(optimizer_specs={"learning_rate": 0.1,
-                                                "clipnorm": 1.0}),
-    training_settings=dict(
+    optimization_settings=pe.optimizer(
+        optimizer_specs=dict(
+            learning_rate=0.01,
+            clipnorm=1.0
+            )
+        ),
+    training_settings=pe.train(
         method="parametric_prior",
         sim_id="toy_example",
-        warmup_initializations=50,
         seed=0,
-        view_ep=50,
-        epochs=10,
+        epochs=10,#400,
     ),
+    initialization_settings=pe.initializer(
+        method="random",
+        loss_quantile=0,
+        number_of_iterations=30,
+        hyppar=["mu0","log_sigma0","log_sigma1"],
+        radius=[2., 1., 3.],
+        mean=[0.,0.,0.]
+        )
 )
+
+
+run(global_dict)
 
 # %% RESULTS
 path = "elicit/results/parametric_prior/toy_example_0"
 
 # loss function
 func.plot_loss(path)
-
 
 # convergence
 func.plot_convergence(path)
