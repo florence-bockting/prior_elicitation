@@ -1,9 +1,9 @@
 **/__pycache__
+**/results/
 .spyproject/
 .vscode/
 docs/source/notebooks/elicit/
 elicit/simulations/LiDO_cluster/
-elicit/results/
 manuscript/
 docs/source/notebooks/books/normal_model.ipynb
 docs/source/notebooks/books/multilevel_model.ipynb
