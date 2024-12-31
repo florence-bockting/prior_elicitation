@@ -17,7 +17,7 @@ release = '0.0.1'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
-# 'sphinxemoji.sphinxemoji',  # Allows emojis in RST files
+
 extensions = [
     "sphinx.ext.autodoc",     # Support automatic documentation
     "sphinx.ext.autosummary",
@@ -28,7 +28,8 @@ extensions = [
     "numpydoc",                # Support NumPy style docstrings
     "myst_nb",                 # Compiling Jupyter Notebooks
     'sphinx.ext.autosectionlabel',  # References to files in local folders
-    "sphinx_design"
+    "sphinx_design",
+    'sphinxemoji.sphinxemoji'  # Allows emojis in RST files
 ]
 autoclass_content = 'both'
 
