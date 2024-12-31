@@ -10,6 +10,11 @@ import tensorflow_probability as tfp
 
 tfd = tfp.distributions
 
+def load_design_matrix_toy2(N, quants=[25,50,75]):
+    X = tf.cast(np.arange(N), tf.float32)
+    X_std = (X-tf.reduce_mean(X))/tf.math.reduce_std(X)
+    X_sel = tfp.stats.percentile(X_std, quants)
+    return X_sel
 
 def load_design_matrix_binomial(N):
     X = tf.range(1.0, N, 1.0)

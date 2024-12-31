@@ -167,39 +167,26 @@
 <li class="toctree-l4"><a class="reference internal" href="../../api/elicit.user.generative_models.html">elicit.user.generative_models module</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.configs.html">elicit.configs module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.elicitation_techniques.html">elicit.elicitation_techniques module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.expert_data.html">elicit.expert_data module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.helper_functions.html">elicit.helper_functions module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.initialization_methods.html">elicit.initialization_methods module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.logs_config.html">elicit.logs_config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.input_functions.html">elicit.input_functions module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.loss_computation.html">elicit.loss_computation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.loss_functions.html">elicit.loss_functions module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.main.html">elicit.main module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.model_simulation.html">elicit.model_simulation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.optimization_process.html">elicit.optimization_process module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.prior_elicitation.html">elicit.prior_elicitation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.prior_simulation.html">elicit.prior_simulation module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.save_config.html">elicit.save_config module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.target_quantities.html">elicit.target_quantities module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/index.html">Tutorials</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorials/binomial_independent.html">Binomial model with parametric priors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorials/binomial_joint.html">Binomial model with joint prior</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../howto/index.html">How-To</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../howto/expert_data.html">... specify the expert data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../howto/generative_model.html">... specify the generative model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../howto/target_quantities.html">... specify the target quantities &amp; elicitation techniques</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../explanation/index.html">Explanation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../explanation/prior_elicitation.html">&gt; prior_elicitation function</a></li>
-</ul>
-</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../howto/index.html">How-To</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../explanation/index.html">Explanation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a></li>
 </ul>
 
@@ -326,16 +313,17 @@ document.write(`
 <span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
 <span class="kn">import</span> <span class="nn">tensorflow_probability</span> <span class="k">as</span> <span class="nn">tfp</span>
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">elicit.logs_config</span> <span class="c1"># noqa</span>
+<span class="kn">import</span> <span class="nn">elicit</span> <span class="k">as</span> <span class="nn">el</span>
 
-<span class="kn">from</span> <span class="nn">elicit.helper_functions</span> <span class="kn">import</span> <span class="n">save_as_pkl</span> <span class="c1"># noqa</span>
+<span class="kn">from</span> <span class="nn">elicit.configs</span> <span class="kn">import</span> <span class="o">*</span>  <span class="c1"># noqa</span>
 
 <span class="n">tfd</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">distributions</span>
 
 
 <div class="viewcode-block" id="softmax_gumbel_trick">
 <a class="viewcode-back" href="../../api/elicit.model_simulation.html#elicit.model_simulation.softmax_gumbel_trick">[docs]</a>
-<span class="k">def</span> <span class="nf">softmax_gumbel_trick</span><span class="p">(</span><span class="n">model_simulations</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">softmax_gumbel_trick</span><span class="p">(</span><span class="n">epred</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">likelihood</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span>
+                         <span class="n">upper_thres</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">temp</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The softmax-gumbel trick computes a continuous approximation of ypred from</span>
 <span class="sd">    a discrete likelihood and thus allows for the computation of gradients for</span>
@@ -372,23 +360,21 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># set seed</span>
-    <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;seed&quot;</span><span class="p">])</span>
+    <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
     <span class="c1"># get batch size</span>
-    <span class="n">B</span> <span class="o">=</span> <span class="n">model_simulations</span><span class="p">[</span><span class="s2">&quot;epred&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">epred</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="c1"># get number of simulations from priors</span>
-    <span class="n">S</span> <span class="o">=</span> <span class="n">model_simulations</span><span class="p">[</span><span class="s2">&quot;epred&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">epred</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="c1"># get number of observations</span>
-    <span class="n">number_obs</span> <span class="o">=</span> <span class="n">model_simulations</span><span class="p">[</span><span class="s2">&quot;epred&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-    <span class="c1"># create subdictionaries for better readability</span>
-    <span class="n">dict_generator</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;generative_model&quot;</span><span class="p">]</span>
+    <span class="n">number_obs</span> <span class="o">=</span> <span class="n">epred</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
     <span class="c1"># constant outcome vector (including zero outcome)</span>
-    <span class="n">thres</span> <span class="o">=</span> <span class="n">dict_generator</span><span class="p">[</span><span class="s2">&quot;softmax_gumble_specs&quot;</span><span class="p">][</span><span class="s2">&quot;upper_threshold&quot;</span><span class="p">]</span>
+    <span class="n">thres</span> <span class="o">=</span> <span class="n">upper_thres</span>
     <span class="n">c</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">thres</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
     <span class="c1"># broadcast to shape (B, rep, outcome-length)</span>
     <span class="n">c_brct</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:],</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">number_obs</span><span class="p">,</span>
                                                             <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)))</span>
     <span class="c1"># compute pmf value</span>
-    <span class="n">pi</span> <span class="o">=</span> <span class="n">model_simulations</span><span class="p">[</span><span class="s2">&quot;likelihood&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">prob</span><span class="p">(</span><span class="n">c_brct</span><span class="p">)</span>
+    <span class="n">pi</span> <span class="o">=</span> <span class="n">likelihood</span><span class="o">.</span><span class="n">prob</span><span class="p">(</span><span class="n">c_brct</span><span class="p">)</span>
     <span class="c1"># prevent underflow</span>
     <span class="n">pi</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pi</span> <span class="o">&lt;</span> <span class="mf">1.8</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">),</span> <span class="mf">1.8</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">),</span> <span class="n">pi</span><span class="p">)</span>
     <span class="c1"># sample from uniform</span>
@@ -398,8 +384,7 @@ document.write(`
     <span class="c1"># softmax gumbel trick</span>
     <span class="n">w</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span>
         <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span>
-            <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">pi</span><span class="p">),</span> <span class="n">g</span><span class="p">),</span>
-            <span class="n">dict_generator</span><span class="p">[</span><span class="s2">&quot;softmax_gumble_specs&quot;</span><span class="p">][</span><span class="s2">&quot;temperature&quot;</span><span class="p">],</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">pi</span><span class="p">),</span> <span class="n">g</span><span class="p">),</span> <span class="n">temp</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="p">)</span>
     <span class="c1"># reparameterization/linear transformation</span>
@@ -437,14 +422,17 @@ document.write(`
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;simulate from generative model&quot;</span><span class="p">)</span>
 
     <span class="c1"># set seed</span>
-    <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;seed&quot;</span><span class="p">])</span>
+    <span class="n">seed</span><span class="o">=</span><span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;seed&quot;</span><span class="p">]</span>
+    <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
     <span class="c1"># create subdictionaries for better readability</span>
-    <span class="n">dict_generator</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;generative_model&quot;</span><span class="p">]</span>
+    <span class="n">dict_generator</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span>
     <span class="c1"># get model and initialize generative model</span>
-    <span class="n">GenerativeModel</span> <span class="o">=</span> <span class="n">dict_generator</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span>
+    <span class="n">GenerativeModel</span> <span class="o">=</span> <span class="n">dict_generator</span><span class="p">[</span><span class="s2">&quot;obj&quot;</span><span class="p">]</span>
     <span class="n">generative_model</span> <span class="o">=</span> <span class="n">GenerativeModel</span><span class="p">()</span>
     <span class="c1"># get model specific arguments (that are not prior samples)</span>
-    <span class="n">add_model_args</span> <span class="o">=</span> <span class="n">dict_generator</span><span class="p">[</span><span class="s2">&quot;additional_model_args&quot;</span><span class="p">]</span>
+    <span class="n">add_model_args</span> <span class="o">=</span> <span class="n">dict_generator</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">add_model_args</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;obj&quot;</span><span class="p">)</span>
+    <span class="n">add_model_args</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">]</span><span class="o">=</span><span class="n">seed</span>
     <span class="c1"># simulate from generator</span>
     <span class="k">if</span> <span class="n">add_model_args</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">model_simulations</span> <span class="o">=</span> <span class="n">generative_model</span><span class="p">(</span>
@@ -452,18 +440,13 @@ document.write(`
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">model_simulations</span> <span class="o">=</span> <span class="n">generative_model</span><span class="p">(</span><span class="n">ground_truth</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">)</span>
-
-    <span class="c1"># estimate gradients for discrete likelihood if necessary</span>
-    <span class="k">if</span> <span class="n">dict_generator</span><span class="p">[</span><span class="s2">&quot;discrete_likelihood&quot;</span><span class="p">]:</span>
-        <span class="n">model_simulations</span><span class="p">[</span><span class="s2">&quot;ypred&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">softmax_gumbel_trick</span><span class="p">(</span>
-            <span class="n">model_simulations</span><span class="p">,</span> <span class="n">global_dict</span>
-        <span class="p">)</span>
     <span class="c1"># save file in object</span>
     <span class="n">saving_path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">ground_truth</span><span class="p">:</span>
-        <span class="n">saving_path</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/expert&quot;</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/model_simulations.pkl&quot;</span>
-    <span class="n">save_as_pkl</span><span class="p">(</span><span class="n">model_simulations</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">saving_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ground_truth</span><span class="p">:</span>
+            <span class="n">saving_path</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/expert&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/model_simulations.pkl&quot;</span>
+        <span class="n">el</span><span class="o">.</span><span class="n">save_as_pkl</span><span class="p">(</span><span class="n">model_simulations</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">model_simulations</span></div>
 

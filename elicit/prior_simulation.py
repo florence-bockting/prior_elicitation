@@ -5,9 +5,9 @@
 import logging
 import tensorflow as tf
 import tensorflow_probability as tfp
-import elicit.logs_config # noqa
+import elicit as el
 
-from elicit.helper_functions import save_as_pkl
+from elicit.configs import *  # noqa
 
 tfd = tfp.distributions
 
@@ -97,31 +97,51 @@ def intialize_priors(global_dict, init_matrix_slice):
     tf.random.set_seed(global_dict["training_settings"]["seed"])
 
     if global_dict["training_settings"]["method"] == "parametric_prior":
-        # list for saving initialize hyperparameter values
-        init_hyperparam_list = []
 
-        # loop over model parameter and initialize each hyperparameter
-        for i in range(len(global_dict["model_parameters"])):
-            get_hyp_dict = global_dict["model_parameters"][i]["hyperparams"]
+        # create dict with all hyperparameters
+        hyp_dict = dict()
+        hp_keys=list()
+        param_names=list()
+        hp_names=list()
+        initialized_hyperparam = dict()
+        for i in range(len(global_dict["parameters"])):
+            hyp_dict[f"param{i}"] = global_dict["parameters"][i]["hyperparams"]
+            param_names += [global_dict["parameters"][i]["name"]]*len(global_dict["parameters"][i]["hyperparams"])
+            hp_keys += list(global_dict["parameters"][i]["hyperparams"].keys())
+            for j in range(len(global_dict["parameters"][i]["hyperparams"])):
+                current_key = list(global_dict["parameters"][i]["hyperparams"].keys())[j]
+                hp_names.append(global_dict["parameters"][i]["hyperparams"][current_key]["name"])
 
-            initialized_hyperparam = dict()
-            for name in get_hyp_dict:
-                initial_value = init_matrix_slice[get_hyp_dict[name]['name']]
+        checked_params=list()
+        for j, (i, hp_n, hp_k) in enumerate(zip(tf.unique(param_names).idx,
+                                 hp_names, hp_keys)):
 
+            hp_dict = global_dict["parameters"][i]["hyperparams"][hp_k]
+            
+            if hp_dict["shared"] and hp_dict["name"] in checked_params:
+                pass
+                #initialized_hyperparam[f"{hp_k}"] = initialized_hyperparam[f"{hp_k}"]
+            else:
+                # get initial value
+                initial_value = init_matrix_slice[hp_n]
                 # initialize hyperparameter
-                initialized_hyperparam[f"{name}"] = tf.Variable(
-                    initial_value=get_hyp_dict[name]["constraint"](initial_value),
+                initialized_hyperparam[f"{hp_k}_{hp_n}"] = tf.Variable(
+                    initial_value=hp_dict["constraint"](initial_value),
                     trainable=True,
-                    name=f"{get_hyp_dict[name]['name']}",
+                    name=f"{hp_n}",
                 )
-            init_hyperparam_list.append(initialized_hyperparam)
 
-        # save initialized priors
-        init_prior = init_hyperparam_list
-        # save file in object
-        output_path = global_dict["training_settings"]["output_path"]
-        path = output_path + "/init_hyperparameters.pkl"
-        save_as_pkl(init_prior, path)
+                # save initialized priors
+                init_prior = initialized_hyperparam
+                
+            if hp_dict["shared"]:
+                checked_params.append(hp_n)
+
+            # save file in object
+            if global_dict["training_settings"]["output_path"] is not None:
+                output_path = global_dict["training_settings"]["output_path"]
+                path = output_path + "/init_hyperparameters.pkl"
+                el.save_as_pkl(init_prior, path)
 
     if global_dict["training_settings"]["method"] == "deep_prior":
         # for more information see BayesFlow documentation
@@ -134,10 +154,12 @@ def intialize_priors(global_dict, init_matrix_slice):
 
         # save initialized priors
         init_prior = invertible_neural_network
+
         # save file in object
-        output_path = global_dict["training_settings"]["output_path"]
-        path = output_path + "/init_hyperparameters.pkl"
-        save_as_pkl(init_prior.trainable_variables, path)
+        if global_dict["training_settings"]["output_path"] is not None:
+            output_path = global_dict["training_settings"]["output_path"]
+            path = output_path + "/init_hyperparameters.pkl"
+            el.save_as_pkl(init_prior.trainable_variables, path)
 
     return init_prior
 
@@ -163,18 +185,19 @@ def sample_from_priors(initialized_priors, ground_truth, global_dict):
 
     """
     # extract variables from dict
-    S = global_dict["training_settings"]["samples_from_prior"]
+    S = global_dict["training_settings"]["num_samples"]
     B = global_dict["training_settings"]["B"]
     # set seed
     tf.random.set_seed(global_dict["training_settings"]["seed"])
 
     if ground_truth:
+
         # number of samples for ground truth
-        rep_true = global_dict["expert_data"]["samples_from_prior"]
+        rep_true = global_dict["expert"]["num_samples"]
         priors = []
 
         for prior in list(
-                global_dict["expert_data"]["simulator_specs"].values()
+                global_dict["expert"]["ground_truth"].values()
                 ):
             # sample from the prior distribution
             priors.append(prior.sample((1, rep_true)))
@@ -183,6 +206,8 @@ def sample_from_priors(initialized_priors, ground_truth, global_dict):
         # multivariate prior is used
         if type(priors[0]) is list:
             prior_samples = tf.concat(priors[0], axis=-1)
+        elif tf.rank(priors[0]) > 2:
+            prior_samples = tf.concat(priors, axis=-1)
         else:
             prior_samples = tf.stack(priors, axis=-1)
 
@@ -191,13 +216,20 @@ def sample_from_priors(initialized_priors, ground_truth, global_dict):
     ):
 
         priors = []
-        for i in range(len(global_dict["model_parameters"])):
+        for i in range(len(global_dict["parameters"])):
             # get the prior distribution family as specified by the user
-            prior_family = global_dict["model_parameters"][i]["family"]
+            prior_family = global_dict["parameters"][i]["family"]
 
+            hp_k=list(global_dict["parameters"][i]["hyperparams"].keys())
+            init_dict={}
+            for k in hp_k:
+                hp_n=global_dict["parameters"][i]["hyperparams"][k]["name"]
+                init_key = f"{k}_{hp_n}"
+                init_dict[f"{k}"]=initialized_priors[init_key]
+                
             # sample from the prior distribution
             priors.append(
-                prior_family(*initialized_priors[i].values()).sample((B, S))
+                prior_family(**init_dict).sample((B, S))
                 )
         # stack all prior distributions into one tf.Tensor of
         # shape (B, S, num_parameters)
@@ -216,10 +248,10 @@ def sample_from_priors(initialized_priors, ground_truth, global_dict):
 
     # save results
     saving_path = global_dict["training_settings"]["output_path"]
-
-    if ground_truth:
-        save_as_pkl(prior_samples, saving_path + "/expert/prior_samples.pkl")
-    else:
-        save_as_pkl(prior_samples, saving_path + "/prior_samples.pkl")
+    if saving_path is not None:
+        if ground_truth:
+            el.save_as_pkl(prior_samples, saving_path + "/expert/prior_samples.pkl")
+        else:
+            el.save_as_pkl(prior_samples, saving_path + "/prior_samples.pkl")
 
     return prior_samples

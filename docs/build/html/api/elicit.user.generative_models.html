@@ -47,7 +47,7 @@
     <link rel="icon" href="../_static/favicon-light.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="elicit.elicitation_techniques module" href="elicit.elicitation_techniques.html" />
+    <link rel="next" title="elicit.configs module" href="elicit.configs.html" />
     <link rel="prev" title="elicit.user.design_matrices module" href="elicit.user.design_matrices.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -168,39 +168,26 @@
 <li class="toctree-l4 current active"><a class="current reference internal" href="#">elicit.user.generative_models module</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.configs.html">elicit.configs module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.elicitation_techniques.html">elicit.elicitation_techniques module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.expert_data.html">elicit.expert_data module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.helper_functions.html">elicit.helper_functions module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.initialization_methods.html">elicit.initialization_methods module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="elicit.logs_config.html">elicit.logs_config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.input_functions.html">elicit.input_functions module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.loss_computation.html">elicit.loss_computation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.loss_functions.html">elicit.loss_functions module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.main.html">elicit.main module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.model_simulation.html">elicit.model_simulation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.optimization_process.html">elicit.optimization_process module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="elicit.prior_elicitation.html">elicit.prior_elicitation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.prior_simulation.html">elicit.prior_simulation module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="elicit.save_config.html">elicit.save_config module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.target_quantities.html">elicit.target_quantities module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorials/index.html">Tutorials</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../tutorials/binomial_independent.html">Binomial model with parametric priors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorials/binomial_joint.html">Binomial model with joint prior</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../howto/index.html">How-To</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../howto/expert_data.html">... specify the expert data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../howto/generative_model.html">... specify the generative model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../howto/target_quantities.html">... specify the target quantities &amp; elicitation techniques</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../explanation/index.html">Explanation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../explanation/prior_elicitation.html">&gt; prior_elicitation function</a></li>
-</ul>
-</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../howto/index.html">How-To</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explanation/index.html">Explanation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
 </ul>
 
@@ -369,6 +356,10 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.generative_models.ToyModel.__call__"><code class="docutils literal notranslate"><span class="pre">ToyModel.__call__()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.generative_models.ToyModel2"><code class="docutils literal notranslate"><span class="pre">ToyModel2</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.generative_models.ToyModel2.__call__"><code class="docutils literal notranslate"><span class="pre">ToyModel2.__call__()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.generative_models.BinomialModel"><code class="docutils literal notranslate"><span class="pre">BinomialModel</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.generative_models.BinomialModel.__call__"><code class="docutils literal notranslate"><span class="pre">BinomialModel.__call__()</span></code></a></li>
 </ul>
@@ -404,7 +395,19 @@ document.write(`
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.user.generative_models.ToyModel.__call__">
-<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/user/generative_models.html#ToyModel.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.user.generative_models.ToyModel.__call__" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/user/generative_models.html#ToyModel.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.user.generative_models.ToyModel.__call__" title="Link to this definition">#</a></dt>
+<dd><p>Call self as a function.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="elicit.user.generative_models.ToyModel2">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">elicit.user.generative_models.</span></span><span class="sig-name descname"><span class="pre">ToyModel2</span></span><a class="reference internal" href="../_modules/elicit/user/generative_models.html#ToyModel2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.user.generative_models.ToyModel2" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="elicit.user.generative_models.ToyModel2.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_matrix</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/user/generative_models.html#ToyModel2.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.user.generative_models.ToyModel2.__call__" title="Link to this definition">#</a></dt>
 <dd><p>Call self as a function.</p>
 </dd></dl>
 
@@ -416,7 +419,7 @@ document.write(`
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.user.generative_models.BinomialModel.__call__">
-<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_count</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/user/generative_models.html#BinomialModel.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.user.generative_models.BinomialModel.__call__" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_count</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_thres</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/user/generative_models.html#BinomialModel.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.user.generative_models.BinomialModel.__call__" title="Link to this definition">#</a></dt>
 <dd><p>Call self as a function.</p>
 </dd></dl>
 
@@ -558,11 +561,11 @@ predictor with three levels.</p>
       </div>
     </a>
     <a class="right-next"
-       href="elicit.elicitation_techniques.html"
+       href="elicit.configs.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">elicit.elicitation_techniques module</p>
+        <p class="prev-next-title">elicit.configs module</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -584,6 +587,10 @@ predictor with three levels.</p>
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.generative_models.ToyModel"><code class="docutils literal notranslate"><span class="pre">ToyModel</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.generative_models.ToyModel.__call__"><code class="docutils literal notranslate"><span class="pre">ToyModel.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.generative_models.ToyModel2"><code class="docutils literal notranslate"><span class="pre">ToyModel2</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.generative_models.ToyModel2.__call__"><code class="docutils literal notranslate"><span class="pre">ToyModel2.__call__()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.generative_models.BinomialModel"><code class="docutils literal notranslate"><span class="pre">BinomialModel</span></code></a><ul class="nav section-nav flex-column">

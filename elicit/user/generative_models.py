@@ -2,15 +2,17 @@
 #
 # noqa SPDX-License-Identifier: Apache-2.0
 
+import numpy as np
 import tensorflow as tf
 import tensorflow_probability as tfp
+import elicit as el
 
 tfd = tfp.distributions
 tfb = tfp.bijectors
 
 
 class ToyModel:
-    def __call__(self, ground_truth, prior_samples, N):
+    def __call__(self, ground_truth, prior_samples, N, **kwargs):
         # number of observations (intercept-only)
         X = tf.ones((1, N))
         # linear predictor (= mu)
@@ -27,10 +29,41 @@ class ToyModel:
             prior_samples=prior_samples
         )
 
+class ToyModel2:
+    def __call__(self, ground_truth, prior_samples, design_matrix,
+                 **kwargs):
+        B = prior_samples.shape[0]
+        S = prior_samples.shape[1]
+
+        # design matrix
+        X = tf.broadcast_to(design_matrix[None, None,:],
+                           (B,S,len(design_matrix)))
+        # linear predictor (= mu)
+        epred = tf.add(prior_samples[:, :, 0][:,:,None],
+                       tf.multiply(prior_samples[:, :, 1][:,:,None], X)
+                       )
+        # data-generating model
+        likelihood = tfd.Normal(
+            loc=epred, scale=tf.expand_dims(prior_samples[:, :, -1], -1)
+        )
+        # prior predictive distribution (=height)
+        ypred = likelihood.sample()
+        
+        # selected observations
+        y_X0 = ypred[:,:,0]
+        y_X1 = ypred[:,:,1]
+        y_X2 = ypred[:,:,2]
+        
+        return dict(
+            likelihood=likelihood,
+            ypred=ypred, epred=epred,
+            prior_samples=prior_samples,
+            y_X0=y_X0, y_X1=y_X1, y_X2=y_X2
+        )
 
 class BinomialModel(tf.Module):
     def __call__(self, ground_truth, prior_samples, design_matrix,
-                 total_count):
+                 total_count, upper_thres, temp, **kwargs):
 
         epred = prior_samples @ tf.transpose(design_matrix)
 
@@ -39,8 +72,11 @@ class BinomialModel(tf.Module):
         likelihood = tfd.Binomial(total_count=total_count,
                                   probs=probs[:, :, :, None])
 
+        ypred = el.softmax_gumbel_trick(epred, likelihood, upper_thres,
+                                        temp, **kwargs)
+
         return dict(
-            likelihood=likelihood, ypred=None, epred=epred,
+            likelihood=likelihood, ypred=ypred, epred=epred,
             prior_samples=prior_samples
         )
 

@@ -167,39 +167,26 @@
 <li class="toctree-l4"><a class="reference internal" href="../../api/elicit.user.generative_models.html">elicit.user.generative_models module</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.configs.html">elicit.configs module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.elicitation_techniques.html">elicit.elicitation_techniques module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.expert_data.html">elicit.expert_data module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.helper_functions.html">elicit.helper_functions module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.initialization_methods.html">elicit.initialization_methods module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.logs_config.html">elicit.logs_config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.input_functions.html">elicit.input_functions module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.loss_computation.html">elicit.loss_computation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.loss_functions.html">elicit.loss_functions module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.main.html">elicit.main module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.model_simulation.html">elicit.model_simulation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.optimization_process.html">elicit.optimization_process module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.prior_elicitation.html">elicit.prior_elicitation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.prior_simulation.html">elicit.prior_simulation module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.save_config.html">elicit.save_config module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.target_quantities.html">elicit.target_quantities module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/index.html">Tutorials</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorials/binomial_independent.html">Binomial model with parametric priors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorials/binomial_joint.html">Binomial model with joint prior</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../howto/index.html">How-To</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../howto/expert_data.html">... specify the expert data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../howto/generative_model.html">... specify the generative model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../howto/target_quantities.html">... specify the target quantities &amp; elicitation techniques</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../explanation/index.html">Explanation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../explanation/prior_elicitation.html">&gt; prior_elicitation function</a></li>
-</ul>
-</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../howto/index.html">How-To</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../explanation/index.html">Explanation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a></li>
 </ul>
 
@@ -326,19 +313,9 @@ document.write(`
 <span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
 <span class="kn">import</span> <span class="nn">tensorflow_probability</span> <span class="k">as</span> <span class="nn">tfp</span>
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">elicit</span> <span class="k">as</span> <span class="nn">el</span>
 
-<span class="kn">import</span> <span class="nn">elicit.save_config</span>
-<span class="kn">import</span> <span class="nn">elicit.logs_config</span> <span class="c1"># noqa</span>
-
-<span class="kn">from</span> <span class="nn">elicit.prior_simulation</span> <span class="kn">import</span> <span class="n">Priors</span>
-<span class="kn">from</span> <span class="nn">elicit.loss_computation</span> <span class="kn">import</span> <span class="n">compute_total_loss</span>
-<span class="kn">from</span> <span class="nn">elicit.optimization_process</span> <span class="kn">import</span> <span class="n">sgd_training</span>
-<span class="kn">from</span> <span class="nn">elicit.initialization_methods</span> <span class="kn">import</span> <span class="n">initialization_phase</span>
-<span class="kn">from</span> <span class="nn">elicit.expert_data</span> <span class="kn">import</span> <span class="n">get_expert_data</span>
-<span class="kn">from</span> <span class="nn">elicit.helper_functions</span> <span class="kn">import</span> <span class="n">save_as_pkl</span><span class="p">,</span> <span class="n">remove_unneeded_files</span>
-<span class="kn">from</span> <span class="nn">elicit.model_simulation</span> <span class="kn">import</span> <span class="n">simulate_from_generator</span>
-<span class="kn">from</span> <span class="nn">elicit.target_quantities</span> <span class="kn">import</span> <span class="n">computation_target_quantities</span>
-<span class="kn">from</span> <span class="nn">elicit.elicitation_techniques</span> <span class="kn">import</span> <span class="n">computation_elicited_statistics</span>
+<span class="kn">from</span> <span class="nn">elicit.configs</span> <span class="kn">import</span> <span class="o">*</span>  <span class="c1"># noqa</span>
 
 <span class="n">tfd</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">distributions</span>
 
@@ -372,19 +349,19 @@ document.write(`
     <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">prior_model</span><span class="p">()</span>
     <span class="c1"># simulate prior predictive distribution based on prior samples</span>
     <span class="c1"># and generative model</span>
-    <span class="n">model_simulations</span> <span class="o">=</span> <span class="n">simulate_from_generator</span><span class="p">(</span>
+    <span class="n">model_simulations</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">simulate_from_generator</span><span class="p">(</span>
         <span class="n">prior_samples</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="c1"># compute the target quantities</span>
-    <span class="n">target_quantities</span> <span class="o">=</span> <span class="n">computation_target_quantities</span><span class="p">(</span>
+    <span class="n">target_quantities</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">computation_target_quantities</span><span class="p">(</span>
         <span class="n">model_simulations</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">global_dict</span>
     <span class="p">)</span>
     <span class="c1"># compute the elicited statistics by applying a specific elicitation</span>
     <span class="c1"># method on the target quantities</span>
-    <span class="n">elicited_statistics</span> <span class="o">=</span> <span class="n">computation_elicited_statistics</span><span class="p">(</span>
+    <span class="n">elicited_statistics</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">computation_elicited_statistics</span><span class="p">(</span>
         <span class="n">target_quantities</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">global_dict</span>
     <span class="p">)</span>
-    <span class="k">return</span> <span class="n">elicited_statistics</span></div>
+    <span class="k">return</span> <span class="n">elicited_statistics</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">,</span> <span class="n">model_simulations</span><span class="p">,</span> <span class="n">target_quantities</span></div>
 
 
 
@@ -397,10 +374,10 @@ document.write(`
 
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Pre-training phase (only first run)&quot;</span><span class="p">)</span>
 
-        <span class="n">loss_list</span><span class="p">,</span> <span class="n">init_prior</span> <span class="o">=</span> <span class="n">initialization_phase</span><span class="p">(</span>
+        <span class="n">loss_list</span><span class="p">,</span> <span class="n">init_prior</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">initialization_phase</span><span class="p">(</span>
             <span class="n">expert_elicited_statistics</span><span class="p">,</span>
             <span class="n">one_forward_simulation</span><span class="p">,</span>
-            <span class="n">compute_total_loss</span><span class="p">,</span>
+            <span class="n">el</span><span class="o">.</span><span class="n">compute_total_loss</span><span class="p">,</span>
             <span class="n">global_dict</span><span class="p">,</span>
         <span class="p">)</span>
 
@@ -413,7 +390,7 @@ document.write(`
         <span class="n">init_prior_model</span> <span class="o">=</span> <span class="n">init_prior</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">index</span><span class="p">)]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># prepare generative model</span>
-        <span class="n">init_prior_model</span> <span class="o">=</span> <span class="n">Priors</span><span class="p">(</span><span class="n">global_dict</span><span class="o">=</span><span class="n">global_dict</span><span class="p">,</span>
+        <span class="n">init_prior_model</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">Priors</span><span class="p">(</span><span class="n">global_dict</span><span class="o">=</span><span class="n">global_dict</span><span class="p">,</span>
                                   <span class="n">ground_truth</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                   <span class="n">init_matrix_slice</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 
@@ -421,39 +398,125 @@ document.write(`
 
 
 
-<div class="viewcode-block" id="run">
-<a class="viewcode-back" href="../../api/elicit.main.html#elicit.main.run">[docs]</a>
-<span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">global_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<div class="viewcode-block" id="Elicit">
+<a class="viewcode-back" href="../../api/elicit.main.html#elicit.main.Elicit">[docs]</a>
+<span class="k">class</span> <span class="nc">Elicit</span><span class="p">:</span>
 
-    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<div class="viewcode-block" id="Elicit.__init__">
+<a class="viewcode-back" href="../../api/elicit.main.html#elicit.main.Elicit.__init__">[docs]</a>
+   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+        <span class="n">model</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span>
+        <span class="n">parameters</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+        <span class="n">target_quantities</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+        <span class="n">expert</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span>
+        <span class="n">training_settings</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span>
+        <span class="n">optimization_settings</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span>
+        <span class="n">normalizing_flow</span><span class="p">:</span> <span class="nb">callable</span> <span class="ow">or</span> <span class="kc">None</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">initialization_settings</span><span class="p">:</span> <span class="nb">callable</span> <span class="ow">or</span> <span class="kc">None</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model : callable</span>
+<span class="sd">            specification of generative model using</span>
+<span class="sd">            :func:`elicit.prior_elicitation.generator`.</span>
+<span class="sd">        parameter : list</span>
+<span class="sd">            list of model parameters specified with</span>
+<span class="sd">            :func:`elicit.prior_elicitation.par`.</span>
+<span class="sd">        target_quantities : list</span>
+<span class="sd">            list of target quantities specified with</span>
+<span class="sd">            :func:`elicit.prior_elicitation.tar`.</span>
+<span class="sd">        expert : callable</span>
+<span class="sd">            specification of input data from expert or oracle using</span>
+<span class="sd">            :func:`el.expert.data` or func:`el.expert.simulate`</span>
+<span class="sd">        training_settings : callable</span>
+<span class="sd">            specification of training settings for learning prior distribution(s)</span>
+<span class="sd">            using :func:`elicit.prior_elicitation.train`</span>
+<span class="sd">        optimization_settings : callable</span>
+<span class="sd">            specification of optimizer using</span>
+<span class="sd">            :func:`elicit.prior_elicitation.optimizer`.</span>
+<span class="sd">        normalizing_flow : callable or None</span>
+<span class="sd">            specification of normalizing flow using :func:`elicit.prior_elicitation.nf`.</span>
+<span class="sd">            Only required for ``deep_prior`` method is used. If </span>
+<span class="sd">            ``parametric_prior`` is used this argument should be ``None``. Default</span>
+<span class="sd">            value is None.</span>
+<span class="sd">        initialization_settings : callable</span>
+<span class="sd">            specification of initialization settings using</span>
+<span class="sd">            :func:`elicit.prior_elicitation.initializer`. For method</span>
+<span class="sd">            &#39;parametric_prior&#39; the argument should be None. Default value is None.</span>
 
-    <span class="c1"># create saving path</span>
-    <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span>
-        <span class="s2">&quot;output_path&quot;</span>
-    <span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;./elicit/</span><span class="si">{</span><span class="n">global_dict</span><span class="p">[</span><span class="s1">&#39;training_settings&#39;</span><span class="p">][</span><span class="s1">&#39;output_path&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">global_dict</span><span class="p">[</span><span class="s1">&#39;training_settings&#39;</span><span class="p">][</span><span class="s1">&#39;method&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">global_dict</span><span class="p">[</span><span class="s1">&#39;training_settings&#39;</span><span class="p">][</span><span class="s1">&#39;sim_id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">global_dict</span><span class="p">[</span><span class="s1">&#39;training_settings&#39;</span><span class="p">][</span><span class="s1">&#39;seed&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>  <span class="c1"># noqa</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        global_dict : dict</span>
+<span class="sd">            specification of all settings to run the optimization procedure.</span>
 
-    <span class="c1"># set seed</span>
-    <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;seed&quot;</span><span class="p">])</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span>
+            <span class="n">target_quantities</span><span class="o">=</span><span class="n">target_quantities</span><span class="p">,</span>
+            <span class="n">expert</span><span class="o">=</span><span class="n">expert</span><span class="p">,</span>
+            <span class="n">training_settings</span><span class="o">=</span><span class="n">training_settings</span><span class="p">,</span>
+            <span class="n">optimization_settings</span><span class="o">=</span><span class="n">optimization_settings</span><span class="p">,</span>
+            <span class="n">normalizing_flow</span><span class="o">=</span><span class="n">normalizing_flow</span><span class="p">,</span>
+            <span class="n">initialization_settings</span><span class="o">=</span><span class="n">initialization_settings</span><span class="p">,</span>
+            <span class="p">)</span></div>
 
-    <span class="c1"># get expert data</span>
-    <span class="n">expert_elicited_statistics</span> <span class="o">=</span> <span class="n">get_expert_data</span><span class="p">(</span>
-        <span class="n">global_dict</span><span class="p">,</span>
-        <span class="n">one_forward_simulation</span><span class="p">)</span>
 
-    <span class="n">init_prior_model</span> <span class="o">=</span> <span class="n">pre_training</span><span class="p">(</span><span class="n">global_dict</span><span class="p">,</span> <span class="n">expert_elicited_statistics</span><span class="p">)</span>
 
-    <span class="c1"># run dag with optimal set of initial values</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Training Phase (only first epoch)&quot;</span><span class="p">)</span>
-    <span class="n">sgd_training</span><span class="p">(</span>
-        <span class="n">expert_elicited_statistics</span><span class="p">,</span>
-        <span class="n">init_prior_model</span><span class="p">,</span>
-        <span class="n">one_forward_simulation</span><span class="p">,</span>
-        <span class="n">compute_total_loss</span><span class="p">,</span>
-        <span class="n">global_dict</span>
-    <span class="p">)</span>
+<div class="viewcode-block" id="Elicit.train">
+<a class="viewcode-back" href="../../api/elicit.main.html#elicit.main.Elicit.train">[docs]</a>
+   <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_file</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
-    <span class="c1"># remove saved files that are not of interest for follow-up analysis</span>
-    <span class="n">remove_unneeded_files</span><span class="p">(</span><span class="n">global_dict</span><span class="p">,</span> <span class="n">elicit</span><span class="o">.</span><span class="n">save_config</span><span class="o">.</span><span class="n">save_results</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="n">save_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># create saving path</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span>
+                <span class="s2">&quot;output_path&quot;</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;./elicit/</span><span class="si">{</span><span class="n">save_file</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;training_settings&#39;</span><span class="p">][</span><span class="s1">&#39;method&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;training_settings&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;training_settings&#39;</span><span class="p">][</span><span class="s1">&#39;seed&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>  <span class="c1"># noqa</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># set seed</span>
+        <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;seed&quot;</span><span class="p">])</span>
+
+        <span class="c1"># get expert data</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;expert&quot;</span><span class="p">][</span><span class="s2">&quot;ground_truth&quot;</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">expert_elicits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;expert&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">expert_elicits</span><span class="p">,</span> <span class="n">expert_prior</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">get_expert_data</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">,</span>
+                <span class="n">one_forward_simulation</span><span class="p">)</span>
+
+        <span class="c1"># initialization of hyperparameter</span>
+        <span class="n">init_prior_model</span> <span class="o">=</span> <span class="n">pre_training</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">,</span> <span class="n">expert_elicits</span><span class="p">)</span>
+
+        <span class="c1"># run dag with optimal set of initial values</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Training Phase (only first epoch)&quot;</span><span class="p">)</span>
+        <span class="n">res_ep</span><span class="p">,</span> <span class="n">res</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">sgd_training</span><span class="p">(</span>
+            <span class="n">expert_elicits</span><span class="p">,</span>
+            <span class="n">init_prior_model</span><span class="p">,</span>
+            <span class="n">one_forward_simulation</span><span class="p">,</span>
+            <span class="n">el</span><span class="o">.</span><span class="n">compute_total_loss</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span>
+        <span class="p">)</span>
+
+        <span class="n">res</span><span class="p">[</span><span class="s2">&quot;expert_elicited_statistics&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">expert_elicits</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;expert&quot;</span><span class="p">][</span><span class="s2">&quot;ground_truth&quot;</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">res</span><span class="p">[</span><span class="s2">&quot;expert_prior_samples&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">expert_prior</span>
+
+        <span class="c1"># remove saved files that are not of interest for follow-up analysis</span>
+        <span class="k">if</span> <span class="n">save_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">el</span><span class="o">.</span><span class="n">remove_unneeded_files</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">,</span> <span class="n">save_results</span><span class="p">)</span>  <span class="c1"># noqa</span>
+
+        <span class="k">return</span> <span class="n">res_ep</span><span class="p">,</span> <span class="n">res</span></div>
+</div>
 
 </pre></div>
 

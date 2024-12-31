@@ -5,11 +5,11 @@
 import tensorflow_probability as tfp
 import bayesflow as bf
 import inspect
-import pandas as pd
 import logging
-import elicit.logs_config # noqa
+import pandas as pd
+import elicit as el
 
-from elicit.helper_functions import save_as_pkl
+from elicit.configs import *  # noqa
 from elicit.user.custom_functions import custom_correlation
 
 tfd = tfp.distributions
@@ -109,10 +109,10 @@ def computation_target_quantities(model_simulations, ground_truth,
         if tar["name"] == "correlation":
             target_quantity = model_simulations["prior_samples"]
         elif (
-            tar["custom_target_function"] is not None
+            tar["target_method"] is not None
         ):
             target_quantity = use_custom_functions(
-                tar["custom_target_function"],
+                tar["target_method"],
                 model_simulations,
                 global_dict,
             )
@@ -124,9 +124,10 @@ def computation_target_quantities(model_simulations, ground_truth,
 
     # save file in object
     saving_path = global_dict["training_settings"]["output_path"]
-    if ground_truth:
-        saving_path = saving_path + "/expert"
-    path = saving_path + "/target_quantities.pkl"
-    save_as_pkl(targets_res, path)
-    # return results
+    if global_dict["training_settings"]["output_path"] is not None:
+        if ground_truth:
+            saving_path = saving_path + "/expert"
+        path = saving_path + "/target_quantities.pkl"
+        el.save_as_pkl(targets_res, path)
+        # return results
     return targets_res

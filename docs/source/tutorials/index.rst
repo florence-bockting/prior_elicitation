@@ -1,11 +1,6 @@
-Contents
+Tutorials
 ========
 
-.. toctree::
-   :maxdepth: 1
-
-   Tutorials
-
-   Binomial model with parametric priors <binomial_independent>
-   Binomial model with joint prior <binomial_joint>
+* Intro parametric priors |:book:| :doc:`Toymodel2`
+* Intro deep prior (ToDo)
 

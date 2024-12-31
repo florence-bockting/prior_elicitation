@@ -167,39 +167,26 @@
 <li class="toctree-l4"><a class="reference internal" href="api/elicit.user.generative_models.html">elicit.user.generative_models module</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3"><a class="reference internal" href="api/elicit.configs.html">elicit.configs module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.elicitation_techniques.html">elicit.elicitation_techniques module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.expert_data.html">elicit.expert_data module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.helper_functions.html">elicit.helper_functions module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.initialization_methods.html">elicit.initialization_methods module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/elicit.logs_config.html">elicit.logs_config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/elicit.input_functions.html">elicit.input_functions module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.loss_computation.html">elicit.loss_computation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.loss_functions.html">elicit.loss_functions module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.main.html">elicit.main module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.model_simulation.html">elicit.model_simulation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.optimization_process.html">elicit.optimization_process module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/elicit.prior_elicitation.html">elicit.prior_elicitation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.prior_simulation.html">elicit.prior_simulation module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/elicit.save_config.html">elicit.save_config module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.target_quantities.html">elicit.target_quantities module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="tutorials/index.html">Tutorials</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/binomial_independent.html">Binomial model with parametric priors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/binomial_joint.html">Binomial model with joint prior</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="howto/index.html">How-To</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="howto/expert_data.html">... specify the expert data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="howto/generative_model.html">... specify the generative model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="howto/target_quantities.html">... specify the target quantities &amp; elicitation techniques</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="explanation/index.html">Explanation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="explanation/prior_elicitation.html">&gt; prior_elicitation function</a></li>
-</ul>
-</details></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="howto/index.html">How-To</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explanation/index.html">Explanation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
 </ul>
 
@@ -367,6 +354,8 @@ document.write(`
 </li>
         <li><a href="api/elicit.user.generative_models.html#elicit.user.generative_models.ToyModel.__call__">(elicit.user.generative_models.ToyModel method)</a>
 </li>
+        <li><a href="api/elicit.user.generative_models.html#elicit.user.generative_models.ToyModel2.__call__">(elicit.user.generative_models.ToyModel2 method)</a>
+</li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -376,6 +365,8 @@ document.write(`
         <li><a href="api/elicit.helper_functions.html#elicit.helper_functions.LowerBound.__init__">(elicit.helper_functions.LowerBound method)</a>
 </li>
         <li><a href="api/elicit.helper_functions.html#elicit.helper_functions.UpperBound.__init__">(elicit.helper_functions.UpperBound method)</a>
+</li>
+        <li><a href="api/elicit.main.html#elicit.main.Elicit.__init__">(elicit.main.Elicit method)</a>
 </li>
         <li><a href="api/elicit.prior_simulation.html#elicit.prior_simulation.Priors.__init__">(elicit.prior_simulation.Priors method)</a>
 </li>
@@ -416,6 +407,8 @@ document.write(`
 </li>
       <li><a href="api/elicit.helper_functions.html#elicit.helper_functions.create_output_summary">create_output_summary() (in module elicit.helper_functions)</a>
 </li>
+      <li><a href="api/elicit.input_functions.html#elicit.input_functions.ElicitationMethod.custom">custom() (elicit.input_functions.ElicitationMethod method)</a>
+</li>
       <li><a href="api/elicit.user.custom_functions.html#elicit.user.custom_functions.custom_correlation">custom_correlation() (in module elicit.user.custom_functions)</a>
 </li>
       <li><a href="api/elicit.user.custom_functions.html#elicit.user.custom_functions.custom_groups">custom_groups() (in module elicit.user.custom_functions)</a>
@@ -426,6 +419,8 @@ document.write(`
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/elicit.input_functions.html#elicit.input_functions.Expert.data">data() (elicit.input_functions.Expert method)</a>
+</li>
       <li><a href="api/elicit.loss_functions.html#elicit.loss_functions.MmdEnergy.distances">distances() (elicit.loss_functions.MmdEnergy method)</a>
 </li>
   </ul></td>
@@ -445,6 +440,15 @@ document.write(`
 
       <ul>
         <li><a href="api/elicit.html#module-elicit">module</a>
+</li>
+      </ul></li>
+      <li><a href="api/elicit.main.html#elicit.main.Elicit">Elicit (class in elicit.main)</a>
+</li>
+      <li>
+    elicit.configs
+
+      <ul>
+        <li><a href="api/elicit.configs.html#module-elicit.configs">module</a>
 </li>
       </ul></li>
       <li>
@@ -476,10 +480,10 @@ document.write(`
 </li>
       </ul></li>
       <li>
-    elicit.logs_config
+    elicit.input_functions
 
       <ul>
-        <li><a href="api/elicit.logs_config.html#module-elicit.logs_config">module</a>
+        <li><a href="api/elicit.input_functions.html#module-elicit.input_functions">module</a>
 </li>
       </ul></li>
       <li>
@@ -496,6 +500,8 @@ document.write(`
         <li><a href="api/elicit.loss_functions.html#module-elicit.loss_functions">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     elicit.main
 
@@ -510,8 +516,6 @@ document.write(`
         <li><a href="api/elicit.model_simulation.html#module-elicit.model_simulation">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     elicit.optimization_process
 
@@ -520,24 +524,10 @@ document.write(`
 </li>
       </ul></li>
       <li>
-    elicit.prior_elicitation
-
-      <ul>
-        <li><a href="api/elicit.prior_elicitation.html#module-elicit.prior_elicitation">module</a>
-</li>
-      </ul></li>
-      <li>
     elicit.prior_simulation
 
       <ul>
         <li><a href="api/elicit.prior_simulation.html#module-elicit.prior_simulation">module</a>
-</li>
-      </ul></li>
-      <li>
-    elicit.save_config
-
-      <ul>
-        <li><a href="api/elicit.save_config.html#module-elicit.save_config">module</a>
 </li>
       </ul></li>
       <li>
@@ -575,7 +565,9 @@ document.write(`
         <li><a href="api/elicit.user.generative_models.html#module-elicit.user.generative_models">module</a>
 </li>
       </ul></li>
-      <li><a href="api/elicit.prior_elicitation.html#elicit.prior_elicitation.expert_input">expert_input() (in module elicit.prior_elicitation)</a>
+      <li><a href="api/elicit.input_functions.html#elicit.input_functions.ElicitationMethod">ElicitationMethod (class in elicit.input_functions)</a>
+</li>
+      <li><a href="api/elicit.input_functions.html#elicit.input_functions.Expert">Expert (class in elicit.input_functions)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -601,8 +593,6 @@ document.write(`
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/elicit.prior_elicitation.html#elicit.prior_elicitation.generator">generator() (in module elicit.prior_elicitation)</a>
-</li>
       <li><a href="api/elicit.expert_data.html#elicit.expert_data.get_expert_data">get_expert_data() (in module elicit.expert_data)</a>
 </li>
   </ul></td>
@@ -615,7 +605,7 @@ document.write(`
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/elicit.prior_elicitation.html#elicit.prior_elicitation.hyppar">hyppar() (in module elicit.prior_elicitation)</a>
+      <li><a href="api/elicit.input_functions.html#elicit.input_functions.hyper">hyper() (in module elicit.input_functions)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -623,16 +613,22 @@ document.write(`
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/elicit.helper_functions.html#elicit.helper_functions.identity">identity() (in module elicit.helper_functions)</a>
+      <li><a href="api/elicit.input_functions.html#elicit.input_functions.ElicitationMethod.identity">identity() (elicit.input_functions.ElicitationMethod method)</a>
+
+      <ul>
+        <li><a href="api/elicit.helper_functions.html#elicit.helper_functions.identity">(in module elicit.helper_functions)</a>
 </li>
+      </ul></li>
       <li><a href="api/elicit.initialization_methods.html#elicit.initialization_methods.init_method">init_method() (in module elicit.initialization_methods)</a>
+</li>
+      <li><a href="api/elicit.input_functions.html#elicit.input_functions.init_specs">init_specs() (in module elicit.input_functions)</a>
 </li>
       <li><a href="api/elicit.initialization_methods.html#elicit.initialization_methods.initialization_phase">initialization_phase() (in module elicit.initialization_methods)</a>
 </li>
-      <li><a href="api/elicit.prior_elicitation.html#elicit.prior_elicitation.initializer">initializer() (in module elicit.prior_elicitation)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/elicit.input_functions.html#elicit.input_functions.initializer">initializer() (in module elicit.input_functions)</a>
+</li>
       <li><a href="api/elicit.prior_simulation.html#elicit.prior_simulation.intialize_priors">intialize_priors() (in module elicit.prior_simulation)</a>
 </li>
       <li><a href="api/elicit.helper_functions.html#elicit.helper_functions.DoubleBound.inv_logit">inv_logit() (elicit.helper_functions.DoubleBound method)</a>
@@ -665,11 +661,13 @@ document.write(`
 </li>
       <li><a href="api/elicit.user.design_matrices.html#elicit.user.design_matrices.load_design_matrix_binomial2">load_design_matrix_binomial2() (in module elicit.user.design_matrices)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/elicit.user.design_matrices.html#elicit.user.design_matrices.load_design_matrix_normal">load_design_matrix_normal() (in module elicit.user.design_matrices)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/elicit.user.design_matrices.html#elicit.user.design_matrices.load_design_matrix_poisson">load_design_matrix_poisson() (in module elicit.user.design_matrices)</a>
+</li>
+      <li><a href="api/elicit.user.design_matrices.html#elicit.user.design_matrices.load_design_matrix_toy2">load_design_matrix_toy2() (in module elicit.user.design_matrices)</a>
 </li>
       <li><a href="api/elicit.helper_functions.html#elicit.helper_functions.DoubleBound.logit">logit() (elicit.helper_functions.DoubleBound method)</a>
 </li>
@@ -685,11 +683,15 @@ document.write(`
 </li>
       <li><a href="api/elicit.loss_functions.html#elicit.loss_functions.MmdEnergy">MmdEnergy (class in elicit.loss_functions)</a>
 </li>
+      <li><a href="api/elicit.input_functions.html#elicit.input_functions.model">model() (in module elicit.input_functions)</a>
+</li>
       <li>
     module
 
       <ul>
         <li><a href="api/elicit.html#module-elicit">elicit</a>
+</li>
+        <li><a href="api/elicit.configs.html#module-elicit.configs">elicit.configs</a>
 </li>
         <li><a href="api/elicit.elicitation_techniques.html#module-elicit.elicitation_techniques">elicit.elicitation_techniques</a>
 </li>
@@ -699,7 +701,7 @@ document.write(`
 </li>
         <li><a href="api/elicit.initialization_methods.html#module-elicit.initialization_methods">elicit.initialization_methods</a>
 </li>
-        <li><a href="api/elicit.logs_config.html#module-elicit.logs_config">elicit.logs_config</a>
+        <li><a href="api/elicit.input_functions.html#module-elicit.input_functions">elicit.input_functions</a>
 </li>
         <li><a href="api/elicit.loss_computation.html#module-elicit.loss_computation">elicit.loss_computation</a>
 </li>
@@ -711,11 +713,7 @@ document.write(`
 </li>
         <li><a href="api/elicit.optimization_process.html#module-elicit.optimization_process">elicit.optimization_process</a>
 </li>
-        <li><a href="api/elicit.prior_elicitation.html#module-elicit.prior_elicitation">elicit.prior_elicitation</a>
-</li>
         <li><a href="api/elicit.prior_simulation.html#module-elicit.prior_simulation">elicit.prior_simulation</a>
-</li>
-        <li><a href="api/elicit.save_config.html#module-elicit.save_config">elicit.save_config</a>
 </li>
         <li><a href="api/elicit.target_quantities.html#module-elicit.target_quantities">elicit.target_quantities</a>
 </li>
@@ -734,7 +732,7 @@ document.write(`
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/elicit.prior_elicitation.html#elicit.prior_elicitation.nf">nf() (in module elicit.prior_elicitation)</a>
+      <li><a href="api/elicit.input_functions.html#elicit.input_functions.nf">nf() (in module elicit.input_functions)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -752,7 +750,7 @@ document.write(`
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/elicit.prior_elicitation.html#elicit.prior_elicitation.optimizer">optimizer() (in module elicit.prior_elicitation)</a>
+      <li><a href="api/elicit.input_functions.html#elicit.input_functions.optimizer">optimizer() (in module elicit.input_functions)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -760,17 +758,15 @@ document.write(`
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/elicit.prior_elicitation.html#elicit.prior_elicitation.par">par() (in module elicit.prior_elicitation)</a>
+      <li><a href="api/elicit.input_functions.html#elicit.input_functions.parameter">parameter() (in module elicit.input_functions)</a>
 </li>
       <li><a href="api/elicit.user.generative_models.html#elicit.user.generative_models.PoissonModel">PoissonModel (class in elicit.user.generative_models)</a>
 </li>
-      <li><a href="api/elicit.main.html#elicit.main.pre_training">pre_training() (in module elicit.main)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/elicit.helper_functions.html#elicit.helper_functions.print_res_summary">print_res_summary() (in module elicit.helper_functions)</a>
+      <li><a href="api/elicit.main.html#elicit.main.pre_training">pre_training() (in module elicit.main)</a>
 </li>
-      <li><a href="api/elicit.prior_elicitation.html#elicit.prior_elicitation.prior_elicitation">prior_elicitation() (in module elicit.prior_elicitation)</a>
+      <li><a href="api/elicit.helper_functions.html#elicit.helper_functions.print_res_summary">print_res_summary() (in module elicit.helper_functions)</a>
 </li>
       <li><a href="api/elicit.prior_simulation.html#elicit.prior_simulation.Priors">Priors (class in elicit.prior_simulation)</a>
 </li>
@@ -779,6 +775,10 @@ document.write(`
 
 <h2 id="Q">Q</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/elicit.input_functions.html#elicit.input_functions.ElicitationMethod.quantiles">quantiles() (elicit.input_functions.ElicitationMethod method)</a>
+</li>
+  </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/elicit.user.custom_functions.html#elicit.user.custom_functions.quantiles_per_ypred">quantiles_per_ypred() (in module elicit.user.custom_functions)</a>
 </li>
@@ -789,10 +789,6 @@ document.write(`
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/elicit.helper_functions.html#elicit.helper_functions.remove_unneeded_files">remove_unneeded_files() (in module elicit.helper_functions)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/elicit.main.html#elicit.main.run">run() (in module elicit.main)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -812,11 +808,11 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/elicit.optimization_process.html#elicit.optimization_process.sgd_training">sgd_training() (in module elicit.optimization_process)</a>
 </li>
+      <li><a href="api/elicit.input_functions.html#elicit.input_functions.Expert.simulate">simulate() (elicit.input_functions.Expert method)</a>
+</li>
       <li><a href="api/elicit.model_simulation.html#elicit.model_simulation.simulate_from_generator">simulate_from_generator() (in module elicit.model_simulation)</a>
 </li>
       <li><a href="api/elicit.model_simulation.html#elicit.model_simulation.softmax_gumbel_trick">softmax_gumbel_trick() (in module elicit.model_simulation)</a>
-</li>
-      <li><a href="api/elicit.prior_elicitation.html#elicit.prior_elicitation.softmax_gumble_specs">softmax_gumble_specs() (in module elicit.prior_elicitation)</a>
 </li>
       <li><a href="api/elicit.loss_functions.html#elicit.loss_functions.MmdEnergy.squared_distances">squared_distances() (elicit.loss_functions.MmdEnergy method)</a>
 </li>
@@ -826,14 +822,20 @@ document.write(`
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/elicit.prior_elicitation.html#elicit.prior_elicitation.tar">tar() (in module elicit.prior_elicitation)</a>
+      <li><a href="api/elicit.input_functions.html#elicit.input_functions.target">target() (in module elicit.input_functions)</a>
+</li>
+      <li><a href="api/elicit.user.generative_models.html#elicit.user.generative_models.ToyModel">ToyModel (class in elicit.user.generative_models)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/elicit.user.generative_models.html#elicit.user.generative_models.ToyModel">ToyModel (class in elicit.user.generative_models)</a>
+      <li><a href="api/elicit.user.generative_models.html#elicit.user.generative_models.ToyModel2">ToyModel2 (class in elicit.user.generative_models)</a>
 </li>
-      <li><a href="api/elicit.prior_elicitation.html#elicit.prior_elicitation.train">train() (in module elicit.prior_elicitation)</a>
+      <li><a href="api/elicit.main.html#elicit.main.Elicit.train">train() (elicit.main.Elicit method)</a>
+
+      <ul>
+        <li><a href="api/elicit.input_functions.html#elicit.input_functions.train">(in module elicit.input_functions)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 

@@ -167,39 +167,26 @@
 <li class="toctree-l4"><a class="reference internal" href="../../api/elicit.user.generative_models.html">elicit.user.generative_models module</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.configs.html">elicit.configs module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.elicitation_techniques.html">elicit.elicitation_techniques module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.expert_data.html">elicit.expert_data module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.helper_functions.html">elicit.helper_functions module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.initialization_methods.html">elicit.initialization_methods module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.logs_config.html">elicit.logs_config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.input_functions.html">elicit.input_functions module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.loss_computation.html">elicit.loss_computation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.loss_functions.html">elicit.loss_functions module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.main.html">elicit.main module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.model_simulation.html">elicit.model_simulation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.optimization_process.html">elicit.optimization_process module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.prior_elicitation.html">elicit.prior_elicitation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.prior_simulation.html">elicit.prior_simulation module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.save_config.html">elicit.save_config module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.target_quantities.html">elicit.target_quantities module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/index.html">Tutorials</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorials/binomial_independent.html">Binomial model with parametric priors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorials/binomial_joint.html">Binomial model with joint prior</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../howto/index.html">How-To</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../howto/expert_data.html">... specify the expert data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../howto/generative_model.html">... specify the generative model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../howto/target_quantities.html">... specify the target quantities &amp; elicitation techniques</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../explanation/index.html">Explanation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../explanation/prior_elicitation.html">&gt; prior_elicitation function</a></li>
-</ul>
-</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../howto/index.html">How-To</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../explanation/index.html">Explanation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a></li>
 </ul>
 
@@ -328,15 +315,13 @@ document.write(`
 <span class="kn">import</span> <span class="nn">bayesflow</span> <span class="k">as</span> <span class="nn">bf</span>
 <span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">elicit.logs_config</span> <span class="c1"># noqa</span>
+<span class="kn">import</span> <span class="nn">elicit</span> <span class="k">as</span> <span class="nn">el</span>
 
-<span class="kn">from</span> <span class="nn">elicit.helper_functions</span> <span class="kn">import</span> <span class="n">save_as_pkl</span>
+<span class="kn">from</span> <span class="nn">elicit.configs</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">elicit.user.custom_functions</span> <span class="kn">import</span> <span class="n">custom_correlation</span>
 
 <span class="n">tfd</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">distributions</span>
 <span class="n">bfn</span> <span class="o">=</span> <span class="n">bf</span><span class="o">.</span><span class="n">networks</span>
-
 
 <span class="c1"># TODO: Update Custom Target Function</span>
 <div class="viewcode-block" id="use_custom_functions">
@@ -400,8 +385,8 @@ document.write(`
 
 <div class="viewcode-block" id="computation_elicited_statistics">
 <a class="viewcode-back" href="../../api/elicit.elicitation_techniques.html#elicit.elicitation_techniques.computation_elicited_statistics">[docs]</a>
-<span class="k">def</span> <span class="nf">computation_elicited_statistics</span><span class="p">(</span><span class="n">target_quantities</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span>
-                                    <span class="n">global_dict</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">computation_elicited_statistics</span><span class="p">(</span>
+        <span class="n">target_quantities</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the elicited statistics from the target quantities by applying a</span>
 <span class="sd">    prespecified elicitation technique.</span>
@@ -411,10 +396,9 @@ document.write(`
 <span class="sd">    target_quantities : dict</span>
 <span class="sd">        simulated target quantities.</span>
 <span class="sd">    ground_truth : bool</span>
-<span class="sd">        whether simulations are based on ground truth. Mainly used for saving</span>
-<span class="sd">        results in extra folder &quot;expert&quot; for later analysis..</span>
+<span class="sd">        True if target quantities are used for oracle.</span>
 <span class="sd">    global_dict : dict</span>
-<span class="sd">        dictionary including all user-input settings..</span>
+<span class="sd">        dictionary including all user-input settings.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -427,6 +411,7 @@ document.write(`
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Compute true elicited statistics&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Compute elicited statistics&quot;</span><span class="p">)</span>
+
     <span class="c1"># create sub-dictionaries for readability</span>
     <span class="n">target_dict</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;target_quantities&quot;</span><span class="p">]</span>
     <span class="c1"># initialize dict for storing results</span>
@@ -434,53 +419,59 @@ document.write(`
     <span class="c1"># loop over elicitation techniques</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">target_dict</span><span class="p">)):</span>
         <span class="c1"># use custom method if specified otherwise use built-in methods</span>
-        <span class="k">if</span> <span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;custom_elicitation_function&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;elicitation_method&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;custom&quot;</span><span class="p">:</span>
             <span class="n">elicited_statistic</span> <span class="o">=</span> <span class="n">use_custom_functions</span><span class="p">(</span>
-                <span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;custom_elicitation_function&quot;</span><span class="p">],</span>
+                <span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;elicitation_method&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">],</span>
                 <span class="n">target_quantities</span><span class="p">,</span>
                 <span class="n">global_dict</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">elicits_res</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;custom_</span><span class="si">{</span><span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elicited_statistic</span>
 
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;elicitation_method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;identity&quot;</span><span class="p">:</span>
-                <span class="n">elicits_res</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;identity_</span><span class="si">{</span><span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">target_quantities</span><span class="p">[</span><span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;elicitation_method&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;identity&quot;</span><span class="p">:</span>
+            <span class="n">elicits_res</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;identity_</span><span class="si">{</span><span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+                        <span class="p">]</span> <span class="o">=</span> <span class="n">target_quantities</span><span class="p">[</span><span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span>
 
-            <span class="k">if</span> <span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;elicitation_method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;pearson_correlation&quot;</span><span class="p">:</span>
-                <span class="n">elicited_statistic</span> <span class="o">=</span> <span class="n">custom_correlation</span><span class="p">(</span><span class="n">target_quantities</span><span class="p">[</span><span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]])</span>
-                <span class="n">elicits_res</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;pearson_</span><span class="si">{</span><span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elicited_statistic</span>
+        <span class="k">if</span> <span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;elicitation_method&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;pearson_correlation&quot;</span><span class="p">:</span>
+            <span class="c1"># compute correlation between model parameters (used for</span>
+            <span class="c1"># learning correlation structure of joint prior)</span>
+            <span class="n">elicited_statistic</span> <span class="o">=</span> <span class="n">custom_correlation</span><span class="p">(</span>
+                <span class="n">target_quantities</span><span class="p">[</span><span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]])</span>
+            <span class="c1"># save correlation in result dictionary</span>
+            <span class="n">elicits_res</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;pearson_</span><span class="si">{</span><span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+                        <span class="p">]</span> <span class="o">=</span> <span class="n">elicited_statistic</span>
 
-            <span class="k">if</span> <span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;elicitation_method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;quantiles&quot;</span><span class="p">:</span>
-                <span class="n">quantiles</span> <span class="o">=</span> <span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;quantiles_specs&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;elicitation_method&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;quantiles&quot;</span><span class="p">:</span>
+            <span class="n">quantiles</span> <span class="o">=</span> <span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;elicitation_method&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
 
-                <span class="c1"># reshape target quantity</span>
-                <span class="k">if</span> <span class="n">tf</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">target_quantities</span><span class="p">[</span><span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]])</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-                    <span class="n">quan_reshaped</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
-                        <span class="n">target_quantities</span><span class="p">[</span><span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]],</span>
-                        <span class="n">shape</span><span class="o">=</span><span class="p">(</span>
-                            <span class="n">target_quantities</span><span class="p">[</span><span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                            <span class="n">target_quantities</span><span class="p">[</span><span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-                            <span class="o">*</span> <span class="n">target_quantities</span><span class="p">[</span><span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-                        <span class="p">),</span>
-                    <span class="p">)</span>
-                <span class="k">if</span> <span class="n">tf</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">target_quantities</span><span class="p">[</span><span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]])</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-                    <span class="n">quan_reshaped</span> <span class="o">=</span> <span class="n">target_quantities</span><span class="p">[</span><span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span>
-
-                <span class="c1"># compute quantiles</span>
-                <span class="n">computed_quantiles</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span>
-                    <span class="n">quan_reshaped</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">quantiles</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span>
+            <span class="c1"># reshape target quantity</span>
+            <span class="k">if</span> <span class="n">tf</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">target_quantities</span><span class="p">[</span><span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]])</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">quan_reshaped</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+                    <span class="n">target_quantities</span><span class="p">[</span><span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]],</span>
+                    <span class="n">shape</span><span class="o">=</span><span class="p">(</span>
+                        <span class="n">target_quantities</span><span class="p">[</span><span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                        <span class="n">target_quantities</span><span class="p">[</span><span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                        <span class="o">*</span> <span class="n">target_quantities</span><span class="p">[</span><span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                    <span class="p">),</span>
                 <span class="p">)</span>
-                <span class="c1"># bring quantiles to the last dimension</span>
-                <span class="n">elicited_statistic</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;ij...-&gt;ji...&quot;</span><span class="p">,</span>
-                                               <span class="n">computed_quantiles</span><span class="p">)</span>
-                <span class="n">elicits_res</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;quantiles_</span><span class="si">{</span><span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elicited_statistic</span>
+            <span class="k">if</span> <span class="n">tf</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">target_quantities</span><span class="p">[</span><span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]])</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">quan_reshaped</span> <span class="o">=</span> <span class="n">target_quantities</span><span class="p">[</span><span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span>
+
+            <span class="c1"># compute quantiles</span>
+            <span class="n">computed_quantiles</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span>
+                <span class="n">quan_reshaped</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">quantiles</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span>
+            <span class="p">)</span>
+            <span class="c1"># bring quantiles to the last dimension</span>
+            <span class="n">elicited_statistic</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;ij...-&gt;ji...&quot;</span><span class="p">,</span>
+                                           <span class="n">computed_quantiles</span><span class="p">)</span>
+            <span class="n">elicits_res</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;quantiles_</span><span class="si">{</span><span class="n">target_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elicited_statistic</span>
 
     <span class="c1"># save file in object</span>
     <span class="n">saving_path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">ground_truth</span><span class="p">:</span>
-        <span class="n">saving_path</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/expert&quot;</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/elicited_statistics.pkl&quot;</span>
-    <span class="n">save_as_pkl</span><span class="p">(</span><span class="n">elicits_res</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">saving_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ground_truth</span><span class="p">:</span>
+            <span class="n">saving_path</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/expert&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/elicited_statistics.pkl&quot;</span>
+        <span class="n">el</span><span class="o">.</span><span class="n">save_as_pkl</span><span class="p">(</span><span class="n">elicits_res</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
 
     <span class="c1"># return results</span>
     <span class="k">return</span> <span class="n">elicits_res</span></div>

@@ -63,7 +63,11 @@ def save_hyperparameters(generator, epoch, global_dict):
         learned values for each hyperparameter and epoch.
 
     """
-    saving_path = global_dict["training_settings"]["output_path"]
+    if global_dict["training_settings"]["output_path"] is not None:
+        saving_path = global_dict["training_settings"]["output_path"]
+    else:
+        saving_path = "elicit_temp"
+
     # extract learned hyperparameter values
     hyperparams = generator.trainable_variables
     if epoch == 0:
@@ -87,6 +91,7 @@ def save_hyperparameters(generator, epoch, global_dict):
     # create a final dict of hyperparameter values
     for val, name in zip(vars_values, vars_names):
         res_dict[name].append(val)
+
     # save result dictionary
     path_res_dict = saving_path + "/res_dict.pkl"
     save_as_pkl(res_dict, path_res_dict)
@@ -116,7 +121,11 @@ def marginal_prior_moments(prior_samples, epoch, global_dict):
         for each sampled marginal prior distribution; for each epoch.
 
     """
-    saving_path = global_dict["training_settings"]["output_path"]
+    if global_dict["training_settings"]["output_path"] is not None:
+        saving_path = global_dict["training_settings"]["output_path"]
+    else:
+        saving_path = "elicit_temp"
+
     if epoch == 0:
         res_dict = {"means": [], "stds": []}
     else:
@@ -128,6 +137,7 @@ def marginal_prior_moments(prior_samples, epoch, global_dict):
     for val, name in zip([means, sds], ["means", "stds"]):
         res_dict[name].append(val)
     # save result dictionary
+
     path_res_dict = saving_path + "/res_dict.pkl"
     save_as_pkl(res_dict, path_res_dict)
     return res_dict

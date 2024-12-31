@@ -7,15 +7,13 @@ import tensorflow_probability as tfp
 import bayesflow as bf
 import inspect
 import pandas as pd
-import logging
-import elicit.logs_config # noqa
+import elicit as el
 
-from elicit.helper_functions import save_as_pkl
+from elicit.configs import *
 from elicit.user.custom_functions import custom_correlation
 
 tfd = tfp.distributions
 bfn = bf.networks
-
 
 # TODO: Update Custom Target Function
 def use_custom_functions(custom_function, model_simulations, global_dict):
@@ -74,8 +72,8 @@ def use_custom_functions(custom_function, model_simulations, global_dict):
     return custom_quantity
 
 
-def computation_elicited_statistics(target_quantities, ground_truth,
-                                    global_dict):
+def computation_elicited_statistics(
+        target_quantities: dict, ground_truth: bool, global_dict: dict):
     """
     Computes the elicited statistics from the target quantities by applying a
     prespecified elicitation technique.
@@ -85,10 +83,9 @@ def computation_elicited_statistics(target_quantities, ground_truth,
     target_quantities : dict
         simulated target quantities.
     ground_truth : bool
-        whether simulations are based on ground truth. Mainly used for saving
-        results in extra folder "expert" for later analysis..
+        True if target quantities are used for oracle.
     global_dict : dict
-        dictionary including all user-input settings..
+        dictionary including all user-input settings.
 
     Returns
     -------
@@ -101,6 +98,7 @@ def computation_elicited_statistics(target_quantities, ground_truth,
         logger.info("Compute true elicited statistics")
     else:
         logger.info("Compute elicited statistics")
+
     # create sub-dictionaries for readability
     target_dict = global_dict["target_quantities"]
     # initialize dict for storing results
@@ -108,53 +106,59 @@ def computation_elicited_statistics(target_quantities, ground_truth,
     # loop over elicitation techniques
     for i in range(len(target_dict)):
         # use custom method if specified otherwise use built-in methods
-        if target_dict[i]["custom_elicitation_function"] is not None:
+        if target_dict[i]["elicitation_method"]["name"] == "custom":
             elicited_statistic = use_custom_functions(
-                target_dict[i]["custom_elicitation_function"],
+                target_dict[i]["elicitation_method"]["value"],
                 target_quantities,
                 global_dict,
             )
             elicits_res[f"custom_{target_dict[i]['name']}"] = elicited_statistic
 
-        else:
-            if target_dict[i]["elicitation_method"] == "identity":
-                elicits_res[f"identity_{target_dict[i]['name']}"] = target_quantities[target_dict[i]['name']]
+        if target_dict[i]["elicitation_method"]["name"] == "identity":
+            elicits_res[f"identity_{target_dict[i]['name']}"
+                        ] = target_quantities[target_dict[i]['name']]
 
-            if target_dict[i]["elicitation_method"] == "pearson_correlation":
-                elicited_statistic = custom_correlation(target_quantities[target_dict[i]['name']])
-                elicits_res[f"pearson_{target_dict[i]['name']}"] = elicited_statistic
+        if target_dict[i]["elicitation_method"]["name"] == "pearson_correlation":
+            # compute correlation between model parameters (used for
+            # learning correlation structure of joint prior)
+            elicited_statistic = custom_correlation(
+                target_quantities[target_dict[i]['name']])
+            # save correlation in result dictionary
+            elicits_res[f"pearson_{target_dict[i]['name']}"
+                        ] = elicited_statistic
 
-            if target_dict[i]["elicitation_method"] == "quantiles":
-                quantiles = target_dict[i]["quantiles_specs"]
+        if target_dict[i]["elicitation_method"]["name"] == "quantiles":
+            quantiles = target_dict[i]["elicitation_method"]["value"]
 
-                # reshape target quantity
-                if tf.rank(target_quantities[target_dict[i]['name']]) == 3:
-                    quan_reshaped = tf.reshape(
-                        target_quantities[target_dict[i]['name']],
-                        shape=(
-                            target_quantities[target_dict[i]['name']].shape[0],
-                            target_quantities[target_dict[i]['name']].shape[1]
-                            * target_quantities[target_dict[i]['name']].shape[2],
-                        ),
-                    )
-                if tf.rank(target_quantities[target_dict[i]['name']]) == 2:
-                    quan_reshaped = target_quantities[target_dict[i]['name']]
-
-                # compute quantiles
-                computed_quantiles = tfp.stats.percentile(
-                    quan_reshaped, q=quantiles, axis=-1
+            # reshape target quantity
+            if tf.rank(target_quantities[target_dict[i]['name']]) == 3:
+                quan_reshaped = tf.reshape(
+                    target_quantities[target_dict[i]['name']],
+                    shape=(
+                        target_quantities[target_dict[i]['name']].shape[0],
+                        target_quantities[target_dict[i]['name']].shape[1]
+                        * target_quantities[target_dict[i]['name']].shape[2],
+                    ),
                 )
-                # bring quantiles to the last dimension
-                elicited_statistic = tf.einsum("ij...->ji...",
-                                               computed_quantiles)
-                elicits_res[f"quantiles_{target_dict[i]['name']}"] = elicited_statistic
+            if tf.rank(target_quantities[target_dict[i]['name']]) == 2:
+                quan_reshaped = target_quantities[target_dict[i]['name']]
+
+            # compute quantiles
+            computed_quantiles = tfp.stats.percentile(
+                quan_reshaped, q=quantiles, axis=-1
+            )
+            # bring quantiles to the last dimension
+            elicited_statistic = tf.einsum("ij...->ji...",
+                                           computed_quantiles)
+            elicits_res[f"quantiles_{target_dict[i]['name']}"] = elicited_statistic
 
     # save file in object
     saving_path = global_dict["training_settings"]["output_path"]
-    if ground_truth:
-        saving_path = saving_path + "/expert"
-    path = saving_path + "/elicited_statistics.pkl"
-    save_as_pkl(elicits_res, path)
+    if saving_path is not None:
+        if ground_truth:
+            saving_path = saving_path + "/expert"
+        path = saving_path + "/elicited_statistics.pkl"
+        el.save_as_pkl(elicits_res, path)
 
     # return results
     return elicits_res

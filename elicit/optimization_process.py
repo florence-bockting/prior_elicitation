@@ -8,7 +8,9 @@ import time
 import numpy as np
 import pandas as pd
 import logging
+import os
 
+from tqdm import tqdm
 from elicit.helper_functions import (
     save_as_pkl,
     save_hyperparameters,
@@ -56,24 +58,39 @@ def sgd_training(
     # create subdirectories for better readability
     dict_training = global_dict["training_settings"]
     dict_optimization = global_dict["optimization_settings"]
-    for epoch in tf.range(dict_training["epochs"]):
+
+    # save files in folder or in temporary location
+    if global_dict["training_settings"]["output_path"] is not None:
+        saving_path = global_dict["training_settings"]["output_path"]
+    else:
+        saving_path = "elicit_temp"
+
+    # progress bar / progress info (detailed)
+    print("Training")
+    if dict_training["progress_info"]==1:
+        ranging = tf.range(dict_training["epochs"])
+    elif dict_training["progress_info"]==0:
+        ranging = tqdm(tf.range(dict_training["epochs"]))
+
+    # initialize the adam optimizer
+    get_optimizer = dict_optimization["optimizer"]
+    dict_optimization.pop("optimizer")
+    optimizer = get_optimizer(**dict_optimization)
+
+    for epoch in ranging:
         if epoch > 0:
             logging.disable(logging.INFO)
         # runtime of one epoch
         epoch_time_start = time.time()
-        # initialize the adam optimizer
-        get_optimizer = dict_optimization["optimizer"]
-        args_optimizer = dict_optimization["optimizer_specs"]
-        optimizer = get_optimizer(**args_optimizer)
 
         with tf.GradientTape() as tape:
             # generate simulations from model
-            training_elicited_statistics = one_forward_simulation(
+            train_elicits, prior_sim, model_sim, targets = one_forward_simulation(
                 prior_model, global_dict,
             )
             # comput loss
             weighted_total_loss = compute_loss(
-                training_elicited_statistics,
+                train_elicits,
                 expert_elicited_statistics,
                 global_dict,
                 epoch,
@@ -101,21 +118,10 @@ def sgd_training(
             # print information for user during training
             # inform about epoch time, total loss and learning rate
             if epoch % dict_training["view_ep"] == 0:
-                if (
-                    type(
-                        dict_optimization["optimizer_specs"][
-                            "learning_rate"
-                        ]
-                    )
-                    is float
-                ):
-                    lr = dict_optimization["optimizer_specs"][
-                        "learning_rate"
-                    ]
+                if type(dict_optimization["learning_rate"]) is float:
+                    lr = dict_optimization["learning_rate"]
                 else:
-                    lr = dict_optimization["optimizer_specs"][
-                        "learning_rate"
-                    ](epoch)
+                    lr = dict_optimization["learning_rate"](epoch)
                 print(f"epoch_time: {epoch_time:.3f} sec")
                 print(f"Epoch: {epoch}, loss: {weighted_total_loss:.5f},\
                       lr: {lr:.6f}")
@@ -129,14 +135,14 @@ def sgd_training(
                 timing = time.strftime('%H:%M:%S', time.gmtime(estimated_time))
                 print(f"Estimated time until completion: {timing}")
 
-        if epoch == np.subtract(dict_training["epochs"], 1):
+        if (epoch == np.subtract(dict_training["epochs"], 1) and 
+            dict_training["progress_info"]==1):
             print("Done :)")
 
-        # save gradients in file
-        saving_path = global_dict["training_settings"]["output_path"]
         if dict_training["method"] == "parametric_prior":
-            path = saving_path + "/gradients.pkl"
-            save_as_pkl(gradients, path)
+            if global_dict["training_settings"]["output_path"] is not None:
+                path = saving_path + "/gradients.pkl"
+                save_as_pkl(gradients, path)
             # save for each epoch
             gradients_ep.append(gradients)
 
@@ -160,19 +166,31 @@ def sgd_training(
                 global_dict,
             )
 
-        if epoch == 0:
-            train_var = prior_model.trainable_variables
-            # save final results in file
-    res = {
+    res_ep = {
         "loss": total_loss,
         "loss_component": component_losses,
         "hyperparameter": res_dict,
         "time_epoch": time_per_epoch,
-        "seed": global_dict["training_settings"]["seed"],
-        "nf_weights": train_var
+        "seed": global_dict["training_settings"]["seed"]
     }
 
+    output_res = {
+        "target_quantities": targets,
+        "elicited_statistics": train_elicits,
+        "prior_samples": prior_sim,
+        "model_samples": model_sim,
+        "model": prior_model
+        }
+
     if dict_training["method"] == "parametric_prior":
-        res["gradients"] = gradients_ep
+        res_ep["gradients"] = gradients_ep
     path = saving_path + "/final_results.pkl"
-    save_as_pkl(res, path)
+    save_as_pkl(res_ep, path)
+
+    if global_dict["training_settings"]["output_path"] is None:
+        os.remove(saving_path + "/final_results.pkl")
+        os.remove(saving_path + "/loss_per_component.pkl")
+        os.remove(saving_path + "/res_dict.pkl")
+        os.rmdir(saving_path)
+
+    return res_ep, output_res

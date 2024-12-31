@@ -6,12 +6,10 @@ import tensorflow_probability as tfp
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import pandas as pd
-import elicit.prior_elicitation as pe
+import elicit as el
 
-from elicit.main import run
 from elicit.user.generative_models import ToyModel
 from elicit.plotting import func
-from elicit.loss_functions import MMD_energy
 
 tfd = tfp.distributions
 
@@ -25,69 +23,73 @@ expert_data = pd.read_pickle(
     "elicit/simulations/parametric_prior_examples/expert_data/toy-example/elicited_statistics.pkl"
 )
 
-global_dict = pe.prior_elicitation(
-    generative_model=pe.generator(
-        model=ToyModel,
-        additional_model_args=dict(
-            N=200
-            )
+eliobj = el.Elicit(
+    model=el.model(
+        obj=ToyModel,
+        N=5,
         ),
-    model_parameters=[
-        pe.par(
+    parameters=[
+        el.parameter(
             name="mu",
             family=tfd.Normal,
             hyperparams=dict(
-                loc=pe.hyppar("mu0"),
-                scale=pe.hyppar("log_sigma0", lower=0)
+                loc=el.hyper("mu0"),
+                scale=el.hyper("sigma0", lower=0)
                 )
         ),
-        pe.par(
+        el.parameter(
             name="sigma",
             family=tfd.HalfNormal,
             hyperparams=dict(
-                scale=pe.hyppar("log_sigma1", lower=0)
+                scale=el.hyper("sigma1", lower=0)
                 )
         ),
     ],
     target_quantities=[
-        pe.tar(
+        el.target(
             name="ypred",
-            elicitation_method="quantiles",
-            quantiles_specs=(5, 25, 50, 75, 95),
-            loss=MMD_energy,
+            elicitation_method=el.eli_method.quantiles((5, 25, 50, 75, 95)),
+            loss=el.MMD_energy,
             loss_weight=1.0
         )
     ],
-    expert_data=pe.expert_input(
-        data=None,
-        from_ground_truth=True,
-        simulator_specs = ground_truth,
-        samples_from_prior = 10_000
+    # expert_data=el.expert.data(
+    #     data=None,
+    # ),
+    expert=el.expert.simulate(
+        ground_truth = ground_truth,
+        num_samples = 10_000
     ),
-    optimization_settings=pe.optimizer(
-        optimizer_specs=dict(
-            learning_rate=0.01,
+    optimization_settings=el.optimizer(
+        specs=dict(
+            learning_rate=0.05,
             clipnorm=1.0
             )
         ),
-    training_settings=pe.train(
+    training_settings=el.train(
         method="parametric_prior",
-        sim_id="toy_example",
+        name="toy_example",
         seed=0,
-        epochs=10,#400,
+        epochs=400,
     ),
-    initialization_settings=pe.initializer(
+    initialization_settings=el.initializer(
         method="random",
         loss_quantile=0,
-        number_of_iterations=30,
-        hyppar=["mu0","log_sigma0","log_sigma1"],
-        radius=[2., 1., 3.],
-        mean=[0.,0.,0.]
+        iterations=3,
+        specs=el.init_specs(
+            radius=1,
+            mean=0
+            )
         )
 )
 
+global_dict=eliobj.inputs
 
-run(global_dict)
+res_ep, res = eliobj.train(save_file=None)
+
+plt.plot(res_ep["hyperparameter"]["mu0"])
+plt.plot(res_ep["hyperparameter"]["sigma0"])
+plt.plot(res_ep["hyperparameter"]["sigma1"])
 
 # %% RESULTS
 path = "elicit/results/parametric_prior/toy_example_0"

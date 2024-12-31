@@ -1,11 +1,8 @@
-Contents
-========
+How-To specify ...
+====================
 
-.. toctree::
-   :maxdepth: 1
-
-   How-To
-
-   ... specify the expert data <expert_data>
-   ... specify the generative model <generative_model>
-   ... specify the target quantities & elicitation techniques <target_quantities>
+* hyperparameters for parametric priors (ToDo)
+* the generative model |:book:| :doc:`generative_model`
+* a custom elicitation technique (ToDo)
+* specify a custom target quantity (ToDo)
+* the expert data (ToDo)

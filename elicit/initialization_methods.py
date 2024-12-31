@@ -5,13 +5,14 @@
 import tensorflow as tf
 import tensorflow_probability as tfp
 
+from tqdm import tqdm
 from elicit.helper_functions import save_as_pkl
 from elicit.prior_simulation import Priors
 
 tfd = tfp.distributions
 
 
-def init_method(hyppar, n_warm_up, method, mean, radius):
+def init_method(hyppar, n_warm_up, method, mean, radius, global_dict):
     """
     Initialize multivariate normal prior over hyperparameter values
 
@@ -31,21 +32,53 @@ def init_method(hyppar, n_warm_up, method, mean, radius):
     """
 
     assert method in ["random", "sobol"], "The initialization method must be one of the following: 'sobol', 'random'"  # noqa
-    
-    n_hypparam = len(hyppar)
-    
-    if method == "random":
-        uniform_samples = tfd.Uniform(tf.subtract(mean,radius), 
-                                      tf.add(mean,radius)).sample(n_warm_up)
-    elif method == "sobol":
-        # Sobol samples
-        sobol_samples = tf.math.sobol_sample(n_hypparam, n_warm_up)
-        # Inverse transform to get samples from normal
-        uniform_samples = tfd.Uniform(tf.subtract(mean,radius), 
-                                  tf.add(mean,radius)).quantile(sobol_samples)
 
-    res_dict = {f"{hyppar[i]}": uniform_samples[:,i] for i in range(n_hypparam)
-                }
+    # counter number of hyperparameters
+    n_hypparam=0
+    name_hyper=list()
+    for i in range(len(global_dict["parameters"])):
+        n_hypparam += len(global_dict["parameters"][i][
+            "hyperparams"].keys())
+        for j,name in enumerate(global_dict["parameters"][i]["hyperparams"].keys()):
+            name_hyper.append(global_dict["parameters"][i]["hyperparams"][name]["name"])
+
+    res_dict=dict()
+
+    if hyppar is None:
+        # make sure type is correct
+        mean = tf.cast(mean, tf.float32)
+        radius = tf.cast(radius, tf.float32)
+
+        for n in name_hyper:
+            if method == "random":
+                uniform_samples = tfd.Uniform(
+                    tf.subtract(mean,radius), tf.add(mean,radius)
+                    ).sample(n_warm_up)
+            elif method == "sobol":
+                # Sobol samples
+                sobol_samples = tf.math.sobol_sample(n_hypparam, n_warm_up)
+                # Inverse transform to get samples from normal
+                uniform_samples = tfd.Uniform(
+                    tf.subtract(mean,radius), tf.add(mean,radius)
+                    ).quantile(sobol_samples)
+
+            res_dict[n]=uniform_samples
+    else:
+        for i,j,n in zip(mean, radius, hyppar):
+            # make sure type is correct
+            i = tf.cast(i, tf.float32)
+            j = tf.cast(j, tf.float32)
+
+            if method == "random":
+                uniform_samples = tfd.Uniform(tf.subtract(i,j), 
+                                              tf.add(i,j)).sample(n_warm_up)
+            elif method == "sobol":
+                # Sobol samples
+                sobol_samples = tf.math.sobol_sample(n_hypparam, n_warm_up)
+                # Inverse transform to get samples from normal
+                uniform_samples = tfd.Uniform(tf.subtract(i,j), 
+                                          tf.add(i,j)).quantile(sobol_samples)
+            res_dict[n] = uniform_samples
 
     return res_dict
 
@@ -89,29 +122,23 @@ def initialization_phase(
     save_prior = []
     dict_copy = dict(global_dict)
 
-    # get number of hyperparameters
-    n_hypparam = 0
-
-    for i in range(len(global_dict["model_parameters"])):
-        n_hypparam += len(
-            global_dict["model_parameters"][i]["hyperparams"]
-        )
-
     # create initializations
     init_matrix = init_method(
-        global_dict["initialization_settings"]["hyppar"],
-        dict_copy["initialization_settings"]["number_of_iterations"],
+        global_dict["initialization_settings"]["specs"]["hyper"],
+        dict_copy["initialization_settings"]["iterations"],
         global_dict["initialization_settings"]["method"],
-        global_dict["initialization_settings"]["mean"],
-        global_dict["initialization_settings"]["radius"]
+        global_dict["initialization_settings"]["specs"]["mean"],
+        global_dict["initialization_settings"]["specs"]["radius"],
+        global_dict
         )
 
-    path = dict_copy["training_settings"][
-        "output_path"] + "/initialization_matrix.pkl"
-    save_as_pkl(init_matrix, path)
+    if global_dict["training_settings"]["output_path"] is not None:
+        path = dict_copy["training_settings"][
+            "output_path"] + "/initialization_matrix.pkl"
+        save_as_pkl(init_matrix, path)
 
-    for i in range(dict_copy["initialization_settings"][
-            "number_of_iterations"]):
+    print("Initialization")
+    for i in tqdm(range(dict_copy["initialization_settings"]["iterations"])):
         dict_copy["training_settings"]["seed"] = (
             dict_copy["training_settings"]["seed"] + i
         )
@@ -124,7 +151,7 @@ def initialization_phase(
                              init_matrix_slice=init_matrix_slice)
 
         # generate simulations from model
-        training_elicited_statistics = one_forward_simulation(prior_model,
+        training_elicited_statistics, *_ = one_forward_simulation(prior_model,
                                                               dict_copy)
 
         # compute loss for each set of initial values
@@ -134,15 +161,15 @@ def initialization_phase(
             dict_copy,
             epoch=0,
         )
-        print(f"({i}) {weighted_total_loss.numpy():.1f} ", end="")
 
         init_var_list.append(prior_model)
         save_prior.append(prior_model.trainable_variables)
         loss_list.append(weighted_total_loss.numpy())
 
-    path = dict_copy["training_settings"][
-        "output_path"] + "/pre_training_results.pkl"
-    save_as_pkl((loss_list, save_prior), path)
+    if global_dict["training_settings"]["output_path"] is not None:
+        path = dict_copy["training_settings"][
+            "output_path"] + "/pre_training_results.pkl"
+        save_as_pkl((loss_list, save_prior), path)
 
     print(" ")
     return loss_list, init_var_list

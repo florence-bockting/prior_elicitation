@@ -15,9 +15,7 @@ tfd = tfp.distributions
 global_dict = pe.prior_elicitation(
     generative_model=pe.generator(
         model=ToyModel,
-        additional_model_args=dict(
-            N=200
-            )
+        additional_model_args=dict(N=200)
     ),
     model_parameters=[
         pe.par(name="mu"),
@@ -53,6 +51,12 @@ global_dict = pe.prior_elicitation(
             clipnorm=1.0
             )
     ),
+    training_settings=pe.train(
+        method="deep_prior",
+        sim_id="toy_example",
+        seed=2,
+        epochs=400
+    ),
     normalizing_flow=pe.nf(
         inference_network=InvertibleNetwork,
         network_specs=dict(
@@ -75,13 +79,6 @@ global_dict = pe.prior_elicitation(
             scale_diag=tf.ones(2)
         )
     ),
-    training_settings=pe.train(
-        method="deep_prior",
-        sim_id="toy_example",
-        seed=2,
-        epochs=400
-    ),
-    initialization_settings=None
 )
 
 

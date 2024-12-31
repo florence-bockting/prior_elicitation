@@ -4,9 +4,9 @@
 
 import logging
 import tensorflow as tf
-import elicit.logs_config # noqa
+import elicit as el
 
-from elicit.prior_simulation import Priors
+from elicit.configs import *  # noqa
 
 
 def get_expert_data(global_dict, one_forward_simulation):
@@ -30,21 +30,31 @@ def get_expert_data(global_dict, one_forward_simulation):
     """
     logger = logging.getLogger(__name__)
 
-    if global_dict["expert_data"]["from_ground_truth"]:
+    try:
+        global_dict["expert"]["data"]
+    except KeyError:
+        oracle=True
+    else:
+        oracle=False
+
+    if oracle:
         logger.info("Simulate from oracle")
         # set seed
         tf.random.set_seed(global_dict["training_settings"]["seed"])
         # sample from true priors
-        prior_model = Priors(global_dict=global_dict,
-                             ground_truth=True,
-                             init_matrix_slice=None)
-        expert_data = one_forward_simulation(
+        prior_model = el.Priors(global_dict=global_dict,
+                                 ground_truth=True,
+                                 init_matrix_slice=None)
+        expert_data, expert_prior, *_ = one_forward_simulation(
             prior_model, global_dict, ground_truth=True
         )
+        return expert_data, expert_prior
+
     else:
         logger.info("Read expert data")
         # load expert data from file
         # TODO Expert data must have same name and structure as sim-based
         # elicited statistics
-        expert_data = global_dict["expert_data"]["data"]
-    return expert_data
+        expert_data = global_dict["expert"]["data"]
+        return expert_data, None
+

@@ -5,10 +5,10 @@
 import tensorflow as tf
 import tensorflow_probability as tfp
 import bayesflow as bf
+import elicit as el
 import logging
-import elicit.logs_config # noqa
 
-from elicit.helper_functions import save_as_pkl
+from elicit.configs import *  # noqa
 
 tfd = tfp.distributions
 bfn = bf.networks
@@ -82,11 +82,12 @@ def compute_loss_components(elicited_statistics, glob_dict, expert):
 
     # save file in object
     saving_path = glob_dict["training_settings"]["output_path"]
-    if expert:
-        saving_path = saving_path + "/expert"
-    path = saving_path + "/loss_components.pkl"
-    save_as_pkl(loss_comp_res, path)
-    # return results
+    if saving_path is not None:
+        if expert:
+            saving_path = saving_path + "/expert"
+        path = saving_path + "/loss_components.pkl"
+        el.save_as_pkl(loss_comp_res, path)
+        # return results
     return loss_comp_res
 
 
@@ -161,7 +162,7 @@ def dynamic_weight_averaging(
     )
     # save file in object
     path = saving_path + "/weighted_total_loss.pkl"
-    save_as_pkl(weighted_total_loss, path)
+    el.save_as_pkl(weighted_total_loss, path)
     return weighted_total_loss
 
 
@@ -212,9 +213,12 @@ def compute_discrepancy(loss_components_expert, loss_components_training,
         loss_per_component.append(loss)
 
     # save file in object
-    saving_path = global_dict["training_settings"]["output_path"]
+    if global_dict["training_settings"]["output_path"] is not None:
+        saving_path = global_dict["training_settings"]["output_path"]
+    else:
+        saving_path = "elicit_temp"
     path = saving_path + "/loss_per_component.pkl"
-    save_as_pkl(loss_per_component, path)
+    el.save_as_pkl(loss_per_component, path)
     return loss_per_component
 
 

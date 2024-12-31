@@ -171,39 +171,26 @@
 <li class="toctree-l4"><a class="reference internal" href="api/elicit.user.generative_models.html">elicit.user.generative_models module</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3"><a class="reference internal" href="api/elicit.configs.html">elicit.configs module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.elicitation_techniques.html">elicit.elicitation_techniques module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.expert_data.html">elicit.expert_data module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.helper_functions.html">elicit.helper_functions module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.initialization_methods.html">elicit.initialization_methods module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/elicit.logs_config.html">elicit.logs_config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/elicit.input_functions.html">elicit.input_functions module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.loss_computation.html">elicit.loss_computation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.loss_functions.html">elicit.loss_functions module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.main.html">elicit.main module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.model_simulation.html">elicit.model_simulation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.optimization_process.html">elicit.optimization_process module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/elicit.prior_elicitation.html">elicit.prior_elicitation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.prior_simulation.html">elicit.prior_simulation module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/elicit.save_config.html">elicit.save_config module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.target_quantities.html">elicit.target_quantities module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="tutorials/index.html">Tutorials</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/binomial_independent.html">Binomial model with parametric priors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/binomial_joint.html">Binomial model with joint prior</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="howto/index.html">How-To</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="howto/expert_data.html">... specify the expert data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="howto/generative_model.html">... specify the generative model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="howto/target_quantities.html">... specify the target quantities &amp; elicitation techniques</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="explanation/index.html">Explanation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="explanation/prior_elicitation.html">&gt; prior_elicitation function</a></li>
-</ul>
-</details></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="howto/index.html">How-To</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explanation/index.html">Explanation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
 </ul>
 
@@ -371,10 +358,8 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-it-about">What is it about?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-does-it-work">How does it work?</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conceptual-idea">Conceptual idea</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation">Implementation</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contents">Contents</a></li>
 </ul>
             </nav>
@@ -462,50 +447,6 @@ the expert data. Select a plausible prior distribution in consultation with the 
 expert or apply model averaging techniques. (Evaluation stage)</p>
 <p>Please consult our papers for the <strong>methodological details</strong> (see Bockting et al. 2024a, 2024b; References are provided below).</p>
 </section>
-<section id="implementation">
-<h3>Implementation<a class="headerlink" href="#implementation" title="Link to this heading">#</a></h3>
-<p>The project is implemented as a <em>Python package</em> and primarily utilizes the following libraries:
-<a class="reference external" href="https://bayesflow.org/">BayesFlow</a>, <a class="reference external" href="https://www.tensorflow.org/">TensorFlow</a>, <a class="reference external" href="https://numpy.org/">NumPy</a>, and
-<a class="reference external" href="https://pandas.pydata.org/">pandas</a>.
-For visualization, <a class="reference external" href="https://matplotlib.org/">matplotlib</a> and <a class="reference external" href="https://seaborn.pydata.org/">seaborn</a> are used.</p>
-<p>The following notebooks showcase the functionality of our <cite>prior_elicitation</cite> package through a series of simple case studies:</p>
-<p>(Please note that the tutorials are currently being updated.)</p>
-<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
-<summary class="sd-summary-title sd-card-header sd-bg-primary sd-bg-text-primary">
-<span class="sd-summary-text">Learning a joint, non-parametric prior for all model parameters</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
-<ol class="arabic simple">
-<li><p class="sd-card-text"><span class="xref std std-doc">Binomial model</span></p></li>
-<li><p class="sd-card-text">Normal model (coming soon)</p></li>
-</ol>
-</div>
-</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
-<summary class="sd-summary-title sd-card-header sd-bg-primary sd-bg-text-primary">
-<span class="sd-summary-text">Learning independent, parametric priors for each model parameter</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
-<ol class="arabic simple">
-<li><p class="sd-card-text"><span class="xref std std-doc">Binomial model</span></p></li>
-<li><p class="sd-card-text">Poisson model (coming soon)</p></li>
-<li><p class="sd-card-text">Normal model (coming soon)</p></li>
-<li><p class="sd-card-text">Hierarchical model (coming soon)</p></li>
-</ol>
-</div>
-</details></section>
-</section>
-<section id="references">
-<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
-<p>We introduced the <cite>prior_elicitation</cite> package (conceptually) in the following papers:</p>
-<ul class="simple">
-<li><p>Bockting, F., Radev S. T., &amp; Bürkner P. C. (2024a) Expert-elicitation method for non-parametric joint priors using normalizing flows. Preprint at <a class="reference external" href="https://arxiv.org/abs/2411.15826">https://arxiv.org/abs/2411.15826</a></p></li>
-<li><p>Bockting, F., Radev, S. T. &amp; Bürkner, P. C. (2024b). Simulation-based prior knowledge elicitation for parametric Bayesian models. Scientific Reports 14, 17330 (2024). <a class="reference external" href="https://doi.org/10.1038/s41598-024-68090-7">https://doi.org/10.1038/s41598-024-68090-7</a></p></li>
-<li><p>(A software paper is in progress)</p></li>
-</ul>
-<p>A selection of reviews on <em>prior elicitation</em>:</p>
-<ul class="simple">
-<li><p>Falconer J. R., Frank E., Polaschek D. L., et al. (2022) Methods for eliciting informative prior distributions: A critical review. Decision Analysis 19(3):189–204. <a class="reference external" href="https://doi.org/10.1287/deca.2022.0451">https://doi.org/10.1287/deca.2022.0451</a></p></li>
-<li><p>Garthwaite P. H., Kadane J. B., O’Hagan A. (2005) Statistical methods for eliciting probability distributions. Journal of the American statistical Association 100(470):680–701. <a class="reference external" href="https://doi.org/10.1198/016214505000000105">https://doi.org/10.1198/016214505000000105</a></p></li>
-<li><p>Mikkola, P., Martin, O. A., Chandramouli, S., Hartmann, M., Abril Pla, O., Thomas, O., … &amp; Klami, A. (2024). Prior knowledge elicitation: The past, present, and future. Bayesian Analysis, 19(4), 1129-1161. <a class="reference external" href="https://doi.org/10.1214/23-BA1381">https://doi.org/10.1214/23-BA1381</a></p></li>
-<li><p>O’Hagan A., Buck C. E., Daneshkhah A., et al. (2006) Uncertain judgements: eliciting experts’ probabilities. John Wiley &amp; Sons</p></li>
-<li><p>Stefan A. M., Evans N. J., Wagenmakers E. J. (2022) Practical challenges and methodological flexibility in prior elicitation. Psychological Methods 27(2):177–197. <a class="reference external" href="https://doi.org/10.1037/met0000354">https://doi.org/10.1037/met0000354</a></p></li>
-</ul>
 </section>
 <section id="contents">
 <h2>Contents<a class="headerlink" href="#contents" title="Link to this heading">#</a></h2>
@@ -516,21 +457,9 @@ For visualization, <a class="reference external" href="https://matplotlib.org/">
 <li class="toctree-l2"><a class="reference internal" href="api/elicit.html">elicit package</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/binomial_independent.html">Binomial model with parametric priors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/binomial_joint.html">Binomial model with joint prior</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="howto/index.html">How-To</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="howto/expert_data.html">... specify the expert data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="howto/generative_model.html">... specify the generative model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="howto/target_quantities.html">... specify the target quantities &amp; elicitation techniques</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="explanation/index.html">Explanation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="explanation/prior_elicitation.html">&gt; prior_elicitation function</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="howto/index.html">How-To</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explanation/index.html">Explanation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
 </ul>
 </div>
@@ -576,10 +505,8 @@ For visualization, <a class="reference external" href="https://matplotlib.org/">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-it-about">What is it about?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-does-it-work">How does it work?</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conceptual-idea">Conceptual idea</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation">Implementation</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contents">Contents</a></li>
 </ul>
   </nav></div>

@@ -167,39 +167,26 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../api/elicit.user.generative_models.html">elicit.user.generative_models module</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/elicit.configs.html">elicit.configs module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/elicit.elicitation_techniques.html">elicit.elicitation_techniques module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/elicit.expert_data.html">elicit.expert_data module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/elicit.helper_functions.html">elicit.helper_functions module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/elicit.initialization_methods.html">elicit.initialization_methods module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../api/elicit.logs_config.html">elicit.logs_config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/elicit.input_functions.html">elicit.input_functions module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/elicit.loss_computation.html">elicit.loss_computation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/elicit.loss_functions.html">elicit.loss_functions module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/elicit.main.html">elicit.main module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/elicit.model_simulation.html">elicit.model_simulation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/elicit.optimization_process.html">elicit.optimization_process module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../api/elicit.prior_elicitation.html">elicit.prior_elicitation module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/elicit.prior_simulation.html">elicit.prior_simulation module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../api/elicit.save_config.html">elicit.save_config module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/elicit.target_quantities.html">elicit.target_quantities module</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../tutorials/index.html">Tutorials</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/binomial_independent.html">Binomial model with parametric priors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/binomial_joint.html">Binomial model with joint prior</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../howto/index.html">How-To</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../howto/expert_data.html">... specify the expert data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../howto/generative_model.html">... specify the generative model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../howto/target_quantities.html">... specify the target quantities &amp; elicitation techniques</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../explanation/index.html">Explanation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../explanation/prior_elicitation.html">&gt; prior_elicitation function</a></li>
-</ul>
-</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../howto/index.html">How-To</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../explanation/index.html">Explanation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../references.html">References</a></li>
 </ul>
 
@@ -323,8 +310,10 @@ document.write(`
 <span class="c1">#</span>
 <span class="c1"># noqa SPDX-License-Identifier: Apache-2.0</span>
 
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
 <span class="kn">import</span> <span class="nn">tensorflow_probability</span> <span class="k">as</span> <span class="nn">tfp</span>
+<span class="kn">import</span> <span class="nn">elicit</span> <span class="k">as</span> <span class="nn">el</span>
 
 <span class="n">tfd</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">distributions</span>
 <span class="n">tfb</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">bijectors</span>
@@ -335,7 +324,7 @@ document.write(`
 <span class="k">class</span> <span class="nc">ToyModel</span><span class="p">:</span>
 <div class="viewcode-block" id="ToyModel.__call__">
 <a class="viewcode-back" href="../../../api/elicit.user.generative_models.html#elicit.user.generative_models.ToyModel.__call__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="c1"># number of observations (intercept-only)</span>
         <span class="n">X</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
         <span class="c1"># linear predictor (= mu)</span>
@@ -354,6 +343,43 @@ document.write(`
 </div>
 
 
+<div class="viewcode-block" id="ToyModel2">
+<a class="viewcode-back" href="../../../api/elicit.user.generative_models.html#elicit.user.generative_models.ToyModel2">[docs]</a>
+<span class="k">class</span> <span class="nc">ToyModel2</span><span class="p">:</span>
+<div class="viewcode-block" id="ToyModel2.__call__">
+<a class="viewcode-back" href="../../../api/elicit.user.generative_models.html#elicit.user.generative_models.ToyModel2.__call__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">,</span> <span class="n">design_matrix</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># design matrix</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">design_matrix</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,:],</span>
+                           <span class="p">(</span><span class="n">B</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">design_matrix</span><span class="p">)))</span>
+        <span class="c1"># linear predictor (= mu)</span>
+        <span class="n">epred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">][:,:,</span><span class="kc">None</span><span class="p">],</span>
+                       <span class="n">tf</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">][:,:,</span><span class="kc">None</span><span class="p">],</span> <span class="n">X</span><span class="p">)</span>
+                       <span class="p">)</span>
+        <span class="c1"># data-generating model</span>
+        <span class="n">likelihood</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span>
+            <span class="n">loc</span><span class="o">=</span><span class="n">epred</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">[:,</span> <span class="p">:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="c1"># prior predictive distribution (=height)</span>
+        <span class="n">ypred</span> <span class="o">=</span> <span class="n">likelihood</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+        
+        <span class="c1"># selected observations</span>
+        <span class="n">y_X0</span> <span class="o">=</span> <span class="n">ypred</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">y_X1</span> <span class="o">=</span> <span class="n">ypred</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">y_X2</span> <span class="o">=</span> <span class="n">ypred</span><span class="p">[:,:,</span><span class="mi">2</span><span class="p">]</span>
+        
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">likelihood</span><span class="o">=</span><span class="n">likelihood</span><span class="p">,</span>
+            <span class="n">ypred</span><span class="o">=</span><span class="n">ypred</span><span class="p">,</span> <span class="n">epred</span><span class="o">=</span><span class="n">epred</span><span class="p">,</span>
+            <span class="n">prior_samples</span><span class="o">=</span><span class="n">prior_samples</span><span class="p">,</span>
+            <span class="n">y_X0</span><span class="o">=</span><span class="n">y_X0</span><span class="p">,</span> <span class="n">y_X1</span><span class="o">=</span><span class="n">y_X1</span><span class="p">,</span> <span class="n">y_X2</span><span class="o">=</span><span class="n">y_X2</span>
+        <span class="p">)</span></div>
+</div>
+
 
 <div class="viewcode-block" id="BinomialModel">
 <a class="viewcode-back" href="../../../api/elicit.user.generative_models.html#elicit.user.generative_models.BinomialModel">[docs]</a>
@@ -361,7 +387,7 @@ document.write(`
 <div class="viewcode-block" id="BinomialModel.__call__">
 <a class="viewcode-back" href="../../../api/elicit.user.generative_models.html#elicit.user.generative_models.BinomialModel.__call__">[docs]</a>
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">,</span> <span class="n">design_matrix</span><span class="p">,</span>
-                 <span class="n">total_count</span><span class="p">):</span>
+                 <span class="n">total_count</span><span class="p">,</span> <span class="n">upper_thres</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 
         <span class="n">epred</span> <span class="o">=</span> <span class="n">prior_samples</span> <span class="o">@</span> <span class="n">tf</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">design_matrix</span><span class="p">)</span>
 
@@ -370,8 +396,11 @@ document.write(`
         <span class="n">likelihood</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Binomial</span><span class="p">(</span><span class="n">total_count</span><span class="o">=</span><span class="n">total_count</span><span class="p">,</span>
                                   <span class="n">probs</span><span class="o">=</span><span class="n">probs</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">])</span>
 
+        <span class="n">ypred</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">softmax_gumbel_trick</span><span class="p">(</span><span class="n">epred</span><span class="p">,</span> <span class="n">likelihood</span><span class="p">,</span> <span class="n">upper_thres</span><span class="p">,</span>
+                                        <span class="n">temp</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
-            <span class="n">likelihood</span><span class="o">=</span><span class="n">likelihood</span><span class="p">,</span> <span class="n">ypred</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">epred</span><span class="o">=</span><span class="n">epred</span><span class="p">,</span>
+            <span class="n">likelihood</span><span class="o">=</span><span class="n">likelihood</span><span class="p">,</span> <span class="n">ypred</span><span class="o">=</span><span class="n">ypred</span><span class="p">,</span> <span class="n">epred</span><span class="o">=</span><span class="n">epred</span><span class="p">,</span>
             <span class="n">prior_samples</span><span class="o">=</span><span class="n">prior_samples</span>
         <span class="p">)</span></div>
 </div>

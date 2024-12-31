@@ -5,19 +5,9 @@
 import tensorflow as tf
 import tensorflow_probability as tfp
 import logging
+import elicit as el
 
-import elicit.save_config
-import elicit.logs_config # noqa
-
-from elicit.prior_simulation import Priors
-from elicit.loss_computation import compute_total_loss
-from elicit.optimization_process import sgd_training
-from elicit.initialization_methods import initialization_phase
-from elicit.expert_data import get_expert_data
-from elicit.helper_functions import remove_unneeded_files
-from elicit.model_simulation import simulate_from_generator
-from elicit.target_quantities import computation_target_quantities
-from elicit.elicitation_techniques import computation_elicited_statistics
+from elicit.configs import *  # noqa
 
 tfd = tfp.distributions
 
@@ -49,19 +39,19 @@ def one_forward_simulation(prior_model, global_dict, ground_truth=False):
     prior_samples = prior_model()
     # simulate prior predictive distribution based on prior samples
     # and generative model
-    model_simulations = simulate_from_generator(
+    model_simulations = el.simulate_from_generator(
         prior_samples, ground_truth, global_dict,
     )
     # compute the target quantities
-    target_quantities = computation_target_quantities(
+    target_quantities = el.computation_target_quantities(
         model_simulations, ground_truth, global_dict
     )
     # compute the elicited statistics by applying a specific elicitation
     # method on the target quantities
-    elicited_statistics = computation_elicited_statistics(
+    elicited_statistics = el.computation_elicited_statistics(
         target_quantities, ground_truth, global_dict
     )
-    return elicited_statistics
+    return elicited_statistics, prior_samples, model_simulations, target_quantities
 
 
 def pre_training(global_dict, expert_elicited_statistics):
@@ -71,10 +61,10 @@ def pre_training(global_dict, expert_elicited_statistics):
 
         logger.info("Pre-training phase (only first run)")
 
-        loss_list, init_prior = initialization_phase(
+        loss_list, init_prior = el.initialization_phase(
             expert_elicited_statistics,
             one_forward_simulation,
-            compute_total_loss,
+            el.compute_total_loss,
             global_dict,
         )
 
@@ -87,41 +77,121 @@ def pre_training(global_dict, expert_elicited_statistics):
         init_prior_model = init_prior[int(index)]
     else:
         # prepare generative model
-        init_prior_model = Priors(global_dict=global_dict,
+        init_prior_model = el.Priors(global_dict=global_dict,
                                   ground_truth=False,
                                   init_matrix_slice=None)
 
     return init_prior_model
 
 
-def run(global_dict: dict):
+class Elicit:
 
-    logger = logging.getLogger(__name__)
+   def __init__(self,
+        model: callable,
+        parameters: list,
+        target_quantities: list,
+        expert: callable,
+        training_settings: callable,
+        optimization_settings: callable,
+        normalizing_flow: callable or None=None,
+        initialization_settings: callable or None=None,
+    ):
+        """
+        Parameters
+        ----------
+        model : callable
+            specification of generative model using
+            :func:`elicit.prior_elicitation.generator`.
+        parameter : list
+            list of model parameters specified with
+            :func:`elicit.prior_elicitation.par`.
+        target_quantities : list
+            list of target quantities specified with
+            :func:`elicit.prior_elicitation.tar`.
+        expert : callable
+            specification of input data from expert or oracle using
+            :func:`el.expert.data` or func:`el.expert.simulate`
+        training_settings : callable
+            specification of training settings for learning prior distribution(s)
+            using :func:`elicit.prior_elicitation.train`
+        optimization_settings : callable
+            specification of optimizer using
+            :func:`elicit.prior_elicitation.optimizer`.
+        normalizing_flow : callable or None
+            specification of normalizing flow using :func:`elicit.prior_elicitation.nf`.
+            Only required for ``deep_prior`` method is used. If 
+            ``parametric_prior`` is used this argument should be ``None``. Default
+            value is None.
+        initialization_settings : callable
+            specification of initialization settings using
+            :func:`elicit.prior_elicitation.initializer`. For method
+            'parametric_prior' the argument should be None. Default value is None.
 
-    # create saving path
-    global_dict["training_settings"][
-        "output_path"
-    ] = f"./elicit/{global_dict['training_settings']['output_path']}/{global_dict['training_settings']['method']}/{global_dict['training_settings']['sim_id']}_{global_dict['training_settings']['seed']}"  # noqa
+        Returns
+        -------
+        global_dict : dict
+            specification of all settings to run the optimization procedure.
 
-    # set seed
-    tf.random.set_seed(global_dict["training_settings"]["seed"])
+        """
+        self.inputs = dict(
+            model=model,
+            parameters=parameters,
+            target_quantities=target_quantities,
+            expert=expert,
+            training_settings=training_settings,
+            optimization_settings=optimization_settings,
+            normalizing_flow=normalizing_flow,
+            initialization_settings=initialization_settings,
+            )
 
-    # get expert data
-    expert_elicited_statistics = get_expert_data(
-        global_dict,
-        one_forward_simulation)
 
-    init_prior_model = pre_training(global_dict, expert_elicited_statistics)
+   def train(self, save_file: str or None=None):
+        logger = logging.getLogger(__name__)
 
-    # run dag with optimal set of initial values
-    logger.info("Training Phase (only first epoch)")
-    sgd_training(
-        expert_elicited_statistics,
-        init_prior_model,
-        one_forward_simulation,
-        compute_total_loss,
-        global_dict
-    )
+        if save_file is not None:
+            # create saving path
+            self.inputs["training_settings"][
+                "output_path"
+            ] = f"./elicit/{save_file}/{self.inputs['training_settings']['method']}/{self.inputs['training_settings']['name']}_{self.inputs['training_settings']['seed']}"  # noqa
+        else:
+            self.inputs["training_settings"]["output_path"] = None
 
-    # remove saved files that are not of interest for follow-up analysis
-    remove_unneeded_files(global_dict, elicit.save_config.save_results)
+        # set seed
+        tf.random.set_seed(self.inputs["training_settings"]["seed"])
+
+        # get expert data
+        try:
+            self.inputs["expert"]["ground_truth"]
+        except KeyError:
+            expert_elicits = self.inputs["expert"]["data"]
+        else:
+            expert_elicits, expert_prior = el.get_expert_data(
+                self.inputs,
+                one_forward_simulation)
+
+        # initialization of hyperparameter
+        init_prior_model = pre_training(self.inputs, expert_elicits)
+
+        # run dag with optimal set of initial values
+        logger.info("Training Phase (only first epoch)")
+        res_ep, res = el.sgd_training(
+            expert_elicits,
+            init_prior_model,
+            one_forward_simulation,
+            el.compute_total_loss,
+            self.inputs
+        )
+
+        res["expert_elicited_statistics"] = expert_elicits
+        try:
+            self.inputs["expert"]["ground_truth"]
+        except KeyError:
+            pass
+        else:
+            res["expert_prior_samples"] = expert_prior
+
+        # remove saved files that are not of interest for follow-up analysis
+        if save_file is not None:
+            el.remove_unneeded_files(self.inputs, save_results)  # noqa
+
+        return res_ep, res

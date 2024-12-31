@@ -15,19 +15,18 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
+   elicit.configs
    elicit.elicitation_techniques
    elicit.expert_data
    elicit.helper_functions
    elicit.initialization_methods
-   elicit.logs_config
+   elicit.input_functions
    elicit.loss_computation
    elicit.loss_functions
    elicit.main
    elicit.model_simulation
    elicit.optimization_process
-   elicit.prior_elicitation
    elicit.prior_simulation
-   elicit.save_config
    elicit.target_quantities
 
 Module contents
