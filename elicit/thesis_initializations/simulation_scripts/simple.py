@@ -89,5 +89,7 @@ if __name__ == "__main__":
     seed = int(sys.argv[1])
     init_method = str(sys.argv[2])
     init_loss = int(sys.argv[3])
+    init_iters = int(sys.argv[4])
 
-    sim_func(seed, init_method, init_loss, init_iters=32)
+    sim_func(seed, init_method, init_loss, init_iters)
+
