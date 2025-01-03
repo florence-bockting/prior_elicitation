@@ -159,9 +159,9 @@ def sgd_training(
             res_dict = save_hyperparameters(prior_model, epoch, global_dict)
         else:
             # save mean and std for each sampled marginal prior; for each epoch
-            path_model = saving_path + "/model_simulations.pkl"
+            #path_model = saving_path + "/model_simulations.pkl"
             res_dict = marginal_prior_moments(
-                pd.read_pickle(path_model)["prior_samples"],
+                model_sim["prior_samples"],
                 epoch,
                 global_dict,
             )

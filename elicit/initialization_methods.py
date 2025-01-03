@@ -4,7 +4,9 @@
 
 import tensorflow as tf
 import tensorflow_probability as tfp
+import numpy as np
 
+from scipy.stats import qmc
 from tqdm import tqdm
 from elicit.helper_functions import save_as_pkl
 from elicit.prior_simulation import Priors
@@ -12,7 +14,43 @@ from elicit.prior_simulation import Priors
 tfd = tfp.distributions
 
 
-def init_method(hyppar, n_warm_up, method, mean, radius, global_dict):
+def generate_samples(n_samples: int, d: int = 1, method: str = "random"):
+    """
+    Generate samples using the specified method (quasi-random or random).
+    Parameters:
+    - n_samples (int): Number of samples to generate.
+    - d (int): Dimensionality of the sample space (default: 1).
+    - method (str): Sampling method, choose from 'random', 'sobol' or 'lhs' (default: 'random').
+    Returns:
+    - np.ndarray: Samples in the unit hypercube [0, 1]^d.
+    """
+    
+    # Validate n_samples and d
+    if not isinstance(n_samples, int) or n_samples <= 0:
+        raise ValueError("n_samples must be a positive integer.")
+    if not isinstance(d, int) or d <= 0:
+        raise ValueError("d must be a positive integer.")
+    
+    # Validate method
+    if not isinstance(method, str):
+        raise TypeError("method must be a string.")
+    if method not in ["sobol", "lhs", "random"]:
+        raise ValueError("Unsupported method. Choose from 'sobol', 'lhs', or 'random'.")
+
+    # Generate samples based on the chosen method
+    if method == "sobol":
+        sampler = qmc.Sobol(d=d)
+        sample_data = sampler.random(n=n_samples)
+    elif method == "lhs":
+        sampler = qmc.LatinHypercube(d=d)
+        sample_data = sampler.random(n=n_samples)
+    elif method == "random":
+        sample_data = np.random.uniform(0, 1, size=(n_samples, d))
+    
+    return sample_data
+
+
+def init_method(hyppar, n_samples, method, mean, radius, global_dict):
     """
     Initialize multivariate normal prior over hyperparameter values
 
@@ -20,7 +58,7 @@ def init_method(hyppar, n_warm_up, method, mean, radius, global_dict):
     ----------
     n_hypparam : int
         Number of hyperparameters.
-    n_warm_up : int
+    n_samples : int
         number of warmup iterations.
 
     Returns
@@ -31,8 +69,18 @@ def init_method(hyppar, n_warm_up, method, mean, radius, global_dict):
 
     """
 
-    assert method in ["random", "sobol"], "The initialization method must be one of the following: 'sobol', 'random'"  # noqa
-
+    #assert method in ["random", "sobol"], "The initialization method must be one of the following: 'sobol', 'random'"  # noqa
+    # Validate n_samples
+    if not isinstance(n_samples, int) or n_samples <= 0:
+        raise ValueError("n_samples must be a positive integer.")
+    
+    # Validate method
+    if not isinstance(method, str):
+        raise TypeError("method must be a string.")
+    if method not in ["sobol", "lhs", "random"]:
+        raise ValueError("Unsupported method. Choose from 'sobol', 'lhs', or 'random'.")
+                
+                
     # counter number of hyperparameters
     n_hypparam=0
     name_hyper=list()
@@ -50,20 +98,29 @@ def init_method(hyppar, n_warm_up, method, mean, radius, global_dict):
         radius = tf.cast(radius, tf.float32)
 
         for n in name_hyper:
-            if method == "random":
-                uniform_samples = tfd.Uniform(
-                    tf.subtract(mean,radius), tf.add(mean,radius)
-                    ).sample(n_warm_up)
-            elif method == "sobol":
-                # Sobol samples
-                sobol_samples = tf.math.sobol_sample(n_hypparam, n_warm_up)
-                # Inverse transform to get samples from normal
-                uniform_samples = tfd.Uniform(
-                    tf.subtract(mean,radius), tf.add(mean,radius)
-                    ).quantile(sobol_samples)
 
+            # Generate samples based on the chosen method
+            if method == "sobol":
+                sampler = qmc.Sobol(d=1)
+                sample_data = sampler.random(n=n_samples)
+            elif method == "lhs":
+                sampler = qmc.LatinHypercube(d=1)
+                sample_data = sampler.random(n=n_samples)
+            elif method == "random":
+                uniform_samples = tfd.Uniform(
+                    tf.subtract(mean,radius), tf.add(mean,radius)).sample(n_samples)
+            # Inverse transform
+            if method == "sobol" or method == "lhs":
+                sample_dat = tf.cast(tf.convert_to_tensor(sample_data),
+                                     tf.float32)
+                uniform_samples = tfd.Uniform(tf.subtract(mean,radius),
+                                                tf.add(mean,radius)
+                                              ).quantile(
+                                                  tf.squeeze(sample_dat, -1))
             res_dict[n]=uniform_samples
+
     else:
+        uniform_samples=[]
         for i,j,n in zip(mean, radius, hyppar):
             # make sure type is correct
             i = tf.cast(i, tf.float32)
@@ -71,14 +128,23 @@ def init_method(hyppar, n_warm_up, method, mean, radius, global_dict):
 
             if method == "random":
                 uniform_samples = tfd.Uniform(tf.subtract(i,j), 
-                                              tf.add(i,j)).sample(n_warm_up)
+                                          tf.add(i,j)).sample(n_samples)
             elif method == "sobol":
-                # Sobol samples
-                sobol_samples = tf.math.sobol_sample(n_hypparam, n_warm_up)
-                # Inverse transform to get samples from normal
-                uniform_samples = tfd.Uniform(tf.subtract(i,j), 
-                                          tf.add(i,j)).quantile(sobol_samples)
-            res_dict[n] = uniform_samples
+                sampler = qmc.Sobol(d=1)
+                sample_data = sampler.random(n=n_samples)
+            elif method == "lhs":
+                sampler = qmc.LatinHypercube(d=1)
+                sample_data = sampler.random(n=n_samples)
+                
+            # Inverse transform
+            if method == "sobol" or method == "lhs":
+                sample_dat = tf.cast(tf.convert_to_tensor(sample_data),
+                                     tf.float32)
+                uniform_samples = tfd.Uniform(
+                    tf.subtract(i,j), tf.add(i,j)).quantile(
+                        tf.squeeze(sample_dat, -1))
+
+            res_dict[n] = tf.stack(uniform_samples, axis=-1)
 
     return res_dict
 

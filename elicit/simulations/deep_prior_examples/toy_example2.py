@@ -8,6 +8,8 @@ import tensorflow as tf
 import pandas as pd
 import elicit as el
 
+from bayesflow.inference_networks import InvertibleNetwork
+from elicit.user.custom_functions import log_R2
 from elicit.user.generative_models import ToyModel2
 from elicit.user.design_matrices import load_design_matrix_toy2
 
@@ -33,27 +35,13 @@ eliobj = el.Elicit(
         ),
     parameters=[
         el.parameter(
-            name="beta0",
-            family=tfd.Normal,
-            hyperparams=dict(
-                loc=el.hyper("mu0"),
-                scale=el.hyper("sigma0", lower=0)
-                )
+            name="beta0"
         ),
         el.parameter(
-            name="beta1",
-            family=tfd.Normal,
-            hyperparams=dict(
-                loc=el.hyper("mu1"),
-                scale=el.hyper("sigma1", lower=0)
-                )
+            name="beta1"
         ),
         el.parameter(
-            name="sigma",
-            family=tfd.HalfNormal,
-            hyperparams=dict(
-                scale=el.hyper("sigma2", lower=0)
-                )
+            name="sigma"
         ),
     ],
     target_quantities=[
@@ -74,60 +62,80 @@ eliobj = el.Elicit(
             elicitation_method=el.eli_method.quantiles((5, 25, 50, 75, 95)),
             loss=el.MMD_energy,
             loss_weight=1.0
+        ),
+        el.target(
+            name="logR2",
+            elicitation_method=el.eli_method.custom(log_R2, ypred, epred),
+            loss=el.MMD_energy,
+            loss_weight=1.0
+        ),
+        el.target(
+            name="correlation",
+            elicitation_method=el.eli_method.correlation(),
+            loss=el.L2,
+            loss_weight=0.1
         )
     ],
-    expert=el.expert.data(dat = expert_dat),
-    # expert=el.expert.simulate(
-    #     ground_truth = ground_truth,
-    #     num_samples = 10_000
-    # ),
+    #expert=el.expert.data(dat = expert_dat),
+    expert=el.expert.simulate(
+        ground_truth = ground_truth,
+        num_samples = 10_000
+    ),
     optimization_settings=el.optimizer(
         optimizer=tf.keras.optimizers.Adam,
         learning_rate=0.05,
         clipnorm=1.0
         ),
     training_settings=el.train(
-        method="parametric_prior",
-        name="toy2_lhs",
+        method="deep_prior",
+        name="toy2",
         seed=1,
-        epochs=1,#400,
+        epochs=400,
         progress_info=0
     ),
+    normalizing_flow=el.nf(
+        inference_network=InvertibleNetwork,
+        network_specs=dict(
+            num_params=3,
+            num_coupling_layers=3,
+            coupling_design="affine",
+            coupling_settings={
+                "dropout": False,
+                "dense_args": {
+                    "units": 128,
+                    "activation": "relu",
+                    "kernel_regularizer": None,
+                },
+                "num_dense": 2,
+            },
+            permutation="fixed"
+        ),
+        base_distribution=tfd.MultivariateNormalDiag(
+            loc=tf.zeros(3),
+            scale_diag=tf.ones(3)
+        )
+    ),
     initialization_settings=el.initializer(
-        method="lhs",
+        method="random",
         loss_quantile=0,
-        iterations=2**7,
+        iterations=10,
         specs=el.init_specs(
-            radius=2,
-            mean=0
+            radius=1.,
+            mean=0.
             )
         )
 )
 
 global_dict = eliobj.inputs
 
-res_ep, res = eliobj.train(save_file="results")
+res_ep, res = eliobj.train(save_file=None)
 
-init_sobol=pd.read_pickle("elicit/results/parametric_prior/toy2_sobol_1/initialization_matrix.pkl")
-init_lhs=pd.read_pickle("elicit/results/parametric_prior/toy2_lhs_1/initialization_matrix.pkl")
-init_random=pd.read_pickle("elicit/results/parametric_prior/toy2_random_1/initialization_matrix.pkl")
+res_ep["hyperparameter"].keys()
 
+tf.stack(res_ep["hyperparameter"]["means"],0)
+tf.stack(res_ep["hyperparameter"]["stds"],0)
 
-import seaborn as sns
-_, axs = plt.subplots(1,4, constrained_layout=True, figsize=(8,2),
-                      sharey=True)
-for i, n in enumerate(["mu0", "sigma0", "mu1", "sigma1"]):
-    sns.ecdfplot(init_sobol[n], label="sobol", ax=axs[i])
-    sns.ecdfplot(init_lhs[n], label="lhs", ax=axs[i])
-    sns.ecdfplot(init_random[n], label="random", ax=axs[i])
-    axs[i].set_title(n, size="medium")
-axs[0].legend(handlelength=0.2, frameon=False, fontsize="small")
-plt.suptitle("ecdf of initializations using different sampling techniques")
-
-
-
-
-plt.plot(res_ep["hyperparameter"]["mu0"])
+plt.plot(res_ep["hyperparameter"]["means"])
 plt.plot(res_ep["hyperparameter"]["mu1"])
 plt.plot(res_ep["hyperparameter"]["sigma0"])
 plt.plot(res_ep["hyperparameter"]["sigma1"])

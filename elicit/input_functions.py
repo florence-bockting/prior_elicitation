@@ -165,7 +165,20 @@ class ElicitationMethod:
         """
         return dict(name="identity",
                     value=None)
-    def custom(self, func: callable):
+    def correlation(self):
+        """
+        Implements a method to calculate the pearson correlation between
+        model parameters.
+
+        Returns
+        -------
+        elicit_dict : dict
+            Dictionary including the correlation settings.
+
+        """
+        return dict(name="pearson_correlation",
+                    value=None)
+    def custom(self, func: callable, **kwargs):
         """
         Implements a placeholder for custom target methods. The custom method
         can be passed as argument.
@@ -181,8 +194,13 @@ class ElicitationMethod:
             Dictionary including the custom settings.
 
         """
+        args_dict=dict()
+        for key in kwargs:
+            args_dict[key] = kwargs[key]
+        
         return dict(name="custom",
-                    value=func)
+                    value=func,
+                    add_args=args_dict)
 
 # create an instance of the ElicitationMethod class
 eli_method = ElicitationMethod()
