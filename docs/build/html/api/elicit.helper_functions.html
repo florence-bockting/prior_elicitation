@@ -356,9 +356,6 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.helper_functions.remove_unneeded_files"><code class="docutils literal notranslate"><span class="pre">remove_unneeded_files()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.helper_functions.save_hyperparameters"><code class="docutils literal notranslate"><span class="pre">save_hyperparameters()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.helper_functions.marginal_prior_moments"><code class="docutils literal notranslate"><span class="pre">marginal_prior_moments()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.helper_functions.create_output_summary"><code class="docutils literal notranslate"><span class="pre">create_output_summary()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.helper_functions.write_res_summary"><code class="docutils literal notranslate"><span class="pre">write_res_summary()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.helper_functions.print_res_summary"><code class="docutils literal notranslate"><span class="pre">print_res_summary()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.helper_functions.identity"><code class="docutils literal notranslate"><span class="pre">identity()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.helper_functions.DoubleBound"><code class="docutils literal notranslate"><span class="pre">DoubleBound</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.helper_functions.DoubleBound.__init__"><code class="docutils literal notranslate"><span class="pre">DoubleBound.__init__()</span></code></a></li>
@@ -466,63 +463,6 @@ distributions for each epoch.</p>
 <dd class="field-even"><dl class="simple">
 <dt><strong>res_dict</strong><span class="classifier">dict</span></dt><dd><p>returns mean (key:’means’) and standard deviation (key:’stds’)
 for each sampled marginal prior distribution; for each epoch.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="elicit.helper_functions.create_output_summary">
-<span class="sig-prename descclassname"><span class="pre">elicit.helper_functions.</span></span><span class="sig-name descname"><span class="pre">create_output_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helper_functions.html#create_output_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helper_functions.create_output_summary" title="Link to this definition">#</a></dt>
-<dd><p>Creates a text summary of all user inputs and some information about the
-learning process</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>path_res</strong><span class="classifier">str</span></dt><dd><p>path to folder in which the results are saved.</p>
-</dd>
-<dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>global dictionary incl. all user specifications as created when call
-the prior_elicitation function.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>txt file</dt><dd><p>returns a text file summarizing all input information and some
-information about the learning process (e.g., wall time).</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="elicit.helper_functions.write_res_summary">
-<span class="sig-prename descclassname"><span class="pre">elicit.helper_functions.</span></span><span class="sig-name descname"><span class="pre">write_res_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helper_functions.html#write_res_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helper_functions.write_res_summary" title="Link to this definition">#</a></dt>
-<dd><p>saves the summary of the user inputs in a text file</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>path_res</strong><span class="classifier">str</span></dt><dd><p>path to location where results are saved.</p>
-</dd>
-<dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>dictionary containing all user specifications.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="elicit.helper_functions.print_res_summary">
-<span class="sig-prename descclassname"><span class="pre">elicit.helper_functions.</span></span><span class="sig-name descname"><span class="pre">print_res_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helper_functions.html#print_res_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helper_functions.print_res_summary" title="Link to this definition">#</a></dt>
-<dd><p>Prints the summary output without saving it to a particular location.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>path_res</strong><span class="classifier">str</span></dt><dd><p>path to location where results are saved.</p>
-</dd>
-<dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>global dictionary containing all user specifications.</p>
 </dd>
 </dl>
 </dd>
@@ -658,9 +598,6 @@ information about the learning process (e.g., wall time).</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.helper_functions.remove_unneeded_files"><code class="docutils literal notranslate"><span class="pre">remove_unneeded_files()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.helper_functions.save_hyperparameters"><code class="docutils literal notranslate"><span class="pre">save_hyperparameters()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.helper_functions.marginal_prior_moments"><code class="docutils literal notranslate"><span class="pre">marginal_prior_moments()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.helper_functions.create_output_summary"><code class="docutils literal notranslate"><span class="pre">create_output_summary()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.helper_functions.write_res_summary"><code class="docutils literal notranslate"><span class="pre">write_res_summary()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.helper_functions.print_res_summary"><code class="docutils literal notranslate"><span class="pre">print_res_summary()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.helper_functions.identity"><code class="docutils literal notranslate"><span class="pre">identity()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.helper_functions.DoubleBound"><code class="docutils literal notranslate"><span class="pre">DoubleBound</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.helper_functions.DoubleBound.__init__"><code class="docutils literal notranslate"><span class="pre">DoubleBound.__init__()</span></code></a></li>

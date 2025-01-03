@@ -348,8 +348,7 @@ document.write(`
 <span class="k">class</span> <span class="nc">ToyModel2</span><span class="p">:</span>
 <div class="viewcode-block" id="ToyModel2.__call__">
 <a class="viewcode-back" href="../../../api/elicit.user.generative_models.html#elicit.user.generative_models.ToyModel2.__call__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">,</span> <span class="n">design_matrix</span><span class="p">,</span>
-                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">,</span> <span class="n">design_matrix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">B</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">S</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
@@ -379,6 +378,91 @@ document.write(`
             <span class="n">y_X0</span><span class="o">=</span><span class="n">y_X0</span><span class="p">,</span> <span class="n">y_X1</span><span class="o">=</span><span class="n">y_X1</span><span class="p">,</span> <span class="n">y_X2</span><span class="o">=</span><span class="n">y_X2</span>
         <span class="p">)</span></div>
 </div>
+
+
+
+<div class="viewcode-block" id="NormalModelSimple">
+<a class="viewcode-back" href="../../../api/elicit.user.generative_models.html#elicit.user.generative_models.NormalModelSimple">[docs]</a>
+<span class="k">class</span> <span class="nc">NormalModelSimple</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="NormalModelSimple.__call__">
+<a class="viewcode-back" href="../../../api/elicit.user.generative_models.html#elicit.user.generative_models.NormalModelSimple.__call__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">,</span> <span class="n">design_matrix</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="n">X</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">design_matrix</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">,:],</span>
+                          <span class="p">(</span><span class="n">prior_samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">prior_samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                           <span class="nb">len</span><span class="p">(</span><span class="n">design_matrix</span><span class="p">)))</span>
+
+        <span class="n">epred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">][:,:,</span><span class="kc">None</span><span class="p">],</span>
+                       <span class="n">prior_samples</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">][:,:,</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">likelihood</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">epred</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
+        <span class="n">ypred</span> <span class="o">=</span> <span class="n">likelihood</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+
+        <span class="n">X0</span> <span class="o">=</span> <span class="n">ypred</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">X1</span> <span class="o">=</span> <span class="n">ypred</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># R2</span>
+        <span class="n">var_epred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">epred</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># variance of difference between ypred and epred</span>
+        <span class="n">var_diff</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">ypred</span><span class="p">,</span> <span class="n">epred</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">var_total</span> <span class="o">=</span> <span class="n">var_epred</span> <span class="o">+</span> <span class="n">var_diff</span>
+        <span class="c1"># variance of linear predictor divided by total variance</span>
+        <span class="n">log_R2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">var_epred</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">var_total</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">likelihood</span><span class="o">=</span><span class="n">likelihood</span><span class="p">,</span>
+            <span class="n">ypred</span><span class="o">=</span><span class="n">ypred</span><span class="p">,</span>
+            <span class="n">epred</span><span class="o">=</span><span class="n">epred</span><span class="p">,</span>
+            <span class="n">prior_samples</span><span class="o">=</span><span class="n">prior_samples</span><span class="p">,</span>
+            <span class="n">logR2</span> <span class="o">=</span> <span class="n">log_R2</span><span class="p">,</span>
+            <span class="n">X0</span><span class="o">=</span><span class="n">X0</span><span class="p">,</span>
+            <span class="n">X1</span><span class="o">=</span><span class="n">X1</span>
+            <span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="NormalModelComplex">
+<a class="viewcode-back" href="../../../api/elicit.user.generative_models.html#elicit.user.generative_models.NormalModelComplex">[docs]</a>
+<span class="k">class</span> <span class="nc">NormalModelComplex</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="NormalModelComplex.__call__">
+<a class="viewcode-back" href="../../../api/elicit.user.generative_models.html#elicit.user.generative_models.NormalModelComplex.__call__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">,</span> <span class="n">design_matrix</span><span class="p">):</span>
+
+        <span class="n">epred</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">@</span> <span class="n">tf</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">design_matrix</span><span class="p">)</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">[:,</span> <span class="p">:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">][:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">])</span>
+
+        <span class="n">likelihood</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">epred</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
+        <span class="n">ypred</span> <span class="o">=</span> <span class="n">likelihood</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+
+        <span class="n">X0</span> <span class="o">=</span> <span class="n">ypred</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">X1</span> <span class="o">=</span> <span class="n">ypred</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># R2</span>
+        <span class="n">var_epred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">epred</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># variance of difference between ypred and epred</span>
+        <span class="n">var_diff</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">ypred</span><span class="p">,</span> <span class="n">epred</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">var_total</span> <span class="o">=</span> <span class="n">var_epred</span> <span class="o">+</span> <span class="n">var_diff</span>
+        <span class="c1"># variance of linear predictor divided by total variance</span>
+        <span class="n">log_R2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">var_epred</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">var_total</span><span class="p">))</span>
+
+        <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">prior_samples</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+             <span class="n">tf</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">[:,</span> <span class="p">:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">][:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">])],</span>
+            <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">likelihood</span><span class="o">=</span><span class="n">likelihood</span><span class="p">,</span>
+            <span class="n">ypred</span><span class="o">=</span><span class="n">ypred</span><span class="p">,</span>
+            <span class="n">epred</span><span class="o">=</span><span class="n">epred</span><span class="p">,</span>
+            <span class="n">prior_samples</span><span class="o">=</span><span class="n">prior_samples</span><span class="p">,</span>
+            <span class="n">R2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">log_R2</span><span class="p">),</span>
+            <span class="n">X0</span><span class="o">=</span><span class="n">X0</span><span class="p">,</span>
+            <span class="n">X1</span><span class="o">=</span><span class="n">X1</span>
+            <span class="p">)</span></div>
+</div>
+
 
 
 <div class="viewcode-block" id="BinomialModel">

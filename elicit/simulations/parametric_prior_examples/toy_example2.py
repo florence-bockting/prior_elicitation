@@ -9,7 +9,7 @@ import pandas as pd
 import elicit as el
 
 from elicit.user.generative_models import ToyModel2
-from elicit.user.design_matrices import load_design_matrix_toy2
+from elicit.user.design_matrices import X_toy2
 
 tfd = tfp.distributions
 
@@ -29,7 +29,7 @@ expert_dat = {
 eliobj = el.Elicit(
     model=el.model(
         obj=ToyModel2,
-        design_matrix=load_design_matrix_toy2(N=200, quants=[25,50,75])
+        design_matrix=X_toy2(N=200, quantiles=[25,50,75])
         ),
     parameters=[
         el.parameter(
@@ -59,41 +59,41 @@ eliobj = el.Elicit(
     target_quantities=[
         el.target(
             name="y_X0",
-            elicitation_method=el.eli_method.quantiles((5, 25, 50, 75, 95)),
+            elicitation_method=el.elicitation_method.quantiles((5, 25, 50, 75, 95)),
             loss=el.MMD_energy,
             loss_weight=1.0
         ),
         el.target(
             name="y_X1",
-            elicitation_method=el.eli_method.quantiles((5, 25, 50, 75, 95)),
+            elicitation_method=el.elicitation_method.quantiles((5, 25, 50, 75, 95)),
             loss=el.MMD_energy,
             loss_weight=1.0
         ),
         el.target(
             name="y_X2",
-            elicitation_method=el.eli_method.quantiles((5, 25, 50, 75, 95)),
+            elicitation_method=el.elicitation_method.quantiles((5, 25, 50, 75, 95)),
             loss=el.MMD_energy,
             loss_weight=1.0
         )
     ],
     expert=el.expert.data(dat = expert_dat),
-    # expert=el.expert.simulate(
+    # expert=el.expert.simulator(
     #     ground_truth = ground_truth,
     #     num_samples = 10_000
     # ),
-    optimization_settings=el.optimizer(
+    optimizer=el.optimizer(
         optimizer=tf.keras.optimizers.Adam,
         learning_rate=0.05,
         clipnorm=1.0
         ),
-    training_settings=el.train(
+    trainer=el.trainer(
         method="parametric_prior",
         name="toy2_lhs",
         seed=1,
         epochs=1,#400,
         progress_info=0
     ),
-    initialization_settings=el.initializer(
+    initializer=el.initializer(
         method="lhs",
         loss_quantile=0,
         iterations=2**7,
@@ -104,9 +104,7 @@ eliobj = el.Elicit(
         )
 )
 
-global_dict = eliobj.inputs
-
-res_ep, res = eliobj.train(save_file="results")
+res = eliobj.fit(save_file=None)
 
 init_sobol=pd.read_pickle("elicit/results/parametric_prior/toy2_sobol_1/initialization_matrix.pkl")
 init_lhs=pd.read_pickle("elicit/results/parametric_prior/toy2_lhs_1/initialization_matrix.pkl")

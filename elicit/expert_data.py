@@ -40,7 +40,7 @@ def get_expert_data(global_dict, one_forward_simulation):
     if oracle:
         logger.info("Simulate from oracle")
         # set seed
-        tf.random.set_seed(global_dict["training_settings"]["seed"])
+        tf.random.set_seed(global_dict["trainer"]["seed"])
         # sample from true priors
         prior_model = el.Priors(global_dict=global_dict,
                                  ground_truth=True,

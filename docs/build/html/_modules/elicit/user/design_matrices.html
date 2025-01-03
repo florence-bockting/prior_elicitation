@@ -318,12 +318,24 @@ document.write(`
 
 <span class="n">tfd</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">distributions</span>
 
-<div class="viewcode-block" id="load_design_matrix_toy2">
-<a class="viewcode-back" href="../../../api/elicit.user.design_matrices.html#elicit.user.design_matrices.load_design_matrix_toy2">[docs]</a>
-<span class="k">def</span> <span class="nf">load_design_matrix_toy2</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">quants</span><span class="o">=</span><span class="p">[</span><span class="mi">25</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">75</span><span class="p">]):</span>
+
+<div class="viewcode-block" id="design_matrix">
+<a class="viewcode-back" href="../../../api/elicit.user.design_matrices.html#elicit.user.design_matrices.design_matrix">[docs]</a>
+<span class="k">def</span> <span class="nf">design_matrix</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">quantiles</span><span class="p">):</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">x_sd</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_std</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">X_std</span> <span class="o">=</span> <span class="n">X</span> <span class="o">/</span> <span class="n">x_sd</span>
+    <span class="n">X_selected</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">X_std</span><span class="p">,</span> <span class="n">quantiles</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">X_selected</span></div>
+
+
+
+<div class="viewcode-block" id="X_toy2">
+<a class="viewcode-back" href="../../../api/elicit.user.design_matrices.html#elicit.user.design_matrices.X_toy2">[docs]</a>
+<span class="k">def</span> <span class="nf">X_toy2</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">quantiles</span><span class="o">=</span><span class="p">[</span><span class="mi">25</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">75</span><span class="p">]):</span>
     <span class="n">X</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
     <span class="n">X_std</span> <span class="o">=</span> <span class="p">(</span><span class="n">X</span><span class="o">-</span><span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">X</span><span class="p">))</span><span class="o">/</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_std</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-    <span class="n">X_sel</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">X_std</span><span class="p">,</span> <span class="n">quants</span><span class="p">)</span>
+    <span class="n">X_sel</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">X_std</span><span class="p">,</span> <span class="n">quantiles</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">X_sel</span></div>
 
 

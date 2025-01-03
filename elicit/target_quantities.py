@@ -123,8 +123,8 @@ def computation_target_quantities(model_simulations, ground_truth,
         targets_res[tar["name"]] = target_quantity
 
     # save file in object
-    saving_path = global_dict["training_settings"]["output_path"]
-    if global_dict["training_settings"]["output_path"] is not None:
+    saving_path = global_dict["trainer"]["output_path"]
+    if global_dict["trainer"]["output_path"] is not None:
         if ground_truth:
             saving_path = saving_path + "/expert"
         path = saving_path + "/target_quantities.pkl"

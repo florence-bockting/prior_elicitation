@@ -348,7 +348,7 @@ document.write(`
 <div class="viewcode-block" id="remove_unneeded_files">
 <a class="viewcode-back" href="../../api/elicit.helper_functions.html#elicit.helper_functions.remove_unneeded_files">[docs]</a>
 <span class="k">def</span> <span class="nf">remove_unneeded_files</span><span class="p">(</span><span class="n">global_dict</span><span class="p">,</span> <span class="n">save_results</span><span class="p">):</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;trainer&quot;</span><span class="p">][</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">save_results</span><span class="p">[</span><span class="s2">&quot;init_hyperparameters&quot;</span><span class="p">]:</span>
         <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/init_hyperparameters.pkl&quot;</span><span class="p">)</span>
@@ -379,8 +379,8 @@ document.write(`
 <span class="sd">        learned values for each hyperparameter and epoch.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">saving_path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;trainer&quot;</span><span class="p">][</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">saving_path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;trainer&quot;</span><span class="p">][</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">saving_path</span> <span class="o">=</span> <span class="s2">&quot;elicit_temp&quot;</span>
 
@@ -440,8 +440,8 @@ document.write(`
 <span class="sd">        for each sampled marginal prior distribution; for each epoch.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">saving_path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;trainer&quot;</span><span class="p">][</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">saving_path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;trainer&quot;</span><span class="p">][</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">saving_path</span> <span class="o">=</span> <span class="s2">&quot;elicit_temp&quot;</span>
 
@@ -463,245 +463,235 @@ document.write(`
 
 
 
-<div class="viewcode-block" id="create_output_summary">
-<a class="viewcode-back" href="../../api/elicit.helper_functions.html#elicit.helper_functions.create_output_summary">[docs]</a>
-<span class="k">def</span> <span class="nf">create_output_summary</span><span class="p">(</span><span class="n">path_res</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Creates a text summary of all user inputs and some information about the</span>
-<span class="sd">    learning process</span>
+<span class="c1"># def create_output_summary(path_res, global_dict):</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     Creates a text summary of all user inputs and some information about the</span>
+<span class="c1">#     learning process</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    path_res : str</span>
-<span class="sd">        path to folder in which the results are saved.</span>
-<span class="sd">    global_dict : dict</span>
-<span class="sd">        global dictionary incl. all user specifications as created when call</span>
-<span class="sd">        the prior_elicitation function.</span>
+<span class="c1">#     Parameters</span>
+<span class="c1">#     ----------</span>
+<span class="c1">#     path_res : str</span>
+<span class="c1">#         path to folder in which the results are saved.</span>
+<span class="c1">#     global_dict : dict</span>
+<span class="c1">#         global dictionary incl. all user specifications as created when call</span>
+<span class="c1">#         the prior_elicitation function.</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    txt file</span>
-<span class="sd">        returns a text file summarizing all input information and some</span>
-<span class="sd">        information about the learning process (e.g., wall time).</span>
+<span class="c1">#     Returns</span>
+<span class="c1">#     -------</span>
+<span class="c1">#     txt file</span>
+<span class="c1">#         returns a text file summarizing all input information and some</span>
+<span class="c1">#         information about the learning process (e.g., wall time).</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">summary_targets</span><span class="p">():</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;target quantities&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;elicitation technique&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;combine-loss&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;target_quantities&quot;</span><span class="p">]:</span>
-            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;target quantities&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
-            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;elicitation technique&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;target_quantities&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;elicitation_method&quot;</span><span class="p">]</span>
-                <span class="p">)</span>
-            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;combine-loss&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;target_quantities&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;loss_components&quot;</span><span class="p">]</span>
-                <span class="p">)</span>
-        <span class="k">return</span> <span class="n">df</span>
+<span class="c1">#     def summary_targets():</span>
+<span class="c1">#         df = pd.DataFrame()</span>
+<span class="c1">#         df[&quot;target quantities&quot;] = []</span>
+<span class="c1">#         df[&quot;elicitation technique&quot;] = []</span>
+<span class="c1">#         df[&quot;combine-loss&quot;] = []</span>
+<span class="c1">#         for k in global_dict[&quot;target_quantities&quot;]:</span>
+<span class="c1">#             df[&quot;target quantities&quot;].append(k)</span>
+<span class="c1">#             df[&quot;elicitation technique&quot;].append(</span>
+<span class="c1">#                 global_dict[&quot;target_quantities&quot;][k][&quot;elicitation_method&quot;]</span>
+<span class="c1">#                 )</span>
+<span class="c1">#             df[&quot;combine-loss&quot;].append(</span>
+<span class="c1">#                 global_dict[&quot;target_quantities&quot;][k][&quot;loss_components&quot;]</span>
+<span class="c1">#                 )</span>
+<span class="c1">#         return df</span>
 
-    <span class="n">loss_comp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">path_res</span> <span class="o">+</span> <span class="s2">&quot;/loss_components.pkl&quot;</span><span class="p">)</span>
+<span class="c1">#     loss_comp = pd.read_pickle(path_res + &quot;/loss_components.pkl&quot;)</span>
 
-    <span class="n">df2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
-    <span class="n">df2</span><span class="p">[</span><span class="s2">&quot;loss components&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">loss_comp</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-    <span class="n">df2</span><span class="p">[</span><span class="s2">&quot;shape&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="nb">list</span><span class="p">(</span><span class="n">loss_comp</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">loss_comp</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-        <span class="p">]</span>
+<span class="c1">#     df2 = pd.DataFrame()</span>
+<span class="c1">#     df2[&quot;loss components&quot;] = list(loss_comp.keys())</span>
+<span class="c1">#     df2[&quot;shape&quot;] = [</span>
+<span class="c1">#         list(loss_comp[key].shape) for key in list(loss_comp.keys())</span>
+<span class="c1">#         ]</span>
 
-    <span class="n">time</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">tf</span><span class="o">.</span><span class="n">reduce_sum</span><span class="p">(</span>
-            <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">path_res</span> <span class="o">+</span> <span class="s2">&quot;/final_results.pkl&quot;</span><span class="p">)[</span><span class="s2">&quot;time_epoch&quot;</span><span class="p">]</span>
-            <span class="p">)</span> <span class="o">/</span> <span class="mf">60.0</span><span class="p">)</span>
-    <span class="nb">min</span><span class="p">,</span> <span class="n">sec</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">time</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">))</span>
+<span class="c1">#     time = (</span>
+<span class="c1">#         tf.reduce_sum(</span>
+<span class="c1">#             pd.read_pickle(path_res + &quot;/final_results.pkl&quot;)[&quot;time_epoch&quot;]</span>
+<span class="c1">#             ) / 60.0)</span>
+<span class="c1">#     min, sec = tuple(f&quot;{time:.2f}&quot;.split(&quot;.&quot;))</span>
 
-    <span class="n">optimizer_dict</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">if</span> <span class="p">(</span>
-        <span class="nb">type</span><span class="p">(</span><span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;optimization_settings&quot;</span><span class="p">][</span>
-            <span class="s2">&quot;optimizer_specs&quot;</span>
-            <span class="p">][</span><span class="s2">&quot;learning_rate&quot;</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">float</span>
-    <span class="p">):</span>
-        <span class="n">optimizer_dict</span><span class="p">[</span><span class="s2">&quot;init_lr&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;optimization_settings&quot;</span><span class="p">][</span>
-            <span class="s2">&quot;optimizer_specs&quot;</span>
-        <span class="p">][</span><span class="s2">&quot;learning_rate&quot;</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="p">(</span>
-        <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;optimization_settings&quot;</span><span class="p">][</span><span class="s2">&quot;optimizer_specs&quot;</span><span class="p">][</span>
-            <span class="s2">&quot;learning_rate&quot;</span>
-        <span class="p">]</span><span class="o">.</span><span class="n">_keras_api_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="o">==</span> <span class="s2">&quot;keras.optimizers.schedules.CosineDecayRestarts&quot;</span>
-    <span class="p">):</span>
-        <span class="n">optimizer_dict</span><span class="p">[</span><span class="s2">&quot;lr_scheduler&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;optimization_settings&quot;</span><span class="p">][</span>
-            <span class="s2">&quot;optimizer_specs&quot;</span>
-        <span class="p">][</span><span class="s2">&quot;learning_rate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">_keras_api_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">optimizer_dict</span><span class="p">[</span><span class="s2">&quot;init_lr&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;optimization_settings&quot;</span><span class="p">][</span>
-            <span class="s2">&quot;optimizer_specs&quot;</span>
-        <span class="p">][</span><span class="s2">&quot;learning_rate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial_learning_rate</span>
-        <span class="n">optimizer_dict</span><span class="p">[</span><span class="s2">&quot;decay_steps&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;optimization_settings&quot;</span><span class="p">][</span>
-            <span class="s2">&quot;optimizer_specs&quot;</span>
-        <span class="p">][</span><span class="s2">&quot;learning_rate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">first_decay_steps</span>
-    <span class="k">elif</span> <span class="p">(</span>
-        <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;optimization_settings&quot;</span><span class="p">][</span><span class="s2">&quot;optimizer_specs&quot;</span><span class="p">][</span>
-            <span class="s2">&quot;learning_rate&quot;</span>
-        <span class="p">]</span><span class="o">.</span><span class="n">_keras_api_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="o">==</span> <span class="s2">&quot;keras.optimizers.schedules.ExponentialDecay&quot;</span>
-    <span class="p">):</span>
-        <span class="n">optimizer_dict</span><span class="p">[</span><span class="s2">&quot;lr_scheduler&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;optimization_settings&quot;</span><span class="p">][</span>
-            <span class="s2">&quot;optimizer_specs&quot;</span>
-        <span class="p">][</span><span class="s2">&quot;learning_rate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">_keras_api_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">optimizer_dict</span><span class="p">[</span><span class="s2">&quot;init_lr&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;optimization_settings&quot;</span><span class="p">][</span>
-            <span class="s2">&quot;optimizer_specs&quot;</span>
-        <span class="p">][</span><span class="s2">&quot;learning_rate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial_learning_rate</span>
-        <span class="n">optimizer_dict</span><span class="p">[</span><span class="s2">&quot;decay_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;optimization_settings&quot;</span><span class="p">][</span>
-            <span class="s2">&quot;optimizer_specs&quot;</span>
-        <span class="p">][</span><span class="s2">&quot;learning_rate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">decay_rate</span>
-        <span class="n">optimizer_dict</span><span class="p">[</span><span class="s2">&quot;decay_steps&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;optimization_settings&quot;</span><span class="p">][</span>
-            <span class="s2">&quot;optimizer_specs&quot;</span>
-        <span class="p">][</span><span class="s2">&quot;learning_rate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">decay_steps</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">optimizer_dict</span><span class="p">[</span><span class="s2">&quot;lr_scheduler&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;optimization_settings&quot;</span><span class="p">][</span>
-            <span class="s2">&quot;optimizer_specs&quot;</span>
-        <span class="p">][</span><span class="s2">&quot;learning_rate&quot;</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;deep_prior&quot;</span><span class="p">:</span>
-        <span class="c1"># create sub(-sub)dict for better readability</span>
-        <span class="n">dict_nf</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s1">&#39;normalizing_flow&#39;</span><span class="p">]</span>
-        <span class="n">dict_nf_copl</span> <span class="o">=</span> <span class="n">dict_nf</span><span class="p">[</span><span class="s1">&#39;coupling_settings&#39;</span><span class="p">]</span>
+<span class="c1">#     optimizer_dict = {}</span>
+<span class="c1">#     if (</span>
+<span class="c1">#         type(global_dict[&quot;optimizer&quot;][</span>
+<span class="c1">#             &quot;optimizer_specs&quot;</span>
+<span class="c1">#             ][&quot;learning_rate&quot;]) is float</span>
+<span class="c1">#     ):</span>
+<span class="c1">#         optimizer_dict[&quot;init_lr&quot;] = global_dict[&quot;optimizer&quot;][&quot;optimizer_specs&quot;</span>
+<span class="c1">#         ][&quot;learning_rate&quot;]</span>
+<span class="c1">#     elif (</span>
+<span class="c1">#         global_dict[&quot;optimization_settings&quot;][&quot;optimizer_specs&quot;][</span>
+<span class="c1">#             &quot;learning_rate&quot;</span>
+<span class="c1">#         ]._keras_api_names[0]</span>
+<span class="c1">#         == &quot;keras.optimizers.schedules.CosineDecayRestarts&quot;</span>
+<span class="c1">#     ):</span>
+<span class="c1">#         optimizer_dict[&quot;lr_scheduler&quot;] = global_dict[&quot;optimizer&quot;][</span>
+<span class="c1">#             &quot;optimizer_specs&quot;</span>
+<span class="c1">#         ][&quot;learning_rate&quot;]._keras_api_names[0]</span>
+<span class="c1">#         optimizer_dict[&quot;init_lr&quot;] = global_dict[&quot;optimizer&quot;][</span>
+<span class="c1">#             &quot;optimizer_specs&quot;</span>
+<span class="c1">#         ][&quot;learning_rate&quot;].initial_learning_rate</span>
+<span class="c1">#         optimizer_dict[&quot;decay_steps&quot;] = global_dict[&quot;optimizer&quot;][</span>
+<span class="c1">#             &quot;optimizer_specs&quot;</span>
+<span class="c1">#         ][&quot;learning_rate&quot;].first_decay_steps</span>
+<span class="c1">#     elif (</span>
+<span class="c1">#         global_dict[&quot;optimizer&quot;][&quot;optimizer_specs&quot;][</span>
+<span class="c1">#             &quot;learning_rate&quot;</span>
+<span class="c1">#         ]._keras_api_names[0]</span>
+<span class="c1">#         == &quot;keras.optimizers.schedules.ExponentialDecay&quot;</span>
+<span class="c1">#     ):</span>
+<span class="c1">#         optimizer_dict[&quot;lr_scheduler&quot;] = global_dict[&quot;optimizer&quot;][</span>
+<span class="c1">#             &quot;optimizer_specs&quot;</span>
+<span class="c1">#         ][&quot;learning_rate&quot;]._keras_api_names[0]</span>
+<span class="c1">#         optimizer_dict[&quot;init_lr&quot;] = global_dict[&quot;optimizer&quot;][</span>
+<span class="c1">#             &quot;optimizer_specs&quot;</span>
+<span class="c1">#         ][&quot;learning_rate&quot;].initial_learning_rate</span>
+<span class="c1">#         optimizer_dict[&quot;decay_rate&quot;] = global_dict[&quot;optimizer&quot;][</span>
+<span class="c1">#             &quot;optimizer_specs&quot;</span>
+<span class="c1">#         ][&quot;learning_rate&quot;].decay_rate</span>
+<span class="c1">#         optimizer_dict[&quot;decay_steps&quot;] = global_dict[&quot;optimizer&quot;][</span>
+<span class="c1">#             &quot;optimizer_specs&quot;</span>
+<span class="c1">#         ][&quot;learning_rate&quot;].decay_steps</span>
+<span class="c1">#     else:</span>
+<span class="c1">#         optimizer_dict[&quot;lr_scheduler&quot;] = global_dict[&quot;optimization_settings&quot;][</span>
+<span class="c1">#             &quot;optimizer_specs&quot;</span>
+<span class="c1">#         ][&quot;learning_rate&quot;]</span>
+<span class="c1">#     if global_dict[&quot;training_settings&quot;][&quot;method&quot;] == &quot;deep_prior&quot;:</span>
+<span class="c1">#         # create sub(-sub)dict for better readability</span>
+<span class="c1">#         dict_nf = global_dict[&#39;normalizing_flow&#39;]</span>
+<span class="c1">#         dict_nf_copl = dict_nf[&#39;coupling_settings&#39;]</span>
 
-        <span class="k">def</span> <span class="nf">method_settings</span><span class="p">():</span>
+<span class="c1">#         def method_settings():</span>
 
-            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span>
-                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Normalizing Flow&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">---------------- </span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;number coupling layers=</span><span class="si">{</span><span class="n">dict_nf</span><span class="p">[</span><span class="s1">&#39;num_coupling_layers&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;coupling design=</span><span class="si">{</span><span class="n">dict_nf</span><span class="p">[</span><span class="s1">&#39;coupling_design&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;units in dense layer=</span><span class="se">\</span>
-<span class="s2">                    </span><span class="si">{</span><span class="n">dict_nf_copl</span><span class="p">[</span><span class="s1">&#39;dense_args&#39;</span><span class="p">][</span><span class="s1">&#39;units&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;activation function=</span><span class="se">\</span>
-<span class="s2">                    </span><span class="si">{</span><span class="n">dict_nf_copl</span><span class="p">[</span><span class="s1">&#39;dense_args&#39;</span><span class="p">][</span><span class="s1">&#39;activation&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;number dense layers=</span><span class="si">{</span><span class="n">dict_nf_copl</span><span class="p">[</span><span class="s1">&#39;num_dense&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;permutation=</span><span class="si">{</span><span class="n">dict_nf</span><span class="p">[</span><span class="s1">&#39;permutation&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;base distribution family=</span><span class="se">\</span>
-<span class="s2">                    </span><span class="si">{</span><span class="n">dict_nf</span><span class="p">[</span><span class="s1">&#39;base_distribution&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
+<span class="c1">#             return str(</span>
+<span class="c1">#                 &quot;\nNormalizing Flow&quot;</span>
+<span class="c1">#                 + &quot;\n---------------- \n&quot;</span>
+<span class="c1">#                 + f&quot;number coupling layers={dict_nf[&#39;num_coupling_layers&#39;]}\n&quot;</span>
+<span class="c1">#                 + f&quot;coupling design={dict_nf[&#39;coupling_design&#39;]}\n&quot;</span>
+<span class="c1">#                 + f&quot;units in dense layer=\</span>
+<span class="c1">#                     {dict_nf_copl[&#39;dense_args&#39;][&#39;units&#39;]}\n&quot;</span>
+<span class="c1">#                 + f&quot;activation function=\</span>
+<span class="c1">#                     {dict_nf_copl[&#39;dense_args&#39;][&#39;activation&#39;]}\n&quot;</span>
+<span class="c1">#                 + f&quot;number dense layers={dict_nf_copl[&#39;num_dense&#39;]}\n&quot;</span>
+<span class="c1">#                 + f&quot;permutation={dict_nf[&#39;permutation&#39;]}\n&quot;</span>
+<span class="c1">#                 + f&quot;base distribution family=\</span>
+<span class="c1">#                     {dict_nf[&#39;base_distribution&#39;]._name}\n&quot;</span>
+<span class="c1">#             )</span>
 
-    <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># create subdict for better readability</span>
-        <span class="n">dict_param</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s1">&#39;model_parameters&#39;</span><span class="p">]</span>
+<span class="c1">#     else:</span>
+<span class="c1">#         # create subdict for better readability</span>
+<span class="c1">#         dict_param = global_dict[&#39;model_parameters&#39;]</span>
 
-        <span class="k">def</span> <span class="nf">method_settings</span><span class="p">():</span>
-            <span class="n">param_names</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
-                <span class="nb">list</span><span class="p">(</span>
-                    <span class="nb">set</span><span class="p">(</span>
-                        <span class="n">dict_param</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-                        <span class="p">)</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="nb">set</span><span class="p">([</span><span class="s2">&quot;independence&quot;</span><span class="p">,</span> <span class="s2">&quot;no_params&quot;</span><span class="p">]))</span>
-                    <span class="p">)</span>
-                <span class="p">)</span>
-            <span class="n">family_dict</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">dict_param</span><span class="p">[</span><span class="n">param</span><span class="p">][</span><span class="s2">&quot;family&quot;</span><span class="p">]</span><span class="o">.</span><span class="vm">__name__</span>
-                <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">param_names</span>
-            <span class="p">}</span>
-            <span class="n">init_dict</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">param_names</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">dict_param</span><span class="p">[</span><span class="n">param</span><span class="p">][</span><span class="s2">&quot;hyperparams_dict&quot;</span><span class="p">]:</span>
-                    <span class="n">init_info</span> <span class="o">=</span> <span class="n">dict_param</span><span class="p">[</span><span class="n">param</span><span class="p">][</span><span class="s2">&quot;hyperparams_dict&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
-                    <span class="n">init_dict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">init_info</span>
+<span class="c1">#         def method_settings():</span>
+<span class="c1">#             param_names = sorted(</span>
+<span class="c1">#                 list(</span>
+<span class="c1">#                     set(</span>
+<span class="c1">#                         dict_param.keys()</span>
+<span class="c1">#                         ).difference(set([&quot;independence&quot;, &quot;no_params&quot;]))</span>
+<span class="c1">#                     )</span>
+<span class="c1">#                 )</span>
+<span class="c1">#             family_dict = {</span>
+<span class="c1">#                 f&quot;{param}&quot;: dict_param[param][&quot;family&quot;].__name__</span>
+<span class="c1">#                 for param in param_names</span>
+<span class="c1">#             }</span>
+<span class="c1">#             init_dict = {}</span>
+<span class="c1">#             for param in param_names:</span>
+<span class="c1">#                 for k in dict_param[param][&quot;hyperparams_dict&quot;]:</span>
+<span class="c1">#                     init_info = dict_param[param][&quot;hyperparams_dict&quot;][k]</span>
+<span class="c1">#                     init_dict[k] = init_info</span>
 
-            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span>
-                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Parametric Prior&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">---------------- </span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;distribution family=</span><span class="si">{</span><span class="n">family_dict</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;initialization=</span><span class="si">{</span><span class="n">init_dict</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
+<span class="c1">#             return str(</span>
+<span class="c1">#                 &quot;\nParametric Prior&quot;</span>
+<span class="c1">#                 + &quot;\n---------------- \n&quot;</span>
+<span class="c1">#                 + f&quot;distribution family={family_dict}\n&quot;</span>
+<span class="c1">#                 + f&quot;initialization={init_dict}\n&quot;</span>
+<span class="c1">#             )</span>
 
-    <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;expert_data&quot;</span><span class="p">][</span><span class="s2">&quot;from_ground_truth&quot;</span><span class="p">]:</span>
-        <span class="n">param_list</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;expert_data&quot;</span><span class="p">][</span><span class="s2">&quot;simulator_specs&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-        <span class="n">true_info2</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">param_list</span><span class="p">:</span>
-            <span class="n">true_info</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;expert_data&quot;</span><span class="p">][</span><span class="s2">&quot;simulator_specs&quot;</span><span class="p">][</span>
-                <span class="n">key</span>
-            <span class="p">]</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-            <span class="n">true_info</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;validate_args&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-            <span class="n">true_info</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;allow_nan_stats&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-            <span class="n">true_info</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;force_probs_to_zero_outside_support&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-            <span class="n">true_info2</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">true_info</span>
+<span class="c1">#     if global_dict[&quot;expert_data&quot;][&quot;from_ground_truth&quot;]:</span>
+<span class="c1">#         param_list = global_dict[&quot;expert_data&quot;][&quot;simulator_specs&quot;].keys()</span>
+<span class="c1">#         true_info2 = {}</span>
+<span class="c1">#         for key in param_list:</span>
+<span class="c1">#             true_info = global_dict[&quot;expert_data&quot;][&quot;simulator_specs&quot;][</span>
+<span class="c1">#                 key</span>
+<span class="c1">#             ].parameters.copy()</span>
+<span class="c1">#             true_info.pop(&quot;validate_args&quot;, None)</span>
+<span class="c1">#             true_info.pop(&quot;allow_nan_stats&quot;, None)</span>
+<span class="c1">#             true_info.pop(&quot;force_probs_to_zero_outside_support&quot;, None)</span>
+<span class="c1">#             true_info2[key] = true_info</span>
 
-        <span class="n">expert_info</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="nb">str</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">true_info2</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">true_info2</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-            <span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">expert_info</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;see file (ToDo)&quot;</span><span class="p">]</span>
+<span class="c1">#         expert_info = [</span>
+<span class="c1">#             str(f&quot;{key}={true_info2[key]}&quot;) for key in true_info2.keys()</span>
+<span class="c1">#             ]</span>
+<span class="c1">#     else:</span>
+<span class="c1">#         expert_info = [&quot;see file (ToDo)&quot;]</span>
 
-    <span class="n">output_summary</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-        <span class="s2">&quot;General summary&quot;</span>
-        <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">---------------- </span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;method=</span><span class="si">{</span><span class="n">global_dict</span><span class="p">[</span><span class="s1">&#39;training_settings&#39;</span><span class="p">][</span><span class="s1">&#39;method&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;sim_id=</span><span class="si">{</span><span class="n">global_dict</span><span class="p">[</span><span class="s1">&#39;training_settings&#39;</span><span class="p">][</span><span class="s1">&#39;sim_id&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;seed=</span><span class="si">{</span><span class="n">global_dict</span><span class="p">[</span><span class="s1">&#39;seed&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;B=</span><span class="si">{</span><span class="n">global_dict</span><span class="p">[</span><span class="s1">&#39;training_settings&#39;</span><span class="p">][</span><span class="s1">&#39;B&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;rep=</span><span class="si">{</span><span class="n">global_dict</span><span class="p">[</span><span class="s1">&#39;training_settings&#39;</span><span class="p">][</span><span class="s1">&#39;simulations_from_prior&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;epochs=</span><span class="si">{</span><span class="n">global_dict</span><span class="p">[</span><span class="s1">&#39;training_settings&#39;</span><span class="p">][</span><span class="s1">&#39;epochs&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;wall time=</span><span class="si">{</span><span class="nb">min</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">sec</span><span class="si">}</span><span class="s2"> (min:sec)</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;optimizer=</span><span class="si">{</span><span class="n">global_dict</span><span class="p">[</span><span class="s1">&#39;optimization_settings&#39;</span><span class="p">][</span><span class="s1">&#39;optimizer&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;learning rate=</span><span class="si">{</span><span class="n">optimizer_dict</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;use_regularizer=</span><span class="si">{</span><span class="n">global_dict</span><span class="p">[</span><span class="s1">&#39;use_regularizer&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Model info&quot;</span>
-        <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">---------------- </span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;model name=</span><span class="si">{</span><span class="n">global_dict</span><span class="p">[</span><span class="s1">&#39;generative_model&#39;</span><span class="p">][</span><span class="s1">&#39;model_function&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;model parameters=</span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">dict_param</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;model parameter scaling=</span><span class="se">\</span>
-<span class="s2">            </span><span class="si">{</span><span class="p">[</span><span class="n">dict_param</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;param_scaling&#39;</span><span class="p">]</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">dict_param</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;model parameter independent=</span><span class="si">{</span><span class="n">dict_param</span><span class="p">[</span><span class="s1">&#39;independence&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Expert info&quot;</span>
-        <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">---------------- </span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">expert_info</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="o">+</span> <span class="n">method_settings</span><span class="p">()</span>
-        <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Target quantities and elicitation techniques&quot;</span>
-        <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--------------------- </span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">summary_targets</span><span class="p">()</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Loss components&quot;</span>
-        <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--------------------- </span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">df2</span><span class="si">}</span><span class="s2">&quot;</span>
-    <span class="p">)</span>
-    <span class="k">return</span> <span class="n">output_summary</span></div>
+<span class="c1">#     output_summary = str(</span>
+<span class="c1">#         &quot;General summary&quot;</span>
+<span class="c1">#         + &quot;\n---------------- \n&quot;</span>
+<span class="c1">#         + f&quot;method={global_dict[&#39;training_settings&#39;][&#39;method&#39;]}\n&quot;</span>
+<span class="c1">#         + f&quot;sim_id={global_dict[&#39;training_settings&#39;][&#39;sim_id&#39;]}\n&quot;</span>
+<span class="c1">#         + f&quot;seed={global_dict[&#39;seed&#39;]}\n&quot;</span>
+<span class="c1">#         + f&quot;B={global_dict[&#39;training_settings&#39;][&#39;B&#39;]}\n&quot;</span>
+<span class="c1">#         + f&quot;rep={global_dict[&#39;training_settings&#39;][&#39;simulations_from_prior&#39;]}\n&quot;</span>
+<span class="c1">#         + f&quot;epochs={global_dict[&#39;training_settings&#39;][&#39;epochs&#39;]}\n&quot;</span>
+<span class="c1">#         + f&quot;wall time={min}:{sec} (min:sec)\n&quot;</span>
+<span class="c1">#         + f&quot;optimizer={global_dict[&#39;optimization_settings&#39;][&#39;optimizer&#39;]}\n&quot;</span>
+<span class="c1">#         + f&quot;learning rate={optimizer_dict}\n&quot;</span>
+<span class="c1">#         + f&quot;use_regularizer={global_dict[&#39;use_regularizer&#39;]}\n&quot;</span>
+<span class="c1">#         + &quot;\nModel info&quot;</span>
+<span class="c1">#         + &quot;\n---------------- \n&quot;</span>
+<span class="c1">#         + f&quot;model name={global_dict[&#39;generative_model&#39;][&#39;model_function&#39;]}\n&quot;</span>
+<span class="c1">#         + f&quot;model parameters={list(dict_param.keys())}\n&quot;</span>
+<span class="c1">#         + f&quot;model parameter scaling=\</span>
+<span class="c1">#             {[dict_param[k][&#39;param_scaling&#39;] for k in dict_param]}\n&quot;</span>
+<span class="c1">#         + f&quot;model parameter independent={dict_param[&#39;independence&#39;]}\n&quot;</span>
+<span class="c1">#         + &quot;\nExpert info&quot;</span>
+<span class="c1">#         + &quot;\n---------------- \n&quot;</span>
+<span class="c1">#         + f&quot;{expert_info}\n&quot;</span>
+<span class="c1">#         + method_settings()</span>
+<span class="c1">#         + &quot;\nTarget quantities and elicitation techniques&quot;</span>
+<span class="c1">#         + &quot;\n--------------------- \n&quot;</span>
+<span class="c1">#         + f&quot;\n{summary_targets()}\n&quot;</span>
+<span class="c1">#         + &quot;\nLoss components&quot;</span>
+<span class="c1">#         + &quot;\n--------------------- \n&quot;</span>
+<span class="c1">#         + f&quot;\n{df2}&quot;</span>
+<span class="c1">#     )</span>
+<span class="c1">#     return output_summary</span>
 
 
+<span class="c1"># def write_res_summary(path_res, global_dict):</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     saves the summary of the user inputs in a text file</span>
 
-<div class="viewcode-block" id="write_res_summary">
-<a class="viewcode-back" href="../../api/elicit.helper_functions.html#elicit.helper_functions.write_res_summary">[docs]</a>
-<span class="k">def</span> <span class="nf">write_res_summary</span><span class="p">(</span><span class="n">path_res</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    saves the summary of the user inputs in a text file</span>
+<span class="c1">#     Parameters</span>
+<span class="c1">#     ----------</span>
+<span class="c1">#     path_res : str</span>
+<span class="c1">#         path to location where results are saved.</span>
+<span class="c1">#     global_dict : dict</span>
+<span class="c1">#         dictionary containing all user specifications.</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    path_res : str</span>
-<span class="sd">        path to location where results are saved.</span>
-<span class="sd">    global_dict : dict</span>
-<span class="sd">        dictionary containing all user specifications.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">path_res</span> <span class="o">+</span> <span class="s2">&quot;/overview.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
-    <span class="n">output_summary</span> <span class="o">=</span> <span class="n">create_output_summary</span><span class="p">(</span><span class="n">path_res</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">)</span>
-    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">output_summary</span><span class="p">)</span>
-    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     f = open(path_res + &quot;/overview.txt&quot;, &quot;w&quot;)</span>
+<span class="c1">#     output_summary = create_output_summary(path_res, global_dict)</span>
+<span class="c1">#     f.write(output_summary)</span>
+<span class="c1">#     f.close()</span>
 
 
+<span class="c1"># def print_res_summary(path_res, global_dict):</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     Prints the summary output without saving it to a particular location.</span>
 
-<div class="viewcode-block" id="print_res_summary">
-<a class="viewcode-back" href="../../api/elicit.helper_functions.html#elicit.helper_functions.print_res_summary">[docs]</a>
-<span class="k">def</span> <span class="nf">print_res_summary</span><span class="p">(</span><span class="n">path_res</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Prints the summary output without saving it to a particular location.</span>
+<span class="c1">#     Parameters</span>
+<span class="c1">#     ----------</span>
+<span class="c1">#     path_res : str</span>
+<span class="c1">#         path to location where results are saved.</span>
+<span class="c1">#     global_dict : dict</span>
+<span class="c1">#         global dictionary containing all user specifications.</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    path_res : str</span>
-<span class="sd">        path to location where results are saved.</span>
-<span class="sd">    global_dict : dict</span>
-<span class="sd">        global dictionary containing all user specifications.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">create_output_summary</span><span class="p">(</span><span class="n">path_res</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">))</span></div>
-
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     print(create_output_summary(path_res, global_dict))</span>
 
 
 <div class="viewcode-block" id="identity">

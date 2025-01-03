@@ -350,7 +350,7 @@ document.write(`
     <span class="k">if</span> <span class="n">oracle</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Simulate from oracle&quot;</span><span class="p">)</span>
         <span class="c1"># set seed</span>
-        <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;seed&quot;</span><span class="p">])</span>
+        <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;trainer&quot;</span><span class="p">][</span><span class="s2">&quot;seed&quot;</span><span class="p">])</span>
         <span class="c1"># sample from true priors</span>
         <span class="n">prior_model</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">Priors</span><span class="p">(</span><span class="n">global_dict</span><span class="o">=</span><span class="n">global_dict</span><span class="p">,</span>
                                  <span class="n">ground_truth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>

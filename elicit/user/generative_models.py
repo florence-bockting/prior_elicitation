@@ -30,8 +30,7 @@ class ToyModel:
         )
 
 class ToyModel2:
-    def __call__(self, ground_truth, prior_samples, design_matrix,
-                 **kwargs):
+    def __call__(self, prior_samples, design_matrix, **kwargs):
         B = prior_samples.shape[0]
         S = prior_samples.shape[1]
 

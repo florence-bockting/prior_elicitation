@@ -153,7 +153,7 @@ def computation_elicited_statistics(
             elicits_res[f"quantiles_{target_dict[i]['name']}"] = elicited_statistic
 
     # save file in object
-    saving_path = global_dict["training_settings"]["output_path"]
+    saving_path = global_dict["trainer"]["output_path"]
     if saving_path is not None:
         if ground_truth:
             saving_path = saving_path + "/expert"

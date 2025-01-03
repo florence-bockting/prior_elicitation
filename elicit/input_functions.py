@@ -203,11 +203,11 @@ class ElicitationMethod:
                     add_args=args_dict)
 
 # create an instance of the ElicitationMethod class
-eli_method = ElicitationMethod()
+elicitation_method = ElicitationMethod()
 
 
 def target(name : str, loss : callable,
-           elicitation_method : callable=eli_method,
+           elicitation_method : callable=elicitation_method,
            target_method : callable=None, loss_weight : float=1.0):
     """
     Specification of target quantity and corresponding elicitation technique.
@@ -279,7 +279,7 @@ class Expert:
 
         return dict(data=dat_prep)
 
-    def simulate(self, ground_truth: dict, num_samples: int=10_000):
+    def simulator(self, ground_truth: dict, num_samples: int=10_000):
         """
         Simulate data from an oracle by defining a ground truth (true prior
         distribution(s)).
@@ -432,7 +432,7 @@ def initializer(method: str, specs: init_specs,
     return init_dict
 
 
-def train(method: str, name: str, seed: int, epochs: int, B: int=128,
+def trainer(method: str, name: str, seed: int, epochs: int, B: int=128,
           num_samples: int=200, output_path: str="results",
           progress_info: int=1, view_ep: int=1, save_log: bool=False):
     """

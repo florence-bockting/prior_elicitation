@@ -34,7 +34,7 @@ def one_forward_simulation(prior_model, global_dict, ground_truth=False):
 
     """
     # set seed
-    tf.random.set_seed(global_dict["training_settings"]["seed"])
+    tf.random.set_seed(global_dict["trainer"]["seed"])
     # generate samples from initialized prior
     prior_samples = prior_model()
     # simulate prior predictive distribution based on prior samples
@@ -57,7 +57,7 @@ def one_forward_simulation(prior_model, global_dict, ground_truth=False):
 def pre_training(global_dict, expert_elicited_statistics):
     logger = logging.getLogger(__name__)
 
-    if global_dict["training_settings"]["method"] == "parametric_prior":
+    if global_dict["trainer"]["method"] == "parametric_prior":
 
         logger.info("Pre-training phase (only first run)")
 
@@ -70,8 +70,7 @@ def pre_training(global_dict, expert_elicited_statistics):
 
         # extract pre-specified quantile loss out of all runs
         # get corresponding set of initial values
-        loss_quantile = global_dict["initialization_settings"][
-            "loss_quantile"]
+        loss_quantile = global_dict["initializer"]["loss_quantile"]
         index = tf.squeeze(tf.where(loss_list == tfp.stats.percentile(
             loss_list, [loss_quantile])))
         init_prior_model = init_prior[int(index)]
@@ -91,10 +90,10 @@ class Elicit:
         parameters: list,
         target_quantities: list,
         expert: callable,
-        training_settings: callable,
-        optimization_settings: callable,
+        trainer: callable,
+        optimizer: callable,
         normalizing_flow: callable or None=None,
-        initialization_settings: callable or None=None,
+        initializer: callable or None=None,
     ):
         """
         Parameters
@@ -111,10 +110,10 @@ class Elicit:
         expert : callable
             specification of input data from expert or oracle using
             :func:`el.expert.data` or func:`el.expert.simulate`
-        training_settings : callable
+        trainer : callable
             specification of training settings for learning prior distribution(s)
             using :func:`elicit.prior_elicitation.train`
-        optimization_settings : callable
+        optimizer : callable
             specification of optimizer using
             :func:`elicit.prior_elicitation.optimizer`.
         normalizing_flow : callable or None
@@ -122,7 +121,7 @@ class Elicit:
             Only required for ``deep_prior`` method is used. If 
             ``parametric_prior`` is used this argument should be ``None``. Default
             value is None.
-        initialization_settings : callable
+        initializer : callable
             specification of initialization settings using
             :func:`elicit.prior_elicitation.initializer`. For method
             'parametric_prior' the argument should be None. Default value is None.
@@ -138,26 +137,25 @@ class Elicit:
             parameters=parameters,
             target_quantities=target_quantities,
             expert=expert,
-            training_settings=training_settings,
-            optimization_settings=optimization_settings,
+            trainer=trainer,
+            optimizer=optimizer,
             normalizing_flow=normalizing_flow,
-            initialization_settings=initialization_settings,
+            initializer=initializer,
             )
 
 
-   def train(self, save_file: str or None=None):
+   def fit(self, save_file: str or None=None):
         logger = logging.getLogger(__name__)
 
         if save_file is not None:
             # create saving path
-            self.inputs["training_settings"][
-                "output_path"
-            ] = f"./elicit/{save_file}/{self.inputs['training_settings']['method']}/{self.inputs['training_settings']['name']}_{self.inputs['training_settings']['seed']}"  # noqa
+            self.inputs["trainer"]["output_path"
+            ] = f"./elicit/{save_file}/{self.inputs['trainer']['method']}/{self.inputs['trainer']['name']}_{self.inputs['trainer']['seed']}"  # noqa
         else:
-            self.inputs["training_settings"]["output_path"] = None
+            self.inputs["trainer"]["output_path"] = None
 
         # set seed
-        tf.random.set_seed(self.inputs["training_settings"]["seed"])
+        tf.random.set_seed(self.inputs["trainer"]["seed"])
 
         # get expert data
         try:
@@ -190,8 +188,12 @@ class Elicit:
         else:
             res["expert_prior_samples"] = expert_prior
 
+        res_dict=dict(
+            across_epochs=res_ep,
+            last_epoch=res)
+
         # remove saved files that are not of interest for follow-up analysis
         if save_file is not None:
             el.remove_unneeded_files(self.inputs, save_results)  # noqa
 
-        return res_ep, res
+        return res_dict

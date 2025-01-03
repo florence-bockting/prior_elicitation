@@ -45,7 +45,7 @@
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/Toymodel2';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/toymodel_deep2';</script>
     <link rel="icon" href="../_static/favicon-light.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -260,7 +260,7 @@
       
       
       
-      <li><a href="../_sources/tutorials/Toymodel2.ipynb" target="_blank"
+      <li><a href="../_sources/tutorials/toymodel_deep2.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -361,6 +361,7 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#target-quantities-and-elicitation-techniques">Target quantities and elicitation techniques</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#expert-elicitation">Expert elicitation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#normalizing-flow">Normalizing Flow</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-learn-prior-distributions-based-on-expert-data">Training: Learn prior distributions based on expert data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results">Results</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convergence">Convergence</a></li>
@@ -407,16 +408,11 @@ document.write(`
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">elicit</span> <span class="k">as</span> <span class="nn">el</span>
 
+<span class="kn">from</span> <span class="nn">bayesflow.inference_networks</span> <span class="kn">import</span> <span class="n">InvertibleNetwork</span>
 <span class="kn">from</span> <span class="nn">elicit.user.generative_models</span> <span class="kn">import</span> <span class="n">ToyModel2</span>
-<span class="kn">from</span> <span class="nn">elicit.user.design_matrices</span> <span class="kn">import</span> <span class="n">load_design_matrix_toy2</span>
+<span class="kn">from</span> <span class="nn">elicit.user.design_matrices</span> <span class="kn">import</span> <span class="n">X_toy2</span>
 
 <span class="n">tfd</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">distributions</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bockting\AppData\Roaming\Python\Python311\site-packages\bayesflow\trainers.py:27: TqdmExperimentalWarning: Using `tqdm.autonotebook.tqdm` in notebook mode. Use `tqdm.tqdm` instead to force console mode (e.g. in jupyter console)
-  from tqdm.autonotebook import tqdm
 </pre></div>
 </div>
 </div>
@@ -427,9 +423,7 @@ document.write(`
 <h3>Generative model<a class="headerlink" href="#generative-model" title="Link to this heading">#</a></h3>
 <div class="amsmath math notranslate nohighlight">
 \[\begin{align*}
-    \beta_0 &amp;\sim \text{Normal}(\mu_0, \sigma_0) \\
-    \beta_1 &amp;\sim \text{Normal}(\mu_1, \sigma_1) \\
-    \sigma &amp;\sim \text{HalfNormal}(\sigma_2) \\
+    (\beta_0, \beta_1, \sigma) &amp;\sim p_\lambda(\cdot) \\
     \mu &amp;= \beta_0 + \beta_1X \\
     y_{pred} &amp;\sim \text{Normal}(\mu, \sigma)
 \end{align*}\]</div>
@@ -438,7 +432,7 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a predictor ranging from 1 to 200 </span>
 <span class="c1"># standardize predictor</span>
 <span class="c1"># select the 25th (X0), 50th (X1), and 75th (X2) quantile of the std. predictor for querying the expert</span>
-<span class="n">load_design_matrix_toy2</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">quants</span><span class="o">=</span><span class="p">[</span><span class="mi">25</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">75</span><span class="p">])</span>
+<span class="n">X_toy2</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">quantiles</span><span class="o">=</span><span class="p">[</span><span class="mi">25</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">75</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -501,7 +495,7 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># specify the model</span>
 <span class="n">model</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">model</span><span class="p">(</span>
         <span class="n">obj</span><span class="o">=</span><span class="n">ToyModel2</span><span class="p">,</span>
-        <span class="n">design_matrix</span><span class="o">=</span><span class="n">load_design_matrix_toy2</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">quants</span><span class="o">=</span><span class="p">[</span><span class="mi">25</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">75</span><span class="p">])</span>
+        <span class="n">design_matrix</span><span class="o">=</span><span class="n">X_toy2</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">quantiles</span><span class="o">=</span><span class="p">[</span><span class="mi">25</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">75</span><span class="p">])</span>
         <span class="p">)</span>
 </pre></div>
 </div>
@@ -515,39 +509,16 @@ document.write(`
 <li><p>slope with normal prior <span class="math notranslate nohighlight">\(\beta_1\)</span></p></li>
 <li><p>random noise with halfnormal prior <span class="math notranslate nohighlight">\(\sigma\)</span></p></li>
 </ul>
-<p><strong>To be learned hyperparameters</strong>
-$<span class="math notranslate nohighlight">\(
-\lambda = (\mu_0, \sigma_0, \mu_1, \sigma_1, \sigma_2)
-\)</span>$</p>
+<p><strong>To be learned hyperparameters</strong></p>
 <ul class="simple">
-<li><p>scale parameters (<span class="math notranslate nohighlight">\(\sigma_0, \sigma_1, \sigma_2\)</span>) are constrained to be positive</p></li>
+<li><p><span class="math notranslate nohighlight">\(\lambda\)</span> represent the weights of the deep neural network in the normalizing flow</p></li>
 </ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">parameters</span><span class="o">=</span><span class="p">[</span>
-        <span class="n">el</span><span class="o">.</span><span class="n">parameter</span><span class="p">(</span>
-            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;beta0&quot;</span><span class="p">,</span>
-            <span class="n">family</span><span class="o">=</span><span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">,</span>
-            <span class="n">hyperparams</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-                <span class="n">loc</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">hyper</span><span class="p">(</span><span class="s2">&quot;mu0&quot;</span><span class="p">),</span>
-                <span class="n">scale</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">hyper</span><span class="p">(</span><span class="s2">&quot;sigma0&quot;</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-                <span class="p">)</span>
-        <span class="p">),</span>
-        <span class="n">el</span><span class="o">.</span><span class="n">parameter</span><span class="p">(</span>
-            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;beta1&quot;</span><span class="p">,</span>
-            <span class="n">family</span><span class="o">=</span><span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">,</span>
-            <span class="n">hyperparams</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-                <span class="n">loc</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">hyper</span><span class="p">(</span><span class="s2">&quot;mu1&quot;</span><span class="p">),</span>
-                <span class="n">scale</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">hyper</span><span class="p">(</span><span class="s2">&quot;sigma1&quot;</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-                <span class="p">)</span>
-        <span class="p">),</span>
-        <span class="n">el</span><span class="o">.</span><span class="n">parameter</span><span class="p">(</span>
-            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;sigma&quot;</span><span class="p">,</span>
-            <span class="n">family</span><span class="o">=</span><span class="n">tfd</span><span class="o">.</span><span class="n">HalfNormal</span><span class="p">,</span>
-            <span class="n">hyperparams</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-                <span class="n">scale</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">hyper</span><span class="p">(</span><span class="s2">&quot;sigma2&quot;</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-                <span class="p">)</span>
-        <span class="p">),</span>
+        <span class="n">el</span><span class="o">.</span><span class="n">parameter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;beta0&quot;</span><span class="p">),</span>
+        <span class="n">el</span><span class="o">.</span><span class="n">parameter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;beta1&quot;</span><span class="p">),</span>
+        <span class="n">el</span><span class="o">.</span><span class="n">parameter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;sigma&quot;</span><span class="p">),</span>
     <span class="p">]</span>
 </pre></div>
 </div>
@@ -590,6 +561,12 @@ $<span class="math notranslate nohighlight">\(
             <span class="n">elicitation_method</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">eli_method</span><span class="o">.</span><span class="n">quantiles</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">95</span><span class="p">)),</span>
             <span class="n">loss</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">MMD_energy</span><span class="p">,</span>
             <span class="n">loss_weight</span><span class="o">=</span><span class="mf">1.0</span>
+        <span class="p">),</span>
+        <span class="n">el</span><span class="o">.</span><span class="n">target</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;correlation&quot;</span><span class="p">,</span>
+            <span class="n">elicitation_method</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">eli_method</span><span class="o">.</span><span class="n">correlation</span><span class="p">(),</span>
+            <span class="n">loss</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">L2</span><span class="p">,</span>
+            <span class="n">loss_weight</span><span class="o">=</span><span class="mf">0.1</span>
         <span class="p">)</span>
     <span class="p">]</span>
 </pre></div>
@@ -621,6 +598,42 @@ $<span class="math notranslate nohighlight">\(
 </div>
 </div>
 </section>
+<section id="normalizing-flow">
+<h2>Normalizing Flow<a class="headerlink" href="#normalizing-flow" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>we make use of the implementation of NFs in the <a class="reference external" href="https://bayesflow.org/"><code class="docutils literal notranslate"><span class="pre">BayesFlow</span></code> Python package</a></p></li>
+<li><p>use affine coupling flows</p></li>
+<li><p>base distribution is a standard normal</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">normalizing_flow</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">nf</span><span class="p">(</span>
+        <span class="n">inference_network</span><span class="o">=</span><span class="n">InvertibleNetwork</span><span class="p">,</span>
+        <span class="n">network_specs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">num_params</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+            <span class="n">num_coupling_layers</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+            <span class="n">coupling_design</span><span class="o">=</span><span class="s2">&quot;affine&quot;</span><span class="p">,</span>
+            <span class="n">coupling_settings</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;dropout&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s2">&quot;dense_args&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="mi">128</span><span class="p">,</span>
+                    <span class="s2">&quot;activation&quot;</span><span class="p">:</span> <span class="s2">&quot;relu&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;kernel_regularizer&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;num_dense&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="n">permutation</span><span class="o">=</span><span class="s2">&quot;fixed&quot;</span>
+        <span class="p">),</span>
+        <span class="n">base_distribution</span><span class="o">=</span><span class="n">tfd</span><span class="o">.</span><span class="n">MultivariateNormalDiag</span><span class="p">(</span>
+            <span class="n">loc</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+            <span class="n">scale_diag</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
 <section id="training-learn-prior-distributions-based-on-expert-data">
 <h2>Training: Learn prior distributions based on expert data<a class="headerlink" href="#training-learn-prior-distributions-based-on-expert-data" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
@@ -632,25 +645,17 @@ $<span class="math notranslate nohighlight">\(
     <span class="n">expert</span><span class="o">=</span><span class="n">expert</span><span class="p">,</span>
     <span class="n">optimization_settings</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">optimizer</span><span class="p">(</span>
         <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">,</span>
-        <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+        <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span>
         <span class="n">clipnorm</span><span class="o">=</span><span class="mf">1.0</span>
         <span class="p">),</span>
     <span class="n">training_settings</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
-        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;parametric_prior&quot;</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;deep_prior&quot;</span><span class="p">,</span>
         <span class="n">name</span><span class="o">=</span><span class="s2">&quot;toy2&quot;</span><span class="p">,</span>
         <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">epochs</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span>
         <span class="n">progress_info</span><span class="o">=</span><span class="mi">0</span>
     <span class="p">),</span>
-    <span class="n">initialization_settings</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">initializer</span><span class="p">(</span>
-        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;random&quot;</span><span class="p">,</span>
-        <span class="n">loss_quantile</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-        <span class="n">iterations</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-        <span class="n">specs</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">init_specs</span><span class="p">(</span>
-            <span class="n">radius</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
-            <span class="n">mean</span><span class="o">=</span><span class="mf">0.</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
+    <span class="n">normalizing_flow</span><span class="o">=</span><span class="n">normalizing_flow</span>
 <span class="p">)</span>
 
 <span class="n">res_ep</span><span class="p">,</span> <span class="n">res</span> <span class="o">=</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">save_file</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
@@ -658,17 +663,10 @@ $<span class="math notranslate nohighlight">\(
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initialization
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Training
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 10/10 [00:00&lt;00:00, 11.21it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 
-Training
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 800/800 [03:57&lt;00:00,  3.37it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 800/800 [11:08&lt;00:00,  1.20it/s]
 </pre></div>
 </div>
 </div>
@@ -678,6 +676,27 @@ Training
 <h2>Results<a class="headerlink" href="#results" title="Link to this heading">#</a></h2>
 <section id="convergence">
 <h3>Convergence<a class="headerlink" href="#convergence" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m_ep</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">res_ep</span><span class="p">[</span><span class="s2">&quot;hyperparameter&quot;</span><span class="p">][</span><span class="s2">&quot;means&quot;</span><span class="p">])</span>
+<span class="n">s_ep</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">res_ep</span><span class="p">[</span><span class="s2">&quot;hyperparameter&quot;</span><span class="p">][</span><span class="s2">&quot;stds&quot;</span><span class="p">])</span>
+
+<span class="n">_</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span> <span class="n">constrained_layout</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">res_ep</span><span class="p">[</span><span class="s2">&quot;loss&quot;</span><span class="p">])</span>
+<span class="p">[</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">m_ep</span><span class="p">[:,</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+<span class="p">[</span><span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">s_ep</span><span class="p">[:,</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[&lt;matplotlib.lines.Line2D at 0x21d7233be90&gt;],
+ [&lt;matplotlib.lines.Line2D at 0x21d710d7cd0&gt;],
+ [&lt;matplotlib.lines.Line2D at 0x21d04cb6c50&gt;]]
+</pre></div>
+</div>
+<img alt="../_images/ed34925be39419c8b378d67ca777583b144d00239889564596bf5236a6e4a0e8.png" src="../_images/ed34925be39419c8b378d67ca777583b144d00239889564596bf5236a6e4a0e8.png" />
+</div>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_convergence</span><span class="p">(</span><span class="n">res_ep</span><span class="p">):</span>
@@ -1025,6 +1044,7 @@ Training
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#target-quantities-and-elicitation-techniques">Target quantities and elicitation techniques</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#expert-elicitation">Expert elicitation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#normalizing-flow">Normalizing Flow</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-learn-prior-distributions-based-on-expert-data">Training: Learn prior distributions based on expert data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results">Results</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convergence">Convergence</a></li>

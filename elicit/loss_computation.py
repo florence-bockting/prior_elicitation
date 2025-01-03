@@ -81,7 +81,7 @@ def compute_loss_components(elicited_statistics, glob_dict, expert):
             loss_comp_res[f"{name}_loss_{i_target}"] = loss_comp
 
     # save file in object
-    saving_path = glob_dict["training_settings"]["output_path"]
+    saving_path = glob_dict["trainer"]["output_path"]
     if saving_path is not None:
         if expert:
             saving_path = saving_path + "/expert"
@@ -213,8 +213,8 @@ def compute_discrepancy(loss_components_expert, loss_components_training,
         loss_per_component.append(loss)
 
     # save file in object
-    if global_dict["training_settings"]["output_path"] is not None:
-        saving_path = global_dict["training_settings"]["output_path"]
+    if global_dict["trainer"]["output_path"] is not None:
+        saving_path = global_dict["trainer"]["output_path"]
     else:
         saving_path = "elicit_temp"
     path = saving_path + "/loss_per_component.pkl"

@@ -190,24 +190,22 @@ def initialization_phase(
 
     # create initializations
     init_matrix = init_method(
-        global_dict["initialization_settings"]["specs"]["hyper"],
-        dict_copy["initialization_settings"]["iterations"],
-        global_dict["initialization_settings"]["method"],
-        global_dict["initialization_settings"]["specs"]["mean"],
-        global_dict["initialization_settings"]["specs"]["radius"],
+        global_dict["initializer"]["specs"]["hyper"],
+        dict_copy["initializer"]["iterations"],
+        global_dict["initializer"]["method"],
+        global_dict["initializer"]["specs"]["mean"],
+        global_dict["initializer"]["specs"]["radius"],
         global_dict
         )
 
-    if global_dict["training_settings"]["output_path"] is not None:
-        path = dict_copy["training_settings"][
+    if global_dict["trainer"]["output_path"] is not None:
+        path = dict_copy["trainer"][
             "output_path"] + "/initialization_matrix.pkl"
         save_as_pkl(init_matrix, path)
 
     print("Initialization")
-    for i in tqdm(range(dict_copy["initialization_settings"]["iterations"])):
-        dict_copy["training_settings"]["seed"] = (
-            dict_copy["training_settings"]["seed"] + i
-        )
+    for i in tqdm(range(dict_copy["initializer"]["iterations"])):
+        dict_copy["trainer"]["seed"] = (dict_copy["trainer"]["seed"] + i)
         # create init-matrix-slice
         init_matrix_slice = {f"{key}": init_matrix[key][i] for key in init_matrix}
 
@@ -232,8 +230,8 @@ def initialization_phase(
         save_prior.append(prior_model.trainable_variables)
         loss_list.append(weighted_total_loss.numpy())
 
-    if global_dict["training_settings"]["output_path"] is not None:
-        path = dict_copy["training_settings"][
+    if global_dict["trainer"]["output_path"] is not None:
+        path = dict_copy["trainer"][
             "output_path"] + "/pre_training_results.pkl"
         save_as_pkl((loss_list, save_prior), path)
 

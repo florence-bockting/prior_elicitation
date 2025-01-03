@@ -56,12 +56,12 @@ def sgd_training(
     gradients_ep = []
     time_per_epoch = []
     # create subdirectories for better readability
-    dict_training = global_dict["training_settings"]
-    dict_optimization = global_dict["optimization_settings"]
+    dict_training = global_dict["trainer"]
+    dict_optimization = global_dict["optimizer"]
 
     # save files in folder or in temporary location
-    if global_dict["training_settings"]["output_path"] is not None:
-        saving_path = global_dict["training_settings"]["output_path"]
+    if global_dict["trainer"]["output_path"] is not None:
+        saving_path = global_dict["trainer"]["output_path"]
     else:
         saving_path = "elicit_temp"
 
@@ -140,7 +140,7 @@ def sgd_training(
             print("Done :)")
 
         if dict_training["method"] == "parametric_prior":
-            if global_dict["training_settings"]["output_path"] is not None:
+            if global_dict["trainer"]["output_path"] is not None:
                 path = saving_path + "/gradients.pkl"
                 save_as_pkl(gradients, path)
             # save for each epoch
@@ -171,7 +171,7 @@ def sgd_training(
         "loss_component": component_losses,
         "hyperparameter": res_dict,
         "time_epoch": time_per_epoch,
-        "seed": global_dict["training_settings"]["seed"]
+        "seed": global_dict["trainer"]["seed"]
     }
 
     output_res = {
@@ -187,7 +187,7 @@ def sgd_training(
     path = saving_path + "/final_results.pkl"
     save_as_pkl(res_ep, path)
 
-    if global_dict["training_settings"]["output_path"] is None:
+    if global_dict["trainer"]["output_path"] is None:
         os.remove(saving_path + "/final_results.pkl")
         os.remove(saving_path + "/loss_per_component.pkl")
         os.remove(saving_path + "/res_dict.pkl")

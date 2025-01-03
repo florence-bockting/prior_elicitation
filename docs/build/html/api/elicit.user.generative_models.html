@@ -360,6 +360,14 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.generative_models.ToyModel2.__call__"><code class="docutils literal notranslate"><span class="pre">ToyModel2.__call__()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.generative_models.NormalModelSimple"><code class="docutils literal notranslate"><span class="pre">NormalModelSimple</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.generative_models.NormalModelSimple.__call__"><code class="docutils literal notranslate"><span class="pre">NormalModelSimple.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.generative_models.NormalModelComplex"><code class="docutils literal notranslate"><span class="pre">NormalModelComplex</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.generative_models.NormalModelComplex.__call__"><code class="docutils literal notranslate"><span class="pre">NormalModelComplex.__call__()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.generative_models.BinomialModel"><code class="docutils literal notranslate"><span class="pre">BinomialModel</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.generative_models.BinomialModel.__call__"><code class="docutils literal notranslate"><span class="pre">BinomialModel.__call__()</span></code></a></li>
 </ul>
@@ -407,7 +415,31 @@ document.write(`
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.user.generative_models.ToyModel2.__call__">
-<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_matrix</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/user/generative_models.html#ToyModel2.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.user.generative_models.ToyModel2.__call__" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_matrix</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/user/generative_models.html#ToyModel2.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.user.generative_models.ToyModel2.__call__" title="Link to this definition">#</a></dt>
+<dd><p>Call self as a function.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="elicit.user.generative_models.NormalModelSimple">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">elicit.user.generative_models.</span></span><span class="sig-name descname"><span class="pre">NormalModelSimple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/user/generative_models.html#NormalModelSimple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.user.generative_models.NormalModelSimple" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="elicit.user.generative_models.NormalModelSimple.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/user/generative_models.html#NormalModelSimple.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.user.generative_models.NormalModelSimple.__call__" title="Link to this definition">#</a></dt>
+<dd><p>Call self as a function.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="elicit.user.generative_models.NormalModelComplex">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">elicit.user.generative_models.</span></span><span class="sig-name descname"><span class="pre">NormalModelComplex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/user/generative_models.html#NormalModelComplex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.user.generative_models.NormalModelComplex" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="elicit.user.generative_models.NormalModelComplex.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_matrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/user/generative_models.html#NormalModelComplex.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.user.generative_models.NormalModelComplex.__call__" title="Link to this definition">#</a></dt>
 <dd><p>Call self as a function.</p>
 </dd></dl>
 
@@ -591,6 +623,14 @@ predictor with three levels.</p>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.generative_models.ToyModel2"><code class="docutils literal notranslate"><span class="pre">ToyModel2</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.generative_models.ToyModel2.__call__"><code class="docutils literal notranslate"><span class="pre">ToyModel2.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.generative_models.NormalModelSimple"><code class="docutils literal notranslate"><span class="pre">NormalModelSimple</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.generative_models.NormalModelSimple.__call__"><code class="docutils literal notranslate"><span class="pre">NormalModelSimple.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.generative_models.NormalModelComplex"><code class="docutils literal notranslate"><span class="pre">NormalModelComplex</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.generative_models.NormalModelComplex.__call__"><code class="docutils literal notranslate"><span class="pre">NormalModelComplex.__call__()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.user.generative_models.BinomialModel"><code class="docutils literal notranslate"><span class="pre">BinomialModel</span></code></a><ul class="nav section-nav flex-column">

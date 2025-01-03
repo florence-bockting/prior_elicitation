@@ -47,7 +47,7 @@ class Priors(tf.Module):
         self.init_matrix_slice = init_matrix_slice
         self.logger = logging.getLogger(__name__)
         # set seed
-        tf.random.set_seed(global_dict["training_settings"]["seed"])
+        tf.random.set_seed(global_dict["trainer"]["seed"])
         # initialize hyperparameter for learning (if true hyperparameter
         # are given, no initialization is needed)
         if not self.ground_truth:
@@ -94,9 +94,9 @@ def intialize_priors(global_dict, init_matrix_slice):
 
     """
     # set seed
-    tf.random.set_seed(global_dict["training_settings"]["seed"])
+    tf.random.set_seed(global_dict["trainer"]["seed"])
 
-    if global_dict["training_settings"]["method"] == "parametric_prior":
+    if global_dict["trainer"]["method"] == "parametric_prior":
 
         # create dict with all hyperparameters
         hyp_dict = dict()
@@ -138,12 +138,12 @@ def intialize_priors(global_dict, init_matrix_slice):
                 checked_params.append(hp_n)
 
             # save file in object
-            if global_dict["training_settings"]["output_path"] is not None:
-                output_path = global_dict["training_settings"]["output_path"]
+            if global_dict["trainer"]["output_path"] is not None:
+                output_path = global_dict["trainer"]["output_path"]
                 path = output_path + "/init_hyperparameters.pkl"
                 el.save_as_pkl(init_prior, path)
 
-    if global_dict["training_settings"]["method"] == "deep_prior":
+    if global_dict["trainer"]["method"] == "deep_prior":
         # for more information see BayesFlow documentation
         # https://bayesflow.org/api/bayesflow.inference_networks.html
         INN = global_dict["normalizing_flow"]["inference_network"]
@@ -156,8 +156,8 @@ def intialize_priors(global_dict, init_matrix_slice):
         init_prior = invertible_neural_network
 
         # save file in object
-        if global_dict["training_settings"]["output_path"] is not None:
-            output_path = global_dict["training_settings"]["output_path"]
+        if global_dict["trainer"]["output_path"] is not None:
+            output_path = global_dict["trainer"]["output_path"]
             path = output_path + "/init_hyperparameters.pkl"
             el.save_as_pkl(init_prior.trainable_variables, path)
 
@@ -185,10 +185,10 @@ def sample_from_priors(initialized_priors, ground_truth, global_dict):
 
     """
     # extract variables from dict
-    S = global_dict["training_settings"]["num_samples"]
-    B = global_dict["training_settings"]["B"]
+    S = global_dict["trainer"]["num_samples"]
+    B = global_dict["trainer"]["B"]
     # set seed
-    tf.random.set_seed(global_dict["training_settings"]["seed"])
+    tf.random.set_seed(global_dict["trainer"]["seed"])
 
     if ground_truth:
 
@@ -211,7 +211,7 @@ def sample_from_priors(initialized_priors, ground_truth, global_dict):
         else:
             prior_samples = tf.stack(priors, axis=-1)
 
-    if (global_dict["training_settings"]["method"] == "parametric_prior") and (
+    if (global_dict["trainer"]["method"] == "parametric_prior") and (
         not ground_truth
     ):
 
@@ -235,7 +235,7 @@ def sample_from_priors(initialized_priors, ground_truth, global_dict):
         # shape (B, S, num_parameters)
         prior_samples = tf.stack(priors, axis=-1)
 
-    if (global_dict["training_settings"]["method"] == "deep_prior") and (
+    if (global_dict["trainer"]["method"] == "deep_prior") and (
         not ground_truth
     ):
 
@@ -247,7 +247,7 @@ def sample_from_priors(initialized_priors, ground_truth, global_dict):
         prior_samples, _ = initialized_priors(u, condition=None, inverse=False)
 
     # save results
-    saving_path = global_dict["training_settings"]["output_path"]
+    saving_path = global_dict["trainer"]["output_path"]
     if saving_path is not None:
         if ground_truth:
             el.save_as_pkl(prior_samples, saving_path + "/expert/prior_samples.pkl")

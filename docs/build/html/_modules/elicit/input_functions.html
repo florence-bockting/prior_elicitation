@@ -490,9 +490,25 @@ document.write(`
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;identity&quot;</span><span class="p">,</span>
                     <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="ElicitationMethod.correlation">
+<a class="viewcode-back" href="../../api/elicit.input_functions.html#elicit.input_functions.ElicitationMethod.correlation">[docs]</a>
+    <span class="k">def</span> <span class="nf">correlation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Implements a method to calculate the pearson correlation between</span>
+<span class="sd">        model parameters.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        elicit_dict : dict</span>
+<span class="sd">            Dictionary including the correlation settings.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;pearson_correlation&quot;</span><span class="p">,</span>
+                    <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="ElicitationMethod.custom">
 <a class="viewcode-back" href="../../api/elicit.input_functions.html#elicit.input_functions.ElicitationMethod.custom">[docs]</a>
-    <span class="k">def</span> <span class="nf">custom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="nb">callable</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">custom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Implements a placeholder for custom target methods. The custom method</span>
 <span class="sd">        can be passed as argument.</span>
@@ -508,19 +524,24 @@ document.write(`
 <span class="sd">            Dictionary including the custom settings.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">args_dict</span><span class="o">=</span><span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">args_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;custom&quot;</span><span class="p">,</span>
-                    <span class="n">value</span><span class="o">=</span><span class="n">func</span><span class="p">)</span></div>
+                    <span class="n">value</span><span class="o">=</span><span class="n">func</span><span class="p">,</span>
+                    <span class="n">add_args</span><span class="o">=</span><span class="n">args_dict</span><span class="p">)</span></div>
 </div>
 
 
 <span class="c1"># create an instance of the ElicitationMethod class</span>
-<span class="n">eli_method</span> <span class="o">=</span> <span class="n">ElicitationMethod</span><span class="p">()</span>
+<span class="n">elicitation_method</span> <span class="o">=</span> <span class="n">ElicitationMethod</span><span class="p">()</span>
 
 
 <div class="viewcode-block" id="target">
 <a class="viewcode-back" href="../../api/elicit.input_functions.html#elicit.input_functions.target">[docs]</a>
 <span class="k">def</span> <span class="nf">target</span><span class="p">(</span><span class="n">name</span> <span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">loss</span> <span class="p">:</span> <span class="nb">callable</span><span class="p">,</span>
-           <span class="n">elicitation_method</span> <span class="p">:</span> <span class="nb">callable</span><span class="o">=</span><span class="n">eli_method</span><span class="p">,</span>
+           <span class="n">elicitation_method</span> <span class="p">:</span> <span class="nb">callable</span><span class="o">=</span><span class="n">elicitation_method</span><span class="p">,</span>
            <span class="n">target_method</span> <span class="p">:</span> <span class="nb">callable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">loss_weight</span> <span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Specification of target quantity and corresponding elicitation technique.</span>
@@ -598,9 +619,9 @@ document.write(`
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">dat_prep</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Expert.simulate">
-<a class="viewcode-back" href="../../api/elicit.input_functions.html#elicit.input_functions.Expert.simulate">[docs]</a>
-    <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">10_000</span><span class="p">):</span>
+<div class="viewcode-block" id="Expert.simulator">
+<a class="viewcode-back" href="../../api/elicit.input_functions.html#elicit.input_functions.Expert.simulator">[docs]</a>
+    <span class="k">def</span> <span class="nf">simulator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">10_000</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Simulate data from an oracle by defining a ground truth (true prior</span>
 <span class="sd">        distribution(s)).</span>
@@ -764,9 +785,9 @@ document.write(`
 
 
 
-<div class="viewcode-block" id="train">
-<a class="viewcode-back" href="../../api/elicit.input_functions.html#elicit.input_functions.train">[docs]</a>
-<span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">epochs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">B</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
+<div class="viewcode-block" id="trainer">
+<a class="viewcode-back" href="../../api/elicit.input_functions.html#elicit.input_functions.trainer">[docs]</a>
+<span class="k">def</span> <span class="nf">trainer</span><span class="p">(</span><span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">epochs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">B</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
           <span class="n">num_samples</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">output_path</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;results&quot;</span><span class="p">,</span>
           <span class="n">progress_info</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">view_ep</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">save_log</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>

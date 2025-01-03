@@ -316,6 +316,17 @@ document.write(`
 <span class="n">tfd</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">distributions</span>
 <span class="n">tfb</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">bijectors</span>
 
+<div class="viewcode-block" id="log_R2">
+<a class="viewcode-back" href="../../../api/elicit.user.custom_functions.html#elicit.user.custom_functions.log_R2">[docs]</a>
+<span class="k">def</span> <span class="nf">log_R2</span><span class="p">(</span><span class="n">epred</span><span class="p">,</span> <span class="n">ypred</span><span class="p">):</span>
+    <span class="n">var_epred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">epred</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># variance of difference between ypred and epred</span>
+    <span class="n">var_diff</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">ypred</span><span class="p">,</span> <span class="n">epred</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">var_total</span> <span class="o">=</span> <span class="n">var_epred</span> <span class="o">+</span> <span class="n">var_diff</span>
+    <span class="c1"># variance of linear predictor divided by total variance</span>
+    <span class="n">log_R2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">var_epred</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">var_total</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">log_R2</span></div>
+
 
 <div class="viewcode-block" id="Normal_log">
 <a class="viewcode-back" href="../../../api/elicit.user.custom_functions.html#elicit.user.custom_functions.Normal_log">[docs]</a>

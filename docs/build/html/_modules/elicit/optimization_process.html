@@ -366,12 +366,12 @@ document.write(`
     <span class="n">gradients_ep</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">time_per_epoch</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="c1"># create subdirectories for better readability</span>
-    <span class="n">dict_training</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">]</span>
-    <span class="n">dict_optimization</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;optimization_settings&quot;</span><span class="p">]</span>
+    <span class="n">dict_training</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;trainer&quot;</span><span class="p">]</span>
+    <span class="n">dict_optimization</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;optimizer&quot;</span><span class="p">]</span>
 
     <span class="c1"># save files in folder or in temporary location</span>
-    <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">saving_path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;trainer&quot;</span><span class="p">][</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">saving_path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;trainer&quot;</span><span class="p">][</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">saving_path</span> <span class="o">=</span> <span class="s2">&quot;elicit_temp&quot;</span>
 
@@ -450,7 +450,7 @@ document.write(`
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done :)&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">dict_training</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;parametric_prior&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;trainer&quot;</span><span class="p">][</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">path</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/gradients.pkl&quot;</span>
                 <span class="n">save_as_pkl</span><span class="p">(</span><span class="n">gradients</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
             <span class="c1"># save for each epoch</span>
@@ -469,9 +469,9 @@ document.write(`
             <span class="n">res_dict</span> <span class="o">=</span> <span class="n">save_hyperparameters</span><span class="p">(</span><span class="n">prior_model</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">global_dict</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># save mean and std for each sampled marginal prior; for each epoch</span>
-            <span class="n">path_model</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/model_simulations.pkl&quot;</span>
+            <span class="c1">#path_model = saving_path + &quot;/model_simulations.pkl&quot;</span>
             <span class="n">res_dict</span> <span class="o">=</span> <span class="n">marginal_prior_moments</span><span class="p">(</span>
-                <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">path_model</span><span class="p">)[</span><span class="s2">&quot;prior_samples&quot;</span><span class="p">],</span>
+                <span class="n">model_sim</span><span class="p">[</span><span class="s2">&quot;prior_samples&quot;</span><span class="p">],</span>
                 <span class="n">epoch</span><span class="p">,</span>
                 <span class="n">global_dict</span><span class="p">,</span>
             <span class="p">)</span>
@@ -481,7 +481,7 @@ document.write(`
         <span class="s2">&quot;loss_component&quot;</span><span class="p">:</span> <span class="n">component_losses</span><span class="p">,</span>
         <span class="s2">&quot;hyperparameter&quot;</span><span class="p">:</span> <span class="n">res_dict</span><span class="p">,</span>
         <span class="s2">&quot;time_epoch&quot;</span><span class="p">:</span> <span class="n">time_per_epoch</span><span class="p">,</span>
-        <span class="s2">&quot;seed&quot;</span><span class="p">:</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;seed&quot;</span><span class="p">]</span>
+        <span class="s2">&quot;seed&quot;</span><span class="p">:</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;trainer&quot;</span><span class="p">][</span><span class="s2">&quot;seed&quot;</span><span class="p">]</span>
     <span class="p">}</span>
 
     <span class="n">output_res</span> <span class="o">=</span> <span class="p">{</span>
@@ -497,7 +497,7 @@ document.write(`
     <span class="n">path</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/final_results.pkl&quot;</span>
     <span class="n">save_as_pkl</span><span class="p">(</span><span class="n">res_ep</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;trainer&quot;</span><span class="p">][</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/final_results.pkl&quot;</span><span class="p">)</span>
         <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/loss_per_component.pkl&quot;</span><span class="p">)</span>
         <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/res_dict.pkl&quot;</span><span class="p">)</span>

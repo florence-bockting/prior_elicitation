@@ -422,7 +422,7 @@ document.write(`
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;simulate from generative model&quot;</span><span class="p">)</span>
 
     <span class="c1"># set seed</span>
-    <span class="n">seed</span><span class="o">=</span><span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;seed&quot;</span><span class="p">]</span>
+    <span class="n">seed</span><span class="o">=</span><span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;trainer&quot;</span><span class="p">][</span><span class="s2">&quot;seed&quot;</span><span class="p">]</span>
     <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
     <span class="c1"># create subdictionaries for better readability</span>
     <span class="n">dict_generator</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span>
@@ -435,13 +435,11 @@ document.write(`
     <span class="n">add_model_args</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">]</span><span class="o">=</span><span class="n">seed</span>
     <span class="c1"># simulate from generator</span>
     <span class="k">if</span> <span class="n">add_model_args</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">model_simulations</span> <span class="o">=</span> <span class="n">generative_model</span><span class="p">(</span>
-            <span class="n">ground_truth</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">,</span> <span class="o">**</span><span class="n">add_model_args</span>
-        <span class="p">)</span>
+        <span class="n">model_simulations</span> <span class="o">=</span> <span class="n">generative_model</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">,</span> <span class="o">**</span><span class="n">add_model_args</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">model_simulations</span> <span class="o">=</span> <span class="n">generative_model</span><span class="p">(</span><span class="n">ground_truth</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">)</span>
     <span class="c1"># save file in object</span>
-    <span class="n">saving_path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;training_settings&quot;</span><span class="p">][</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span>
+    <span class="n">saving_path</span> <span class="o">=</span> <span class="n">global_dict</span><span class="p">[</span><span class="s2">&quot;trainer&quot;</span><span class="p">][</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">saving_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">ground_truth</span><span class="p">:</span>
             <span class="n">saving_path</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/expert&quot;</span>

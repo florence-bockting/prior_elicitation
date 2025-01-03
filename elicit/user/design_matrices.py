@@ -19,10 +19,10 @@ def design_matrix(N, quantiles):
     return X_selected
 
 
-def load_design_matrix_toy2(N, quants=[25,50,75]):
+def X_toy2(N, quantiles=[25,50,75]):
     X = tf.cast(np.arange(N), tf.float32)
     X_std = (X-tf.reduce_mean(X))/tf.math.reduce_std(X)
-    X_sel = tfp.stats.percentile(X_std, quants)
+    X_sel = tfp.stats.percentile(X_std, quantiles)
     return X_sel
 
 def load_design_matrix_binomial(N):

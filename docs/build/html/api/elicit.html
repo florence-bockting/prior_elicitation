@@ -375,6 +375,7 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="elicit.user.html">elicit.user package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="elicit.user.html#submodules">Submodules</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="elicit.user.custom_functions.html">elicit.user.custom_functions module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="elicit.user.custom_functions.html#elicit.user.custom_functions.log_R2"><code class="docutils literal notranslate"><span class="pre">log_R2()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="elicit.user.custom_functions.html#elicit.user.custom_functions.Normal_log"><code class="docutils literal notranslate"><span class="pre">Normal_log</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="elicit.user.custom_functions.html#elicit.user.custom_functions.HalfNormal_log"><code class="docutils literal notranslate"><span class="pre">HalfNormal_log</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="elicit.user.custom_functions.html#elicit.user.custom_functions.custom_correlation"><code class="docutils literal notranslate"><span class="pre">custom_correlation()</span></code></a></li>
@@ -383,7 +384,8 @@ document.write(`
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.user.design_matrices.html">elicit.user.design_matrices module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="elicit.user.design_matrices.html#elicit.user.design_matrices.load_design_matrix_toy2"><code class="docutils literal notranslate"><span class="pre">load_design_matrix_toy2()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="elicit.user.design_matrices.html#elicit.user.design_matrices.design_matrix"><code class="docutils literal notranslate"><span class="pre">design_matrix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="elicit.user.design_matrices.html#elicit.user.design_matrices.X_toy2"><code class="docutils literal notranslate"><span class="pre">X_toy2()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="elicit.user.design_matrices.html#elicit.user.design_matrices.load_design_matrix_binomial"><code class="docutils literal notranslate"><span class="pre">load_design_matrix_binomial()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="elicit.user.design_matrices.html#elicit.user.design_matrices.load_design_matrix_normal"><code class="docutils literal notranslate"><span class="pre">load_design_matrix_normal()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="elicit.user.design_matrices.html#elicit.user.design_matrices.load_design_matrix_binomial2"><code class="docutils literal notranslate"><span class="pre">load_design_matrix_binomial2()</span></code></a></li>
@@ -393,6 +395,8 @@ document.write(`
 <li class="toctree-l3"><a class="reference internal" href="elicit.user.generative_models.html">elicit.user.generative_models module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="elicit.user.generative_models.html#elicit.user.generative_models.ToyModel"><code class="docutils literal notranslate"><span class="pre">ToyModel</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="elicit.user.generative_models.html#elicit.user.generative_models.ToyModel2"><code class="docutils literal notranslate"><span class="pre">ToyModel2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="elicit.user.generative_models.html#elicit.user.generative_models.NormalModelSimple"><code class="docutils literal notranslate"><span class="pre">NormalModelSimple</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="elicit.user.generative_models.html#elicit.user.generative_models.NormalModelComplex"><code class="docutils literal notranslate"><span class="pre">NormalModelComplex</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="elicit.user.generative_models.html#elicit.user.generative_models.BinomialModel"><code class="docutils literal notranslate"><span class="pre">BinomialModel</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="elicit.user.generative_models.html#elicit.user.generative_models.NormalModel"><code class="docutils literal notranslate"><span class="pre">NormalModel</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="elicit.user.generative_models.html#elicit.user.generative_models.BinomialModel2"><code class="docutils literal notranslate"><span class="pre">BinomialModel2</span></code></a></li>
@@ -426,9 +430,6 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="elicit.helper_functions.html#elicit.helper_functions.remove_unneeded_files"><code class="docutils literal notranslate"><span class="pre">remove_unneeded_files()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="elicit.helper_functions.html#elicit.helper_functions.save_hyperparameters"><code class="docutils literal notranslate"><span class="pre">save_hyperparameters()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="elicit.helper_functions.html#elicit.helper_functions.marginal_prior_moments"><code class="docutils literal notranslate"><span class="pre">marginal_prior_moments()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="elicit.helper_functions.html#elicit.helper_functions.create_output_summary"><code class="docutils literal notranslate"><span class="pre">create_output_summary()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="elicit.helper_functions.html#elicit.helper_functions.write_res_summary"><code class="docutils literal notranslate"><span class="pre">write_res_summary()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="elicit.helper_functions.html#elicit.helper_functions.print_res_summary"><code class="docutils literal notranslate"><span class="pre">print_res_summary()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="elicit.helper_functions.html#elicit.helper_functions.identity"><code class="docutils literal notranslate"><span class="pre">identity()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="elicit.helper_functions.html#elicit.helper_functions.DoubleBound"><code class="docutils literal notranslate"><span class="pre">DoubleBound</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="elicit.helper_functions.html#elicit.helper_functions.DoubleBound.__init__"><code class="docutils literal notranslate"><span class="pre">DoubleBound.__init__()</span></code></a></li>
@@ -453,6 +454,7 @@ document.write(`
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="elicit.initialization_methods.html">elicit.initialization_methods module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="elicit.initialization_methods.html#elicit.initialization_methods.generate_samples"><code class="docutils literal notranslate"><span class="pre">generate_samples()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="elicit.initialization_methods.html#elicit.initialization_methods.init_method"><code class="docutils literal notranslate"><span class="pre">init_method()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="elicit.initialization_methods.html#elicit.initialization_methods.initialization_phase"><code class="docutils literal notranslate"><span class="pre">initialization_phase()</span></code></a></li>
 </ul>
@@ -464,19 +466,20 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="elicit.input_functions.html#elicit.input_functions.ElicitationMethod"><code class="docutils literal notranslate"><span class="pre">ElicitationMethod</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="elicit.input_functions.html#elicit.input_functions.ElicitationMethod.quantiles"><code class="docutils literal notranslate"><span class="pre">ElicitationMethod.quantiles()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.input_functions.html#elicit.input_functions.ElicitationMethod.identity"><code class="docutils literal notranslate"><span class="pre">ElicitationMethod.identity()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.input_functions.html#elicit.input_functions.ElicitationMethod.correlation"><code class="docutils literal notranslate"><span class="pre">ElicitationMethod.correlation()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.input_functions.html#elicit.input_functions.ElicitationMethod.custom"><code class="docutils literal notranslate"><span class="pre">ElicitationMethod.custom()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="elicit.input_functions.html#elicit.input_functions.target"><code class="docutils literal notranslate"><span class="pre">target()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="elicit.input_functions.html#elicit.input_functions.Expert"><code class="docutils literal notranslate"><span class="pre">Expert</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="elicit.input_functions.html#elicit.input_functions.Expert.data"><code class="docutils literal notranslate"><span class="pre">Expert.data()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="elicit.input_functions.html#elicit.input_functions.Expert.simulate"><code class="docutils literal notranslate"><span class="pre">Expert.simulate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.input_functions.html#elicit.input_functions.Expert.simulator"><code class="docutils literal notranslate"><span class="pre">Expert.simulator()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="elicit.input_functions.html#elicit.input_functions.optimizer"><code class="docutils literal notranslate"><span class="pre">optimizer()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="elicit.input_functions.html#elicit.input_functions.init_specs"><code class="docutils literal notranslate"><span class="pre">init_specs()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="elicit.input_functions.html#elicit.input_functions.initializer"><code class="docutils literal notranslate"><span class="pre">initializer()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="elicit.input_functions.html#elicit.input_functions.train"><code class="docutils literal notranslate"><span class="pre">train()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.input_functions.html#elicit.input_functions.trainer"><code class="docutils literal notranslate"><span class="pre">trainer()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="elicit.input_functions.html#elicit.input_functions.nf"><code class="docutils literal notranslate"><span class="pre">nf()</span></code></a></li>
 </ul>
 </li>
@@ -505,7 +508,7 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="elicit.main.html#elicit.main.pre_training"><code class="docutils literal notranslate"><span class="pre">pre_training()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="elicit.main.html#elicit.main.Elicit"><code class="docutils literal notranslate"><span class="pre">Elicit</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="elicit.main.html#elicit.main.Elicit.__init__"><code class="docutils literal notranslate"><span class="pre">Elicit.__init__()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="elicit.main.html#elicit.main.Elicit.train"><code class="docutils literal notranslate"><span class="pre">Elicit.train()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.main.html#elicit.main.Elicit.fit"><code class="docutils literal notranslate"><span class="pre">Elicit.fit()</span></code></a></li>
 </ul>
 </li>
 </ul>

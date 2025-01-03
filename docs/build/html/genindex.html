@@ -329,7 +329,7 @@ document.write(`
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
  | <a href="#U"><strong>U</strong></a>
- | <a href="#W"><strong>W</strong></a>
+ | <a href="#X"><strong>X</strong></a>
  
 </div>
 <h2 id="_">_</h2>
@@ -349,6 +349,10 @@ document.write(`
         <li><a href="api/elicit.user.generative_models.html#elicit.user.generative_models.BinomialModel2.__call__">(elicit.user.generative_models.BinomialModel2 method)</a>
 </li>
         <li><a href="api/elicit.user.generative_models.html#elicit.user.generative_models.NormalModel.__call__">(elicit.user.generative_models.NormalModel method)</a>
+</li>
+        <li><a href="api/elicit.user.generative_models.html#elicit.user.generative_models.NormalModelComplex.__call__">(elicit.user.generative_models.NormalModelComplex method)</a>
+</li>
+        <li><a href="api/elicit.user.generative_models.html#elicit.user.generative_models.NormalModelSimple.__call__">(elicit.user.generative_models.NormalModelSimple method)</a>
 </li>
         <li><a href="api/elicit.user.generative_models.html#elicit.user.generative_models.PoissonModel.__call__">(elicit.user.generative_models.PoissonModel method)</a>
 </li>
@@ -405,7 +409,7 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/elicit.loss_computation.html#elicit.loss_computation.compute_total_loss">compute_total_loss() (in module elicit.loss_computation)</a>
 </li>
-      <li><a href="api/elicit.helper_functions.html#elicit.helper_functions.create_output_summary">create_output_summary() (in module elicit.helper_functions)</a>
+      <li><a href="api/elicit.input_functions.html#elicit.input_functions.ElicitationMethod.correlation">correlation() (elicit.input_functions.ElicitationMethod method)</a>
 </li>
       <li><a href="api/elicit.input_functions.html#elicit.input_functions.ElicitationMethod.custom">custom() (elicit.input_functions.ElicitationMethod method)</a>
 </li>
@@ -421,10 +425,12 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/elicit.input_functions.html#elicit.input_functions.Expert.data">data() (elicit.input_functions.Expert method)</a>
 </li>
-      <li><a href="api/elicit.loss_functions.html#elicit.loss_functions.MmdEnergy.distances">distances() (elicit.loss_functions.MmdEnergy method)</a>
+      <li><a href="api/elicit.user.design_matrices.html#elicit.user.design_matrices.design_matrix">design_matrix() (in module elicit.user.design_matrices)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/elicit.loss_functions.html#elicit.loss_functions.MmdEnergy.distances">distances() (elicit.loss_functions.MmdEnergy method)</a>
+</li>
       <li><a href="api/elicit.helper_functions.html#elicit.helper_functions.DoubleBound">DoubleBound (class in elicit.helper_functions)</a>
 </li>
       <li><a href="api/elicit.loss_computation.html#elicit.loss_computation.dynamic_weight_averaging">dynamic_weight_averaging() (in module elicit.loss_computation)</a>
@@ -575,6 +581,8 @@ document.write(`
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/elicit.main.html#elicit.main.Elicit.fit">fit() (elicit.main.Elicit method)</a>
+</li>
       <li><a href="api/elicit.helper_functions.html#elicit.helper_functions.DoubleBound.forward">forward() (elicit.helper_functions.DoubleBound method)</a>
 
       <ul>
@@ -589,10 +597,12 @@ document.write(`
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/elicit.loss_functions.html#elicit.loss_functions.MmdEnergy.generate_weights">generate_weights() (elicit.loss_functions.MmdEnergy method)</a>
+      <li><a href="api/elicit.initialization_methods.html#elicit.initialization_methods.generate_samples">generate_samples() (in module elicit.initialization_methods)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/elicit.loss_functions.html#elicit.loss_functions.MmdEnergy.generate_weights">generate_weights() (elicit.loss_functions.MmdEnergy method)</a>
+</li>
       <li><a href="api/elicit.expert_data.html#elicit.expert_data.get_expert_data">get_expert_data() (in module elicit.expert_data)</a>
 </li>
   </ul></td>
@@ -667,7 +677,7 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/elicit.user.design_matrices.html#elicit.user.design_matrices.load_design_matrix_poisson">load_design_matrix_poisson() (in module elicit.user.design_matrices)</a>
 </li>
-      <li><a href="api/elicit.user.design_matrices.html#elicit.user.design_matrices.load_design_matrix_toy2">load_design_matrix_toy2() (in module elicit.user.design_matrices)</a>
+      <li><a href="api/elicit.user.custom_functions.html#elicit.user.custom_functions.log_R2">log_R2() (in module elicit.user.custom_functions)</a>
 </li>
       <li><a href="api/elicit.helper_functions.html#elicit.helper_functions.DoubleBound.logit">logit() (elicit.helper_functions.DoubleBound method)</a>
 </li>
@@ -734,11 +744,15 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/elicit.input_functions.html#elicit.input_functions.nf">nf() (in module elicit.input_functions)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/elicit.user.custom_functions.html#elicit.user.custom_functions.Normal_log">Normal_log (class in elicit.user.custom_functions)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/elicit.user.generative_models.html#elicit.user.generative_models.NormalModel">NormalModel (class in elicit.user.generative_models)</a>
+</li>
+      <li><a href="api/elicit.user.generative_models.html#elicit.user.generative_models.NormalModelComplex">NormalModelComplex (class in elicit.user.generative_models)</a>
+</li>
+      <li><a href="api/elicit.user.generative_models.html#elicit.user.generative_models.NormalModelSimple">NormalModelSimple (class in elicit.user.generative_models)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -765,8 +779,6 @@ document.write(`
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/elicit.main.html#elicit.main.pre_training">pre_training() (in module elicit.main)</a>
-</li>
-      <li><a href="api/elicit.helper_functions.html#elicit.helper_functions.print_res_summary">print_res_summary() (in module elicit.helper_functions)</a>
 </li>
       <li><a href="api/elicit.prior_simulation.html#elicit.prior_simulation.Priors">Priors (class in elicit.prior_simulation)</a>
 </li>
@@ -808,9 +820,9 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/elicit.optimization_process.html#elicit.optimization_process.sgd_training">sgd_training() (in module elicit.optimization_process)</a>
 </li>
-      <li><a href="api/elicit.input_functions.html#elicit.input_functions.Expert.simulate">simulate() (elicit.input_functions.Expert method)</a>
-</li>
       <li><a href="api/elicit.model_simulation.html#elicit.model_simulation.simulate_from_generator">simulate_from_generator() (in module elicit.model_simulation)</a>
+</li>
+      <li><a href="api/elicit.input_functions.html#elicit.input_functions.Expert.simulator">simulator() (elicit.input_functions.Expert method)</a>
 </li>
       <li><a href="api/elicit.model_simulation.html#elicit.model_simulation.softmax_gumbel_trick">softmax_gumbel_trick() (in module elicit.model_simulation)</a>
 </li>
@@ -830,12 +842,8 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/elicit.user.generative_models.html#elicit.user.generative_models.ToyModel2">ToyModel2 (class in elicit.user.generative_models)</a>
 </li>
-      <li><a href="api/elicit.main.html#elicit.main.Elicit.train">train() (elicit.main.Elicit method)</a>
-
-      <ul>
-        <li><a href="api/elicit.input_functions.html#elicit.input_functions.train">(in module elicit.input_functions)</a>
+      <li><a href="api/elicit.input_functions.html#elicit.input_functions.trainer">trainer() (in module elicit.input_functions)</a>
 </li>
-      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -855,10 +863,10 @@ document.write(`
   </ul></td>
 </tr></table>
 
-<h2 id="W">W</h2>
+<h2 id="X">X</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/elicit.helper_functions.html#elicit.helper_functions.write_res_summary">write_res_summary() (in module elicit.helper_functions)</a>
+      <li><a href="api/elicit.user.design_matrices.html#elicit.user.design_matrices.X_toy2">X_toy2() (in module elicit.user.design_matrices)</a>
 </li>
   </ul></td>
 </tr></table>

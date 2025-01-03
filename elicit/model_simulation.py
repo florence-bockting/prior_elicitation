@@ -109,7 +109,7 @@ def simulate_from_generator(prior_samples, ground_truth, global_dict):
         logger.info("simulate from generative model")
 
     # set seed
-    seed=global_dict["training_settings"]["seed"]
+    seed=global_dict["trainer"]["seed"]
     tf.random.set_seed(seed)
     # create subdictionaries for better readability
     dict_generator = global_dict["model"]
@@ -122,13 +122,11 @@ def simulate_from_generator(prior_samples, ground_truth, global_dict):
     add_model_args["seed"]=seed
     # simulate from generator
     if add_model_args is not None:
-        model_simulations = generative_model(
-            ground_truth, prior_samples, **add_model_args
-        )
+        model_simulations = generative_model(prior_samples, **add_model_args)
     else:
         model_simulations = generative_model(ground_truth, prior_samples)
     # save file in object
-    saving_path = global_dict["training_settings"]["output_path"]
+    saving_path = global_dict["trainer"]["output_path"]
     if saving_path is not None:
         if ground_truth:
             saving_path = saving_path + "/expert"
