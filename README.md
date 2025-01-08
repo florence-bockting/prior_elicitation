@@ -84,21 +84,19 @@ For those of you who would like to contribute to our project, please have a look
   <tbody>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/florence-bockting"><img src="https://avatars.githubusercontent.com/u/48919471?v=4" width="100px;" alt="Florence Bockting"/><br /><sub><b>Florence Bockting</b></sub></a><br /></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/paul-buerkner"><img src="https://avatars.githubusercontent.com/u/12938496?v=4" width="100px;" alt="Paul-Christian Bürkner"/><br /><sub><b>Paul-Christian Bürkner</b></sub></a><br /></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/stefanradev93"><img src="https://avatars.githubusercontent.com/u/22372377?v=4" width="100px;" alt="Stefan T. Radev"/><br /><sub><b>Stefan T. Radev</b></sub></a><br /></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/paul-buerkner"><img src="https://avatars.githubusercontent.com/u/12938496?v=4" width="100px;" alt="Paul-Christian Bürkner"/><br /><sub><b>Paul-Christian Bürkner</b></sub></a></td>
     </tr>
   </tbody>
 </table>
-
-**Contributors**
-
+<b>Contributors</b>
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/lunafazio"><img src="https://avatars.githubusercontent.com/u/26548493?v=4" width="100px;" alt="Luna Fazio"/><br /><sub><b>Luna Fazio</b></sub></a><br /></a><br /><a href="#conceptual-lunafazio" title="Conceptual">🖋</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/lunafazio"><img src="https://avatars.githubusercontent.com/u/26548493?v=4" width="100px;" alt="Luna Fazio"/><br /><sub><b>Luna Fazio</b></sub></a><br /></a><br /><a href="#conceptual-lunafazio" title="Conceptual">🖋</a></td><br />
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/stefanradev93"><img src="https://avatars.githubusercontent.com/u/22372377?v=4" width="100px;" alt="Stefan T. Radev"/><br /><sub><b>Stefan T. Radev</b></sub></a></a><br><br><a href="#conceptual-stefanradev" title="Conceptual">🖋</a></td><br />
     </tr>
   </tbody>
 </table>
