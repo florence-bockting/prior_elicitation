@@ -28,7 +28,7 @@ expert_dat = {
     "quantiles_y_X2": [-9.279653, 3.0914488, 6.8263884, 10.551274, 23.285913]
 }
 
-eliobj = el.Elicit(
+elicit = el.Elicit(
     model=el.model(
         obj=ToyModel2,
         design_matrix=load_design_matrix_toy2(N=200, quants=[25,50,75])
@@ -44,7 +44,7 @@ eliobj = el.Elicit(
             name="sigma"
         ),
     ],
-    target_quantities=[
+    targets=[
         el.target(
             name="y_X0",
             elicitation_method=el.eli_method.quantiles((5, 25, 50, 75, 95)),
@@ -77,23 +77,23 @@ eliobj = el.Elicit(
         )
     ],
     #expert=el.expert.data(dat = expert_dat),
-    expert=el.expert.simulate(
+    expert=el.expert.simulator(
         ground_truth = ground_truth,
         num_samples = 10_000
     ),
-    optimization_settings=el.optimizer(
+    optimizer=el.optimizer(
         optimizer=tf.keras.optimizers.Adam,
         learning_rate=0.05,
         clipnorm=1.0
         ),
-    training_settings=el.train(
+    trainer=el.trainer(
         method="deep_prior",
         name="toy2",
         seed=1,
         epochs=400,
         progress_info=0
     ),
-    normalizing_flow=el.nf(
+    network=el.networks.NF(
         inference_network=InvertibleNetwork,
         network_specs=dict(
             num_params=3,
@@ -114,16 +114,7 @@ eliobj = el.Elicit(
             loc=tf.zeros(3),
             scale_diag=tf.ones(3)
         )
-    ),
-    initialization_settings=el.initializer(
-        method="random",
-        loss_quantile=0,
-        iterations=10,
-        specs=el.init_specs(
-            radius=1.,
-            mean=0.
-            )
-        )
+    )
 )
 
 global_dict = eliobj.inputs

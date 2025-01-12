@@ -52,12 +52,21 @@ class ToyModel2:
         y_X0 = ypred[:,:,0]
         y_X1 = ypred[:,:,1]
         y_X2 = ypred[:,:,2]
-        
+
+        # R2
+        var_epred = tf.math.reduce_variance(epred, -1)
+        # variance of difference between ypred and epred
+        var_diff = tf.math.reduce_variance(tf.subtract(ypred, epred), -1)
+        var_total = var_epred + var_diff
+        # variance of linear predictor divided by total variance
+        log_R2 = tf.subtract(tf.math.log(var_epred), tf.math.log(var_total))
+
         return dict(
             likelihood=likelihood,
             ypred=ypred, epred=epred,
             prior_samples=prior_samples,
-            y_X0=y_X0, y_X1=y_X1, y_X2=y_X2
+            y_X0=y_X0, y_X1=y_X1, y_X2=y_X2,
+            log_R2=log_R2
         )
 
 

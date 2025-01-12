@@ -5,13 +5,54 @@
 import tensorflow_probability as tfp
 import matplotlib.pyplot as plt
 import tensorflow as tf
+import numpy as np
 import pandas as pd
 import elicit as el
 
-from elicit.user.generative_models import ToyModel2
-from elicit.user.design_matrices import X_toy2
+from elicit.extras import utils
 
 tfd = tfp.distributions
+
+# numeric, standardized predictor
+def std_predictor(N, quantiles):
+    X = tf.cast(np.arange(N), tf.float32)
+    X_std = (X-tf.reduce_mean(X))/tf.math.reduce_std(X)
+    X_sel = tfp.stats.percentile(X_std, quantiles)
+    return X_sel
+
+# implemented, generative model
+class ToyModel2:
+    def __call__(self, prior_samples, design_matrix, **kwargs):
+        B = prior_samples.shape[0]
+        S = prior_samples.shape[1]
+
+        # preprocess shape of design matrix
+        X = tf.broadcast_to(design_matrix[None, None,:],
+                           (B,S,len(design_matrix)))
+        # linear predictor (= mu)
+        epred = tf.add(prior_samples[:, :, 0][:,:,None],
+                       tf.multiply(prior_samples[:, :, 1][:,:,None], X)
+                       )
+        # data-generating model
+        likelihood = tfd.Normal(
+            loc=epred, scale=tf.expand_dims(prior_samples[:, :, -1], -1)
+        )
+        # prior predictive distribution (=height)
+        ypred = likelihood.sample()
+        
+        # selected observations
+        y_X0, y_X1, y_X2 = (ypred[:,:,0], ypred[:,:,1], ypred[:,:,2])
+
+        # log R2 (log for numerical stability)
+        log_R2 = utils.log_R2(ypred, epred)
+
+        return dict(
+            likelihood=likelihood,
+            ypred=ypred, epred=epred,
+            prior_samples=prior_samples,
+            y_X0=y_X0, y_X1=y_X1, y_X2=y_X2,
+            log_R2=log_R2
+        )
 
 
 ground_truth = {
@@ -26,10 +67,10 @@ expert_dat = {
     "quantiles_y_X2": [-9.279653, 3.0914488, 6.8263884, 10.551274, 23.285913]
 }
 
-eliobj = el.Elicit(
+elicit = el.Elicit(
     model=el.model(
         obj=ToyModel2,
-        design_matrix=X_toy2(N=200, quantiles=[25,50,75])
+        design_matrix=std_predictor(N=200, quantiles=[25,50,75])
         ),
     parameters=[
         el.parameter(
@@ -45,7 +86,7 @@ eliobj = el.Elicit(
             family=tfd.Normal,
             hyperparams=dict(
                 loc=el.hyper("mu1"),
-                scale=el.hyper("sigma1", lower=0)
+                scale=el.hyper("sigma1", lower=0) # TODO specify error message
                 )
         ),
         el.parameter(
@@ -56,55 +97,88 @@ eliobj = el.Elicit(
                 )
         ),
     ],
-    target_quantities=[
+    targets=[
         el.target(
             name="y_X0",
-            elicitation_method=el.elicitation_method.quantiles((5, 25, 50, 75, 95)),
-            loss=el.MMD_energy,
-            loss_weight=1.0
+            query=el.queries.quantiles((5, 25, 50, 75, 95)),
+            loss=el.losses.MMD2(kernel="energy"),
+            weight=1.0
         ),
         el.target(
             name="y_X1",
-            elicitation_method=el.elicitation_method.quantiles((5, 25, 50, 75, 95)),
-            loss=el.MMD_energy,
-            loss_weight=1.0
+            query=el.queries.quantiles((5, 25, 50, 75, 95)),
+            loss=el.losses.MMD2(kernel="energy"),
+            weight=1.0
         ),
         el.target(
             name="y_X2",
-            elicitation_method=el.elicitation_method.quantiles((5, 25, 50, 75, 95)),
-            loss=el.MMD_energy,
-            loss_weight=1.0
+            query=el.queries.quantiles((5, 25, 50, 75, 95)),
+            loss=el.losses.MMD2(kernel="energy"),
+            weight=1.0
+        ),
+        el.target(
+            name="log_R2",
+            query=el.queries.quantiles((5, 25, 50, 75, 95)),
+            loss=el.losses.MMD2(kernel="energy"),
+            weight=1.0
         )
     ],
-    expert=el.expert.data(dat = expert_dat),
-    # expert=el.expert.simulator(
-    #     ground_truth = ground_truth,
-    #     num_samples = 10_000
-    # ),
+    #expert=el.expert.data(dat = expert_dat),
+    expert=el.expert.simulator(
+        ground_truth = ground_truth,
+        num_samples = 10_000
+    ),
     optimizer=el.optimizer(
         optimizer=tf.keras.optimizers.Adam,
-        learning_rate=0.05,
+        learning_rate=0.1,
         clipnorm=1.0
         ),
     trainer=el.trainer(
         method="parametric_prior",
         name="toy2_lhs",
-        seed=1,
-        epochs=1,#400,
-        progress_info=0
+        seed=0,
+        epochs=400
     ),
     initializer=el.initializer(
         method="lhs",
         loss_quantile=0,
-        iterations=2**7,
-        specs=el.init_specs(
-            radius=2,
+        iterations=32,
+        distribution=el.initialization.uniform(
+            radius=1,
             mean=0
             )
-        )
+        ),
+    #network = el.networks.NF(...) # TODO vs. el.normalizing_flow(...)
 )
 
-res = eliobj.fit(save_file=None)
+hist = elicit.fit(save_dir=None) # evtl. history per default auch als return
+# bei erneuten callen von fit -> nachfrage: overwrite? --> if true, überschreiben
+
+
+elicit.results # additional saved results
+elicit.history # equiv. "across_epochs" (loss, loss_component, time, hyperparameter, hyperparameter_gradient)
+
+elicit = load_elicit(save_dir="folder_name") # beachte nicht-picklebare Inhalte / sinnvolle error messages
+
+
+plt.plot(hist["hyperparameter"]["mu0"], label="mu0")
+plt.plot(hist["hyperparameter"]["sigma0"], label="sigma0")
+plt.plot(hist["hyperparameter"]["mu1"], label="mu1")
+plt.plot(hist["hyperparameter"]["sigma1"], label="sigma1")
+plt.plot(hist["hyperparameter"]["sigma2"], label="sigma2")
+plt.legend()
+
+
+import seaborn as sns
+
+lhs=elicit.results["init_matrix"]["mu0"][:,0]
+
+sns.ecdfplot(random, label="random")
+sns.ecdfplot(sobol, label="sobol")
+sns.ecdfplot(lhs, label="lhs")
+#plt.axline((0,0), (30,30))
+plt.legend()
+
 
 init_sobol=pd.read_pickle("elicit/results/parametric_prior/toy2_sobol_1/initialization_matrix.pkl")
 init_lhs=pd.read_pickle("elicit/results/parametric_prior/toy2_lhs_1/initialization_matrix.pkl")

@@ -15,3 +15,4 @@ manuscript_non_parametric_joint_prior/simulation_results
 manuscript_non_parametric_joint_prior/experts
 logs
 *.zip
+/elicit/user
