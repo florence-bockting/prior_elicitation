@@ -63,9 +63,10 @@ def sgd_training(
         saving_path = "elicit_temp"
 
     # initialize the adam optimizer
+    optimizer_copy = optimizer.copy()
     init_sgd_optimizer = optimizer["optimizer"]
-    optimizer.pop("optimizer")
-    sgd_optimizer = init_sgd_optimizer(**optimizer)
+    optimizer_copy.pop("optimizer")
+    sgd_optimizer = init_sgd_optimizer(**optimizer_copy)
 
     # start training loop
     print("Training")

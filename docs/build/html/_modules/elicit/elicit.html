@@ -308,9 +308,33 @@ document.write(`
 <span class="kn">import</span> <span class="nn">tensorflow_probability</span> <span class="k">as</span> <span class="nn">tfp</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">elicit</span> <span class="k">as</span> <span class="nn">el</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 
 
 <span class="n">tfd</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">distributions</span>
+
+
+<div class="viewcode-block" id="Dtype">
+<a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.Dtype">[docs]</a>
+<span class="k">class</span> <span class="nc">Dtype</span><span class="p">:</span> 
+<div class="viewcode-block" id="Dtype.__init__">
+<a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.Dtype.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vtype</span><span class="p">,</span> <span class="n">dim</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vtype</span> <span class="o">=</span> <span class="n">vtype</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="n">dim</span></div>
+
+
+<div class="viewcode-block" id="Dtype.__call__">
+<a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.Dtype.__call__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vtype</span><span class="o">==</span><span class="s2">&quot;real&quot;</span><span class="p">:</span>
+            <span class="n">dtype_dim</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">vtype</span><span class="o">==</span><span class="s2">&quot;array&quot;</span><span class="p">:</span>
+            <span class="n">dtype_dim</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">,))</span>
+        <span class="k">return</span> <span class="n">dtype_dim</span></div>
+</div>
+
 
 
 <div class="viewcode-block" id="hyper">
@@ -364,10 +388,7 @@ document.write(`
         <span class="n">transform</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">identity</span>
 
     <span class="c1"># value type</span>
-    <span class="k">if</span> <span class="n">vtype</span><span class="o">==</span><span class="s2">&quot;real&quot;</span><span class="p">:</span>
-        <span class="n">dtype_dim</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">vtype</span><span class="o">==</span><span class="s2">&quot;array&quot;</span><span class="p">:</span>
-        <span class="n">dtype_dim</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">dim</span><span class="p">,))</span>
+    <span class="n">dtype_dim</span> <span class="o">=</span> <span class="n">Dtype</span><span class="p">(</span><span class="n">vtype</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span>
 
     <span class="n">hyppar_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">,</span>
@@ -813,7 +834,7 @@ document.write(`
         <span class="n">trainer</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span>
         <span class="n">optimizer</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span>
         <span class="n">network</span><span class="p">:</span> <span class="nb">callable</span> <span class="ow">or</span> <span class="kc">None</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">initializer</span><span class="p">:</span> <span class="nb">callable</span> <span class="ow">or</span> <span class="kc">None</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">initializer</span><span class="p">:</span> <span class="nb">callable</span> <span class="ow">or</span> <span class="kc">None</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
@@ -861,8 +882,8 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">=</span><span class="n">network</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">initializer</span><span class="o">=</span><span class="n">initializer</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">=</span><span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">=</span><span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">=</span><span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">=</span><span class="nb">dict</span><span class="p">()</span>
 
         <span class="c1"># set seed</span>
         <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">])</span></div>
@@ -871,11 +892,24 @@ document.write(`
 <div class="viewcode-block" id="Elicit.fit">
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.Elicit.fit">[docs]</a>
    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="c1"># check whether elicit object is already fitted</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">user_answ</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;elicit object is already fitted.&quot;</span><span class="o">+</span>
+                 <span class="s2">&quot; Do you want to fit it again and overwrite the results?&quot;</span><span class="o">+</span>
+                 <span class="s2">&quot; Press &#39;n&#39; to stop process and &#39;y&#39; to continue fitting.&quot;</span><span class="p">)</span>
+           
+            <span class="k">while</span> <span class="n">user_answ</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">]:</span>
+                <span class="n">user_answ</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Please press either &#39;y&#39; for fitting or &#39;n&#39;&quot;</span><span class="o">+</span>
+                                 <span class="s2">&quot; for abording the process.&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">user_answ</span> <span class="o">==</span> <span class="s2">&quot;n&quot;</span><span class="p">:</span>
+                <span class="k">return</span><span class="p">(</span><span class="s2">&quot;Process aborded; elicit object is not re-fitted.&quot;</span><span class="p">)</span>
+
         <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-        
+
         <span class="c1"># set seed</span>
         <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">])</span>
-        
+
         <span class="k">if</span> <span class="n">save_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># create saving path</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span>

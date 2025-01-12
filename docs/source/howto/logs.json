@@ -1,0 +1,528 @@
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.utils", "message": "Simulate from oracle"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.simulations", "message": "Set true prior hyperparameters"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from true prior(s)"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from true generative model"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.targets", "message": "Compute true target quantities"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.targets", "message": "Compute true elicited statistics"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.initialization", "message": "Pre-training phase (only first run)"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.elicit", "message": "Training Phase (only first epoch)"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 13:46", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.utils", "message": "Simulate from oracle"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.simulations", "message": "Set true prior hyperparameters"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from true prior(s)"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from true generative model"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.targets", "message": "Compute true target quantities"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.targets", "message": "Compute true elicited statistics"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.initialization", "message": "Pre-training phase (only first run)"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.elicit", "message": "Training Phase (only first epoch)"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:01", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.utils", "message": "Simulate from oracle"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.simulations", "message": "Set true prior hyperparameters"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from true prior(s)"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from true generative model"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.targets", "message": "Compute true target quantities"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.targets", "message": "Compute true elicited statistics"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.initialization", "message": "Pre-training phase (only first run)"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.elicit", "message": "Training Phase (only first epoch)"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:10", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.utils", "message": "Simulate from oracle"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.simulations", "message": "Set true prior hyperparameters"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from true prior(s)"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from true generative model"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.targets", "message": "Compute true target quantities"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.targets", "message": "Compute true elicited statistics"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.initialization", "message": "Pre-training phase (only first run)"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.elicit", "message": "Training Phase (only first epoch)"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:13", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:14", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:14", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:14", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:14", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:14", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:14", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.utils", "message": "Simulate from oracle"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.simulations", "message": "Set true prior hyperparameters"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from true prior(s)"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from true generative model"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.targets", "message": "Compute true target quantities"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.targets", "message": "Compute true elicited statistics"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.initialization", "message": "Pre-training phase (only first run)"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.elicit", "message": "Training Phase (only first epoch)"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:23", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.utils", "message": "Simulate from oracle"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.simulations", "message": "Set true prior hyperparameters"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from true prior(s)"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from true generative model"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.targets", "message": "Compute true target quantities"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.targets", "message": "Compute true elicited statistics"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.initialization", "message": "Pre-training phase (only first run)"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.elicit", "message": "Training Phase (only first epoch)"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-12 14:33", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}

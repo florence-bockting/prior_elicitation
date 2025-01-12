@@ -6,9 +6,24 @@ import tensorflow as tf
 import tensorflow_probability as tfp
 import logging
 import elicit as el
+import sys
 
 
 tfd = tfp.distributions
+
+
+class Dtype: 
+    def __init__(self, vtype, dim):
+        self.vtype = vtype
+        self.dim = dim
+
+    def __call__(self, x):
+
+        if self.vtype=="real":
+            dtype_dim = tf.cast(x, dtype=tf.float32)
+        elif self.vtype=="array":
+            dtype_dim = tf.constant(x, dtype=tf.float32, shape=(self.dim,))
+        return dtype_dim
 
 
 def hyper(name: str, lower: float=float("-inf"), upper: float=float("inf"),
@@ -60,10 +75,7 @@ def hyper(name: str, lower: float=float("-inf"), upper: float=float("inf"),
         transform=el.helpers.identity
 
     # value type
-    if vtype=="real":
-        dtype_dim=lambda x: tf.cast(x, dtype=tf.float32)
-    elif vtype=="array":
-        dtype_dim=lambda x: tf.constant(x, dtype=tf.float32, shape=(dim,))
+    dtype_dim = Dtype(vtype, dim)
 
     hyppar_dict = dict(
         name = name,
@@ -462,7 +474,7 @@ class Elicit:
         trainer: callable,
         optimizer: callable,
         network: callable or None=None,
-        initializer: callable or None=None,
+        initializer: callable or None=None
     ):
         """
         Parameters
@@ -510,18 +522,31 @@ class Elicit:
         self.network=network
         self.initializer=initializer
 
-        self.history=None
-        self.results=None
+        self.history=dict()
+        self.results=dict()
 
         # set seed
         tf.random.set_seed(self.trainer["seed"])
 
    def fit(self, save_dir: str or None=None, silent=False):
+        # check whether elicit object is already fitted
+        if len(self.history.keys()) != 0:
+            user_answ = input("elicit object is already fitted."+
+                 " Do you want to fit it again and overwrite the results?"+
+                 " Press 'n' to stop process and 'y' to continue fitting.")
+           
+            while user_answ not in ["n", "y"]:
+                user_answ = input("Please press either 'y' for fitting or 'n'"+
+                                 " for abording the process.")
+
+            if user_answ == "n":
+                return("Process aborded; elicit object is not re-fitted.")
+
         logger = logging.getLogger(__name__)
-        
+
         # set seed
         tf.random.set_seed(self.trainer["seed"])
-        
+
         if save_dir is not None:
             # create saving path
             self.trainer["output_path"

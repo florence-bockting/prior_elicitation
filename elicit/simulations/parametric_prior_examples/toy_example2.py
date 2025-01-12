@@ -137,7 +137,7 @@ elicit = el.Elicit(
         method="parametric_prior",
         name="toy2_lhs",
         seed=0,
-        epochs=400
+        epochs=4
     ),
     initializer=el.initializer(
         method="lhs",
@@ -158,8 +158,12 @@ hist = elicit.fit(save_dir=None) # evtl. history per default auch als return
 elicit.results # additional saved results
 elicit.history # equiv. "across_epochs" (loss, loss_component, time, hyperparameter, hyperparameter_gradient)
 
-elicit = load_elicit(save_dir="folder_name") # beachte nicht-picklebare Inhalte / sinnvolle error messages
+# save elicit obj
+el.utils.save_elicit(elicit, "./results/elicit_empty.pkl")
 
+elicit_loaded2 = el.utils.load_elicit("./results/elicit_empty.pkl")
+
+hist_loaded = elicit_loaded.fit(save_dir=None)
 
 plt.plot(hist["hyperparameter"]["mu0"], label="mu0")
 plt.plot(hist["hyperparameter"]["sigma0"], label="sigma0")

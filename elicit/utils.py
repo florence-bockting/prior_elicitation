@@ -6,7 +6,9 @@ import tensorflow as tf
 import elicit as el
 import logging
 import logging.config
-
+import pandas as pd
+import os
+import sys
 
 #%% configuration for logging information
 LOGGING = {
@@ -146,3 +148,55 @@ def get_expert_data(trainer, model, targets, expert, parameters, network):
         # elicited statistics
         expert_data = expert["data"]
         return expert_data, None
+
+
+def save_elicit(elicit_obj, save_dir):
+    # check whether saving path is already used
+    if os.path.isfile(save_dir):
+        user_ans = input("In provided directory exists already a file with"+
+                         " identical name. Do you want to overwrite it?"+
+                         " Press 'y' for overwriting and 'n' for abording.")
+        while user_ans not in ["n", "y"]:
+            user_ans = input("Please press either 'y' for overwriting or 'n'"+
+                             "for abording the process.")
+
+        if user_ans == "n":
+            return("Process aborded. File is not overwritten.")
+
+    storage = dict()
+    # user inputs
+    storage["model"] = elicit_obj.model
+    storage["parameters"] = elicit_obj.parameters
+    storage["targets"] = elicit_obj.targets
+    storage["expert"] = elicit_obj.expert
+    storage["optimizer"] = elicit_obj.optimizer
+    storage["trainer"] = elicit_obj.trainer
+    storage["initializer"] = elicit_obj.initializer
+    storage["network"] = elicit_obj.network
+    # results
+    storage["results"] = elicit_obj.results
+    storage["history"] = elicit_obj.history
+
+    el.helpers.save_as_pkl(storage, save_dir)
+    print(f"saved elicit as: {save_dir}")
+
+
+def load_elicit(save_dir):
+    obj = pd.read_pickle(save_dir)
+
+    elicit = el.Elicit(
+        model = obj["model"],
+        parameters = obj["parameters"],
+        targets = obj["targets"],
+        expert = obj["expert"],
+        optimizer = obj["optimizer"],
+        trainer = obj["trainer"],
+        initializer = obj["initializer"],
+        network = obj["network"]
+        )
+
+    # add results if already fitted
+    elicit.history = obj["history"]
+    elicit.results = obj["results"]
+
+    return elicit

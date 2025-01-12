@@ -308,7 +308,9 @@ document.write(`
 <span class="kn">import</span> <span class="nn">elicit</span> <span class="k">as</span> <span class="nn">el</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">logging.config</span>
-
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="c1">#%% configuration for logging information</span>
 <span class="n">LOGGING</span> <span class="o">=</span> <span class="p">{</span>
@@ -453,6 +455,64 @@ document.write(`
         <span class="c1"># elicited statistics</span>
         <span class="n">expert_data</span> <span class="o">=</span> <span class="n">expert</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">expert_data</span><span class="p">,</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="save_elicit">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.save_elicit">[docs]</a>
+<span class="k">def</span> <span class="nf">save_elicit</span><span class="p">(</span><span class="n">elicit_obj</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">):</span>
+    <span class="c1"># check whether saving path is already used</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">save_dir</span><span class="p">):</span>
+        <span class="n">user_ans</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;In provided directory exists already a file with&quot;</span><span class="o">+</span>
+                         <span class="s2">&quot; identical name. Do you want to overwrite it?&quot;</span><span class="o">+</span>
+                         <span class="s2">&quot; Press &#39;y&#39; for overwriting and &#39;n&#39; for abording.&quot;</span><span class="p">)</span>
+        <span class="k">while</span> <span class="n">user_ans</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">]:</span>
+            <span class="n">user_ans</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Please press either &#39;y&#39; for overwriting or &#39;n&#39;&quot;</span><span class="o">+</span>
+                             <span class="s2">&quot;for abording the process.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">user_ans</span> <span class="o">==</span> <span class="s2">&quot;n&quot;</span><span class="p">:</span>
+            <span class="k">return</span><span class="p">(</span><span class="s2">&quot;Process aborded. File is not overwritten.&quot;</span><span class="p">)</span>
+
+    <span class="n">storage</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="c1"># user inputs</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elicit_obj</span><span class="o">.</span><span class="n">model</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elicit_obj</span><span class="o">.</span><span class="n">parameters</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;targets&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elicit_obj</span><span class="o">.</span><span class="n">targets</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;expert&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elicit_obj</span><span class="o">.</span><span class="n">expert</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;optimizer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elicit_obj</span><span class="o">.</span><span class="n">optimizer</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;trainer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elicit_obj</span><span class="o">.</span><span class="n">trainer</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;initializer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elicit_obj</span><span class="o">.</span><span class="n">initializer</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;network&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elicit_obj</span><span class="o">.</span><span class="n">network</span>
+    <span class="c1"># results</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elicit_obj</span><span class="o">.</span><span class="n">results</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;history&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elicit_obj</span><span class="o">.</span><span class="n">history</span>
+
+    <span class="n">el</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">save_as_pkl</span><span class="p">(</span><span class="n">storage</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;saved elicit as: </span><span class="si">{</span><span class="n">save_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="load_elicit">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.load_elicit">[docs]</a>
+<span class="k">def</span> <span class="nf">load_elicit</span><span class="p">(</span><span class="n">save_dir</span><span class="p">):</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">save_dir</span><span class="p">)</span>
+
+    <span class="n">elicit</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">Elicit</span><span class="p">(</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">],</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">],</span>
+        <span class="n">targets</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;targets&quot;</span><span class="p">],</span>
+        <span class="n">expert</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;expert&quot;</span><span class="p">],</span>
+        <span class="n">optimizer</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;optimizer&quot;</span><span class="p">],</span>
+        <span class="n">trainer</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;trainer&quot;</span><span class="p">],</span>
+        <span class="n">initializer</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;initializer&quot;</span><span class="p">],</span>
+        <span class="n">network</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;network&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+
+    <span class="c1"># add results if already fitted</span>
+    <span class="n">elicit</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;history&quot;</span><span class="p">]</span>
+    <span class="n">elicit</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">elicit</span></div>
 
 </pre></div>
 
