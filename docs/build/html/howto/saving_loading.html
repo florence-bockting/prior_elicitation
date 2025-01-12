@@ -364,8 +364,14 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#q-a">Q&amp;A</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-happens-when-i-want-to-fit-an-already-fitted-elicit-object">What happens when I want to fit an already fitted <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object?</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-happens-when-i-want-to-save-an-elicit-object-with-a-name-that-already-exists">What happens when I want to save an elicit object with a name that already exists?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-happens-when-i-want-to-fit-an-already-fitted-elicit-object">What happens when I want to fit an already fitted <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object?</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#can-i-force-re-fitting">Can I force re-fitting?</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-happens-when-i-want-to-save-an-elicit-object-with-a-name-that-already-exists">What happens when I want to save an elicit object with a name that already exists?</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#can-i-force-overwriting-of-file-while-saving">Can I force overwriting of file while saving?</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -659,6 +665,16 @@ Training
 </div>
 </div>
 </div>
+<section id="can-i-force-re-fitting">
+<h4>Can I force re-fitting?<a class="headerlink" href="#can-i-force-re-fitting" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit_toy0</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">save_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force_fit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
 </section>
 <section id="what-happens-when-i-want-to-save-an-elicit-object-with-a-name-that-already-exists">
 <h3>What happens when I want to save an elicit object with a name that already exists?<a class="headerlink" href="#what-happens-when-i-want-to-save-an-elicit-object-with-a-name-that-already-exists" title="Link to this heading">#</a></h3>
@@ -680,6 +696,16 @@ Training
 </div>
 </div>
 </div>
+<section id="can-i-force-overwriting-of-file-while-saving">
+<h4>Can I force overwriting of file while saving?<a class="headerlink" href="#can-i-force-overwriting-of-file-while-saving" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">save_elicit</span><span class="p">(</span><span class="n">elicit_toy0</span><span class="p">,</span> <span class="s2">&quot;./results/fit_toy0.pkl&quot;</span><span class="p">,</span> <span class="n">force_overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
 </section>
 </section>
 </section>
@@ -729,8 +755,14 @@ Training
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#q-a">Q&amp;A</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-happens-when-i-want-to-fit-an-already-fitted-elicit-object">What happens when I want to fit an already fitted <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object?</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-happens-when-i-want-to-save-an-elicit-object-with-a-name-that-already-exists">What happens when I want to save an elicit object with a name that already exists?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-happens-when-i-want-to-fit-an-already-fitted-elicit-object">What happens when I want to fit an already fitted <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object?</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#can-i-force-re-fitting">Can I force re-fitting?</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-happens-when-i-want-to-save-an-elicit-object-with-a-name-that-already-exists">What happens when I want to save an elicit object with a name that already exists?</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#can-i-force-overwriting-of-file-while-saving">Can I force overwriting of file while saving?</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

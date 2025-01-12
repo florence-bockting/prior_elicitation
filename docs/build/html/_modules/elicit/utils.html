@@ -460,9 +460,9 @@ document.write(`
 
 <div class="viewcode-block" id="save_elicit">
 <a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.save_elicit">[docs]</a>
-<span class="k">def</span> <span class="nf">save_elicit</span><span class="p">(</span><span class="n">elicit_obj</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">save_elicit</span><span class="p">(</span><span class="n">elicit_obj</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">,</span> <span class="n">force_overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="c1"># check whether saving path is already used</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">save_dir</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">save_dir</span><span class="p">)</span> <span class="ow">or</span> <span class="n">force_overwrite</span><span class="p">:</span>
         <span class="n">user_ans</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;In provided directory exists already a file with&quot;</span><span class="o">+</span>
                          <span class="s2">&quot; identical name. Do you want to overwrite it?&quot;</span><span class="o">+</span>
                          <span class="s2">&quot; Press &#39;y&#39; for overwriting and &#39;n&#39; for abording.&quot;</span><span class="p">)</span>

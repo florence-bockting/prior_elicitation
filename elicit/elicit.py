@@ -6,8 +6,6 @@ import tensorflow as tf
 import tensorflow_probability as tfp
 import logging
 import elicit as el
-import sys
-
 
 tfd = tfp.distributions
 
@@ -528,9 +526,9 @@ class Elicit:
         # set seed
         tf.random.set_seed(self.trainer["seed"])
 
-   def fit(self, save_dir: str or None=None, silent=False):
+   def fit(self, save_dir: str or None=None, silent=False, force_fit=False):
         # check whether elicit object is already fitted
-        if len(self.history.keys()) != 0:
+        if len(self.history.keys()) != 0 and not force_fit:
             user_answ = input("elicit object is already fitted."+
                  " Do you want to fit it again and overwrite the results?"+
                  " Press 'n' to stop process and 'y' to continue fitting.")

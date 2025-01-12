@@ -150,9 +150,9 @@ def get_expert_data(trainer, model, targets, expert, parameters, network):
         return expert_data, None
 
 
-def save_elicit(elicit_obj, save_dir):
+def save_elicit(elicit_obj, save_dir, force_overwrite=False):
     # check whether saving path is already used
-    if os.path.isfile(save_dir):
+    if os.path.isfile(save_dir) and not force_overwrite:
         user_ans = input("In provided directory exists already a file with"+
                          " identical name. Do you want to overwrite it?"+
                          " Press 'y' for overwriting and 'n' for abording.")
