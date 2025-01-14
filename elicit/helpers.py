@@ -34,69 +34,6 @@ def save_as_pkl(variable, path_to_file):
         pickle.dump(variable, file=df_file)
 
 
-def remove_unneeded_files(output_path, save_results):
-
-    if not save_results["init_hyperparameters"]:
-        os.remove(output_path + "/init_hyperparameters.pkl")
-    if not save_results["init_hyperparameters"]:
-        os.remove(output_path + "/prior_samples.pkl")
-
-
-def save_hyperparameters(generator, epoch, output_path):
-    """
-    extracts the learnable hyperparameter values from the model and saves them
-    in appropriate form for post-analysis
-
-    Parameters
-    ----------
-    generator : trainable tf.model
-        initialized prior model used for training.
-    epoch : int
-        Current epoch.
-    global_dict : dict
-        dictionary including all user-input settings.
-
-    Returns
-    -------
-    res_dict : dict
-        learned values for each hyperparameter and epoch.
-
-    """
-    if output_path is not None:
-        saving_path = output_path
-    else:
-        saving_path = "elicit_temp"
-
-    # extract learned hyperparameter values
-    hyperparams = generator.trainable_variables
-    if epoch == 0:
-        # prepare list for saving hyperparameter values
-        hyp_list = []
-        for i in range(len(hyperparams)):
-            hyp_list.append(hyperparams[i].name[:-2])
-        # create a dict with empty list for each hyperparameter
-        res_dict = {f"{k}": [] for k in hyp_list}
-    # read saved list to add new values
-    else:
-        path_res_dict = saving_path + "/res_dict.pkl"
-        res_dict = pd.read_pickle(rf"{path_res_dict}")
-    # save names and values of hyperparameters
-    vars_values = [
-        hyperparams[i].numpy().copy() for i in range(len(hyperparams))
-        ]
-    vars_names = [
-        hyperparams[i].name[:-2] for i in range(len(hyperparams))
-        ]
-    # create a final dict of hyperparameter values
-    for val, name in zip(vars_values, vars_names):
-        res_dict[name].append(val)
-
-    # save result dictionary
-    path_res_dict = saving_path + "/res_dict.pkl"
-    save_as_pkl(res_dict, path_res_dict)
-    return res_dict
-
-
 def marginal_prior_moments(prior_samples, epoch, output_path):
     """
     Used for summarizing learned prior distributions in the case of

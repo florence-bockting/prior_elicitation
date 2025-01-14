@@ -2,10 +2,8 @@
 #
 # noqa SPDX-License-Identifier: Apache-2.0
 
-import logging
 import tensorflow as tf
 import tensorflow_probability as tfp
-import elicit as el
 
 tfd = tfp.distributions
 
@@ -47,20 +45,16 @@ class Priors(tf.Module):
         self.parameters=parameters
         self.network=network
         self.expert=expert
-        self.logger = logging.getLogger(__name__)
 
         # set seed
         tf.random.set_seed(seed)
         # initialize hyperparameter for learning (if true hyperparameter
         # are given, no initialization is needed)
         if not self.ground_truth:
-            self.logger.info("Initialize prior hyperparameters")
             self.init_priors = intialize_priors(
                 self.init_matrix_slice, self.trainer["method"], seed,
-                self.trainer["output_path"],
                 self.parameters, self.network)
         else:
-            self.logger.info("Set true prior hyperparameters")
             self.init_priors = None
 
     def __call__(self):
@@ -73,21 +67,16 @@ class Priors(tf.Module):
             Samples from prior distribution(s).
 
         """
-        if self.ground_truth:
-            self.logger.info("Sample from true prior(s)")
-        else:
-            self.logger.info("Sample from prior(s)")
+
         prior_samples = sample_from_priors(
             self.init_priors, self.ground_truth, self.trainer["num_samples"],
             self.trainer["B"], self.trainer["seed"], self.trainer["method"],
-            self.parameters, self.network, self.expert,
-            self.trainer["output_path"]
+            self.parameters, self.network, self.expert
             )
         return prior_samples
 
 
-def intialize_priors(init_matrix_slice, method, seed, output_path, parameters,
-                     network):
+def intialize_priors(init_matrix_slice, method, seed, parameters, network):
     """
     Initialize prior distributions.
 
@@ -106,7 +95,6 @@ def intialize_priors(init_matrix_slice, method, seed, output_path, parameters,
     tf.random.set_seed(seed)
 
     if method == "parametric_prior":
-
         # create dict with all hyperparameters
         hyp_dict = dict()
         hp_keys=list()
@@ -146,11 +134,6 @@ def intialize_priors(init_matrix_slice, method, seed, output_path, parameters,
             if hp_dict["shared"]:
                 checked_params.append(hp_n)
 
-            # save file in object
-            if output_path is not None:
-                path = output_path + "/init_hyperparameters.pkl"
-                el.save_as_pkl(init_prior, path)
-
     if method == "deep_prior":
         # for more information see BayesFlow documentation
         # https://bayesflow.org/api/bayesflow.inference_networks.html
@@ -161,16 +144,11 @@ def intialize_priors(init_matrix_slice, method, seed, output_path, parameters,
         # save initialized priors
         init_prior = invertible_neural_network
 
-        # save file in object
-        if output_path is not None:
-            path = output_path + "/init_hyperparameters.pkl"
-            el.save_as_pkl(init_prior.trainable_variables, path)
-
     return init_prior
 
 
 def sample_from_priors(initialized_priors, ground_truth, num_samples, B, seed,
-                       method, parameters, network, expert, output_path):
+                       method, parameters, network, expert):
     """
     Samples from initialized prior distributions.
 
@@ -236,18 +214,11 @@ def sample_from_priors(initialized_priors, ground_truth, num_samples, B, seed,
     if (method == "deep_prior") and (not ground_truth):
 
         # initialize base distribution
-        base_dist = network["base_distribution"]
+        base_dist = network["base_distribution"](num_params=len(parameters))
         # sample from base distribution
         u = base_dist.sample((B, num_samples))
         # apply transformation function to samples from base distr.
         prior_samples, _ = initialized_priors(u, condition=None, inverse=False)
-
-    # save results
-    if output_path is not None:
-        if ground_truth:
-            el.save_as_pkl(prior_samples, output_path + "/expert/prior_samples.pkl")
-        else:
-            el.save_as_pkl(prior_samples, output_path + "/prior_samples.pkl")
 
     return prior_samples
 
@@ -322,8 +293,7 @@ def softmax_gumbel_trick(epred: float, likelihood: callable,
     return ypred
 
 
-def simulate_from_generator(prior_samples, ground_truth, seed, output_path,
-                            model):
+def simulate_from_generator(prior_samples, seed, model):
     """
     Simulates data from the specified generative model.
 
@@ -331,9 +301,6 @@ def simulate_from_generator(prior_samples, ground_truth, seed, output_path,
     ----------
     prior_samples : dict
         samples from prior distributions.
-    ground_truth : bool
-        if simulation is based on true hyperparameter vector. Mainly for
-        saving results in a specific "expert" folder for later analysis.
     global_dict : dict
         dictionary including all user-input settings.
 
@@ -343,11 +310,6 @@ def simulate_from_generator(prior_samples, ground_truth, seed, output_path,
         simulated data from generative model.
 
     """
-    logger = logging.getLogger(__name__)
-    if ground_truth:
-        logger.info("simulate from true generative model")
-    else:
-        logger.info("simulate from generative model")
 
     # set seed
     tf.random.set_seed(seed)
@@ -362,13 +324,6 @@ def simulate_from_generator(prior_samples, ground_truth, seed, output_path,
     if add_model_args is not None:
         model_simulations = generative_model(prior_samples, **add_model_args)
     else:
-        model_simulations = generative_model(ground_truth, prior_samples)
-
-    # save file in object
-    if output_path is not None:
-        if ground_truth:
-            output_path = output_path + "/expert"
-        path = output_path + "/model_simulations.pkl"
-        el.save_as_pkl(model_simulations, path)
+        model_simulations = generative_model(prior_samples)
 
     return model_simulations

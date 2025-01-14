@@ -2,5 +2,5 @@ Tutorials
 ========
 
 * |:book:| :doc:`toymodel_parametric`
-* Intro deep prior (ToDo)
+* |:book:| :doc:`toymodel_deep`
 

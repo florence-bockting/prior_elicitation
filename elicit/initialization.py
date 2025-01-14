@@ -163,16 +163,13 @@ def initialization_phase(
         parameters
         )
 
-    if trainer["output_path"] is not None:
-        path = trainer["output_path"] + "/initialization_matrix.pkl"
-        el.helpers.save_as_pkl(init_matrix, path)
-
     print("Initialization")
 
     for i in tqdm(range(initializer["iterations"])):
         seed = seed+1
         # create init-matrix-slice
-        init_matrix_slice = {f"{key}": init_matrix[key][i] for key in init_matrix}
+        init_matrix_slice = {
+            f"{key}": init_matrix[key][i] for key in init_matrix}
 
         # prepare generative model
         prior_model = el.simulations.Priors(
@@ -191,21 +188,16 @@ def initialization_phase(
                                                targets)
 
         # compute loss for each set of initial values
-        weighted_total_loss = el.losses.compute_loss(
+        (weighted_total_loss, *_) = el.losses.compute_loss(
             training_elicited_statistics,
             expert_elicited_statistics,
             epoch=0,
-            targets=targets,
-            output_path=trainer["output_path"]
+            targets=targets
         )
 
         init_var_list.append(prior_model)
         save_prior.append(prior_model.trainable_variables)
         loss_list.append(weighted_total_loss.numpy())
-
-    if trainer["output_path"] is not None:
-        path = trainer["output_path"] + "/pre_training_results.pkl"
-        el.helpers.save_as_pkl((loss_list, save_prior), path)
 
     print(" ")
     return loss_list, init_var_list, init_matrix
@@ -239,7 +231,10 @@ def pre_training(expert_elicited_statistics, initializer, parameters, trainer,
             trainer=trainer, 
             parameters=parameters,
             network=network,
-            expert=expert)
+            expert=expert,
+            seed=trainer["seed"])
+
+        loss_list, init_prior, init_matrix = (None,None,None)
 
     return init_prior_model, loss_list, init_prior, init_matrix
 

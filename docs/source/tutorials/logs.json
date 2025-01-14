@@ -464,3 +464,39 @@
 {"asctime": "2025-01-12 10:35", "levelname": "WARNING", "name": "matplotlib.font_manager", "message": "findfont: Font family ['cmss10'] not found. Falling back to DejaVu Sans."}
 {"asctime": "2025-01-12 10:35", "levelname": "WARNING", "name": "matplotlib.font_manager", "message": "findfont: Font family ['cmex10'] not found. Falling back to DejaVu Sans."}
 {"asctime": "2025-01-12 10:35", "levelname": "WARNING", "name": "matplotlib.font_manager", "message": "findfont: Font family ['DejaVu Sans Display'] not found. Falling back to DejaVu Sans."}
+{"asctime": "2025-01-14 11:55", "levelname": "INFO", "name": "elicit.utils", "message": "Simulate from oracle"}
+{"asctime": "2025-01-14 11:55", "levelname": "INFO", "name": "elicit.simulations", "message": "Set true prior hyperparameters"}
+{"asctime": "2025-01-14 11:55", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from true prior(s)"}
+{"asctime": "2025-01-14 11:55", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from true generative model"}
+{"asctime": "2025-01-14 11:55", "levelname": "INFO", "name": "elicit.targets", "message": "Compute true target quantities"}
+{"asctime": "2025-01-14 11:55", "levelname": "INFO", "name": "elicit.targets", "message": "Compute true elicited statistics"}
+{"asctime": "2025-01-14 11:55", "levelname": "INFO", "name": "elicit.simulations", "message": "Initialize prior hyperparameters"}
+{"asctime": "2025-01-14 11:55", "levelname": "INFO", "name": "elicit.elicit", "message": "Training Phase (only first epoch)"}
+{"asctime": "2025-01-14 11:55", "levelname": "INFO", "name": "elicit.simulations", "message": "Sample from prior(s)"}
+{"asctime": "2025-01-14 11:55", "levelname": "INFO", "name": "elicit.simulations", "message": "simulate from generative model"}
+{"asctime": "2025-01-14 11:55", "levelname": "INFO", "name": "elicit.targets", "message": "Compute target quantities"}
+{"asctime": "2025-01-14 11:55", "levelname": "INFO", "name": "elicit.targets", "message": "Compute elicited statistics"}
+{"asctime": "2025-01-14 11:55", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess expert elicited statistics"}
+{"asctime": "2025-01-14 11:55", "levelname": "INFO", "name": "elicit.losses", "message": "preprocess simulated statistics"}
+{"asctime": "2025-01-14 11:55", "levelname": "INFO", "name": "elicit.losses", "message": "compute discrepancy"}
+{"asctime": "2025-01-14 11:55", "levelname": "INFO", "name": "elicit.losses", "message": "compute total loss"}
+{"asctime": "2025-01-14 12:03", "levelname": "WARNING", "name": "matplotlib.font_manager", "message": "findfont: Font family ['STIXGeneral'] not found. Falling back to DejaVu Sans."}
+{"asctime": "2025-01-14 12:03", "levelname": "WARNING", "name": "matplotlib.font_manager", "message": "findfont: Font family ['STIXGeneral'] not found. Falling back to DejaVu Sans."}
+{"asctime": "2025-01-14 12:03", "levelname": "WARNING", "name": "matplotlib.font_manager", "message": "findfont: Font family ['STIXGeneral'] not found. Falling back to DejaVu Sans."}
+{"asctime": "2025-01-14 12:03", "levelname": "WARNING", "name": "matplotlib.font_manager", "message": "findfont: Font family ['STIXGeneral'] not found. Falling back to DejaVu Sans."}
+{"asctime": "2025-01-14 12:03", "levelname": "WARNING", "name": "matplotlib.font_manager", "message": "findfont: Font family ['STIXNonUnicode'] not found. Falling back to DejaVu Sans."}
+{"asctime": "2025-01-14 12:03", "levelname": "WARNING", "name": "matplotlib.font_manager", "message": "findfont: Font family ['STIXNonUnicode'] not found. Falling back to DejaVu Sans."}
+{"asctime": "2025-01-14 12:03", "levelname": "WARNING", "name": "matplotlib.font_manager", "message": "findfont: Font family ['STIXNonUnicode'] not found. Falling back to DejaVu Sans."}
+{"asctime": "2025-01-14 12:03", "levelname": "WARNING", "name": "matplotlib.font_manager", "message": "findfont: Font family ['STIXSizeOneSym'] not found. Falling back to DejaVu Sans."}
+{"asctime": "2025-01-14 12:03", "levelname": "WARNING", "name": "matplotlib.font_manager", "message": "findfont: Font family ['STIXSizeTwoSym'] not found. Falling back to DejaVu Sans."}
+{"asctime": "2025-01-14 12:03", "levelname": "WARNING", "name": "matplotlib.font_manager", "message": "findfont: Font family ['STIXSizeThreeSym'] not found. Falling back to DejaVu Sans."}
+{"asctime": "2025-01-14 12:03", "levelname": "WARNING", "name": "matplotlib.font_manager", "message": "findfont: Font family ['STIXSizeFourSym'] not found. Falling back to DejaVu Sans."}
+{"asctime": "2025-01-14 12:03", "levelname": "WARNING", "name": "matplotlib.font_manager", "message": "findfont: Font family ['STIXSizeFiveSym'] not found. Falling back to DejaVu Sans."}
+{"asctime": "2025-01-14 12:03", "levelname": "WARNING", "name": "matplotlib.font_manager", "message": "findfont: Font family ['cmsy10'] not found. Falling back to DejaVu Sans."}
+{"asctime": "2025-01-14 12:03", "levelname": "WARNING", "name": "matplotlib.font_manager", "message": "findfont: Font family ['cmr10'] not found. Falling back to DejaVu Sans."}
+{"asctime": "2025-01-14 12:03", "levelname": "WARNING", "name": "matplotlib.font_manager", "message": "findfont: Font family ['cmtt10'] not found. Falling back to DejaVu Sans."}
+{"asctime": "2025-01-14 12:03", "levelname": "WARNING", "name": "matplotlib.font_manager", "message": "findfont: Font family ['cmmi10'] not found. Falling back to DejaVu Sans."}
+{"asctime": "2025-01-14 12:03", "levelname": "WARNING", "name": "matplotlib.font_manager", "message": "findfont: Font family ['cmb10'] not found. Falling back to DejaVu Sans."}
+{"asctime": "2025-01-14 12:03", "levelname": "WARNING", "name": "matplotlib.font_manager", "message": "findfont: Font family ['cmss10'] not found. Falling back to DejaVu Sans."}
+{"asctime": "2025-01-14 12:03", "levelname": "WARNING", "name": "matplotlib.font_manager", "message": "findfont: Font family ['cmex10'] not found. Falling back to DejaVu Sans."}
+{"asctime": "2025-01-14 12:03", "levelname": "WARNING", "name": "matplotlib.font_manager", "message": "findfont: Font family ['DejaVu Sans Display'] not found. Falling back to DejaVu Sans."}

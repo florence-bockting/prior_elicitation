@@ -4,55 +4,12 @@
 
 import tensorflow as tf
 import elicit as el
-import logging
-import logging.config
 import pandas as pd
 import os
-import sys
-
-#%% configuration for logging information
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "json": {
-            "format": "%(asctime)s %(levelname)s %(name)s %(message)s",
-            "datefmt": "%Y-%m-%d %H:%M",
-            "class": "pythonjsonlogger.jsonlogger.JsonFormatter",
-        }
-    },
-    "handlers": {
-        "json_file": {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': 'logs.json',
-            'formatter': 'json',
-            }
-    },
-    "loggers": {"": {"handlers": ["json_file"], "level": "INFO"}},
-}
-
-logging.config.dictConfig(LOGGING)
-
-
-#%% configuration for saving results
-save_results = dict(
-    # all generated initializations during pre-training
-    initialization_matrix=True,
-    # tuple: loss values corresp. to each set of generated initial values
-    pre_training_results=True,
-    # initialized hyperparameter values
-    init_hyperparameters=True,
-    # prior samples of last epoch
-    prior_samples=False,
-    # elicited statistics of last epoch
-    elicited_statistics=True,
-)
 
 
 #%% wrapper for workflow
-def one_forward_simulation(prior_model, trainer, model, targets,
-                           ground_truth=False):
+def one_forward_simulation(prior_model, trainer, model, targets):
     """
     One forward simulation from prior samples to elicited statistics.
 
@@ -80,19 +37,19 @@ def one_forward_simulation(prior_model, trainer, model, targets,
     # simulate prior predictive distribution based on prior samples
     # and generative model
     model_simulations = el.simulations.simulate_from_generator(
-        prior_samples, ground_truth, trainer["seed"], trainer["output_path"],
-        model
+        prior_samples, trainer["seed"], model
     )
     # compute the target quantities
     target_quantities = el.targets.computation_target_quantities(
-        model_simulations, ground_truth, targets, trainer["output_path"]
+        model_simulations, targets
     )
     # compute the elicited statistics by applying a specific elicitation
     # method on the target quantities
     elicited_statistics = el.targets.computation_elicited_statistics(
-        target_quantities, ground_truth, targets, trainer["output_path"]
+        target_quantities, targets
     )
-    return elicited_statistics, prior_samples, model_simulations, target_quantities
+    return (elicited_statistics, prior_samples, model_simulations,
+            target_quantities)
 
 
 #%% simulate expert data or get input data
@@ -115,7 +72,6 @@ def get_expert_data(trainer, model, targets, expert, parameters, network):
         model-simulated elicited statistics.
 
     """
-    logger = logging.getLogger(__name__)
 
     try:
         expert["data"]
@@ -125,7 +81,6 @@ def get_expert_data(trainer, model, targets, expert, parameters, network):
         oracle=False
 
     if oracle:
-        logger.info("Simulate from oracle")
         # set seed
         tf.random.set_seed(trainer["seed"])
         # sample from true priors
@@ -137,12 +92,11 @@ def get_expert_data(trainer, model, targets, expert, parameters, network):
             seed=trainer["seed"])
         # compute elicited statistics and target quantities
         expert_data, expert_prior, *_ = one_forward_simulation(
-            prior_model, trainer, model, targets, ground_truth=True
+            prior_model, trainer, model, targets
         )
         return expert_data, expert_prior
 
     else:
-        logger.info("Read expert data")
         # load expert data from file
         # TODO Expert data must have same name and structure as sim-based
         # elicited statistics

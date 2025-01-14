@@ -5,15 +5,12 @@
 import tensorflow as tf
 import tensorflow_probability as tfp
 import bayesflow as bf
-import elicit as el
-import numpy as np
-import logging
 
 tfd = tfp.distributions
 bfn = bf.networks
 
 
-def compute_loss_components(elicited_statistics, output_path, expert):
+def compute_loss_components(elicited_statistics):
     """
     Computes the single loss components used for computing the discrepancy
     between the elicited statistics. This computation depends on the
@@ -37,11 +34,6 @@ def compute_loss_components(elicited_statistics, output_path, expert):
         the discrepancy.
 
     """
-    logger = logging.getLogger(__name__)
-    if expert:
-        logger.info("preprocess expert elicited statistics")
-    else:
-        logger.info("preprocess simulated statistics")
 
     # extract names from elicited statistics
     name_elicits = list(elicited_statistics.keys())
@@ -79,18 +71,11 @@ def compute_loss_components(elicited_statistics, output_path, expert):
         else:
             loss_comp_res[f"{name}_loss_{i_target}"] = loss_comp
 
-    # save file in object
-    if output_path is not None:
-        if expert:
-            output_path = output_path + "/expert"
-        path = output_path + "/loss_components.pkl"
-        el.helpers.save_as_pkl(loss_comp_res, path)
-        # return results
     return loss_comp_res
 
 
 def compute_discrepancy(loss_components_expert, loss_components_training,
-                        targets, output_path):
+                        targets):
     """
     Computes the discrepancy between all loss components using a specified
     discrepancy measure and returns a list with all loss values.
@@ -113,8 +98,7 @@ def compute_discrepancy(loss_components_expert, loss_components_training,
         list of loss value for each loss component
 
     """
-    logger = logging.getLogger(__name__)
-    logger.info("compute discrepancy")
+
     # create dictionary for storing results
     loss_per_component = []
     # extract expert loss components by name
@@ -135,19 +119,11 @@ def compute_discrepancy(loss_components_expert, loss_components_training,
         loss = loss_function(loss_comp_expert, loss_components_training[name])
         loss_per_component.append(loss)
 
-    # save file in object
-    if output_path is not None:
-        output_path = output_path
-    else:
-        output_path = "elicit_temp"
-    path = output_path + "/loss_per_component.pkl"
-    el.helpers.save_as_pkl(loss_per_component, path)
     return loss_per_component
 
 
 def compute_loss(
-    training_elicited_statistics, expert_elicited_statistics, epoch, targets,
-    output_path
+    training_elicited_statistics, expert_elicited_statistics, epoch, targets
 ):
     """
     Wrapper around the loss computation from elicited statistics to final
@@ -213,8 +189,7 @@ def compute_loss(
             total loss value (either weighted or unweighted).
 
         """
-        logger = logging.getLogger(__name__)
-        logger.info("compute total loss")
+
         # loss_per_component_current = loss_per_component
         # TODO: check whether order of loss_per_component and target quantities
         # is equivalent!
@@ -228,17 +203,18 @@ def compute_loss(
         return total_loss
 
     loss_components_expert = compute_loss_components(
-        expert_elicited_statistics, output_path, expert=True
+        expert_elicited_statistics
     )
     loss_components_training = compute_loss_components(
-        training_elicited_statistics, output_path, expert=False
+        training_elicited_statistics
     )
     loss_per_component = compute_discrepancy(
-        loss_components_expert, loss_components_training, targets, output_path
+        loss_components_expert, loss_components_training, targets
     )
     weighted_total_loss=compute_total_loss(epoch, loss_per_component, targets)
 
-    return weighted_total_loss
+    return (weighted_total_loss, loss_components_expert,
+            loss_components_training, loss_per_component)
 
 
 def L2(loss_component_expert, loss_component_training,

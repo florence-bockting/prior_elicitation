@@ -137,7 +137,9 @@ elicit = el.Elicit(
         method="parametric_prior",
         name="toy2_lhs",
         seed=0,
-        epochs=4
+        epochs=4,
+        save_configs_history=el.configs.save_history(hyperparameter_gradient=False),
+        save_configs_results=el.configs.save_results(model=False)
     ),
     initializer=el.initializer(
         method="lhs",
@@ -151,12 +153,17 @@ elicit = el.Elicit(
     #network = el.networks.NF(...) # TODO vs. el.normalizing_flow(...)
 )
 
-hist = elicit.fit(save_dir=None) # evtl. history per default auch als return
+hist = elicit.fit(save_dir="results") # evtl. history per default auch als return
 # bei erneuten callen von fit -> nachfrage: overwrite? --> if true, überschreiben
 
+final_res = pd.read_pickle("./results/parametric_prior/toy2_lhs_0.pkl")
 
-elicit.results # additional saved results
-elicit.history # equiv. "across_epochs" (loss, loss_component, time, hyperparameter, hyperparameter_gradient)
+final_res["history"].keys()
+final_res["results"].keys()
+
+
+elicit.results.keys() # additional saved results
+elicit.history.keys() # equiv. "across_epochs" (loss, loss_component, time, hyperparameter, hyperparameter_gradient)
 
 # save elicit obj
 el.utils.save_elicit(elicit, "./results/elicit_empty.pkl")

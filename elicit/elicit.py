@@ -4,7 +4,6 @@
 
 import tensorflow as tf
 import tensorflow_probability as tfp
-import logging
 import elicit as el
 
 tfd = tfp.distributions
@@ -152,7 +151,7 @@ def model(obj: callable, **kwargs):
 
 
 class Queries:
-    def quantiles(self, quants: tuple):
+    def quantiles(self, quantiles: tuple):
         """
         Implements a quantile-based elicitation technique.
 
@@ -167,7 +166,7 @@ class Queries:
             Dictionary including the quantile settings.
 
         """
-        return dict(name="quantiles", value=quants)
+        return dict(name="quantiles", value=quantiles)
 
 
     def identity(self):
@@ -405,7 +404,8 @@ def initializer(method: str, distribution: el.initialization.uniform,
 
 def trainer(method: str, name: str, seed: int, epochs: int, B: int=128,
           num_samples: int=200, output_path: str="results",
-          save_log: bool=False):
+          save_configs_history: callable=el.configs.save_history(),
+          save_configs_results: callable=el.configs.save_results()):
     """
     Specification of training settings for learning the prior distribution(s).
 
@@ -437,7 +437,7 @@ def trainer(method: str, name: str, seed: int, epochs: int, B: int=128,
         arguments allow to specify after how many epochs information should be
         printed. The default is 1, thus information is printed after each
         iteration.
-    save_log : bool, optional
+    save_configs_history : bool, optional
         Saves the computational pipeline (which computation is carried out)
         in an extra file. Might help to understand the computational steps
         carried out by the method. The default is False.
@@ -457,7 +457,8 @@ def trainer(method: str, name: str, seed: int, epochs: int, B: int=128,
         num_samples=num_samples,
         epochs=epochs,
         output_path=output_path,
-        save_log=save_log
+        save_configs_history=save_configs_history,
+        save_configs_results=save_configs_results
     )
     return train_dict
 
@@ -540,15 +541,13 @@ class Elicit:
             if user_answ == "n":
                 return("Process aborded; elicit object is not re-fitted.")
 
-        logger = logging.getLogger(__name__)
-
         # set seed
         tf.random.set_seed(self.trainer["seed"])
 
         if save_dir is not None:
             # create saving path
             self.trainer["output_path"
-            ] = f"./elicit/{save_dir}/{self.trainer['method']}/{self.trainer['name']}_{self.trainer['seed']}"  # noqa
+            ] = f"./{save_dir}/{self.trainer['method']}/{self.trainer['name']}_{self.trainer['seed']}"  # noqa
         else:
             self.trainer["output_path"] = None
 
@@ -564,7 +563,6 @@ class Elicit:
             self.model, self.targets, self.network, self.expert)
 
         # run dag with optimal set of initial values
-        logger.info("Training Phase (only first epoch)")
         # save results in corresp. attributes
         self.history, self.results = el.optimization.sgd_training(
             expert_elicits,
@@ -588,9 +586,26 @@ class Elicit:
             self.results["init_prior"] = init_prior
             self.results["init_matrix"] = init_matrix
 
-        # remove saved files that are not of interest for follow-up analysis
-        if save_dir is not None:
-            el.remove_unneeded_files(self.trainer["output_path"], save_dir)  # noqa
+        # save results if desired and remove files that should not be saved
+        if self.trainer["output_path"] is not None:
+            save_hist = self.history.copy()
+            save_res = self.results.copy()
+            
+            for key_hist in self.trainer["save_configs_history"]:
+                if not self.trainer["save_configs_history"][key_hist]:
+                    save_hist.pop(key_hist)
+
+            for key_res in self.trainer["save_configs_results"]:
+                if not self.trainer["save_configs_results"][key_res]:
+                    save_res.pop(key_res)
+
+            final_dict = {
+                "history": save_hist,
+                "results": save_res
+                }
+
+            el.helpers.save_as_pkl(
+                final_dict, self.trainer["output_path"]+".pkl")
 
         # return history by default
         if not silent:

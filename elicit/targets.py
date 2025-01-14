@@ -7,17 +7,15 @@ import tensorflow_probability as tfp
 import bayesflow as bf
 import inspect
 import pandas as pd
-import elicit as el
-import logging
 
-from elicit.user.custom_functions import custom_correlation
+from elicit.extras import utils
 
 tfd = tfp.distributions
 bfn = bf.networks
 
 
 # TODO: Update Custom Target Function
-def use_custom_functions(custom_function, model_simulations, output_path):
+def use_custom_functions(custom_function, model_simulations):
     """
     Helper function that prepares custom functions if specified by checking
     all inputs and extracting the argument from different sources.
@@ -75,7 +73,7 @@ def use_custom_functions(custom_function, model_simulations, output_path):
 
 
 def computation_elicited_statistics(
-        target_quantities: dict, ground_truth: bool, targets, output_path):
+        target_quantities: dict, targets):
     """
     Computes the elicited statistics from the target quantities by applying a
     prespecified elicitation technique.
@@ -84,8 +82,6 @@ def computation_elicited_statistics(
     ----------
     target_quantities : dict
         simulated target quantities.
-    ground_truth : bool
-        True if target quantities are used for oracle.
     global_dict : dict
         dictionary including all user-input settings.
 
@@ -95,11 +91,6 @@ def computation_elicited_statistics(
         simulated elicited statistics.
 
     """
-    logger = logging.getLogger(__name__)
-    if ground_truth:
-        logger.info("Compute true elicited statistics")
-    else:
-        logger.info("Compute elicited statistics")
 
     # initialize dict for storing results
     elicits_res = dict()
@@ -109,8 +100,7 @@ def computation_elicited_statistics(
         if targets[i]["query"]["name"] == "custom":
             elicited_statistic = use_custom_functions(
                 targets[i]["elicitation_method"]["value"],
-                target_quantities,
-                output_path,
+                target_quantities
             )
             elicits_res[f"custom_{targets[i]['name']}"] = elicited_statistic
 
@@ -121,7 +111,7 @@ def computation_elicited_statistics(
         if targets[i]["query"]["name"] == "pearson_correlation":
             # compute correlation between model parameters (used for
             # learning correlation structure of joint prior)
-            elicited_statistic = custom_correlation(
+            elicited_statistic = utils.pearson_correlation(
                 target_quantities[targets[i]['name']])
             # save correlation in result dictionary
             elicits_res[f"pearson_{targets[i]['name']}"
@@ -152,19 +142,11 @@ def computation_elicited_statistics(
                                            computed_quantiles)
             elicits_res[f"quantiles_{targets[i]['name']}"] = elicited_statistic
 
-    # save file in object
-    if output_path is not None:
-        if ground_truth:
-            output_path = output_path + "/expert"
-        path = output_path + "/elicited_statistics.pkl"
-        el.save_as_pkl(elicits_res, path)
-
     # return results
     return elicits_res
 
 
-def computation_target_quantities(model_simulations, ground_truth, targets,
-                                  output_path):
+def computation_target_quantities(model_simulations, targets):
     """
     Computes target quantities from model simulations.
 
@@ -172,9 +154,6 @@ def computation_target_quantities(model_simulations, ground_truth, targets,
     ----------
     model_simulations : dict
         simulations from generative model.
-    ground_truth : bool
-        whether simulations are based on ground truth. Mainly used for saving
-        results in extra folder "expert" for later analysis.
     global_dict : dict
         dictionary including all user-input settings..
 
@@ -183,11 +162,7 @@ def computation_target_quantities(model_simulations, ground_truth, targets,
     targets_res : dict
         computed target quantities.
     """
-    logger = logging.getLogger(__name__)
-    if ground_truth:
-        logger.info("Compute true target quantities")
-    else:
-        logger.info("Compute target quantities")
+
     # initialize dict for storing results
     targets_res = dict()
     # loop over target quantities
@@ -201,8 +176,7 @@ def computation_target_quantities(model_simulations, ground_truth, targets,
         ):
             target_quantity = use_custom_functions(
                 tar["target_method"],
-                model_simulations,
-                output_path
+                model_simulations
             )
         else:
             target_quantity = model_simulations[tar["name"]]
@@ -210,10 +184,4 @@ def computation_target_quantities(model_simulations, ground_truth, targets,
         # save target quantities
         targets_res[tar["name"]] = target_quantity
 
-    # save file in object
-    if output_path is not None:
-        if ground_truth:
-            output_path = output_path + "/expert"
-        el.save_as_pkl(targets_res, output_path + "/target_quantities.pkl")
-        # return results
     return targets_res

@@ -53,14 +53,10 @@ def sgd_training(
     prior_model = prior_model_init
     total_loss = []
     component_losses = []
+    loss_comp_expert = []
+    loss_comp_model = []
     gradients_ep = []
     time_per_epoch = []
-
-    # save files in folder or in temporary location
-    if trainer["output_path"] is not None:
-        saving_path = trainer["output_path"]
-    else:
-        saving_path = "elicit_temp"
 
     # initialize the adam optimizer
     optimizer_copy = optimizer.copy()
@@ -78,17 +74,18 @@ def sgd_training(
 
         with tf.GradientTape() as tape:
             # generate simulations from model
-            (train_elicits, prior_sim,
-             model_sim, target_quants) = el.utils.one_forward_simulation(
+            (train_elicits, prior_sim, model_sim, target_quants
+             ) = el.utils.one_forward_simulation(
                 prior_model, trainer, model, targets
             )
             # compute total loss as weighted sum
-            weighted_total_loss = el.losses.compute_loss(
+            (weighted_total_loss, loss_components_expert,
+             loss_components_training, loss_per_component
+             ) = el.losses.compute_loss(
                 train_elicits,
                 expert_elicited_statistics,
                 epoch,
-                targets,
-                trainer["output_path"]
+                targets
             )
 
             # compute gradient of loss wrt trainable_variables
@@ -110,31 +107,45 @@ def sgd_training(
             print("Loss is NAN. The training process has been stopped.")
             break
 
+        # %% Saving of results
         if trainer["method"] == "parametric_prior":
-            if trainer["output_path"] is not None:
-                path = saving_path + "/gradients.pkl"
-                el.helpers.save_as_pkl(gradients, path)
-            # save for each epoch
+            # save gradients per epoch
             gradients_ep.append(gradients)
 
-        # savings per epoch
-        time_per_epoch.append(epoch_time)
-        total_loss.append(weighted_total_loss)
-        component_losses.append(
-            pd.read_pickle(saving_path + "/loss_per_component.pkl")
-            )
-
-        if trainer["method"] == "parametric_prior":
             # save single learned hyperparameter values for each prior and
             # epoch
-            res_dict = el.helpers.save_hyperparameters(
-                prior_model, epoch, trainer["output_path"]
-                )
-        else:
+
+            # extract learned hyperparameter values
+            hyperparams = prior_model.trainable_variables
+            if epoch == 0:
+                # prepare list for saving hyperparameter values
+                hyp_list = []
+                for i in range(len(hyperparams)):
+                    hyp_list.append(hyperparams[i].name[:-2])
+                # create a dict with empty list for each hyperparameter
+                res_dict = {f"{k}": [] for k in hyp_list}
+
+            # save names and values of hyperparameters
+            vars_values = [
+                hyperparams[i].numpy().copy() for i in range(len(hyperparams))
+                ]
+            vars_names = [
+                hyperparams[i].name[:-2] for i in range(len(hyperparams))
+                ]
+            # create a final dict of hyperparameter values
+            for val, name in zip(vars_values, vars_names):
+                res_dict[name].append(val)
+
+        if trainer["method"] == "deep_prior":
             # save mean and std for each sampled marginal prior; for each epoch
             res_dict = el.helpers.marginal_prior_moments(
                 model_sim["prior_samples"], epoch, trainer["output_path"]
             )
+
+        # savings per epoch (independent from chosen method)
+        time_per_epoch.append(epoch_time)
+        total_loss.append(weighted_total_loss)
+        component_losses.append(loss_per_component)
 
     res_ep = {
         "loss": total_loss,
@@ -148,18 +159,12 @@ def sgd_training(
         "elicited_statistics": train_elicits,
         "prior_samples": prior_sim,
         "model_samples": model_sim,
-        "model": prior_model
+        "model": prior_model,
+        "loss_tensor_expert": loss_components_expert,
+        "loss_tensor_model": loss_components_training,
         }
 
     if trainer["method"] == "parametric_prior":
         res_ep["hyperparameter_gradient"] = gradients_ep
-    path = saving_path + "/final_results.pkl"
-    el.helpers.save_as_pkl(res_ep, path)
-
-    if trainer["output_path"] is None:
-        os.remove(saving_path + "/final_results.pkl")
-        os.remove(saving_path + "/loss_per_component.pkl")
-        os.remove(saving_path + "/res_dict.pkl")
-        os.rmdir(saving_path)
 
     return res_ep, output_res

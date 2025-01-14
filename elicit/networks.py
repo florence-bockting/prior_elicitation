@@ -2,6 +2,12 @@
 #
 # noqa SPDX-License-Identifier: Apache-2.0
 
+import tensorflow as tf
+import tensorflow_probability as tfp
+
+tfd = tfp.distributions
+
+
 def NF(inference_network: callable, network_specs: dict,
        base_distribution: callable):
     """
@@ -33,3 +39,15 @@ def NF(inference_network: callable, network_specs: dict,
     )
 
     return nf_dict
+
+
+class BaseNormal:
+    def __call__(self, num_params):
+
+        base_dist = tfd.MultivariateNormalDiag(
+            loc=tf.zeros(num_params),
+            scale_diag=tf.ones(num_params)
+            )
+        return base_dist
+
+base_normal = BaseNormal()
