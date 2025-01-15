@@ -67,6 +67,9 @@ expert_dat = {
     "quantiles_y_X2": [-9.279653, 3.0914488, 6.8263884, 10.551274, 23.285913]
 }
 
+def test_func():
+    pass
+
 elicit = el.Elicit(
     model=el.model(
         obj=ToyModel2,
@@ -118,7 +121,7 @@ elicit = el.Elicit(
         ),
         el.target(
             name="log_R2",
-            query=el.queries.quantiles((5, 25, 50, 75, 95)),
+            query=el.queries.custom(test_func),
             loss=el.losses.MMD2(kernel="energy"),
             weight=1.0
         )
@@ -137,9 +140,7 @@ elicit = el.Elicit(
         method="parametric_prior",
         name="toy2_lhs",
         seed=0,
-        epochs=4,
-        save_configs_history=el.configs.save_history(hyperparameter_gradient=False),
-        save_configs_results=el.configs.save_results(model=False)
+        epochs=4
     ),
     initializer=el.initializer(
         method="lhs",
@@ -153,8 +154,7 @@ elicit = el.Elicit(
     #network = el.networks.NF(...) # TODO vs. el.normalizing_flow(...)
 )
 
-hist = elicit.fit(save_dir="results") # evtl. history per default auch als return
-# bei erneuten callen von fit -> nachfrage: overwrite? --> if true, überschreiben
+hist = elicit.fit(save_dir="results")
 
 final_res = pd.read_pickle("./results/parametric_prior/toy2_lhs_0.pkl")
 

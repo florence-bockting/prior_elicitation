@@ -137,10 +137,17 @@ def sgd_training(
                 res_dict[name].append(val)
 
         if trainer["method"] == "deep_prior":
-            # save mean and std for each sampled marginal prior; for each epoch
-            res_dict = el.helpers.marginal_prior_moments(
-                model_sim["prior_samples"], epoch, trainer["output_path"]
-            )
+            # save mean and std for each sampled marginal prior
+            # for each epoch
+
+            if epoch == 0:
+                res_dict = {"means": [], "stds": []}
+
+            means = tf.reduce_mean(model_sim["prior_samples"], (0, 1))
+            sds = tf.reduce_mean(tf.math.reduce_std(model_sim["prior_samples"], 1), 0)
+
+            for val, name in zip([means, sds], ["means", "stds"]):
+                res_dict[name].append(val)
 
         # savings per epoch (independent from chosen method)
         time_per_epoch.append(epoch_time)

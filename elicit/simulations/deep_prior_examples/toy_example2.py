@@ -120,7 +120,7 @@ elicit = el.Elicit(
         method="deep_prior",
         name="toy2",
         seed=3,
-        epochs=200
+        epochs=2,#00
     ),
     network=el.networks.NF(
         inference_network=InvertibleNetwork,
@@ -143,7 +143,7 @@ elicit = el.Elicit(
     )
 )
 
-hist = elicit.fit(save_dir=None)
+hist = elicit.fit(save_dir="res2")
 
 
 elicit.results["expert_elicited_statistics"]["quantiles_y_X2"]
