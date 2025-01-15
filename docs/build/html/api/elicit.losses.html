@@ -166,6 +166,7 @@
 <li class="toctree-l4"><a class="reference internal" href="elicit.extras.utils.html">elicit.extras.utils module</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.configs.html">elicit.configs module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.elicit.html">elicit.elicit module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.helpers.html">elicit.helpers module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.initialization.html">elicit.initialization module</a></li>
@@ -373,7 +374,7 @@ document.write(`
 <span id="elicit-losses-module"></span><h1>elicit.losses module<a class="headerlink" href="#module-elicit.losses" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.losses.compute_loss_components">
-<span class="sig-prename descclassname"><span class="pre">elicit.losses.</span></span><span class="sig-name descname"><span class="pre">compute_loss_components</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elicited_statistics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expert</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#compute_loss_components"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.compute_loss_components" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.losses.</span></span><span class="sig-name descname"><span class="pre">compute_loss_components</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elicited_statistics</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#compute_loss_components"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.compute_loss_components" title="Link to this definition">#</a></dt>
 <dd><p>Computes the single loss components used for computing the discrepancy
 between the elicited statistics. This computation depends on the
 method as specified in the ‘combine-loss’ argument.</p>
@@ -402,7 +403,7 @@ the discrepancy.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.losses.compute_discrepancy">
-<span class="sig-prename descclassname"><span class="pre">elicit.losses.</span></span><span class="sig-name descname"><span class="pre">compute_discrepancy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loss_components_expert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_components_training</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#compute_discrepancy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.compute_discrepancy" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.losses.</span></span><span class="sig-name descname"><span class="pre">compute_discrepancy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loss_components_expert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_components_training</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#compute_discrepancy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.compute_discrepancy" title="Link to this definition">#</a></dt>
 <dd><p>Computes the discrepancy between all loss components using a specified
 discrepancy measure and returns a list with all loss values.</p>
 <dl class="field-list simple">
@@ -429,7 +430,7 @@ simulations. (The names (keys) between loss_components_expert and               
 
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.losses.compute_loss">
-<span class="sig-prename descclassname"><span class="pre">elicit.losses.</span></span><span class="sig-name descname"><span class="pre">compute_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">training_elicited_statistics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expert_elicited_statistics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#compute_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.compute_loss" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.losses.</span></span><span class="sig-name descname"><span class="pre">compute_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">training_elicited_statistics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expert_elicited_statistics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#compute_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.compute_loss" title="Link to this definition">#</a></dt>
 <dd><p>Wrapper around the loss computation from elicited statistics to final
 loss value.</p>
 <dl class="field-list simple">

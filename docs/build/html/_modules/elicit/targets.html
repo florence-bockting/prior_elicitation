@@ -165,6 +165,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../api/elicit.extras.utils.html">elicit.extras.utils module</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.configs.html">elicit.configs module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.elicit.html">elicit.elicit module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.helpers.html">elicit.helpers module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.initialization.html">elicit.initialization module</a></li>
@@ -309,10 +310,8 @@ document.write(`
 <span class="kn">import</span> <span class="nn">bayesflow</span> <span class="k">as</span> <span class="nn">bf</span>
 <span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">elicit</span> <span class="k">as</span> <span class="nn">el</span>
-<span class="kn">import</span> <span class="nn">logging</span>
 
-<span class="kn">from</span> <span class="nn">elicit.user.custom_functions</span> <span class="kn">import</span> <span class="n">custom_correlation</span>
+<span class="kn">from</span> <span class="nn">elicit.extras</span> <span class="kn">import</span> <span class="n">utils</span>
 
 <span class="n">tfd</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">distributions</span>
 <span class="n">bfn</span> <span class="o">=</span> <span class="n">bf</span><span class="o">.</span><span class="n">networks</span>
@@ -321,7 +320,7 @@ document.write(`
 <span class="c1"># TODO: Update Custom Target Function</span>
 <div class="viewcode-block" id="use_custom_functions">
 <a class="viewcode-back" href="../../api/elicit.targets.html#elicit.targets.use_custom_functions">[docs]</a>
-<span class="k">def</span> <span class="nf">use_custom_functions</span><span class="p">(</span><span class="n">custom_function</span><span class="p">,</span> <span class="n">model_simulations</span><span class="p">,</span> <span class="n">output_path</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">use_custom_functions</span><span class="p">(</span><span class="n">custom_function</span><span class="p">,</span> <span class="n">model_simulations</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Helper function that prepares custom functions if specified by checking</span>
 <span class="sd">    all inputs and extracting the argument from different sources.</span>
@@ -382,7 +381,7 @@ document.write(`
 <div class="viewcode-block" id="computation_elicited_statistics">
 <a class="viewcode-back" href="../../api/elicit.targets.html#elicit.targets.computation_elicited_statistics">[docs]</a>
 <span class="k">def</span> <span class="nf">computation_elicited_statistics</span><span class="p">(</span>
-        <span class="n">target_quantities</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">output_path</span><span class="p">):</span>
+        <span class="n">target_quantities</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the elicited statistics from the target quantities by applying a</span>
 <span class="sd">    prespecified elicitation technique.</span>
@@ -391,8 +390,6 @@ document.write(`
 <span class="sd">    ----------</span>
 <span class="sd">    target_quantities : dict</span>
 <span class="sd">        simulated target quantities.</span>
-<span class="sd">    ground_truth : bool</span>
-<span class="sd">        True if target quantities are used for oracle.</span>
 <span class="sd">    global_dict : dict</span>
 <span class="sd">        dictionary including all user-input settings.</span>
 
@@ -402,11 +399,6 @@ document.write(`
 <span class="sd">        simulated elicited statistics.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">ground_truth</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Compute true elicited statistics&quot;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Compute elicited statistics&quot;</span><span class="p">)</span>
 
     <span class="c1"># initialize dict for storing results</span>
     <span class="n">elicits_res</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
@@ -416,8 +408,7 @@ document.write(`
         <span class="k">if</span> <span class="n">targets</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;query&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;custom&quot;</span><span class="p">:</span>
             <span class="n">elicited_statistic</span> <span class="o">=</span> <span class="n">use_custom_functions</span><span class="p">(</span>
                 <span class="n">targets</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;elicitation_method&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">],</span>
-                <span class="n">target_quantities</span><span class="p">,</span>
-                <span class="n">output_path</span><span class="p">,</span>
+                <span class="n">target_quantities</span>
             <span class="p">)</span>
             <span class="n">elicits_res</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;custom_</span><span class="si">{</span><span class="n">targets</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elicited_statistic</span>
 
@@ -428,7 +419,7 @@ document.write(`
         <span class="k">if</span> <span class="n">targets</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;query&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;pearson_correlation&quot;</span><span class="p">:</span>
             <span class="c1"># compute correlation between model parameters (used for</span>
             <span class="c1"># learning correlation structure of joint prior)</span>
-            <span class="n">elicited_statistic</span> <span class="o">=</span> <span class="n">custom_correlation</span><span class="p">(</span>
+            <span class="n">elicited_statistic</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">pearson_correlation</span><span class="p">(</span>
                 <span class="n">target_quantities</span><span class="p">[</span><span class="n">targets</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]])</span>
             <span class="c1"># save correlation in result dictionary</span>
             <span class="n">elicits_res</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;pearson_</span><span class="si">{</span><span class="n">targets</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -459,13 +450,6 @@ document.write(`
                                            <span class="n">computed_quantiles</span><span class="p">)</span>
             <span class="n">elicits_res</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;quantiles_</span><span class="si">{</span><span class="n">targets</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elicited_statistic</span>
 
-    <span class="c1"># save file in object</span>
-    <span class="k">if</span> <span class="n">output_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">ground_truth</span><span class="p">:</span>
-            <span class="n">output_path</span> <span class="o">=</span> <span class="n">output_path</span> <span class="o">+</span> <span class="s2">&quot;/expert&quot;</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="n">output_path</span> <span class="o">+</span> <span class="s2">&quot;/elicited_statistics.pkl&quot;</span>
-        <span class="n">el</span><span class="o">.</span><span class="n">save_as_pkl</span><span class="p">(</span><span class="n">elicits_res</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
-
     <span class="c1"># return results</span>
     <span class="k">return</span> <span class="n">elicits_res</span></div>
 
@@ -473,8 +457,7 @@ document.write(`
 
 <div class="viewcode-block" id="computation_target_quantities">
 <a class="viewcode-back" href="../../api/elicit.targets.html#elicit.targets.computation_target_quantities">[docs]</a>
-<span class="k">def</span> <span class="nf">computation_target_quantities</span><span class="p">(</span><span class="n">model_simulations</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span>
-                                  <span class="n">output_path</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">computation_target_quantities</span><span class="p">(</span><span class="n">model_simulations</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes target quantities from model simulations.</span>
 
@@ -482,9 +465,6 @@ document.write(`
 <span class="sd">    ----------</span>
 <span class="sd">    model_simulations : dict</span>
 <span class="sd">        simulations from generative model.</span>
-<span class="sd">    ground_truth : bool</span>
-<span class="sd">        whether simulations are based on ground truth. Mainly used for saving</span>
-<span class="sd">        results in extra folder &quot;expert&quot; for later analysis.</span>
 <span class="sd">    global_dict : dict</span>
 <span class="sd">        dictionary including all user-input settings..</span>
 
@@ -493,11 +473,7 @@ document.write(`
 <span class="sd">    targets_res : dict</span>
 <span class="sd">        computed target quantities.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">ground_truth</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Compute true target quantities&quot;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Compute target quantities&quot;</span><span class="p">)</span>
+
     <span class="c1"># initialize dict for storing results</span>
     <span class="n">targets_res</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="c1"># loop over target quantities</span>
@@ -511,8 +487,7 @@ document.write(`
         <span class="p">):</span>
             <span class="n">target_quantity</span> <span class="o">=</span> <span class="n">use_custom_functions</span><span class="p">(</span>
                 <span class="n">tar</span><span class="p">[</span><span class="s2">&quot;target_method&quot;</span><span class="p">],</span>
-                <span class="n">model_simulations</span><span class="p">,</span>
-                <span class="n">output_path</span>
+                <span class="n">model_simulations</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">target_quantity</span> <span class="o">=</span> <span class="n">model_simulations</span><span class="p">[</span><span class="n">tar</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span>
@@ -520,12 +495,6 @@ document.write(`
         <span class="c1"># save target quantities</span>
         <span class="n">targets_res</span><span class="p">[</span><span class="n">tar</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">target_quantity</span>
 
-    <span class="c1"># save file in object</span>
-    <span class="k">if</span> <span class="n">output_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">ground_truth</span><span class="p">:</span>
-            <span class="n">output_path</span> <span class="o">=</span> <span class="n">output_path</span> <span class="o">+</span> <span class="s2">&quot;/expert&quot;</span>
-        <span class="n">el</span><span class="o">.</span><span class="n">save_as_pkl</span><span class="p">(</span><span class="n">targets_res</span><span class="p">,</span> <span class="n">output_path</span> <span class="o">+</span> <span class="s2">&quot;/target_quantities.pkl&quot;</span><span class="p">)</span>
-        <span class="c1"># return results</span>
     <span class="k">return</span> <span class="n">targets_res</span></div>
 
 </pre></div>

@@ -165,6 +165,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../api/elicit.extras.utils.html">elicit.extras.utils module</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.configs.html">elicit.configs module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.elicit.html">elicit.elicit module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.helpers.html">elicit.helpers module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.initialization.html">elicit.initialization module</a></li>
@@ -357,14 +358,10 @@ document.write(`
     <span class="n">prior_model</span> <span class="o">=</span> <span class="n">prior_model_init</span>
     <span class="n">total_loss</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">component_losses</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">loss_comp_expert</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">loss_comp_model</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">gradients_ep</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">time_per_epoch</span> <span class="o">=</span> <span class="p">[]</span>
-
-    <span class="c1"># save files in folder or in temporary location</span>
-    <span class="k">if</span> <span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">saving_path</span> <span class="o">=</span> <span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">saving_path</span> <span class="o">=</span> <span class="s2">&quot;elicit_temp&quot;</span>
 
     <span class="c1"># initialize the adam optimizer</span>
     <span class="n">optimizer_copy</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -382,17 +379,18 @@ document.write(`
 
         <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">GradientTape</span><span class="p">()</span> <span class="k">as</span> <span class="n">tape</span><span class="p">:</span>
             <span class="c1"># generate simulations from model</span>
-            <span class="p">(</span><span class="n">train_elicits</span><span class="p">,</span> <span class="n">prior_sim</span><span class="p">,</span>
-             <span class="n">model_sim</span><span class="p">,</span> <span class="n">target_quants</span><span class="p">)</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">one_forward_simulation</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">train_elicits</span><span class="p">,</span> <span class="n">prior_sim</span><span class="p">,</span> <span class="n">model_sim</span><span class="p">,</span> <span class="n">target_quants</span>
+             <span class="p">)</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">one_forward_simulation</span><span class="p">(</span>
                 <span class="n">prior_model</span><span class="p">,</span> <span class="n">trainer</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">targets</span>
             <span class="p">)</span>
             <span class="c1"># compute total loss as weighted sum</span>
-            <span class="n">weighted_total_loss</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">compute_loss</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">weighted_total_loss</span><span class="p">,</span> <span class="n">loss_components_expert</span><span class="p">,</span>
+             <span class="n">loss_components_training</span><span class="p">,</span> <span class="n">loss_per_component</span>
+             <span class="p">)</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">compute_loss</span><span class="p">(</span>
                 <span class="n">train_elicits</span><span class="p">,</span>
                 <span class="n">expert_elicited_statistics</span><span class="p">,</span>
                 <span class="n">epoch</span><span class="p">,</span>
-                <span class="n">targets</span><span class="p">,</span>
-                <span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span>
+                <span class="n">targets</span>
             <span class="p">)</span>
 
             <span class="c1"># compute gradient of loss wrt trainable_variables</span>
@@ -414,31 +412,52 @@ document.write(`
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Loss is NAN. The training process has been stopped.&quot;</span><span class="p">)</span>
             <span class="k">break</span>
 
+        <span class="c1"># %% Saving of results</span>
         <span class="k">if</span> <span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;parametric_prior&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">path</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/gradients.pkl&quot;</span>
-                <span class="n">el</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">save_as_pkl</span><span class="p">(</span><span class="n">gradients</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
-            <span class="c1"># save for each epoch</span>
+            <span class="c1"># save gradients per epoch</span>
             <span class="n">gradients_ep</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gradients</span><span class="p">)</span>
 
-        <span class="c1"># savings per epoch</span>
-        <span class="n">time_per_epoch</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">epoch_time</span><span class="p">)</span>
-        <span class="n">total_loss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">weighted_total_loss</span><span class="p">)</span>
-        <span class="n">component_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/loss_per_component.pkl&quot;</span><span class="p">)</span>
-            <span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;parametric_prior&quot;</span><span class="p">:</span>
             <span class="c1"># save single learned hyperparameter values for each prior and</span>
             <span class="c1"># epoch</span>
-            <span class="n">res_dict</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">save_hyperparameters</span><span class="p">(</span>
-                <span class="n">prior_model</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span>
-                <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># save mean and std for each sampled marginal prior; for each epoch</span>
-            <span class="n">res_dict</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">marginal_prior_moments</span><span class="p">(</span>
-                <span class="n">model_sim</span><span class="p">[</span><span class="s2">&quot;prior_samples&quot;</span><span class="p">],</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span>
-            <span class="p">)</span>
+
+            <span class="c1"># extract learned hyperparameter values</span>
+            <span class="n">hyperparams</span> <span class="o">=</span> <span class="n">prior_model</span><span class="o">.</span><span class="n">trainable_variables</span>
+            <span class="k">if</span> <span class="n">epoch</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># prepare list for saving hyperparameter values</span>
+                <span class="n">hyp_list</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hyperparams</span><span class="p">)):</span>
+                    <span class="n">hyp_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hyperparams</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
+                <span class="c1"># create a dict with empty list for each hyperparameter</span>
+                <span class="n">res_dict</span> <span class="o">=</span> <span class="p">{</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">hyp_list</span><span class="p">}</span>
+
+            <span class="c1"># save names and values of hyperparameters</span>
+            <span class="n">vars_values</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">hyperparams</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hyperparams</span><span class="p">))</span>
+                <span class="p">]</span>
+            <span class="n">vars_names</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">hyperparams</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hyperparams</span><span class="p">))</span>
+                <span class="p">]</span>
+            <span class="c1"># create a final dict of hyperparameter values</span>
+            <span class="k">for</span> <span class="n">val</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">vars_values</span><span class="p">,</span> <span class="n">vars_names</span><span class="p">):</span>
+                <span class="n">res_dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;deep_prior&quot;</span><span class="p">:</span>
+            <span class="c1"># save mean and std for each sampled marginal prior</span>
+            <span class="c1"># for each epoch</span>
+
+            <span class="k">if</span> <span class="n">epoch</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">res_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;means&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;stds&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+
+            <span class="n">means</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">model_sim</span><span class="p">[</span><span class="s2">&quot;prior_samples&quot;</span><span class="p">],</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="n">sds</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_std</span><span class="p">(</span><span class="n">model_sim</span><span class="p">[</span><span class="s2">&quot;prior_samples&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">val</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">means</span><span class="p">,</span> <span class="n">sds</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;means&quot;</span><span class="p">,</span> <span class="s2">&quot;stds&quot;</span><span class="p">]):</span>
+                <span class="n">res_dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+
+        <span class="c1"># savings per epoch (independent from chosen method)</span>
+        <span class="n">time_per_epoch</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">epoch_time</span><span class="p">)</span>
+        <span class="n">total_loss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">weighted_total_loss</span><span class="p">)</span>
+        <span class="n">component_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">loss_per_component</span><span class="p">)</span>
 
     <span class="n">res_ep</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;loss&quot;</span><span class="p">:</span> <span class="n">total_loss</span><span class="p">,</span>
@@ -452,19 +471,13 @@ document.write(`
         <span class="s2">&quot;elicited_statistics&quot;</span><span class="p">:</span> <span class="n">train_elicits</span><span class="p">,</span>
         <span class="s2">&quot;prior_samples&quot;</span><span class="p">:</span> <span class="n">prior_sim</span><span class="p">,</span>
         <span class="s2">&quot;model_samples&quot;</span><span class="p">:</span> <span class="n">model_sim</span><span class="p">,</span>
-        <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">prior_model</span>
+        <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">prior_model</span><span class="p">,</span>
+        <span class="s2">&quot;loss_tensor_expert&quot;</span><span class="p">:</span> <span class="n">loss_components_expert</span><span class="p">,</span>
+        <span class="s2">&quot;loss_tensor_model&quot;</span><span class="p">:</span> <span class="n">loss_components_training</span><span class="p">,</span>
         <span class="p">}</span>
 
     <span class="k">if</span> <span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;parametric_prior&quot;</span><span class="p">:</span>
         <span class="n">res_ep</span><span class="p">[</span><span class="s2">&quot;hyperparameter_gradient&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gradients_ep</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/final_results.pkl&quot;</span>
-    <span class="n">el</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">save_as_pkl</span><span class="p">(</span><span class="n">res_ep</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/final_results.pkl&quot;</span><span class="p">)</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/loss_per_component.pkl&quot;</span><span class="p">)</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">saving_path</span> <span class="o">+</span> <span class="s2">&quot;/res_dict.pkl&quot;</span><span class="p">)</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">rmdir</span><span class="p">(</span><span class="n">saving_path</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">res_ep</span><span class="p">,</span> <span class="n">output_res</span></div>
 

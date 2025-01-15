@@ -59,6 +59,14 @@ def hyper(
     hyppar_dict : dict
         Dictionary including all hyperparameter settings.
 
+    Examples
+    --------
+    >>> # sigma hyperparameter of a parameteric distribution
+    >>> el.hyper(name="sigma0", lower=0)
+
+    >>> # shared hyperparameter
+    >>> el.hyper(name="sigma", lower=0, shared=True)
+
     """
     # constraints
     # only lower bound
@@ -89,7 +97,7 @@ def hyper(
 
 def parameter(
     name: str, family: callable or None = None,
-    hyperparams: dict or None = None
+    hyperparams: callable or None = None
 ):
     """
     Specification of model parameters.
@@ -101,21 +109,31 @@ def parameter(
     family : callable or None
         Prior distribution family for model parameter.
         Only required for ``parametric_prior`` method.
-        Must be an `tfp.distributions <https://www.tensorflow.org/probability/api_docs/python/tfp/distributions>`_ object.  # noqa
+        Must be an `tfp.distributions <https://www.tensorflow.org/probability/api_docs/python/tfp/distributions>`_ object.
     hyperparams : dict or None
         Hyperparameters of distribution as specified in **family**.
         Only required for ``parametric_prior`` method.
         Structure of dictionary: *keys* must match arguments of
-        `tfp.distributions <https://www.tensorflow.org/probability/api_docs/python/tfp/distributions>`_  # noqa
+        `tfp.distributions <https://www.tensorflow.org/probability/api_docs/python/tfp/distributions>`_
         object and *values* have to be specified using the :func:`hyper`
         method.
         Further details are provided in
         `How-To specify prior hyperparameters (TODO) <url>`_.
+        Default value is ``None``.
 
     Returns
     -------
     param_dict : dict
         Dictionary including all model (hyper)parameter settings.
+
+    Examples
+    --------
+    >>> el.parameter(name="beta0",
+    >>>              family=tfd.Normal,
+    >>>              hyperparams=dict(loc=el.hyper("mu0"),
+    >>>                               scale=el.hyper("sigma0", lower=0)
+    >>>                               )
+    >>>              )
 
     """
 
@@ -126,7 +144,7 @@ def parameter(
 
 def model(obj: callable, **kwargs):
     """
-    Specification of generative model.
+    Specification of the generative model.
 
     Parameters
     ----------
@@ -141,6 +159,37 @@ def model(obj: callable, **kwargs):
     generator_dict : dict
         Dictionary including all generative model settings.
 
+    Examples
+    --------
+    >>> # specify the generative model class
+    >>> class ToyModel:
+    >>>     def __call__(self, prior_samples, design_matrix, **kwargs):
+    >>>         B = prior_samples.shape[0]
+    >>>         S = prior_samples.shape[1]
+    >>>         # preprocess shape of design matrix
+    >>>         X = tf.broadcast_to(design_matrix[None, None,:],
+    >>>                            (B,S,len(design_matrix)))
+    >>>         # linear predictor (= mu)
+    >>>         epred = tf.add(prior_samples[:, :, 0][:,:,None],
+    >>>                        tf.multiply(prior_samples[:, :, 1][:,:,None], X)
+    >>>                        )
+    >>>         # data-generating model
+    >>>         likelihood = tfd.Normal(
+    >>>             loc=epred, scale=tf.expand_dims(prior_samples[:, :, -1], -1)
+    >>>             )
+    >>>         # prior predictive distribution (=height)
+    >>>         ypred = likelihood.sample()
+    >>>
+    >>>         return dict(
+    >>>             likelihood=likelihood,
+    >>>             ypred=ypred, epred=epred,
+    >>>             prior_samples=prior_samples
+    >>>             )
+
+    >>> # specify the model category in the elicit object
+    >>> el.model(obj=ToyModel,
+    >>>          design_matrix=std_predictor(N=200, quantiles=[25,50,75])
+    >>>          )
     """
     generator_dict = dict(obj=obj)
 
@@ -200,7 +249,7 @@ class Queries:
         can be passed as argument.
         Note: this function hasn't been implemented yet and will raise
         an ``NotImplementedError``.  See for further information the
-        corresponding `issue #33`<https://github.com/florence-bockting/prior_elicitation/issues/33>`_.  # noqa
+        corresponding `GitHub issue #33 <https://github.com/florence-bockting/prior_elicitation/issues/33>`_.
 
         Parameters
         ----------
@@ -230,7 +279,7 @@ queries = Queries()
 def target(
     name: str,
     query: callable = queries,
-    loss: callable = el.losses.MMD(kernel="energy"),
+    loss: callable = el.losses.MMD2(kernel="energy"),
     target_method: callable = None,
     weight: float = 1.0,
 ):
@@ -242,24 +291,23 @@ def target(
     name : string
         Name of the target quantity. Two approaches are possible:
         (1) Target quantity is identical to an output from the generative
-        model: The name must match the output variable name. (2) Target
-        quantity is computed via custom method: Provide custom function via
-        **target_method**.
+        model: The name must match the output variable name. (2) Custom target
+        quantity is computed using the **target_method** argument.
     query : callable
-        Specify built-in elicitation technique or use the ``custom`` method to
-        pass a custom elicitation method.
-        The default is an instance of :class:`ElicitationMethod`.
+        Specify the elicitation technique by using one of the methods 
+        implemented in :func:`Queries`.
         See `How-To specify custom elicitation techniques (TODO) <url>`_.
     loss : callable
         Loss function for computing the discrepancy between expert data and
         model simulations. Implemented classes can be found
-        in :doc:`el.losses`. The default is the maximum mean discrepancy with
-        an energy kernel: :class:`el.losses.MMD(kernel="energy")`
+        in :mod:`elicit.losses`.
+        The default is the maximum mean discrepancy with
+        an energy kernel: :func:`elicit.losses.MMD2`
     target_method : callable, optional
         Custom method for computing a target quantity.
         Note: This method hasn't been implemented yet and will raise an
         ``NotImplementedError``. See for further information the corresponding
-        `issue #34`<https://github.com/florence-bockting/prior_elicitation/issues/34>`_.  # noqa
+        `GitHub issue #34 <https://github.com/florence-bockting/prior_elicitation/issues/34>`_.
         The default is ``None``.
     weight : float, optional
         Weight of the corresponding elicited quantity in the total loss.
@@ -271,6 +319,19 @@ def target(
         Dictionary including all settings regarding the target quantity and
         corresponding elicitation technique.
 
+    Examples
+    --------
+    >>> el.target(name="y_X0",
+    >>>           query=el.queries.quantiles((5, 25, 50, 75, 95)),
+    >>>           loss=el.losses.MMD2(kernel="energy"),
+    >>>           weight=1.0
+    >>>           )
+
+    >>> el.target(name="correlation",
+    >>>           query=el.queries.correlation(),
+    >>>           loss=el.losses.L2,
+    >>>           weight=1.0
+    >>>           )
     """
     try:
         target_method is not None
@@ -310,6 +371,13 @@ class Expert:
         expert_data : dict
             Expert-elicited information used for learning prior distributions.
 
+        Examples
+        --------
+        >>> expert_dat = {
+        >>>     "quantiles_y_X0": [-12.55, -0.57, 3.29, 7.14, 19.15],
+        >>>     "quantiles_y_X1": [-11.18, 1.45, 5.06, 8.83, 20.42],
+        >>>     "quantiles_y_X2": [-9.28, 3.09, 6.83, 10.55, 23.29]
+        >>> }
         """
         dat_prep = {
             f"{key}": tf.expand_dims(
@@ -333,7 +401,7 @@ class Expert:
             True prior distributions with *keys* matching the parameter names
             as specified in :func:`parameter` and *values* being prior
             distributions implemented as
-            `tfp.distributions <https://www.tensorflow.org/probability/api_docs/python/tfp/distributions>`_  # noqa
+            `tfp.distributions <https://www.tensorflow.org/probability/api_docs/python/tfp/distributions>`_
             object with predetermined hyperparameter values.
         num_samples : int
             Number of draws from the prior distribution.
@@ -346,6 +414,16 @@ class Expert:
             Settings of oracle for simulating from ground truth. True elicited
             statistics are used as 'expert-data' in loss function.
 
+        Examples
+        --------
+        >>> el.expert.simulator(
+        >>>     ground_truth = {
+        >>>         "beta0": tfd.Normal(loc=5, scale=1),
+        >>>         "beta1": tfd.Normal(loc=2, scale=1),
+        >>>         "sigma": tfd.HalfNormal(scale=10.0),
+        >>>     },
+        >>>     num_samples = 10_000
+        >>> )
         """
         return dict(ground_truth=ground_truth, num_samples=num_samples)
 
@@ -353,14 +431,14 @@ class Expert:
 expert = Expert()
 
 
-def optimizer(optimizer: callable = tf.keras.optimizers.Adam, **kwargs):
+def optimizer(optimizer: callable = tf.keras.optimizers.Adam(), **kwargs):
     """
     Specification of optimizer and its settings for SGD.
 
     Parameters
     ----------
-    optimizer : callable, `tf.keras.optimizers <https://www.tensorflow.org/api_docs/python/tf/keras/optimizers>`_ object  # noqa
-        Optimizer used for SGD implemented as `tf.keras.optimizers <https://www.tensorflow.org/api_docs/python/tf/keras/optimizers>`_ object.  # noqa
+    optimizer : callable, `tf.keras.optimizers <https://www.tensorflow.org/api_docs/python/tf/keras/optimizers>`_ object.
+        Optimizer used for SGD implemented as `tf.keras.optimizers <https://www.tensorflow.org/api_docs/python/tf/keras/optimizers>`_ object.
         The default is ``tf.keras.optimizers.Adam``.
     **kwargs : keyword arguments, optional
         Additional keyword arguments expected by **optimizer**.
@@ -370,6 +448,13 @@ def optimizer(optimizer: callable = tf.keras.optimizers.Adam, **kwargs):
     optimizer_dict : dict
         Dictionary specifying the SGD optimizer and its additional settings.
 
+    Examples
+    --------
+    >>> optimizer=el.optimizer(
+    >>>     optimizer=tf.keras.optimizers.Adam,
+    >>>     learning_rate=0.1,
+    >>>     clipnorm=1.0
+    >>> )
     """
     optimizer_dict = dict(optimizer=optimizer)
     for key in kwargs:
@@ -380,7 +465,7 @@ def optimizer(optimizer: callable = tf.keras.optimizers.Adam, **kwargs):
 
 def initializer(
     method: str,
-    distribution: el.initialization.uniform,
+    distribution: callable = el.initialization.uniform(),
     loss_quantile: int = 0,
     iterations: int = 100,
 ):
@@ -398,9 +483,9 @@ def initializer(
     method : string
         Name of initialization method. Currently supported are "random", "lhs",
         and "sobol".
-    distribution : callable, :class:`el.initialization.uniform`
+    distribution : callable, :func:`elicit.initialization.uniform`
         Specification of initialization distribution.
-        Currently implemented methods: :class:`el.initialiation.uniform`
+        Currently implemented methods: :func:`elicit.initialization.uniform`
     loss_quantile : int,
         Quantile indicating which loss value should be used for selecting the
         initial hyperparameters.
@@ -414,6 +499,17 @@ def initializer(
     init_dict : dict
         Dictionary specifying the initialization method.
 
+    Examples
+    --------
+    >>> el.initializer(
+    >>>     method="lhs",
+    >>>     loss_quantile=0,
+    >>>     iterations=32,
+    >>>     distribution=el.initialization.uniform(
+    >>>         radius=1,
+    >>>         mean=0
+    >>>         )
+    >>>     )
     """
     init_dict = dict(
         method=method,
@@ -454,16 +550,16 @@ def trainer(
         batch size. The default is 128.
     num_samples : int, optional
         number of samples from the prior(s). The default is 200.
-    save_configs_history : callable, :func:`el.configs.save_history`
+    save_configs_history : callable, :func:`elicit.configs.save_history`
         Exclude or include sub-results in the final result file.
         In the ``history`` object are all results that are saved across epochs.
         For usage information see
-        `How-To: Save and load the elicit object <https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html>`_  # noqa
-    save_configs_results : callable, :func:`el.configs.save_results`
+        `How-To: Save and load the elicit object <https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html>`_
+    save_configs_results : callable, :func:`elicit.configs.save_results`
         Exclude or include sub-results in the final result file.
         In the ``results`` object are all results that are saved for the last
         epoch only. For usage information see
-        `How-To: Save and load the elicit object <https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html>`_  # noqa
+        `How-To: Save and load the elicit object <https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html>`_
 
     Returns
     -------
@@ -471,6 +567,18 @@ def trainer(
         dictionary specifying the training settings for learning the prior
         distribution(s).
 
+    Examples
+    --------
+    >>> el.trainer(
+    >>>     method="parametric_prior",
+    >>>     name="toymodel",
+    >>>     seed=0,
+    >>>     epochs=400,
+    >>>     B=128,
+    >>>     num_samples=200,
+    >>>     save_configs_history=el.configs.save_history(loss_component=False),
+    >>>     save_configs_results=el.configs.save_results(model=False)
+    >>> )
     """
     train_dict = dict(
         method=method,
@@ -503,28 +611,29 @@ class Elicit:
         Parameters
         ----------
         model : callable
-            specification of generative model using :func:`el.model`.
+            specification of generative model using :func:`model`.
         parameters : list
-            list of model parameters specified with :func:`el.parameter`.
+            list of model parameters specified with :func:`parameter`.
         targets : list
-            list of target quantities specified with :func:`el.target`.
+            list of target quantities specified with :func:`target`.
         expert : callable
             provide input data from expert or simulate data from oracle with
-            :func:`el.expert.data` or func:`el.expert.simulator`, respectively.
+            either the ``data`` or ``simulator`` method of the
+            :mod:`elicit.elicit.Expert` module.
         trainer : callable
             specification of training settings and meta-information for
-            workflow using :func:`el.trainer`
+            workflow using :func:`trainer`
         optimizer : callable
             specification of SGD optimizer and its settings using
-            :func:`el.optimizer`.
+            :func:`optimizer`.
         normalizing_flow : callable or None
             specification of normalizing flow using a method implemented in
-            :module:`el.networks`.
+            :mod:`elicit.networks`.
             Only required for ``deep_prior`` method. For ``parametric_prior``
             use ``None``. Default value is ``None``.
         initializer : callable
             specification of initialization settings using
-            :func:`el.initializer`. Only required for `parametric_prior` method.
+            :func:`initializer`. Only required for ``parametric_prior`` method.
             Otherwise the argument should be ``None``. Default value is
             ``None.``
 
@@ -576,6 +685,12 @@ class Elicit:
         history : dict
             Results saved across epochs (e.g., loss). If ``silent=True`` the 
             fit method returns nothing.
+
+        Examples
+        --------
+        >>> eliobj.fit(save_dir=None, silent=True)
+        
+        >>> history = eliobj.fit(save_dir="results", force_fit=True)
 
         """
         # check whether elicit object is already fitted

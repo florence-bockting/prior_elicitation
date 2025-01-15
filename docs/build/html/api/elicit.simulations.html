@@ -166,6 +166,7 @@
 <li class="toctree-l4"><a class="reference internal" href="elicit.extras.utils.html">elicit.extras.utils module</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.configs.html">elicit.configs module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.elicit.html">elicit.elicit module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.helpers.html">elicit.helpers module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.initialization.html">elicit.initialization module</a></li>
@@ -433,7 +434,7 @@ None if ground_truth = True</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.simulations.intialize_priors">
-<span class="sig-prename descclassname"><span class="pre">elicit.simulations.</span></span><span class="sig-name descname"><span class="pre">intialize_priors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">init_matrix_slice</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/simulations.html#intialize_priors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.simulations.intialize_priors" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.simulations.</span></span><span class="sig-name descname"><span class="pre">intialize_priors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">init_matrix_slice</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/simulations.html#intialize_priors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.simulations.intialize_priors" title="Link to this definition">#</a></dt>
 <dd><p>Initialize prior distributions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -453,7 +454,7 @@ None if ground_truth = True</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.simulations.sample_from_priors">
-<span class="sig-prename descclassname"><span class="pre">elicit.simulations.</span></span><span class="sig-name descname"><span class="pre">sample_from_priors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initialized_priors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/simulations.html#sample_from_priors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.simulations.sample_from_priors" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.simulations.</span></span><span class="sig-name descname"><span class="pre">sample_from_priors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initialized_priors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expert</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/simulations.html#sample_from_priors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.simulations.sample_from_priors" title="Link to this definition">#</a></dt>
 <dd><p>Samples from initialized prior distributions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -523,15 +524,12 @@ generative model.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.simulations.simulate_from_generator">
-<span class="sig-prename descclassname"><span class="pre">elicit.simulations.</span></span><span class="sig-name descname"><span class="pre">simulate_from_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/simulations.html#simulate_from_generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.simulations.simulate_from_generator" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.simulations.</span></span><span class="sig-name descname"><span class="pre">simulate_from_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/simulations.html#simulate_from_generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.simulations.simulate_from_generator" title="Link to this definition">#</a></dt>
 <dd><p>Simulates data from the specified generative model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>prior_samples</strong><span class="classifier">dict</span></dt><dd><p>samples from prior distributions.</p>
-</dd>
-<dt><strong>ground_truth</strong><span class="classifier">bool</span></dt><dd><p>if simulation is based on true hyperparameter vector. Mainly for
-saving results in a specific “expert” folder for later analysis.</p>
 </dd>
 <dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all user-input settings.</p>
 </dd>

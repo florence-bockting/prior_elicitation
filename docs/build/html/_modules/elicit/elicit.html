@@ -165,6 +165,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../api/elicit.extras.utils.html">elicit.extras.utils module</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.configs.html">elicit.configs module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.elicit.html">elicit.elicit module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.helpers.html">elicit.helpers module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.initialization.html">elicit.initialization module</a></li>
@@ -306,7 +307,6 @@ document.write(`
 
 <span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
 <span class="kn">import</span> <span class="nn">tensorflow_probability</span> <span class="k">as</span> <span class="nn">tfp</span>
-<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">elicit</span> <span class="k">as</span> <span class="nn">el</span>
 
 <span class="n">tfd</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">distributions</span>
@@ -314,7 +314,7 @@ document.write(`
 
 <div class="viewcode-block" id="Dtype">
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.Dtype">[docs]</a>
-<span class="k">class</span> <span class="nc">Dtype</span><span class="p">:</span> 
+<span class="k">class</span> <span class="nc">Dtype</span><span class="p">:</span>
 <div class="viewcode-block" id="Dtype.__init__">
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.Dtype.__init__">[docs]</a>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vtype</span><span class="p">,</span> <span class="n">dim</span><span class="p">):</span>
@@ -326,9 +326,9 @@ document.write(`
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.Dtype.__call__">[docs]</a>
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vtype</span><span class="o">==</span><span class="s2">&quot;real&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vtype</span> <span class="o">==</span> <span class="s2">&quot;real&quot;</span><span class="p">:</span>
             <span class="n">dtype_dim</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">vtype</span><span class="o">==</span><span class="s2">&quot;array&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">vtype</span> <span class="o">==</span> <span class="s2">&quot;array&quot;</span><span class="p">:</span>
             <span class="n">dtype_dim</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">,))</span>
         <span class="k">return</span> <span class="n">dtype_dim</span></div>
 </div>
@@ -337,8 +337,14 @@ document.write(`
 
 <div class="viewcode-block" id="hyper">
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.hyper">[docs]</a>
-<span class="k">def</span> <span class="nf">hyper</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">lower</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">),</span> <span class="n">upper</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">),</span>
-          <span class="n">vtype</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;real&quot;</span><span class="p">,</span> <span class="n">dim</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">shared</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">hyper</span><span class="p">(</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">lower</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">),</span>
+    <span class="n">upper</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">),</span>
+    <span class="n">vtype</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;real&quot;</span><span class="p">,</span>
+    <span class="n">dim</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">shared</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Specification of prior hyperparameters.</span>
 
@@ -367,33 +373,37 @@ document.write(`
 <span class="sd">    hyppar_dict : dict</span>
 <span class="sd">        Dictionary including all hyperparameter settings.</span>
 
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; # sigma hyperparameter of a parameteric distribution</span>
+<span class="sd">    &gt;&gt;&gt; el.hyper(name=&quot;sigma0&quot;, lower=0)</span>
+
+<span class="sd">    &gt;&gt;&gt; # shared hyperparameter</span>
+<span class="sd">    &gt;&gt;&gt; el.hyper(name=&quot;sigma&quot;, lower=0, shared=True)</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># constraints</span>
     <span class="c1"># only lower bound</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">lower</span> <span class="o">!=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="n">upper</span> <span class="o">==</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)):</span>
         <span class="n">lower_bound</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">LowerBound</span><span class="p">(</span><span class="n">lower</span><span class="p">)</span>
-        <span class="n">transform</span><span class="o">=</span><span class="n">lower_bound</span><span class="o">.</span><span class="n">inverse</span>
+        <span class="n">transform</span> <span class="o">=</span> <span class="n">lower_bound</span><span class="o">.</span><span class="n">inverse</span>
     <span class="c1"># only upper bound</span>
-    <span class="k">elif</span> <span class="p">((</span><span class="n">upper</span> <span class="o">!=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="n">lower</span> <span class="o">==</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">))):</span>
+    <span class="k">elif</span> <span class="p">(</span><span class="n">upper</span> <span class="o">!=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="n">lower</span> <span class="o">==</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">)):</span>
         <span class="n">upper_bound</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">UpperBound</span><span class="p">(</span><span class="n">upper</span><span class="p">)</span>
-        <span class="n">transform</span><span class="o">=</span><span class="n">upper_bound</span><span class="o">.</span><span class="n">inverse</span>
+        <span class="n">transform</span> <span class="o">=</span> <span class="n">upper_bound</span><span class="o">.</span><span class="n">inverse</span>
     <span class="c1"># upper and lower bound</span>
-    <span class="k">elif</span> <span class="p">((</span><span class="n">upper</span> <span class="o">!=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="n">lower</span> <span class="o">!=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">))):</span>
+    <span class="k">elif</span> <span class="p">(</span><span class="n">upper</span> <span class="o">!=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="n">lower</span> <span class="o">!=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">)):</span>
         <span class="n">double_bound</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">DoubleBound</span><span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">)</span>
-        <span class="n">transform</span><span class="o">=</span><span class="n">double_bound</span><span class="o">.</span><span class="n">inverse</span>
+        <span class="n">transform</span> <span class="o">=</span> <span class="n">double_bound</span><span class="o">.</span><span class="n">inverse</span>
     <span class="c1"># unbounded</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">transform</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">identity</span>
+        <span class="n">transform</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">identity</span>
 
     <span class="c1"># value type</span>
     <span class="n">dtype_dim</span> <span class="o">=</span> <span class="n">Dtype</span><span class="p">(</span><span class="n">vtype</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span>
 
     <span class="n">hyppar_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">,</span>
-        <span class="n">constraint</span> <span class="o">=</span> <span class="n">transform</span><span class="p">,</span>
-        <span class="n">vtype</span> <span class="o">=</span> <span class="n">dtype_dim</span><span class="p">,</span>
-        <span class="n">dim</span> <span class="o">=</span> <span class="n">dim</span><span class="p">,</span>
-        <span class="n">shared</span> <span class="o">=</span> <span class="n">shared</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">constraint</span><span class="o">=</span><span class="n">transform</span><span class="p">,</span> <span class="n">vtype</span><span class="o">=</span><span class="n">dtype_dim</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="n">dim</span><span class="p">,</span> <span class="n">shared</span><span class="o">=</span><span class="n">shared</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">hyppar_dict</span></div>
@@ -402,8 +412,10 @@ document.write(`
 
 <div class="viewcode-block" id="parameter">
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.parameter">[docs]</a>
-<span class="k">def</span> <span class="nf">parameter</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">family</span><span class="p">:</span> <span class="nb">callable</span> <span class="ow">or</span> <span class="kc">None</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-              <span class="n">hyperparams</span><span class="p">:</span> <span class="nb">dict</span> <span class="ow">or</span> <span class="kc">None</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">parameter</span><span class="p">(</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">family</span><span class="p">:</span> <span class="nb">callable</span> <span class="ow">or</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">hyperparams</span><span class="p">:</span> <span class="nb">callable</span> <span class="ow">or</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Specification of model parameters.</span>
 
@@ -413,28 +425,36 @@ document.write(`
 <span class="sd">        Custom name of parameter.</span>
 <span class="sd">    family : callable or None</span>
 <span class="sd">        Prior distribution family for model parameter.</span>
-<span class="sd">        Only required for method ``parametric_prior``.</span>
+<span class="sd">        Only required for ``parametric_prior`` method.</span>
 <span class="sd">        Must be an `tfp.distributions &lt;https://www.tensorflow.org/probability/api_docs/python/tfp/distributions&gt;`_ object.</span>
 <span class="sd">    hyperparams : dict or None</span>
 <span class="sd">        Hyperparameters of distribution as specified in **family**.</span>
-<span class="sd">        Only required for method ``parametric_prior``.</span>
-<span class="sd">        Structure of dictionary: Keys must match arguments of</span>
+<span class="sd">        Only required for ``parametric_prior`` method.</span>
+<span class="sd">        Structure of dictionary: *keys* must match arguments of</span>
 <span class="sd">        `tfp.distributions &lt;https://www.tensorflow.org/probability/api_docs/python/tfp/distributions&gt;`_</span>
-<span class="sd">        object and values have to be specified using the :func:`hyper` method.</span>
-<span class="sd">        Further details are provided in `How-To specify prior hyperparameters (TODO) &lt;url&gt;`_.</span>
+<span class="sd">        object and *values* have to be specified using the :func:`hyper`</span>
+<span class="sd">        method.</span>
+<span class="sd">        Further details are provided in</span>
+<span class="sd">        `How-To specify prior hyperparameters (TODO) &lt;url&gt;`_.</span>
+<span class="sd">        Default value is ``None``.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    param_dict : dict</span>
-<span class="sd">        Dictionary including all model parameter settings.</span>
+<span class="sd">        Dictionary including all model (hyper)parameter settings.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; el.parameter(name=&quot;beta0&quot;,</span>
+<span class="sd">    &gt;&gt;&gt;              family=tfd.Normal,</span>
+<span class="sd">    &gt;&gt;&gt;              hyperparams=dict(loc=el.hyper(&quot;mu0&quot;),</span>
+<span class="sd">    &gt;&gt;&gt;                               scale=el.hyper(&quot;sigma0&quot;, lower=0)</span>
+<span class="sd">    &gt;&gt;&gt;                               )</span>
+<span class="sd">    &gt;&gt;&gt;              )</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">param_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
-        <span class="n">family</span><span class="o">=</span><span class="n">family</span><span class="p">,</span>
-        <span class="n">hyperparams</span><span class="o">=</span><span class="n">hyperparams</span>
-    <span class="p">)</span>
+    <span class="n">param_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="n">family</span><span class="p">,</span> <span class="n">hyperparams</span><span class="o">=</span><span class="n">hyperparams</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">param_dict</span></div>
 
@@ -444,7 +464,7 @@ document.write(`
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.model">[docs]</a>
 <span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Specification of generative model.</span>
+<span class="sd">    Specification of the generative model.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -459,10 +479,39 @@ document.write(`
 <span class="sd">    generator_dict : dict</span>
 <span class="sd">        Dictionary including all generative model settings.</span>
 
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; # specify the generative model class</span>
+<span class="sd">    &gt;&gt;&gt; class ToyModel:</span>
+<span class="sd">    &gt;&gt;&gt;     def __call__(self, prior_samples, design_matrix, **kwargs):</span>
+<span class="sd">    &gt;&gt;&gt;         B = prior_samples.shape[0]</span>
+<span class="sd">    &gt;&gt;&gt;         S = prior_samples.shape[1]</span>
+<span class="sd">    &gt;&gt;&gt;         # preprocess shape of design matrix</span>
+<span class="sd">    &gt;&gt;&gt;         X = tf.broadcast_to(design_matrix[None, None,:],</span>
+<span class="sd">    &gt;&gt;&gt;                            (B,S,len(design_matrix)))</span>
+<span class="sd">    &gt;&gt;&gt;         # linear predictor (= mu)</span>
+<span class="sd">    &gt;&gt;&gt;         epred = tf.add(prior_samples[:, :, 0][:,:,None],</span>
+<span class="sd">    &gt;&gt;&gt;                        tf.multiply(prior_samples[:, :, 1][:,:,None], X)</span>
+<span class="sd">    &gt;&gt;&gt;                        )</span>
+<span class="sd">    &gt;&gt;&gt;         # data-generating model</span>
+<span class="sd">    &gt;&gt;&gt;         likelihood = tfd.Normal(</span>
+<span class="sd">    &gt;&gt;&gt;             loc=epred, scale=tf.expand_dims(prior_samples[:, :, -1], -1)</span>
+<span class="sd">    &gt;&gt;&gt;             )</span>
+<span class="sd">    &gt;&gt;&gt;         # prior predictive distribution (=height)</span>
+<span class="sd">    &gt;&gt;&gt;         ypred = likelihood.sample()</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt;         return dict(</span>
+<span class="sd">    &gt;&gt;&gt;             likelihood=likelihood,</span>
+<span class="sd">    &gt;&gt;&gt;             ypred=ypred, epred=epred,</span>
+<span class="sd">    &gt;&gt;&gt;             prior_samples=prior_samples</span>
+<span class="sd">    &gt;&gt;&gt;             )</span>
+
+<span class="sd">    &gt;&gt;&gt; # specify the model category in the elicit object</span>
+<span class="sd">    &gt;&gt;&gt; el.model(obj=ToyModel,</span>
+<span class="sd">    &gt;&gt;&gt;          design_matrix=std_predictor(N=200, quantiles=[25,50,75])</span>
+<span class="sd">    &gt;&gt;&gt;          )</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">generator_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-        <span class="n">obj</span><span class="o">=</span><span class="n">obj</span>
-        <span class="p">)</span>
+    <span class="n">generator_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="n">obj</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
         <span class="n">generator_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
@@ -476,7 +525,7 @@ document.write(`
 <span class="k">class</span> <span class="nc">Queries</span><span class="p">:</span>
 <div class="viewcode-block" id="Queries.quantiles">
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.Queries.quantiles">[docs]</a>
-    <span class="k">def</span> <span class="nf">quantiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">quants</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">quantiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">quantiles</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Implements a quantile-based elicitation technique.</span>
 
@@ -491,8 +540,7 @@ document.write(`
 <span class="sd">            Dictionary including the quantile settings.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;quantiles&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">quants</span><span class="p">)</span></div>
-
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;quantiles&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">quantiles</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Queries.identity">
@@ -511,7 +559,6 @@ document.write(`
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;identity&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></div>
 
 
-
 <div class="viewcode-block" id="Queries.correlation">
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.Queries.correlation">[docs]</a>
     <span class="k">def</span> <span class="nf">correlation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -528,13 +575,15 @@ document.write(`
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;pearson_correlation&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></div>
 
 
-
 <div class="viewcode-block" id="Queries.custom">
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.Queries.custom">[docs]</a>
     <span class="k">def</span> <span class="nf">custom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Implements a placeholder for custom target methods. The custom method</span>
 <span class="sd">        can be passed as argument.</span>
+<span class="sd">        Note: this function hasn&#39;t been implemented yet and will raise</span>
+<span class="sd">        an ``NotImplementedError``.  See for further information the</span>
+<span class="sd">        corresponding `GitHub issue #33 &lt;https://github.com/florence-bockting/prior_elicitation/issues/33&gt;`_.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -547,25 +596,31 @@ document.write(`
 <span class="sd">            Dictionary including the custom settings.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">args_dict</span><span class="o">=</span><span class="nb">dict</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="n">args_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-        
-        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;custom&quot;</span><span class="p">,</span>
-                    <span class="n">value</span><span class="o">=</span><span class="n">func</span><span class="p">,</span>
-                    <span class="n">add_args</span><span class="o">=</span><span class="n">args_dict</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+            <span class="s2">&quot;The use of custom elicitation methods hasn&#39;t been implemented yet.&quot;</span>
+            <span class="p">)</span></div>
 </div>
 
+        <span class="c1"># args_dict = dict()</span>
+        <span class="c1"># for key in kwargs:</span>
+        <span class="c1">#     args_dict[key] = kwargs[key]</span>
 
-<span class="c1"># create an instance of the ElicitationMethod class</span>
+        <span class="c1"># return dict(name=&quot;custom&quot;, value=func, add_args=args_dict)</span>
+
+
+<span class="c1"># create an instance of the Queries class</span>
 <span class="n">queries</span> <span class="o">=</span> <span class="n">Queries</span><span class="p">()</span>
 
 
 <div class="viewcode-block" id="target">
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.target">[docs]</a>
-<span class="k">def</span> <span class="nf">target</span><span class="p">(</span><span class="n">name</span> <span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">loss</span> <span class="p">:</span> <span class="nb">callable</span><span class="p">,</span>
-           <span class="n">query</span> <span class="p">:</span> <span class="nb">callable</span><span class="o">=</span><span class="n">queries</span><span class="p">,</span>
-           <span class="n">target_method</span> <span class="p">:</span> <span class="nb">callable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span> <span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">target</span><span class="p">(</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">query</span><span class="p">:</span> <span class="nb">callable</span> <span class="o">=</span> <span class="n">queries</span><span class="p">,</span>
+    <span class="n">loss</span><span class="p">:</span> <span class="nb">callable</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">MMD2</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;energy&quot;</span><span class="p">),</span>
+    <span class="n">target_method</span><span class="p">:</span> <span class="nb">callable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Specification of target quantity and corresponding elicitation technique.</span>
 
@@ -574,24 +629,26 @@ document.write(`
 <span class="sd">    name : string</span>
 <span class="sd">        Name of the target quantity. Two approaches are possible:</span>
 <span class="sd">        (1) Target quantity is identical to an output from the generative</span>
-<span class="sd">        model: The name must match the output variable name. (2) Target</span>
-<span class="sd">        quantity is computed via custom method: Provide custom function via </span>
-<span class="sd">        **target_method**.</span>
-<span class="sd">    elicitation_method : callable</span>
-<span class="sd">        Specify built-in elicitation technique or use the ``custom`` method to</span>
-<span class="sd">        pass a custom elicitation method.</span>
-<span class="sd">        The default is an instance of :class:`ElicitationMethod`.</span>
+<span class="sd">        model: The name must match the output variable name. (2) Custom target</span>
+<span class="sd">        quantity is computed using the **target_method** argument.</span>
+<span class="sd">    query : callable</span>
+<span class="sd">        Specify the elicitation technique by using one of the methods </span>
+<span class="sd">        implemented in :func:`Queries`.</span>
 <span class="sd">        See `How-To specify custom elicitation techniques (TODO) &lt;url&gt;`_.</span>
 <span class="sd">    loss : callable</span>
 <span class="sd">        Loss function for computing the discrepancy between expert data and</span>
-<span class="sd">        model simulations.</span>
-<span class="sd">        Implemented classes can be found in :doc:`elicit.loss_functions`.</span>
+<span class="sd">        model simulations. Implemented classes can be found</span>
+<span class="sd">        in :mod:`elicit.losses`.</span>
+<span class="sd">        The default is the maximum mean discrepancy with</span>
+<span class="sd">        an energy kernel: :func:`elicit.losses.MMD2`</span>
 <span class="sd">    target_method : callable, optional</span>
 <span class="sd">        Custom method for computing a target quantity.</span>
-<span class="sd">        See `How-To specify a custom target quantity (TODO) &lt;url&gt;`_.</span>
+<span class="sd">        Note: This method hasn&#39;t been implemented yet and will raise an</span>
+<span class="sd">        ``NotImplementedError``. See for further information the corresponding</span>
+<span class="sd">        `GitHub issue #34 &lt;https://github.com/florence-bockting/prior_elicitation/issues/34&gt;`_.</span>
 <span class="sd">        The default is ``None``.</span>
-<span class="sd">    loss_weight : float, optional</span>
-<span class="sd">        Weight used for the elicited quantity in the total loss.</span>
+<span class="sd">    weight : float, optional</span>
+<span class="sd">        Weight of the corresponding elicited quantity in the total loss.</span>
 <span class="sd">        The default is ``1.0``.</span>
 
 <span class="sd">    Returns</span>
@@ -600,7 +657,27 @@ document.write(`
 <span class="sd">        Dictionary including all settings regarding the target quantity and</span>
 <span class="sd">        corresponding elicitation technique.</span>
 
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; el.target(name=&quot;y_X0&quot;,</span>
+<span class="sd">    &gt;&gt;&gt;           query=el.queries.quantiles((5, 25, 50, 75, 95)),</span>
+<span class="sd">    &gt;&gt;&gt;           loss=el.losses.MMD2(kernel=&quot;energy&quot;),</span>
+<span class="sd">    &gt;&gt;&gt;           weight=1.0</span>
+<span class="sd">    &gt;&gt;&gt;           )</span>
+
+<span class="sd">    &gt;&gt;&gt; el.target(name=&quot;correlation&quot;,</span>
+<span class="sd">    &gt;&gt;&gt;           query=el.queries.correlation(),</span>
+<span class="sd">    &gt;&gt;&gt;           loss=el.losses.L2,</span>
+<span class="sd">    &gt;&gt;&gt;           weight=1.0</span>
+<span class="sd">    &gt;&gt;&gt;           )</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">target_method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+            <span class="s2">&quot;The use of a custom target quantity hasn&#39;t been implemented yet.&quot;</span>
+            <span class="p">)</span>
+
     <span class="c1"># create instance of loss class</span>
     <span class="n">loss_instance</span> <span class="o">=</span> <span class="n">loss</span>
 
@@ -609,7 +686,7 @@ document.write(`
         <span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span>
         <span class="n">target_method</span><span class="o">=</span><span class="n">target_method</span><span class="p">,</span>
         <span class="n">loss</span><span class="o">=</span><span class="n">loss_instance</span><span class="p">,</span>
-        <span class="n">weight</span><span class="o">=</span><span class="n">weight</span>
+        <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">target_dict</span></div>
@@ -628,7 +705,7 @@ document.write(`
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        dat : dict</span>
-<span class="sd">            Elicited data from expert provided as dictionary. Data must be </span>
+<span class="sd">            Elicited data from expert provided as dictionary. Data must be</span>
 <span class="sd">            provided in a standardized format which is explained in</span>
 <span class="sd">            `How-To specify the expert data (TODO) &lt;url&gt;`_</span>
 
@@ -637,18 +714,27 @@ document.write(`
 <span class="sd">        expert_data : dict</span>
 <span class="sd">            Expert-elicited information used for learning prior distributions.</span>
 
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; expert_dat = {</span>
+<span class="sd">        &gt;&gt;&gt;     &quot;quantiles_y_X0&quot;: [-12.55, -0.57, 3.29, 7.14, 19.15],</span>
+<span class="sd">        &gt;&gt;&gt;     &quot;quantiles_y_X1&quot;: [-11.18, 1.45, 5.06, 8.83, 20.42],</span>
+<span class="sd">        &gt;&gt;&gt;     &quot;quantiles_y_X2&quot;: [-9.28, 3.09, 6.83, 10.55, 23.29]</span>
+<span class="sd">        &gt;&gt;&gt; }</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">dat_prep</span> <span class="o">=</span> <span class="p">{</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span>
-                        <span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span><span class="p">(</span><span class="n">dat</span><span class="p">[</span><span class="n">key</span><span class="p">]),</span>
-                        <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">dat</span><span class="p">}</span>
+        <span class="n">dat_prep</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span>
+                <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span><span class="p">(</span><span class="n">dat</span><span class="p">[</span><span class="n">key</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span> <span class="mi">0</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">dat</span>
+        <span class="p">}</span>
 
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">dat_prep</span><span class="p">)</span></div>
 
 
-
 <div class="viewcode-block" id="Expert.simulator">
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.Expert.simulator">[docs]</a>
-    <span class="k">def</span> <span class="nf">simulator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">10_000</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">simulator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10_000</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Simulate data from an oracle by defining a ground truth (true prior</span>
 <span class="sd">        distribution(s)).</span>
@@ -659,7 +745,7 @@ document.write(`
 <span class="sd">        ----------</span>
 <span class="sd">        ground_truth : dict</span>
 <span class="sd">            True prior distributions with *keys* matching the parameter names</span>
-<span class="sd">            as specified in :func:`parameter` and *values* being prior </span>
+<span class="sd">            as specified in :func:`parameter` and *values* being prior</span>
 <span class="sd">            distributions implemented as</span>
 <span class="sd">            `tfp.distributions &lt;https://www.tensorflow.org/probability/api_docs/python/tfp/distributions&gt;`_</span>
 <span class="sd">            object with predetermined hyperparameter values.</span>
@@ -674,9 +760,20 @@ document.write(`
 <span class="sd">            Settings of oracle for simulating from ground truth. True elicited</span>
 <span class="sd">            statistics are used as &#39;expert-data&#39; in loss function.</span>
 
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; el.expert.simulator(</span>
+<span class="sd">        &gt;&gt;&gt;     ground_truth = {</span>
+<span class="sd">        &gt;&gt;&gt;         &quot;beta0&quot;: tfd.Normal(loc=5, scale=1),</span>
+<span class="sd">        &gt;&gt;&gt;         &quot;beta1&quot;: tfd.Normal(loc=2, scale=1),</span>
+<span class="sd">        &gt;&gt;&gt;         &quot;sigma&quot;: tfd.HalfNormal(scale=10.0),</span>
+<span class="sd">        &gt;&gt;&gt;     },</span>
+<span class="sd">        &gt;&gt;&gt;     num_samples = 10_000</span>
+<span class="sd">        &gt;&gt;&gt; )</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">ground_truth</span><span class="o">=</span><span class="n">ground_truth</span><span class="p">,</span> <span class="n">num_samples</span><span class="o">=</span><span class="n">num_samples</span><span class="p">)</span></div>
 </div>
+
 
 
 <span class="n">expert</span> <span class="o">=</span> <span class="n">Expert</span><span class="p">()</span>
@@ -684,13 +781,13 @@ document.write(`
 
 <div class="viewcode-block" id="optimizer">
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.optimizer">[docs]</a>
-<span class="k">def</span> <span class="nf">optimizer</span><span class="p">(</span><span class="n">optimizer</span><span class="p">:</span> <span class="nb">callable</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">optimizer</span><span class="p">(</span><span class="n">optimizer</span><span class="p">:</span> <span class="nb">callable</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Specification of optimizer and its settings for SGD.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    optimizer : callable, `tf.keras.optimizers &lt;https://www.tensorflow.org/api_docs/python/tf/keras/optimizers&gt;`_ object</span>
+<span class="sd">    optimizer : callable, `tf.keras.optimizers &lt;https://www.tensorflow.org/api_docs/python/tf/keras/optimizers&gt;`_ object.</span>
 <span class="sd">        Optimizer used for SGD implemented as `tf.keras.optimizers &lt;https://www.tensorflow.org/api_docs/python/tf/keras/optimizers&gt;`_ object.</span>
 <span class="sd">        The default is ``tf.keras.optimizers.Adam``.</span>
 <span class="sd">    **kwargs : keyword arguments, optional</span>
@@ -701,6 +798,13 @@ document.write(`
 <span class="sd">    optimizer_dict : dict</span>
 <span class="sd">        Dictionary specifying the SGD optimizer and its additional settings.</span>
 
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; optimizer=el.optimizer(</span>
+<span class="sd">    &gt;&gt;&gt;     optimizer=tf.keras.optimizers.Adam,</span>
+<span class="sd">    &gt;&gt;&gt;     learning_rate=0.1,</span>
+<span class="sd">    &gt;&gt;&gt;     clipnorm=1.0</span>
+<span class="sd">    &gt;&gt;&gt; )</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">optimizer_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
@@ -712,11 +816,15 @@ document.write(`
 
 <div class="viewcode-block" id="initializer">
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.initializer">[docs]</a>
-<span class="k">def</span> <span class="nf">initializer</span><span class="p">(</span><span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">distribution</span><span class="p">:</span> <span class="n">el</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">uniform</span><span class="p">,</span> 
-                <span class="n">loss_quantile</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">iterations</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">initializer</span><span class="p">(</span>
+    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">distribution</span><span class="p">:</span> <span class="nb">callable</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">uniform</span><span class="p">(),</span>
+    <span class="n">loss_quantile</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">iterations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Initialization method for finding initial values of model hyperparameters</span>
-<span class="sd">    required for instantiating training with SGD. Initial values for each </span>
+<span class="sd">    required for instantiating training with SGD. Initial values for each</span>
 <span class="sd">    hyperparameter are drawn from a uniform distribution ranging from</span>
 <span class="sd">    ``mean-radius`` to ``mean+radius``.</span>
 <span class="sd">    Further details on the implemented initialization method can be found in</span>
@@ -726,13 +834,13 @@ document.write(`
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    method : string</span>
-<span class="sd">        Name of initialization method. Currently supported are &quot;random&quot; and</span>
-<span class="sd">        &quot;sobol&quot;.</span>
-<span class="sd">    specs : callable, :func:`init_specs`</span>
-<span class="sd">        Specification of uniform distribution from which initial values are</span>
-<span class="sd">        drawn per hyperparameter </span>
+<span class="sd">        Name of initialization method. Currently supported are &quot;random&quot;, &quot;lhs&quot;,</span>
+<span class="sd">        and &quot;sobol&quot;.</span>
+<span class="sd">    distribution : callable, :func:`elicit.initialization.uniform`</span>
+<span class="sd">        Specification of initialization distribution.</span>
+<span class="sd">        Currently implemented methods: :func:`elicit.initialization.uniform`</span>
 <span class="sd">    loss_quantile : int,</span>
-<span class="sd">        Quantile indicating which loss value should be used for selecting the </span>
+<span class="sd">        Quantile indicating which loss value should be used for selecting the</span>
 <span class="sd">        initial hyperparameters.</span>
 <span class="sd">        The default is ``0`` i.e., the minimum loss.</span>
 <span class="sd">    iterations : int</span>
@@ -744,13 +852,24 @@ document.write(`
 <span class="sd">    init_dict : dict</span>
 <span class="sd">        Dictionary specifying the initialization method.</span>
 
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; el.initializer(</span>
+<span class="sd">    &gt;&gt;&gt;     method=&quot;lhs&quot;,</span>
+<span class="sd">    &gt;&gt;&gt;     loss_quantile=0,</span>
+<span class="sd">    &gt;&gt;&gt;     iterations=32,</span>
+<span class="sd">    &gt;&gt;&gt;     distribution=el.initialization.uniform(</span>
+<span class="sd">    &gt;&gt;&gt;         radius=1,</span>
+<span class="sd">    &gt;&gt;&gt;         mean=0</span>
+<span class="sd">    &gt;&gt;&gt;         )</span>
+<span class="sd">    &gt;&gt;&gt;     )</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">init_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
         <span class="n">distribution</span><span class="o">=</span><span class="n">distribution</span><span class="p">,</span>
         <span class="n">loss_quantile</span><span class="o">=</span><span class="n">loss_quantile</span><span class="p">,</span>
-        <span class="n">iterations</span><span class="o">=</span><span class="n">iterations</span>
-        <span class="p">)</span>
+        <span class="n">iterations</span><span class="o">=</span><span class="n">iterations</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">init_dict</span></div>
 
@@ -758,16 +877,23 @@ document.write(`
 
 <div class="viewcode-block" id="trainer">
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.trainer">[docs]</a>
-<span class="k">def</span> <span class="nf">trainer</span><span class="p">(</span><span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">epochs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">B</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
-          <span class="n">num_samples</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">output_path</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;results&quot;</span><span class="p">,</span>
-          <span class="n">save_log</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">trainer</span><span class="p">(</span>
+    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">epochs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">B</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">128</span><span class="p">,</span>
+    <span class="n">num_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span>
+    <span class="n">save_configs_history</span><span class="p">:</span> <span class="nb">callable</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">configs</span><span class="o">.</span><span class="n">save_history</span><span class="p">(),</span>
+    <span class="n">save_configs_results</span><span class="p">:</span> <span class="nb">callable</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">configs</span><span class="o">.</span><span class="n">save_results</span><span class="p">(),</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Specification of training settings for learning the prior distribution(s).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    method : str</span>
-<span class="sd">        Method for learning the prior distribution. Available is either </span>
+<span class="sd">        Method for learning the prior distribution. Available is either</span>
 <span class="sd">        ``parametric_prior`` for learning independent parametric priors</span>
 <span class="sd">        or ``deep_prior`` for learning a joint non-parameteric prior.</span>
 <span class="sd">    name : str</span>
@@ -779,23 +905,17 @@ document.write(`
 <span class="sd">    B : int, optional</span>
 <span class="sd">        batch size. The default is 128.</span>
 <span class="sd">    num_samples : int, optional</span>
-<span class="sd">        number of draws sampled from the prior(s). The default is 200.</span>
-<span class="sd">    output_path : str, optional</span>
-<span class="sd">        path (incl. foldername) in which results are stored.</span>
-<span class="sd">        The default is &quot;results&quot;.</span>
-<span class="sd">    progress_info : int, optional</span>
-<span class="sd">        whether information about loss, remaining time, etc should be printed</span>
-<span class="sd">        during training. ``1`` prints information and ``0`` is silence.</span>
-<span class="sd">        The default is 1.</span>
-<span class="sd">    view_ep : int, optional</span>
-<span class="sd">        if information regarding the training progress should be printed, this</span>
-<span class="sd">        arguments allow to specify after how many epochs information should be</span>
-<span class="sd">        printed. The default is 1, thus information is printed after each</span>
-<span class="sd">        iteration.</span>
-<span class="sd">    save_log : bool, optional</span>
-<span class="sd">        Saves the computational pipeline (which computation is carried out)</span>
-<span class="sd">        in an extra file. Might help to understand the computational steps</span>
-<span class="sd">        carried out by the method. The default is False.</span>
+<span class="sd">        number of samples from the prior(s). The default is 200.</span>
+<span class="sd">    save_configs_history : callable, :func:`elicit.configs.save_history`</span>
+<span class="sd">        Exclude or include sub-results in the final result file.</span>
+<span class="sd">        In the ``history`` object are all results that are saved across epochs.</span>
+<span class="sd">        For usage information see</span>
+<span class="sd">        `How-To: Save and load the elicit object &lt;https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html&gt;`_</span>
+<span class="sd">    save_configs_results : callable, :func:`elicit.configs.save_results`</span>
+<span class="sd">        Exclude or include sub-results in the final result file.</span>
+<span class="sd">        In the ``results`` object are all results that are saved for the last</span>
+<span class="sd">        epoch only. For usage information see</span>
+<span class="sd">        `How-To: Save and load the elicit object &lt;https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html&gt;`_</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -803,6 +923,18 @@ document.write(`
 <span class="sd">        dictionary specifying the training settings for learning the prior</span>
 <span class="sd">        distribution(s).</span>
 
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; el.trainer(</span>
+<span class="sd">    &gt;&gt;&gt;     method=&quot;parametric_prior&quot;,</span>
+<span class="sd">    &gt;&gt;&gt;     name=&quot;toymodel&quot;,</span>
+<span class="sd">    &gt;&gt;&gt;     seed=0,</span>
+<span class="sd">    &gt;&gt;&gt;     epochs=400,</span>
+<span class="sd">    &gt;&gt;&gt;     B=128,</span>
+<span class="sd">    &gt;&gt;&gt;     num_samples=200,</span>
+<span class="sd">    &gt;&gt;&gt;     save_configs_history=el.configs.save_history(loss_component=False),</span>
+<span class="sd">    &gt;&gt;&gt;     save_configs_results=el.configs.save_results(model=False)</span>
+<span class="sd">    &gt;&gt;&gt; )</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">train_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
@@ -811,9 +943,10 @@ document.write(`
         <span class="n">B</span><span class="o">=</span><span class="n">B</span><span class="p">,</span>
         <span class="n">num_samples</span><span class="o">=</span><span class="n">num_samples</span><span class="p">,</span>
         <span class="n">epochs</span><span class="o">=</span><span class="n">epochs</span><span class="p">,</span>
-        <span class="n">output_path</span><span class="o">=</span><span class="n">output_path</span><span class="p">,</span>
-        <span class="n">save_log</span><span class="o">=</span><span class="n">save_log</span>
+        <span class="n">save_configs_history</span><span class="o">=</span><span class="n">save_configs_history</span><span class="p">,</span>
+        <span class="n">save_configs_results</span><span class="o">=</span><span class="n">save_configs_results</span><span class="p">,</span>
     <span class="p">)</span>
+
     <span class="k">return</span> <span class="n">train_dict</span></div>
 
 
@@ -824,64 +957,65 @@ document.write(`
 
 <div class="viewcode-block" id="Elicit.__init__">
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.Elicit.__init__">[docs]</a>
-   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
         <span class="n">model</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span>
         <span class="n">parameters</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
         <span class="n">targets</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
         <span class="n">expert</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span>
         <span class="n">trainer</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span>
         <span class="n">optimizer</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span>
-        <span class="n">network</span><span class="p">:</span> <span class="nb">callable</span> <span class="ow">or</span> <span class="kc">None</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">initializer</span><span class="p">:</span> <span class="nb">callable</span> <span class="ow">or</span> <span class="kc">None</span><span class="o">=</span><span class="kc">None</span>
+        <span class="n">network</span><span class="p">:</span> <span class="nb">callable</span> <span class="ow">or</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">initializer</span><span class="p">:</span> <span class="nb">callable</span> <span class="ow">or</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        model : callable</span>
-<span class="sd">            specification of generative model using</span>
-<span class="sd">            :func:`elicit.prior_elicitation.generator`.</span>
-<span class="sd">        parameter : list</span>
-<span class="sd">            list of model parameters specified with</span>
-<span class="sd">            :func:`elicit.prior_elicitation.par`.</span>
+<span class="sd">            specification of generative model using :func:`model`.</span>
+<span class="sd">        parameters : list</span>
+<span class="sd">            list of model parameters specified with :func:`parameter`.</span>
 <span class="sd">        targets : list</span>
-<span class="sd">            list of target quantities specified with</span>
-<span class="sd">            :func:`el.target`.</span>
+<span class="sd">            list of target quantities specified with :func:`target`.</span>
 <span class="sd">        expert : callable</span>
-<span class="sd">            specification of input data from expert or oracle using</span>
-<span class="sd">            :func:`el.expert.data` or func:`el.expert.simulate`</span>
+<span class="sd">            provide input data from expert or simulate data from oracle with</span>
+<span class="sd">            either the ``data`` or ``simulator`` method of the</span>
+<span class="sd">            :mod:`elicit.elicit.Expert` module.</span>
 <span class="sd">        trainer : callable</span>
-<span class="sd">            specification of training settings for learning prior distribution(s)</span>
-<span class="sd">            using :func:`elicit.prior_elicitation.train`</span>
+<span class="sd">            specification of training settings and meta-information for</span>
+<span class="sd">            workflow using :func:`trainer`</span>
 <span class="sd">        optimizer : callable</span>
-<span class="sd">            specification of optimizer using</span>
-<span class="sd">            :func:`elicit.prior_elicitation.optimizer`.</span>
+<span class="sd">            specification of SGD optimizer and its settings using</span>
+<span class="sd">            :func:`optimizer`.</span>
 <span class="sd">        normalizing_flow : callable or None</span>
-<span class="sd">            specification of normalizing flow using :func:`elicit.prior_elicitation.nf`.</span>
-<span class="sd">            Only required for ``deep_prior`` method is used. If </span>
-<span class="sd">            ``parametric_prior`` is used this argument should be ``None``. Default</span>
-<span class="sd">            value is None.</span>
+<span class="sd">            specification of normalizing flow using a method implemented in</span>
+<span class="sd">            :mod:`elicit.networks`.</span>
+<span class="sd">            Only required for ``deep_prior`` method. For ``parametric_prior``</span>
+<span class="sd">            use ``None``. Default value is ``None``.</span>
 <span class="sd">        initializer : callable</span>
 <span class="sd">            specification of initialization settings using</span>
-<span class="sd">            :func:`elicit.prior_elicitation.initializer`. For method</span>
-<span class="sd">            &#39;parametric_prior&#39; the argument should be None. Default value is None.</span>
+<span class="sd">            :func:`initializer`. Only required for ``parametric_prior`` method.</span>
+<span class="sd">            Otherwise the argument should be ``None``. Default value is</span>
+<span class="sd">            ``None.``</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        global_dict : dict</span>
-<span class="sd">            specification of all settings to run the optimization procedure.</span>
+<span class="sd">        eliobj : class instance</span>
+<span class="sd">            specification of all settings to run the elicitation workflow and</span>
+<span class="sd">            fit the eliobj.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">=</span><span class="n">model</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="o">=</span><span class="n">targets</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">expert</span><span class="o">=</span><span class="n">expert</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="o">=</span><span class="n">trainer</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">=</span><span class="n">network</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">initializer</span><span class="o">=</span><span class="n">initializer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="n">targets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">expert</span> <span class="o">=</span> <span class="n">expert</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span> <span class="o">=</span> <span class="n">trainer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">optimizer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">network</span> <span class="o">=</span> <span class="n">network</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initializer</span> <span class="o">=</span> <span class="n">initializer</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">=</span><span class="nb">dict</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">=</span><span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 
         <span class="c1"># set seed</span>
         <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">])</span></div>
@@ -889,46 +1023,93 @@ document.write(`
 
 <div class="viewcode-block" id="Elicit.fit">
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.Elicit.fit">[docs]</a>
-   <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-           <span class="n">force_fit</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">force_fit</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fit the eliobj and learn the prior distributions.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        save_dir : str or None, optional</span>
+<span class="sd">            If None the results are only saved as attribute in eliobj loaded in</span>
+<span class="sd">            current working environment, If string is provided, results are </span>
+<span class="sd">            saved in folder with with name ``save_dir``.</span>
+<span class="sd">            The default is ``None.``</span>
+<span class="sd">        silent : bool, optional</span>
+<span class="sd">            Specifies whether the ``history`` object is returned when fitting</span>
+<span class="sd">            is finished (``True``) or only saved as attribute of the eliobj</span>
+<span class="sd">            (``False``). The default is ``False``.</span>
+<span class="sd">        force_fit : bool, optional</span>
+<span class="sd">            If the eliobj was already fitted and the user wants to refit it, </span>
+<span class="sd">            the user is asked whether they want to overwrite the previous</span>
+<span class="sd">            fitting results. Setting ``force_fit=True`` allows the user to</span>
+<span class="sd">            force overfitting without being prompted. The default is ``False``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        history : dict</span>
+<span class="sd">            Results saved across epochs (e.g., loss). If ``silent=True`` the </span>
+<span class="sd">            fit method returns nothing.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; eliobj.fit(save_dir=None, silent=True)</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; history = eliobj.fit(save_dir=&quot;results&quot;, force_fit=True)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># check whether elicit object is already fitted</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">force_fit</span><span class="p">:</span>
-            <span class="n">user_answ</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;elicit object is already fitted.&quot;</span><span class="o">+</span>
-                 <span class="s2">&quot; Do you want to fit it again and overwrite the results?&quot;</span><span class="o">+</span>
-                 <span class="s2">&quot; Press &#39;n&#39; to stop process and &#39;y&#39; to continue fitting.&quot;</span><span class="p">)</span>
-           
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">force_fit</span><span class="p">:</span>
+            <span class="n">user_answ</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span>
+                <span class="s2">&quot;elicit object is already fitted.&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot; Do you want to fit it again and overwrite the results?&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot; Press &#39;n&#39; to stop process and &#39;y&#39; to continue fitting.&quot;</span>
+            <span class="p">)</span>
+
             <span class="k">while</span> <span class="n">user_answ</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">]:</span>
-                <span class="n">user_answ</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Please press either &#39;y&#39; for fitting or &#39;n&#39;&quot;</span><span class="o">+</span>
-                                 <span class="s2">&quot; for abording the process.&quot;</span><span class="p">)</span>
+                <span class="n">user_answ</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span>
+                    <span class="s2">&quot;Please press either &#39;y&#39; for fitting or &#39;n&#39;&quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot; for abording the process.&quot;</span>
+                <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">user_answ</span> <span class="o">==</span> <span class="s2">&quot;n&quot;</span><span class="p">:</span>
-                <span class="k">return</span><span class="p">(</span><span class="s2">&quot;Process aborded; elicit object is not re-fitted.&quot;</span><span class="p">)</span>
-
-        <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+                <span class="k">return</span> <span class="s2">&quot;Process aborded; elicit object is not re-fitted.&quot;</span>
 
         <span class="c1"># set seed</span>
         <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="n">save_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># create saving path</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span>
-            <span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;./elicit/</span><span class="si">{</span><span class="n">save_dir</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s1">&#39;seed&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>  <span class="c1"># noqa</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;./</span><span class="si">{</span><span class="n">save_dir</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s1">&#39;seed&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>  <span class="c1"># noqa</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># get expert data</span>
         <span class="n">expert_elicits</span><span class="p">,</span> <span class="n">expert_prior</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_expert_data</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">expert</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">expert</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="c1"># initialization of hyperparameter</span>
-        <span class="p">(</span><span class="n">init_prior_model</span><span class="p">,</span> <span class="n">loss_list</span><span class="p">,</span>
-         <span class="n">init_prior</span><span class="p">,</span> <span class="n">init_matrix</span><span class="p">)</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">pre_training</span><span class="p">(</span>
-            <span class="n">expert_elicits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">initializer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">expert</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">init_prior_model</span><span class="p">,</span> <span class="n">loss_list</span><span class="p">,</span> <span class="n">init_prior</span><span class="p">,</span> <span class="n">init_matrix</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">el</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">pre_training</span><span class="p">(</span>
+                <span class="n">expert_elicits</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">initializer</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">expert</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
 
         <span class="c1"># run dag with optimal set of initial values</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Training Phase (only first epoch)&quot;</span><span class="p">)</span>
         <span class="c1"># save results in corresp. attributes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">optimization</span><span class="o">.</span><span class="n">sgd_training</span><span class="p">(</span>
             <span class="n">expert_elicits</span><span class="p">,</span>
@@ -936,9 +1117,9 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">targets</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">,</span>
         <span class="p">)</span>
-
+        <span class="c1"># add some additional results</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;expert_elicited_statistics&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">expert_elicits</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">expert</span><span class="p">[</span><span class="s2">&quot;ground_truth&quot;</span><span class="p">]</span>
@@ -947,14 +1128,28 @@ document.write(`
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;expert_prior_samples&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">expert_prior</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span><span class="o">==</span><span class="s2">&quot;parametric_prior&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;parametric_prior&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;init_loss_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">loss_list</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;init_prior&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">init_prior</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;init_matrix&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">init_matrix</span>
 
-        <span class="c1"># remove saved files that are not of interest for follow-up analysis</span>
-        <span class="k">if</span> <span class="n">save_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">el</span><span class="o">.</span><span class="n">remove_unneeded_files</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">],</span> <span class="n">save_dir</span><span class="p">)</span>  <span class="c1"># noqa</span>
+        <span class="c1"># save results if desired and remove unrelevant sub-results</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">save_hist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">save_res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="n">key_hist</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;save_configs_history&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;save_configs_history&quot;</span><span class="p">][</span><span class="n">key_hist</span><span class="p">]:</span>
+                    <span class="n">save_hist</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key_hist</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">key_res</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;save_configs_results&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;save_configs_results&quot;</span><span class="p">][</span><span class="n">key_res</span><span class="p">]:</span>
+                    <span class="n">save_res</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key_res</span><span class="p">)</span>
+
+            <span class="n">final_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;history&quot;</span><span class="p">:</span> <span class="n">save_hist</span><span class="p">,</span> <span class="s2">&quot;results&quot;</span><span class="p">:</span> <span class="n">save_res</span><span class="p">}</span>
+
+            <span class="n">el</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">save_as_pkl</span><span class="p">(</span><span class="n">final_dict</span><span class="p">,</span> 
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.pkl&quot;</span><span class="p">)</span>
 
         <span class="c1"># return history by default</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">silent</span><span class="p">:</span>

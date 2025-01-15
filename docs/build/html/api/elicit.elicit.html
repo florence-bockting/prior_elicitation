@@ -48,7 +48,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="elicit.helpers module" href="elicit.helpers.html" />
-    <link rel="prev" title="elicit.extras.utils module" href="elicit.extras.utils.html" />
+    <link rel="prev" title="elicit.configs module" href="elicit.configs.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -166,6 +166,7 @@
 <li class="toctree-l4"><a class="reference internal" href="elicit.extras.utils.html">elicit.extras.utils module</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.configs.html">elicit.configs module</a></li>
 <li class="toctree-l3 current active"><a class="current reference internal" href="#">elicit.elicit module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.helpers.html">elicit.helpers module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.initialization.html">elicit.initialization module</a></li>
@@ -438,11 +439,20 @@ The default is <code class="docutils literal notranslate"><span class="pre">Fals
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># sigma hyperparameter of a parameteric distribution</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">el</span><span class="o">.</span><span class="n">hyper</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;sigma0&quot;</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># shared hyperparameter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">el</span><span class="o">.</span><span class="n">hyper</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;sigma&quot;</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">shared</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.elicit.parameter">
-<span class="sig-prename descclassname"><span class="pre">elicit.elicit.</span></span><span class="sig-name descname"><span class="pre">parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">family</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyperparams</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/elicit.html#parameter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.elicit.parameter" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.elicit.</span></span><span class="sig-name descname"><span class="pre">parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">family</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyperparams</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/elicit.html#parameter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.elicit.parameter" title="Link to this definition">#</a></dt>
 <dd><p>Specification of model parameters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -450,31 +460,43 @@ The default is <code class="docutils literal notranslate"><span class="pre">Fals
 <dt><strong>name</strong><span class="classifier">string</span></dt><dd><p>Custom name of parameter.</p>
 </dd>
 <dt><strong>family</strong><span class="classifier">callable or None</span></dt><dd><p>Prior distribution family for model parameter.
-Only required for method <code class="docutils literal notranslate"><span class="pre">parametric_prior</span></code>.
+Only required for <code class="docutils literal notranslate"><span class="pre">parametric_prior</span></code> method.
 Must be an <a class="reference external" href="https://www.tensorflow.org/probability/api_docs/python/tfp/distributions">tfp.distributions</a> object.</p>
 </dd>
 <dt><strong>hyperparams</strong><span class="classifier">dict or None</span></dt><dd><p>Hyperparameters of distribution as specified in <strong>family</strong>.
-Only required for method <code class="docutils literal notranslate"><span class="pre">parametric_prior</span></code>.
-Structure of dictionary: Keys must match arguments of
+Only required for <code class="docutils literal notranslate"><span class="pre">parametric_prior</span></code> method.
+Structure of dictionary: <em>keys</em> must match arguments of
 <a class="reference external" href="https://www.tensorflow.org/probability/api_docs/python/tfp/distributions">tfp.distributions</a>
-object and values have to be specified using the <a class="reference internal" href="#elicit.elicit.hyper" title="elicit.elicit.hyper"><code class="xref py py-func docutils literal notranslate"><span class="pre">hyper()</span></code></a> method.
-Further details are provided in <a class="reference external" href="url">How-To specify prior hyperparameters (TODO)</a>.</p>
+object and <em>values</em> have to be specified using the <a class="reference internal" href="#elicit.elicit.hyper" title="elicit.elicit.hyper"><code class="xref py py-func docutils literal notranslate"><span class="pre">hyper()</span></code></a>
+method.
+Further details are provided in
+<a class="reference external" href="url">How-To specify prior hyperparameters (TODO)</a>.
+Default value is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>param_dict</strong><span class="classifier">dict</span></dt><dd><p>Dictionary including all model parameter settings.</p>
+<dt><strong>param_dict</strong><span class="classifier">dict</span></dt><dd><p>Dictionary including all model (hyper)parameter settings.</p>
 </dd>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">el</span><span class="o">.</span><span class="n">parameter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;beta0&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>             <span class="n">family</span><span class="o">=</span><span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>             <span class="n">hyperparams</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">hyper</span><span class="p">(</span><span class="s2">&quot;mu0&quot;</span><span class="p">),</span>
+<span class="gp">&gt;&gt;&gt; </span>                              <span class="n">scale</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">hyper</span><span class="p">(</span><span class="s2">&quot;sigma0&quot;</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>                              <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>             <span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.elicit.model">
 <span class="sig-prename descclassname"><span class="pre">elicit.elicit.</span></span><span class="sig-name descname"><span class="pre">model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/elicit.html#model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.elicit.model" title="Link to this definition">#</a></dt>
-<dd><p>Specification of generative model.</p>
+<dd><p>Specification of the generative model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -492,6 +514,39 @@ See <a class="reference external" href="url">How-To specify the generative_model
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># specify the generative model class</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ToyModel</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">,</span> <span class="n">design_matrix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">B</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">S</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="c1"># preprocess shape of design matrix</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">X</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">design_matrix</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,:],</span>
+<span class="gp">&gt;&gt;&gt; </span>                           <span class="p">(</span><span class="n">B</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">design_matrix</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="c1"># linear predictor (= mu)</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">epred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">][:,:,</span><span class="kc">None</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>                       <span class="n">tf</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">][:,:,</span><span class="kc">None</span><span class="p">],</span> <span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>                       <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="c1"># data-generating model</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">likelihood</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>            <span class="n">loc</span><span class="o">=</span><span class="n">epred</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">[:,</span> <span class="p">:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>            <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="c1"># prior predictive distribution (=height)</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">ypred</span> <span class="o">=</span> <span class="n">likelihood</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>            <span class="n">likelihood</span><span class="o">=</span><span class="n">likelihood</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>            <span class="n">ypred</span><span class="o">=</span><span class="n">ypred</span><span class="p">,</span> <span class="n">epred</span><span class="o">=</span><span class="n">epred</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>            <span class="n">prior_samples</span><span class="o">=</span><span class="n">prior_samples</span>
+<span class="gp">&gt;&gt;&gt; </span>            <span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># specify the model category in the elicit object</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">el</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="n">ToyModel</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="n">design_matrix</span><span class="o">=</span><span class="n">std_predictor</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">quantiles</span><span class="o">=</span><span class="p">[</span><span class="mi">25</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">75</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span>         <span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py class">
@@ -500,7 +555,7 @@ See <a class="reference external" href="url">How-To specify the generative_model
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.elicit.Queries.quantiles">
-<span class="sig-name descname"><span class="pre">quantiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quants</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/elicit.html#Queries.quantiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.elicit.Queries.quantiles" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">quantiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quantiles</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/elicit.html#Queries.quantiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.elicit.Queries.quantiles" title="Link to this definition">#</a></dt>
 <dd><p>Implements a quantile-based elicitation technique.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -552,7 +607,10 @@ model parameters.</p>
 <dt class="sig sig-object py" id="elicit.elicit.Queries.custom">
 <span class="sig-name descname"><span class="pre">custom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/elicit.html#Queries.custom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.elicit.Queries.custom" title="Link to this definition">#</a></dt>
 <dd><p>Implements a placeholder for custom target methods. The custom method
-can be passed as argument.</p>
+can be passed as argument.
+Note: this function hasn’t been implemented yet and will raise
+an <code class="docutils literal notranslate"><span class="pre">NotImplementedError</span></code>.  See for further information the
+corresponding <a class="reference external" href="https://github.com/florence-bockting/prior_elicitation/issues/33">GitHub issue #33</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -573,31 +631,33 @@ can be passed as argument.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.elicit.target">
-<span class="sig-prename descclassname"><span class="pre">elicit.elicit.</span></span><span class="sig-name descname"><span class="pre">target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss:</span> <span class="pre">callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query:</span> <span class="pre">callable</span> <span class="pre">=</span> <span class="pre">&lt;elicit.elicit.Queries</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_method:</span> <span class="pre">callable</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/elicit.html#target"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.elicit.target" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.elicit.</span></span><span class="sig-name descname"><span class="pre">target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query:</span> <span class="pre">callable</span> <span class="pre">=</span> <span class="pre">&lt;elicit.elicit.Queries</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss:</span> <span class="pre">callable</span> <span class="pre">=</span> <span class="pre">&lt;elicit.losses.MMD2</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_method:</span> <span class="pre">callable</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/elicit.html#target"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.elicit.target" title="Link to this definition">#</a></dt>
 <dd><p>Specification of target quantity and corresponding elicitation technique.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>name</strong><span class="classifier">string</span></dt><dd><p>Name of the target quantity. Two approaches are possible:
 (1) Target quantity is identical to an output from the generative
-model: The name must match the output variable name. (2) Target
-quantity is computed via custom method: Provide custom function via 
-<strong>target_method</strong>.</p>
+model: The name must match the output variable name. (2) Custom target
+quantity is computed using the <strong>target_method</strong> argument.</p>
 </dd>
-<dt><strong>elicitation_method</strong><span class="classifier">callable</span></dt><dd><p>Specify built-in elicitation technique or use the <code class="docutils literal notranslate"><span class="pre">custom</span></code> method to
-pass a custom elicitation method.
-The default is an instance of <code class="xref py py-class docutils literal notranslate"><span class="pre">ElicitationMethod</span></code>.
+<dt><strong>query</strong><span class="classifier">callable</span></dt><dd><p>Specify the elicitation technique by using one of the methods 
+implemented in <a class="reference internal" href="#elicit.elicit.Queries" title="elicit.elicit.Queries"><code class="xref py py-func docutils literal notranslate"><span class="pre">Queries()</span></code></a>.
 See <a class="reference external" href="url">How-To specify custom elicitation techniques (TODO)</a>.</p>
 </dd>
 <dt><strong>loss</strong><span class="classifier">callable</span></dt><dd><p>Loss function for computing the discrepancy between expert data and
-model simulations.
-Implemented classes can be found in <span class="xref std std-doc">elicit.loss_functions</span>.</p>
+model simulations. Implemented classes can be found
+in <a class="reference internal" href="elicit.losses.html#module-elicit.losses" title="elicit.losses"><code class="xref py py-mod docutils literal notranslate"><span class="pre">elicit.losses</span></code></a>.
+The default is the maximum mean discrepancy with
+an energy kernel: <a class="reference internal" href="elicit.losses.html#elicit.losses.MMD2" title="elicit.losses.MMD2"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.losses.MMD2()</span></code></a></p>
 </dd>
 <dt><strong>target_method</strong><span class="classifier">callable, optional</span></dt><dd><p>Custom method for computing a target quantity.
-See <a class="reference external" href="url">How-To specify a custom target quantity (TODO)</a>.
+Note: This method hasn’t been implemented yet and will raise an
+<code class="docutils literal notranslate"><span class="pre">NotImplementedError</span></code>. See for further information the corresponding
+<a class="reference external" href="https://github.com/florence-bockting/prior_elicitation/issues/34">GitHub issue #34</a>.
 The default is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </dd>
-<dt><strong>loss_weight</strong><span class="classifier">float, optional</span></dt><dd><p>Weight used for the elicited quantity in the total loss.
+<dt><strong>weight</strong><span class="classifier">float, optional</span></dt><dd><p>Weight of the corresponding elicited quantity in the total loss.
 The default is <code class="docutils literal notranslate"><span class="pre">1.0</span></code>.</p>
 </dd>
 </dl>
@@ -610,6 +670,21 @@ corresponding elicitation technique.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">el</span><span class="o">.</span><span class="n">target</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;y_X0&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>          <span class="n">query</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">queries</span><span class="o">.</span><span class="n">quantiles</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">95</span><span class="p">)),</span>
+<span class="gp">&gt;&gt;&gt; </span>          <span class="n">loss</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">MMD2</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;energy&quot;</span><span class="p">),</span>
+<span class="gp">&gt;&gt;&gt; </span>          <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span>          <span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">el</span><span class="o">.</span><span class="n">target</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;correlation&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>          <span class="n">query</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">queries</span><span class="o">.</span><span class="n">correlation</span><span class="p">(),</span>
+<span class="gp">&gt;&gt;&gt; </span>          <span class="n">loss</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">L2</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>          <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span>          <span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py class">
@@ -623,7 +698,7 @@ corresponding elicitation technique.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>dat</strong><span class="classifier">dict</span></dt><dd><p>Elicited data from expert provided as dictionary. Data must be 
+<dt><strong>dat</strong><span class="classifier">dict</span></dt><dd><p>Elicited data from expert provided as dictionary. Data must be
 provided in a standardized format which is explained in
 <a class="reference external" href="url">How-To specify the expert data (TODO)</a></p>
 </dd>
@@ -636,6 +711,14 @@ provided in a standardized format which is explained in
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">expert_dat</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="s2">&quot;quantiles_y_X0&quot;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">12.55</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.57</span><span class="p">,</span> <span class="mf">3.29</span><span class="p">,</span> <span class="mf">7.14</span><span class="p">,</span> <span class="mf">19.15</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="s2">&quot;quantiles_y_X1&quot;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">11.18</span><span class="p">,</span> <span class="mf">1.45</span><span class="p">,</span> <span class="mf">5.06</span><span class="p">,</span> <span class="mf">8.83</span><span class="p">,</span> <span class="mf">20.42</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="s2">&quot;quantiles_y_X2&quot;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">9.28</span><span class="p">,</span> <span class="mf">3.09</span><span class="p">,</span> <span class="mf">6.83</span><span class="p">,</span> <span class="mf">10.55</span><span class="p">,</span> <span class="mf">23.29</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">}</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -649,7 +732,7 @@ further details.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>ground_truth</strong><span class="classifier">dict</span></dt><dd><p>True prior distributions with <em>keys</em> matching the parameter names
-as specified in <a class="reference internal" href="#elicit.elicit.parameter" title="elicit.elicit.parameter"><code class="xref py py-func docutils literal notranslate"><span class="pre">parameter()</span></code></a> and <em>values</em> being prior 
+as specified in <a class="reference internal" href="#elicit.elicit.parameter" title="elicit.elicit.parameter"><code class="xref py py-func docutils literal notranslate"><span class="pre">parameter()</span></code></a> and <em>values</em> being prior
 distributions implemented as
 <a class="reference external" href="https://www.tensorflow.org/probability/api_docs/python/tfp/distributions">tfp.distributions</a>
 object with predetermined hyperparameter values.</p>
@@ -668,18 +751,29 @@ statistics are used as ‘expert-data’ in loss function.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">el</span><span class="o">.</span><span class="n">expert</span><span class="o">.</span><span class="n">simulator</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">ground_truth</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;beta0&quot;</span><span class="p">:</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;beta1&quot;</span><span class="p">:</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;sigma&quot;</span><span class="p">:</span> <span class="n">tfd</span><span class="o">.</span><span class="n">HalfNormal</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mf">10.0</span><span class="p">),</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">num_samples</span> <span class="o">=</span> <span class="mi">10_000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.elicit.optimizer">
-<span class="sig-prename descclassname"><span class="pre">elicit.elicit.</span></span><span class="sig-name descname"><span class="pre">optimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimizer:</span> <span class="pre">callable</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'keras.src.optimizers.adam.Adam'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/elicit.html#optimizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.elicit.optimizer" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.elicit.</span></span><span class="sig-name descname"><span class="pre">optimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimizer:</span> <span class="pre">callable</span> <span class="pre">=</span> <span class="pre">&lt;keras.src.optimizers.adam.Adam</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/elicit.html#optimizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.elicit.optimizer" title="Link to this definition">#</a></dt>
 <dd><p>Specification of optimizer and its settings for SGD.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
-<dt><strong>optimizer</strong><span class="classifier">callable, <a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/keras/optimizers">tf.keras.optimizers</a> object</span></dt><dd><p>Optimizer used for SGD implemented as <a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/keras/optimizers">tf.keras.optimizers</a> object.
+<dt><strong>optimizer</strong><span class="classifier">callable, <a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/keras/optimizers">tf.keras.optimizers</a> object.</span></dt><dd><p>Optimizer used for SGD implemented as <a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/keras/optimizers">tf.keras.optimizers</a> object.
 The default is <code class="docutils literal notranslate"><span class="pre">tf.keras.optimizers.Adam</span></code>.</p>
 </dd>
 <dt><strong>**kwargs</strong><span class="classifier">keyword arguments, optional</span></dt><dd><p>Additional keyword arguments expected by <strong>optimizer</strong>.</p>
@@ -693,13 +787,21 @@ The default is <code class="docutils literal notranslate"><span class="pre">tf.k
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">optimizer</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">optimizer</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">clipnorm</span><span class="o">=</span><span class="mf">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.elicit.initializer">
-<span class="sig-prename descclassname"><span class="pre">elicit.elicit.</span></span><span class="sig-name descname"><span class="pre">initializer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distribution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uniform</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_quantile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/elicit.html#initializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.elicit.initializer" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.elicit.</span></span><span class="sig-name descname"><span class="pre">initializer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distribution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{'hyper':</span> <span class="pre">None,</span> <span class="pre">'mean':</span> <span class="pre">0.0,</span> <span class="pre">'radius':</span> <span class="pre">1.0}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_quantile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/elicit.html#initializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.elicit.initializer" title="Link to this definition">#</a></dt>
 <dd><p>Initialization method for finding initial values of model hyperparameters
-required for instantiating training with SGD. Initial values for each 
+required for instantiating training with SGD. Initial values for each
 hyperparameter are drawn from a uniform distribution ranging from
 <code class="docutils literal notranslate"><span class="pre">mean-radius</span></code> to <code class="docutils literal notranslate"><span class="pre">mean+radius</span></code>.
 Further details on the implemented initialization method can be found in
@@ -708,13 +810,13 @@ Only necessary for method <code class="docutils literal notranslate"><span class
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
-<dt><strong>method</strong><span class="classifier">string</span></dt><dd><p>Name of initialization method. Currently supported are “random” and
-“sobol”.</p>
+<dt><strong>method</strong><span class="classifier">string</span></dt><dd><p>Name of initialization method. Currently supported are “random”, “lhs”,
+and “sobol”.</p>
 </dd>
-<dt><strong>specs</strong><span class="classifier">callable, <code class="xref py py-func docutils literal notranslate"><span class="pre">init_specs()</span></code></span></dt><dd><p>Specification of uniform distribution from which initial values are
-drawn per hyperparameter</p>
+<dt><strong>distribution</strong><span class="classifier">callable, <a class="reference internal" href="elicit.initialization.html#elicit.initialization.uniform" title="elicit.initialization.uniform"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.initialization.uniform()</span></code></a></span></dt><dd><p>Specification of initialization distribution.
+Currently implemented methods: <a class="reference internal" href="elicit.initialization.html#elicit.initialization.uniform" title="elicit.initialization.uniform"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.initialization.uniform()</span></code></a></p>
 </dd>
-<dt><strong>loss_quantile</strong><span class="classifier">int,</span></dt><dd><p>Quantile indicating which loss value should be used for selecting the 
+<dt><strong>loss_quantile</strong><span class="classifier">int,</span></dt><dd><p>Quantile indicating which loss value should be used for selecting the
 initial hyperparameters.
 The default is <code class="docutils literal notranslate"><span class="pre">0</span></code> i.e., the minimum loss.</p>
 </dd>
@@ -730,16 +832,28 @@ The default is <code class="docutils literal notranslate"><span class="pre">100<
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">el</span><span class="o">.</span><span class="n">initializer</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;lhs&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">loss_quantile</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">iterations</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">distribution</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">radius</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">mean</span><span class="o">=</span><span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.elicit.trainer">
-<span class="sig-prename descclassname"><span class="pre">elicit.elicit.</span></span><span class="sig-name descname"><span class="pre">trainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">128</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'results'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_log</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/elicit.html#trainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.elicit.trainer" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.elicit.</span></span><span class="sig-name descname"><span class="pre">trainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">128</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_configs_history</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{'hyperparameter':</span> <span class="pre">True,</span> <span class="pre">'hyperparameter_gradient':</span> <span class="pre">True,</span> <span class="pre">'loss':</span> <span class="pre">True,</span> <span class="pre">'loss_component':</span> <span class="pre">True}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_configs_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{'elicited_statistics':</span> <span class="pre">True,</span> <span class="pre">'expert_elicited_statistics':</span> <span class="pre">True,</span> <span class="pre">'expert_prior_samples':</span> <span class="pre">True,</span> <span class="pre">'init_loss_list':</span> <span class="pre">True,</span> <span class="pre">'init_matrix':</span> <span class="pre">True,</span> <span class="pre">'init_prior':</span> <span class="pre">True,</span> <span class="pre">'loss_tensor_expert':</span> <span class="pre">True,</span> <span class="pre">'loss_tensor_model':</span> <span class="pre">True,</span> <span class="pre">'model':</span> <span class="pre">True,</span> <span class="pre">'model_samples':</span> <span class="pre">True,</span> <span class="pre">'prior_samples':</span> <span class="pre">True,</span> <span class="pre">'target_quantities':</span> <span class="pre">True}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/elicit.html#trainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.elicit.trainer" title="Link to this definition">#</a></dt>
 <dd><p>Specification of training settings for learning the prior distribution(s).</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>method</strong><span class="classifier">str</span></dt><dd><p>Method for learning the prior distribution. Available is either 
+<dd class="field-odd"><dl>
+<dt><strong>method</strong><span class="classifier">str</span></dt><dd><p>Method for learning the prior distribution. Available is either
 <code class="docutils literal notranslate"><span class="pre">parametric_prior</span></code> for learning independent parametric priors
 or <code class="docutils literal notranslate"><span class="pre">deep_prior</span></code> for learning a joint non-parameteric prior.</p>
 </dd>
@@ -751,23 +865,17 @@ or <code class="docutils literal notranslate"><span class="pre">deep_prior</span
 </dd>
 <dt><strong>B</strong><span class="classifier">int, optional</span></dt><dd><p>batch size. The default is 128.</p>
 </dd>
-<dt><strong>num_samples</strong><span class="classifier">int, optional</span></dt><dd><p>number of draws sampled from the prior(s). The default is 200.</p>
+<dt><strong>num_samples</strong><span class="classifier">int, optional</span></dt><dd><p>number of samples from the prior(s). The default is 200.</p>
 </dd>
-<dt><strong>output_path</strong><span class="classifier">str, optional</span></dt><dd><p>path (incl. foldername) in which results are stored.
-The default is “results”.</p>
+<dt><strong>save_configs_history</strong><span class="classifier">callable, <a class="reference internal" href="elicit.configs.html#elicit.configs.save_history" title="elicit.configs.save_history"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.configs.save_history()</span></code></a></span></dt><dd><p>Exclude or include sub-results in the final result file.
+In the <code class="docutils literal notranslate"><span class="pre">history</span></code> object are all results that are saved across epochs.
+For usage information see
+<a class="reference external" href="https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html">How-To: Save and load the elicit object</a></p>
 </dd>
-<dt><strong>progress_info</strong><span class="classifier">int, optional</span></dt><dd><p>whether information about loss, remaining time, etc should be printed
-during training. <code class="docutils literal notranslate"><span class="pre">1</span></code> prints information and <code class="docutils literal notranslate"><span class="pre">0</span></code> is silence.
-The default is 1.</p>
-</dd>
-<dt><strong>view_ep</strong><span class="classifier">int, optional</span></dt><dd><p>if information regarding the training progress should be printed, this
-arguments allow to specify after how many epochs information should be
-printed. The default is 1, thus information is printed after each
-iteration.</p>
-</dd>
-<dt><strong>save_log</strong><span class="classifier">bool, optional</span></dt><dd><p>Saves the computational pipeline (which computation is carried out)
-in an extra file. Might help to understand the computational steps
-carried out by the method. The default is False.</p>
+<dt><strong>save_configs_results</strong><span class="classifier">callable, <a class="reference internal" href="elicit.configs.html#elicit.configs.save_results" title="elicit.configs.save_results"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.configs.save_results()</span></code></a></span></dt><dd><p>Exclude or include sub-results in the final result file.
+In the <code class="docutils literal notranslate"><span class="pre">results</span></code> object are all results that are saved for the last
+epoch only. For usage information see
+<a class="reference external" href="https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html">How-To: Save and load the elicit object</a></p>
 </dd>
 </dl>
 </dd>
@@ -779,6 +887,19 @@ distribution(s).</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">el</span><span class="o">.</span><span class="n">trainer</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;parametric_prior&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;toymodel&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">epochs</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">B</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">num_samples</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">save_configs_history</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">configs</span><span class="o">.</span><span class="n">save_history</span><span class="p">(</span><span class="n">loss_component</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">save_configs_results</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">configs</span><span class="o">.</span><span class="n">save_results</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py class">
@@ -788,38 +909,38 @@ distribution(s).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>model</strong><span class="classifier">callable</span></dt><dd><p>specification of generative model using
-<code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.prior_elicitation.generator()</span></code>.</p>
+<dt><strong>model</strong><span class="classifier">callable</span></dt><dd><p>specification of generative model using <a class="reference internal" href="#elicit.elicit.model" title="elicit.elicit.model"><code class="xref py py-func docutils literal notranslate"><span class="pre">model()</span></code></a>.</p>
 </dd>
-<dt><strong>parameter</strong><span class="classifier">list</span></dt><dd><p>list of model parameters specified with
-<code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.prior_elicitation.par()</span></code>.</p>
+<dt><strong>parameters</strong><span class="classifier">list</span></dt><dd><p>list of model parameters specified with <a class="reference internal" href="#elicit.elicit.parameter" title="elicit.elicit.parameter"><code class="xref py py-func docutils literal notranslate"><span class="pre">parameter()</span></code></a>.</p>
 </dd>
-<dt><strong>targets</strong><span class="classifier">list</span></dt><dd><p>list of target quantities specified with
-<code class="xref py py-func docutils literal notranslate"><span class="pre">el.target()</span></code>.</p>
+<dt><strong>targets</strong><span class="classifier">list</span></dt><dd><p>list of target quantities specified with <a class="reference internal" href="#elicit.elicit.target" title="elicit.elicit.target"><code class="xref py py-func docutils literal notranslate"><span class="pre">target()</span></code></a>.</p>
 </dd>
-<dt><strong>expert</strong><span class="classifier">callable</span></dt><dd><p>specification of input data from expert or oracle using
-<code class="xref py py-func docutils literal notranslate"><span class="pre">el.expert.data()</span></code> or func:<cite>el.expert.simulate</cite></p>
+<dt><strong>expert</strong><span class="classifier">callable</span></dt><dd><p>provide input data from expert or simulate data from oracle with
+either the <code class="docutils literal notranslate"><span class="pre">data</span></code> or <code class="docutils literal notranslate"><span class="pre">simulator</span></code> method of the
+<a class="reference internal" href="#elicit.elicit.Expert" title="elicit.elicit.Expert"><code class="xref py py-mod docutils literal notranslate"><span class="pre">elicit.elicit.Expert</span></code></a> module.</p>
 </dd>
-<dt><strong>trainer</strong><span class="classifier">callable</span></dt><dd><p>specification of training settings for learning prior distribution(s)
-using <code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.prior_elicitation.train()</span></code></p>
+<dt><strong>trainer</strong><span class="classifier">callable</span></dt><dd><p>specification of training settings and meta-information for
+workflow using <a class="reference internal" href="#elicit.elicit.trainer" title="elicit.elicit.trainer"><code class="xref py py-func docutils literal notranslate"><span class="pre">trainer()</span></code></a></p>
 </dd>
-<dt><strong>optimizer</strong><span class="classifier">callable</span></dt><dd><p>specification of optimizer using
-<code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.prior_elicitation.optimizer()</span></code>.</p>
+<dt><strong>optimizer</strong><span class="classifier">callable</span></dt><dd><p>specification of SGD optimizer and its settings using
+<a class="reference internal" href="#elicit.elicit.optimizer" title="elicit.elicit.optimizer"><code class="xref py py-func docutils literal notranslate"><span class="pre">optimizer()</span></code></a>.</p>
 </dd>
-<dt><strong>normalizing_flow</strong><span class="classifier">callable or None</span></dt><dd><p>specification of normalizing flow using <code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.prior_elicitation.nf()</span></code>.
-Only required for <code class="docutils literal notranslate"><span class="pre">deep_prior</span></code> method is used. If 
-<code class="docutils literal notranslate"><span class="pre">parametric_prior</span></code> is used this argument should be <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default
-value is None.</p>
+<dt><strong>normalizing_flow</strong><span class="classifier">callable or None</span></dt><dd><p>specification of normalizing flow using a method implemented in
+<a class="reference internal" href="elicit.networks.html#module-elicit.networks" title="elicit.networks"><code class="xref py py-mod docutils literal notranslate"><span class="pre">elicit.networks</span></code></a>.
+Only required for <code class="docutils literal notranslate"><span class="pre">deep_prior</span></code> method. For <code class="docutils literal notranslate"><span class="pre">parametric_prior</span></code>
+use <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default value is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </dd>
 <dt><strong>initializer</strong><span class="classifier">callable</span></dt><dd><p>specification of initialization settings using
-<code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.prior_elicitation.initializer()</span></code>. For method
-‘parametric_prior’ the argument should be None. Default value is None.</p>
+<a class="reference internal" href="#elicit.elicit.initializer" title="elicit.elicit.initializer"><code class="xref py py-func docutils literal notranslate"><span class="pre">initializer()</span></code></a>. Only required for <code class="docutils literal notranslate"><span class="pre">parametric_prior</span></code> method.
+Otherwise the argument should be <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default value is
+<code class="docutils literal notranslate"><span class="pre">None.</span></code></p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>specification of all settings to run the optimization procedure.</p>
+<dt><strong>eliobj</strong><span class="classifier">class instance</span></dt><dd><p>specification of all settings to run the elicitation workflow and
+fit the eliobj.</p>
 </dd>
 </dl>
 </dd>
@@ -830,38 +951,38 @@ value is None.</p>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>model</strong><span class="classifier">callable</span></dt><dd><p>specification of generative model using
-<code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.prior_elicitation.generator()</span></code>.</p>
+<dt><strong>model</strong><span class="classifier">callable</span></dt><dd><p>specification of generative model using <a class="reference internal" href="#elicit.elicit.model" title="elicit.elicit.model"><code class="xref py py-func docutils literal notranslate"><span class="pre">model()</span></code></a>.</p>
 </dd>
-<dt><strong>parameter</strong><span class="classifier">list</span></dt><dd><p>list of model parameters specified with
-<code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.prior_elicitation.par()</span></code>.</p>
+<dt><strong>parameters</strong><span class="classifier">list</span></dt><dd><p>list of model parameters specified with <a class="reference internal" href="#elicit.elicit.parameter" title="elicit.elicit.parameter"><code class="xref py py-func docutils literal notranslate"><span class="pre">parameter()</span></code></a>.</p>
 </dd>
-<dt><strong>targets</strong><span class="classifier">list</span></dt><dd><p>list of target quantities specified with
-<code class="xref py py-func docutils literal notranslate"><span class="pre">el.target()</span></code>.</p>
+<dt><strong>targets</strong><span class="classifier">list</span></dt><dd><p>list of target quantities specified with <a class="reference internal" href="#elicit.elicit.target" title="elicit.elicit.target"><code class="xref py py-func docutils literal notranslate"><span class="pre">target()</span></code></a>.</p>
 </dd>
-<dt><strong>expert</strong><span class="classifier">callable</span></dt><dd><p>specification of input data from expert or oracle using
-<code class="xref py py-func docutils literal notranslate"><span class="pre">el.expert.data()</span></code> or func:<cite>el.expert.simulate</cite></p>
+<dt><strong>expert</strong><span class="classifier">callable</span></dt><dd><p>provide input data from expert or simulate data from oracle with
+either the <code class="docutils literal notranslate"><span class="pre">data</span></code> or <code class="docutils literal notranslate"><span class="pre">simulator</span></code> method of the
+<a class="reference internal" href="#elicit.elicit.Expert" title="elicit.elicit.Expert"><code class="xref py py-mod docutils literal notranslate"><span class="pre">elicit.elicit.Expert</span></code></a> module.</p>
 </dd>
-<dt><strong>trainer</strong><span class="classifier">callable</span></dt><dd><p>specification of training settings for learning prior distribution(s)
-using <code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.prior_elicitation.train()</span></code></p>
+<dt><strong>trainer</strong><span class="classifier">callable</span></dt><dd><p>specification of training settings and meta-information for
+workflow using <a class="reference internal" href="#elicit.elicit.trainer" title="elicit.elicit.trainer"><code class="xref py py-func docutils literal notranslate"><span class="pre">trainer()</span></code></a></p>
 </dd>
-<dt><strong>optimizer</strong><span class="classifier">callable</span></dt><dd><p>specification of optimizer using
-<code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.prior_elicitation.optimizer()</span></code>.</p>
+<dt><strong>optimizer</strong><span class="classifier">callable</span></dt><dd><p>specification of SGD optimizer and its settings using
+<a class="reference internal" href="#elicit.elicit.optimizer" title="elicit.elicit.optimizer"><code class="xref py py-func docutils literal notranslate"><span class="pre">optimizer()</span></code></a>.</p>
 </dd>
-<dt><strong>normalizing_flow</strong><span class="classifier">callable or None</span></dt><dd><p>specification of normalizing flow using <code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.prior_elicitation.nf()</span></code>.
-Only required for <code class="docutils literal notranslate"><span class="pre">deep_prior</span></code> method is used. If 
-<code class="docutils literal notranslate"><span class="pre">parametric_prior</span></code> is used this argument should be <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default
-value is None.</p>
+<dt><strong>normalizing_flow</strong><span class="classifier">callable or None</span></dt><dd><p>specification of normalizing flow using a method implemented in
+<a class="reference internal" href="elicit.networks.html#module-elicit.networks" title="elicit.networks"><code class="xref py py-mod docutils literal notranslate"><span class="pre">elicit.networks</span></code></a>.
+Only required for <code class="docutils literal notranslate"><span class="pre">deep_prior</span></code> method. For <code class="docutils literal notranslate"><span class="pre">parametric_prior</span></code>
+use <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default value is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </dd>
 <dt><strong>initializer</strong><span class="classifier">callable</span></dt><dd><p>specification of initialization settings using
-<code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.prior_elicitation.initializer()</span></code>. For method
-‘parametric_prior’ the argument should be None. Default value is None.</p>
+<a class="reference internal" href="#elicit.elicit.initializer" title="elicit.elicit.initializer"><code class="xref py py-func docutils literal notranslate"><span class="pre">initializer()</span></code></a>. Only required for <code class="docutils literal notranslate"><span class="pre">parametric_prior</span></code> method.
+Otherwise the argument should be <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default value is
+<code class="docutils literal notranslate"><span class="pre">None.</span></code></p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>specification of all settings to run the optimization procedure.</p>
+<dt><strong>eliobj</strong><span class="classifier">class instance</span></dt><dd><p>specification of all settings to run the elicitation workflow and
+fit the eliobj.</p>
 </dd>
 </dl>
 </dd>
@@ -871,7 +992,42 @@ value is None.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.elicit.Elicit.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_fit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/elicit.html#Elicit.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.elicit.Elicit.fit" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Fit the eliobj and learn the prior distributions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>save_dir</strong><span class="classifier">str or None, optional</span></dt><dd><p>If None the results are only saved as attribute in eliobj loaded in
+current working environment, If string is provided, results are 
+saved in folder with with name <code class="docutils literal notranslate"><span class="pre">save_dir</span></code>.
+The default is <code class="docutils literal notranslate"><span class="pre">None.</span></code></p>
+</dd>
+<dt><strong>silent</strong><span class="classifier">bool, optional</span></dt><dd><p>Specifies whether the <code class="docutils literal notranslate"><span class="pre">history</span></code> object is returned when fitting
+is finished (<code class="docutils literal notranslate"><span class="pre">True</span></code>) or only saved as attribute of the eliobj
+(<code class="docutils literal notranslate"><span class="pre">False</span></code>). The default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+<dt><strong>force_fit</strong><span class="classifier">bool, optional</span></dt><dd><p>If the eliobj was already fitted and the user wants to refit it, 
+the user is asked whether they want to overwrite the previous
+fitting results. Setting <code class="docutils literal notranslate"><span class="pre">force_fit=True</span></code> allows the user to
+force overfitting without being prompted. The default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>history</strong><span class="classifier">dict</span></dt><dd><p>Results saved across epochs (e.g., loss). If <code class="docutils literal notranslate"><span class="pre">silent=True</span></code> the 
+fit method returns nothing.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eliobj</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">save_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">history</span> <span class="o">=</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">save_dir</span><span class="o">=</span><span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="n">force_fit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
 
 </dd></dl>
 
@@ -889,12 +1045,12 @@ value is None.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="elicit.extras.utils.html"
+       href="elicit.configs.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">elicit.extras.utils module</p>
+        <p class="prev-next-title">elicit.configs module</p>
       </div>
     </a>
     <a class="right-next"

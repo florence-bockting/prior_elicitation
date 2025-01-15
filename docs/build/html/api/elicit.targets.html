@@ -166,6 +166,7 @@
 <li class="toctree-l4"><a class="reference internal" href="elicit.extras.utils.html">elicit.extras.utils module</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.configs.html">elicit.configs module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.elicit.html">elicit.elicit module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.helpers.html">elicit.helpers module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.initialization.html">elicit.initialization module</a></li>
@@ -364,7 +365,7 @@ document.write(`
 <span id="elicit-targets-module"></span><h1>elicit.targets module<a class="headerlink" href="#module-elicit.targets" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.targets.use_custom_functions">
-<span class="sig-prename descclassname"><span class="pre">elicit.targets.</span></span><span class="sig-name descname"><span class="pre">use_custom_functions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">custom_function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_simulations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/targets.html#use_custom_functions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.targets.use_custom_functions" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.targets.</span></span><span class="sig-name descname"><span class="pre">use_custom_functions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">custom_function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_simulations</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/targets.html#use_custom_functions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.targets.use_custom_functions" title="Link to this definition">#</a></dt>
 <dd><p>Helper function that prepares custom functions if specified by checking
 all inputs and extracting the argument from different sources.</p>
 <dl class="field-list simple">
@@ -389,15 +390,13 @@ all inputs and extracting the argument from different sources.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.targets.computation_elicited_statistics">
-<span class="sig-prename descclassname"><span class="pre">elicit.targets.</span></span><span class="sig-name descname"><span class="pre">computation_elicited_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_quantities</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/targets.html#computation_elicited_statistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.targets.computation_elicited_statistics" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.targets.</span></span><span class="sig-name descname"><span class="pre">computation_elicited_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_quantities</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/targets.html#computation_elicited_statistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.targets.computation_elicited_statistics" title="Link to this definition">#</a></dt>
 <dd><p>Computes the elicited statistics from the target quantities by applying a
 prespecified elicitation technique.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>target_quantities</strong><span class="classifier">dict</span></dt><dd><p>simulated target quantities.</p>
-</dd>
-<dt><strong>ground_truth</strong><span class="classifier">bool</span></dt><dd><p>True if target quantities are used for oracle.</p>
 </dd>
 <dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all user-input settings.</p>
 </dd>
@@ -414,15 +413,12 @@ prespecified elicitation technique.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.targets.computation_target_quantities">
-<span class="sig-prename descclassname"><span class="pre">elicit.targets.</span></span><span class="sig-name descname"><span class="pre">computation_target_quantities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_simulations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/targets.html#computation_target_quantities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.targets.computation_target_quantities" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.targets.</span></span><span class="sig-name descname"><span class="pre">computation_target_quantities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_simulations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/targets.html#computation_target_quantities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.targets.computation_target_quantities" title="Link to this definition">#</a></dt>
 <dd><p>Computes target quantities from model simulations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>model_simulations</strong><span class="classifier">dict</span></dt><dd><p>simulations from generative model.</p>
-</dd>
-<dt><strong>ground_truth</strong><span class="classifier">bool</span></dt><dd><p>whether simulations are based on ground truth. Mainly used for saving
-results in extra folder “expert” for later analysis.</p>
 </dd>
 <dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all user-input settings..</p>
 </dd>

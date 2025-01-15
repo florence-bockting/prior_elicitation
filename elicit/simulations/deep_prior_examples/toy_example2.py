@@ -100,8 +100,8 @@ elicit = el.Elicit(
             weight=1.0
         ),
         el.target(
-            name="cor",
-            query=el.queries.identity(),
+            name="correlation",
+            query=el.queries.correlation(),
             loss=el.losses.L2,
             weight=1.0
         )
@@ -143,7 +143,7 @@ elicit = el.Elicit(
     )
 )
 
-hist = elicit.fit(save_dir="res2")
+hist = elicit.fit(save_dir=None)
 
 
 elicit.results["expert_elicited_statistics"]["quantiles_y_X2"]

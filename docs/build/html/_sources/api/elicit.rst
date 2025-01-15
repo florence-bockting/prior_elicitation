@@ -15,6 +15,7 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
+   elicit.configs
    elicit.elicit
    elicit.helpers
    elicit.initialization

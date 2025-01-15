@@ -165,6 +165,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../api/elicit.extras.utils.html">elicit.extras.utils module</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.configs.html">elicit.configs module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.elicit.html">elicit.elicit module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.helpers.html">elicit.helpers module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.initialization.html">elicit.initialization module</a></li>
@@ -307,9 +308,6 @@ document.write(`
 <span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
 <span class="kn">import</span> <span class="nn">tensorflow_probability</span> <span class="k">as</span> <span class="nn">tfp</span>
 <span class="kn">import</span> <span class="nn">bayesflow</span> <span class="k">as</span> <span class="nn">bf</span>
-<span class="kn">import</span> <span class="nn">elicit</span> <span class="k">as</span> <span class="nn">el</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="n">tfd</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">distributions</span>
 <span class="n">bfn</span> <span class="o">=</span> <span class="n">bf</span><span class="o">.</span><span class="n">networks</span>
@@ -317,7 +315,7 @@ document.write(`
 
 <div class="viewcode-block" id="compute_loss_components">
 <a class="viewcode-back" href="../../api/elicit.losses.html#elicit.losses.compute_loss_components">[docs]</a>
-<span class="k">def</span> <span class="nf">compute_loss_components</span><span class="p">(</span><span class="n">elicited_statistics</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">expert</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">compute_loss_components</span><span class="p">(</span><span class="n">elicited_statistics</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the single loss components used for computing the discrepancy</span>
 <span class="sd">    between the elicited statistics. This computation depends on the</span>
@@ -341,11 +339,6 @@ document.write(`
 <span class="sd">        the discrepancy.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">expert</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;preprocess expert elicited statistics&quot;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;preprocess simulated statistics&quot;</span><span class="p">)</span>
 
     <span class="c1"># extract names from elicited statistics</span>
     <span class="n">name_elicits</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">elicited_statistics</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
@@ -383,13 +376,6 @@ document.write(`
         <span class="k">else</span><span class="p">:</span>
             <span class="n">loss_comp_res</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_loss_</span><span class="si">{</span><span class="n">i_target</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">loss_comp</span>
 
-    <span class="c1"># save file in object</span>
-    <span class="k">if</span> <span class="n">output_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">expert</span><span class="p">:</span>
-            <span class="n">output_path</span> <span class="o">=</span> <span class="n">output_path</span> <span class="o">+</span> <span class="s2">&quot;/expert&quot;</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="n">output_path</span> <span class="o">+</span> <span class="s2">&quot;/loss_components.pkl&quot;</span>
-        <span class="n">el</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">save_as_pkl</span><span class="p">(</span><span class="n">loss_comp_res</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
-        <span class="c1"># return results</span>
     <span class="k">return</span> <span class="n">loss_comp_res</span></div>
 
 
@@ -397,7 +383,7 @@ document.write(`
 <div class="viewcode-block" id="compute_discrepancy">
 <a class="viewcode-back" href="../../api/elicit.losses.html#elicit.losses.compute_discrepancy">[docs]</a>
 <span class="k">def</span> <span class="nf">compute_discrepancy</span><span class="p">(</span><span class="n">loss_components_expert</span><span class="p">,</span> <span class="n">loss_components_training</span><span class="p">,</span>
-                        <span class="n">targets</span><span class="p">,</span> <span class="n">output_path</span><span class="p">):</span>
+                        <span class="n">targets</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the discrepancy between all loss components using a specified</span>
 <span class="sd">    discrepancy measure and returns a list with all loss values.</span>
@@ -420,8 +406,7 @@ document.write(`
 <span class="sd">        list of loss value for each loss component</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;compute discrepancy&quot;</span><span class="p">)</span>
+
     <span class="c1"># create dictionary for storing results</span>
     <span class="n">loss_per_component</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="c1"># extract expert loss components by name</span>
@@ -442,13 +427,6 @@ document.write(`
         <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_function</span><span class="p">(</span><span class="n">loss_comp_expert</span><span class="p">,</span> <span class="n">loss_components_training</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
         <span class="n">loss_per_component</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span>
 
-    <span class="c1"># save file in object</span>
-    <span class="k">if</span> <span class="n">output_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">output_path</span> <span class="o">=</span> <span class="n">output_path</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">output_path</span> <span class="o">=</span> <span class="s2">&quot;elicit_temp&quot;</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="n">output_path</span> <span class="o">+</span> <span class="s2">&quot;/loss_per_component.pkl&quot;</span>
-    <span class="n">el</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">save_as_pkl</span><span class="p">(</span><span class="n">loss_per_component</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">loss_per_component</span></div>
 
 
@@ -456,8 +434,7 @@ document.write(`
 <div class="viewcode-block" id="compute_loss">
 <a class="viewcode-back" href="../../api/elicit.losses.html#elicit.losses.compute_loss">[docs]</a>
 <span class="k">def</span> <span class="nf">compute_loss</span><span class="p">(</span>
-    <span class="n">training_elicited_statistics</span><span class="p">,</span> <span class="n">expert_elicited_statistics</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span>
-    <span class="n">output_path</span>
+    <span class="n">training_elicited_statistics</span><span class="p">,</span> <span class="n">expert_elicited_statistics</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">targets</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Wrapper around the loss computation from elicited statistics to final</span>
@@ -523,8 +500,7 @@ document.write(`
 <span class="sd">            total loss value (either weighted or unweighted).</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;compute total loss&quot;</span><span class="p">)</span>
+
         <span class="c1"># loss_per_component_current = loss_per_component</span>
         <span class="c1"># TODO: check whether order of loss_per_component and target quantities</span>
         <span class="c1"># is equivalent!</span>
@@ -538,17 +514,18 @@ document.write(`
         <span class="k">return</span> <span class="n">total_loss</span>
 
     <span class="n">loss_components_expert</span> <span class="o">=</span> <span class="n">compute_loss_components</span><span class="p">(</span>
-        <span class="n">expert_elicited_statistics</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">expert</span><span class="o">=</span><span class="kc">True</span>
+        <span class="n">expert_elicited_statistics</span>
     <span class="p">)</span>
     <span class="n">loss_components_training</span> <span class="o">=</span> <span class="n">compute_loss_components</span><span class="p">(</span>
-        <span class="n">training_elicited_statistics</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">expert</span><span class="o">=</span><span class="kc">False</span>
+        <span class="n">training_elicited_statistics</span>
     <span class="p">)</span>
     <span class="n">loss_per_component</span> <span class="o">=</span> <span class="n">compute_discrepancy</span><span class="p">(</span>
-        <span class="n">loss_components_expert</span><span class="p">,</span> <span class="n">loss_components_training</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">output_path</span>
+        <span class="n">loss_components_expert</span><span class="p">,</span> <span class="n">loss_components_training</span><span class="p">,</span> <span class="n">targets</span>
     <span class="p">)</span>
     <span class="n">weighted_total_loss</span><span class="o">=</span><span class="n">compute_total_loss</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">loss_per_component</span><span class="p">,</span> <span class="n">targets</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">weighted_total_loss</span></div>
+    <span class="k">return</span> <span class="p">(</span><span class="n">weighted_total_loss</span><span class="p">,</span> <span class="n">loss_components_expert</span><span class="p">,</span>
+            <span class="n">loss_components_training</span><span class="p">,</span> <span class="n">loss_per_component</span><span class="p">)</span></div>
 
 
 

@@ -165,6 +165,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../api/elicit.extras.utils.html">elicit.extras.utils module</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.configs.html">elicit.configs module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.elicit.html">elicit.elicit module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.helpers.html">elicit.helpers module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.initialization.html">elicit.initialization module</a></li>
@@ -304,10 +305,8 @@ document.write(`
 <span class="c1">#</span>
 <span class="c1"># noqa SPDX-License-Identifier: Apache-2.0</span>
 
-<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
 <span class="kn">import</span> <span class="nn">tensorflow_probability</span> <span class="k">as</span> <span class="nn">tfp</span>
-<span class="kn">import</span> <span class="nn">elicit</span> <span class="k">as</span> <span class="nn">el</span>
 
 <span class="n">tfd</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">distributions</span>
 
@@ -353,20 +352,16 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">=</span><span class="n">network</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">expert</span><span class="o">=</span><span class="n">expert</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
         <span class="c1"># set seed</span>
         <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
         <span class="c1"># initialize hyperparameter for learning (if true hyperparameter</span>
         <span class="c1"># are given, no initialization is needed)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">ground_truth</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Initialize prior hyperparameters&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">init_priors</span> <span class="o">=</span> <span class="n">intialize_priors</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">init_matrix_slice</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">],</span> <span class="n">seed</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">],</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Set true prior hyperparameters&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">init_priors</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
@@ -382,15 +377,11 @@ document.write(`
 <span class="sd">            Samples from prior distribution(s).</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ground_truth</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sample from true prior(s)&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sample from prior(s)&quot;</span><span class="p">)</span>
+
         <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">sample_from_priors</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">init_priors</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ground_truth</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;num_samples&quot;</span><span class="p">],</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;B&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">],</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">expert</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">expert</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">prior_samples</span></div>
 </div>
@@ -399,8 +390,7 @@ document.write(`
 
 <div class="viewcode-block" id="intialize_priors">
 <a class="viewcode-back" href="../../api/elicit.simulations.html#elicit.simulations.intialize_priors">[docs]</a>
-<span class="k">def</span> <span class="nf">intialize_priors</span><span class="p">(</span><span class="n">init_matrix_slice</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span>
-                     <span class="n">network</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">intialize_priors</span><span class="p">(</span><span class="n">init_matrix_slice</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">network</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Initialize prior distributions.</span>
 
@@ -419,7 +409,6 @@ document.write(`
     <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;parametric_prior&quot;</span><span class="p">:</span>
-
         <span class="c1"># create dict with all hyperparameters</span>
         <span class="n">hyp_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="n">hp_keys</span><span class="o">=</span><span class="nb">list</span><span class="p">()</span>
@@ -459,11 +448,6 @@ document.write(`
             <span class="k">if</span> <span class="n">hp_dict</span><span class="p">[</span><span class="s2">&quot;shared&quot;</span><span class="p">]:</span>
                 <span class="n">checked_params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hp_n</span><span class="p">)</span>
 
-            <span class="c1"># save file in object</span>
-            <span class="k">if</span> <span class="n">output_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">path</span> <span class="o">=</span> <span class="n">output_path</span> <span class="o">+</span> <span class="s2">&quot;/init_hyperparameters.pkl&quot;</span>
-                <span class="n">el</span><span class="o">.</span><span class="n">save_as_pkl</span><span class="p">(</span><span class="n">init_prior</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
-
     <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;deep_prior&quot;</span><span class="p">:</span>
         <span class="c1"># for more information see BayesFlow documentation</span>
         <span class="c1"># https://bayesflow.org/api/bayesflow.inference_networks.html</span>
@@ -474,11 +458,6 @@ document.write(`
         <span class="c1"># save initialized priors</span>
         <span class="n">init_prior</span> <span class="o">=</span> <span class="n">invertible_neural_network</span>
 
-        <span class="c1"># save file in object</span>
-        <span class="k">if</span> <span class="n">output_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">path</span> <span class="o">=</span> <span class="n">output_path</span> <span class="o">+</span> <span class="s2">&quot;/init_hyperparameters.pkl&quot;</span>
-            <span class="n">el</span><span class="o">.</span><span class="n">save_as_pkl</span><span class="p">(</span><span class="n">init_prior</span><span class="o">.</span><span class="n">trainable_variables</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
-
     <span class="k">return</span> <span class="n">init_prior</span></div>
 
 
@@ -486,7 +465,7 @@ document.write(`
 <div class="viewcode-block" id="sample_from_priors">
 <a class="viewcode-back" href="../../api/elicit.simulations.html#elicit.simulations.sample_from_priors">[docs]</a>
 <span class="k">def</span> <span class="nf">sample_from_priors</span><span class="p">(</span><span class="n">initialized_priors</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span>
-                       <span class="n">method</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">network</span><span class="p">,</span> <span class="n">expert</span><span class="p">,</span> <span class="n">output_path</span><span class="p">):</span>
+                       <span class="n">method</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">network</span><span class="p">,</span> <span class="n">expert</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Samples from initialized prior distributions.</span>
 
@@ -552,18 +531,11 @@ document.write(`
     <span class="k">if</span> <span class="p">(</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;deep_prior&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">ground_truth</span><span class="p">):</span>
 
         <span class="c1"># initialize base distribution</span>
-        <span class="n">base_dist</span> <span class="o">=</span> <span class="n">network</span><span class="p">[</span><span class="s2">&quot;base_distribution&quot;</span><span class="p">]</span>
+        <span class="n">base_dist</span> <span class="o">=</span> <span class="n">network</span><span class="p">[</span><span class="s2">&quot;base_distribution&quot;</span><span class="p">](</span><span class="n">num_params</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">parameters</span><span class="p">))</span>
         <span class="c1"># sample from base distribution</span>
         <span class="n">u</span> <span class="o">=</span> <span class="n">base_dist</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">B</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">))</span>
         <span class="c1"># apply transformation function to samples from base distr.</span>
         <span class="n">prior_samples</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">initialized_priors</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">condition</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-    <span class="c1"># save results</span>
-    <span class="k">if</span> <span class="n">output_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">ground_truth</span><span class="p">:</span>
-            <span class="n">el</span><span class="o">.</span><span class="n">save_as_pkl</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">,</span> <span class="n">output_path</span> <span class="o">+</span> <span class="s2">&quot;/expert/prior_samples.pkl&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">el</span><span class="o">.</span><span class="n">save_as_pkl</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">,</span> <span class="n">output_path</span> <span class="o">+</span> <span class="s2">&quot;/prior_samples.pkl&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">prior_samples</span></div>
 
@@ -644,8 +616,7 @@ document.write(`
 
 <div class="viewcode-block" id="simulate_from_generator">
 <a class="viewcode-back" href="../../api/elicit.simulations.html#elicit.simulations.simulate_from_generator">[docs]</a>
-<span class="k">def</span> <span class="nf">simulate_from_generator</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span>
-                            <span class="n">model</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">simulate_from_generator</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Simulates data from the specified generative model.</span>
 
@@ -653,9 +624,6 @@ document.write(`
 <span class="sd">    ----------</span>
 <span class="sd">    prior_samples : dict</span>
 <span class="sd">        samples from prior distributions.</span>
-<span class="sd">    ground_truth : bool</span>
-<span class="sd">        if simulation is based on true hyperparameter vector. Mainly for</span>
-<span class="sd">        saving results in a specific &quot;expert&quot; folder for later analysis.</span>
 <span class="sd">    global_dict : dict</span>
 <span class="sd">        dictionary including all user-input settings.</span>
 
@@ -665,11 +633,6 @@ document.write(`
 <span class="sd">        simulated data from generative model.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">ground_truth</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;simulate from true generative model&quot;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;simulate from generative model&quot;</span><span class="p">)</span>
 
     <span class="c1"># set seed</span>
     <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
@@ -684,14 +647,7 @@ document.write(`
     <span class="k">if</span> <span class="n">add_model_args</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">model_simulations</span> <span class="o">=</span> <span class="n">generative_model</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">,</span> <span class="o">**</span><span class="n">add_model_args</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">model_simulations</span> <span class="o">=</span> <span class="n">generative_model</span><span class="p">(</span><span class="n">ground_truth</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">)</span>
-
-    <span class="c1"># save file in object</span>
-    <span class="k">if</span> <span class="n">output_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">ground_truth</span><span class="p">:</span>
-            <span class="n">output_path</span> <span class="o">=</span> <span class="n">output_path</span> <span class="o">+</span> <span class="s2">&quot;/expert&quot;</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="n">output_path</span> <span class="o">+</span> <span class="s2">&quot;/model_simulations.pkl&quot;</span>
-        <span class="n">el</span><span class="o">.</span><span class="n">save_as_pkl</span><span class="p">(</span><span class="n">model_simulations</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+        <span class="n">model_simulations</span> <span class="o">=</span> <span class="n">generative_model</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">model_simulations</span></div>
 

@@ -165,6 +165,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../api/elicit.extras.utils.html">elicit.extras.utils module</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/elicit.configs.html">elicit.configs module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/elicit.elicit.html">elicit.elicit module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/elicit.helpers.html">elicit.helpers module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/elicit.initialization.html">elicit.initialization module</a></li>
@@ -305,6 +306,7 @@ document.write(`
 <span class="c1"># noqa SPDX-License-Identifier: Apache-2.0</span>
 
 <span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">import</span> <span class="nn">tensorflow_probability</span> <span class="k">as</span> <span class="nn">tfp</span>
 
 
 <div class="viewcode-block" id="log_R2">
@@ -317,6 +319,19 @@ document.write(`
     <span class="c1"># variance of linear predictor divided by total variance</span>
     <span class="n">log_R2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">var_epred</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">var_total</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">log_R2</span></div>
+
+
+
+<div class="viewcode-block" id="pearson_correlation">
+<a class="viewcode-back" href="../../../api/elicit.extras.utils.html#elicit.extras.utils.pearson_correlation">[docs]</a>
+<span class="k">def</span> <span class="nf">pearson_correlation</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">):</span>
+    <span class="n">corM</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">correlation</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">,</span> <span class="n">sample_axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">event_axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">tensor</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">experimental</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">corM</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">tensor_mask</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">experimental</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">corM</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">!=</span> <span class="mf">0.0</span>
+
+    <span class="n">cor</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">boolean_mask</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span> <span class="n">tensor_mask</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">diag_elements</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">cor</span><span class="p">,</span> <span class="p">(</span><span class="n">prior_samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">diag_elements</span><span class="p">))</span></div>
 
 </pre></div>
 

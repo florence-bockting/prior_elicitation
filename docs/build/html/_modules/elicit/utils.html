@@ -165,6 +165,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../api/elicit.extras.utils.html">elicit.extras.utils module</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.configs.html">elicit.configs module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.elicit.html">elicit.elicit module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.helpers.html">elicit.helpers module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.initialization.html">elicit.initialization module</a></li>
@@ -306,57 +307,14 @@ document.write(`
 
 <span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
 <span class="kn">import</span> <span class="nn">elicit</span> <span class="k">as</span> <span class="nn">el</span>
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">logging.config</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-
-<span class="c1">#%% configuration for logging information</span>
-<span class="n">LOGGING</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="s2">&quot;disable_existing_loggers&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="s2">&quot;formatters&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;json&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> </span><span class="si">%(levelname)s</span><span class="s2"> </span><span class="si">%(name)s</span><span class="s2"> </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;datefmt&quot;</span><span class="p">:</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;pythonjsonlogger.jsonlogger.JsonFormatter&quot;</span><span class="p">,</span>
-        <span class="p">}</span>
-    <span class="p">},</span>
-    <span class="s2">&quot;handlers&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;json_file&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;INFO&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;logging.FileHandler&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;filename&#39;</span><span class="p">:</span> <span class="s1">&#39;logs.json&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;formatter&#39;</span><span class="p">:</span> <span class="s1">&#39;json&#39;</span><span class="p">,</span>
-            <span class="p">}</span>
-    <span class="p">},</span>
-    <span class="s2">&quot;loggers&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;handlers&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;json_file&quot;</span><span class="p">],</span> <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;INFO&quot;</span><span class="p">}},</span>
-<span class="p">}</span>
-
-<span class="n">logging</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">dictConfig</span><span class="p">(</span><span class="n">LOGGING</span><span class="p">)</span>
-
-
-<span class="c1">#%% configuration for saving results</span>
-<span class="n">save_results</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-    <span class="c1"># all generated initializations during pre-training</span>
-    <span class="n">initialization_matrix</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="c1"># tuple: loss values corresp. to each set of generated initial values</span>
-    <span class="n">pre_training_results</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="c1"># initialized hyperparameter values</span>
-    <span class="n">init_hyperparameters</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="c1"># prior samples of last epoch</span>
-    <span class="n">prior_samples</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="c1"># elicited statistics of last epoch</span>
-    <span class="n">elicited_statistics</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<span class="p">)</span>
 
 
 <span class="c1">#%% wrapper for workflow</span>
 <div class="viewcode-block" id="one_forward_simulation">
 <a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.one_forward_simulation">[docs]</a>
-<span class="k">def</span> <span class="nf">one_forward_simulation</span><span class="p">(</span><span class="n">prior_model</span><span class="p">,</span> <span class="n">trainer</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span>
-                           <span class="n">ground_truth</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">one_forward_simulation</span><span class="p">(</span><span class="n">prior_model</span><span class="p">,</span> <span class="n">trainer</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    One forward simulation from prior samples to elicited statistics.</span>
 
@@ -384,19 +342,19 @@ document.write(`
     <span class="c1"># simulate prior predictive distribution based on prior samples</span>
     <span class="c1"># and generative model</span>
     <span class="n">model_simulations</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">simulate_from_generator</span><span class="p">(</span>
-        <span class="n">prior_samples</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">],</span> <span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">],</span>
-        <span class="n">model</span>
+        <span class="n">prior_samples</span><span class="p">,</span> <span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">],</span> <span class="n">model</span>
     <span class="p">)</span>
     <span class="c1"># compute the target quantities</span>
     <span class="n">target_quantities</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">computation_target_quantities</span><span class="p">(</span>
-        <span class="n">model_simulations</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span>
+        <span class="n">model_simulations</span><span class="p">,</span> <span class="n">targets</span>
     <span class="p">)</span>
     <span class="c1"># compute the elicited statistics by applying a specific elicitation</span>
     <span class="c1"># method on the target quantities</span>
     <span class="n">elicited_statistics</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">computation_elicited_statistics</span><span class="p">(</span>
-        <span class="n">target_quantities</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span>
+        <span class="n">target_quantities</span><span class="p">,</span> <span class="n">targets</span>
     <span class="p">)</span>
-    <span class="k">return</span> <span class="n">elicited_statistics</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">,</span> <span class="n">model_simulations</span><span class="p">,</span> <span class="n">target_quantities</span></div>
+    <span class="k">return</span> <span class="p">(</span><span class="n">elicited_statistics</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">,</span> <span class="n">model_simulations</span><span class="p">,</span>
+            <span class="n">target_quantities</span><span class="p">)</span></div>
 
 
 
@@ -422,7 +380,6 @@ document.write(`
 <span class="sd">        model-simulated elicited statistics.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="n">expert</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
@@ -432,7 +389,6 @@ document.write(`
         <span class="n">oracle</span><span class="o">=</span><span class="kc">False</span>
 
     <span class="k">if</span> <span class="n">oracle</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Simulate from oracle&quot;</span><span class="p">)</span>
         <span class="c1"># set seed</span>
         <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">])</span>
         <span class="c1"># sample from true priors</span>
@@ -444,12 +400,11 @@ document.write(`
             <span class="n">seed</span><span class="o">=</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">])</span>
         <span class="c1"># compute elicited statistics and target quantities</span>
         <span class="n">expert_data</span><span class="p">,</span> <span class="n">expert_prior</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">one_forward_simulation</span><span class="p">(</span>
-            <span class="n">prior_model</span><span class="p">,</span> <span class="n">trainer</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">ground_truth</span><span class="o">=</span><span class="kc">True</span>
+            <span class="n">prior_model</span><span class="p">,</span> <span class="n">trainer</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">targets</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">expert_data</span><span class="p">,</span> <span class="n">expert_prior</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Read expert data&quot;</span><span class="p">)</span>
         <span class="c1"># load expert data from file</span>
         <span class="c1"># TODO Expert data must have same name and structure as sim-based</span>
         <span class="c1"># elicited statistics</span>
@@ -462,7 +417,7 @@ document.write(`
 <a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.save_elicit">[docs]</a>
 <span class="k">def</span> <span class="nf">save_elicit</span><span class="p">(</span><span class="n">elicit_obj</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">,</span> <span class="n">force_overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="c1"># check whether saving path is already used</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">save_dir</span><span class="p">)</span> <span class="ow">or</span> <span class="n">force_overwrite</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">save_dir</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">force_overwrite</span><span class="p">:</span>
         <span class="n">user_ans</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;In provided directory exists already a file with&quot;</span><span class="o">+</span>
                          <span class="s2">&quot; identical name. Do you want to overwrite it?&quot;</span><span class="o">+</span>
                          <span class="s2">&quot; Press &#39;y&#39; for overwriting and &#39;n&#39; for abording.&quot;</span><span class="p">)</span>
