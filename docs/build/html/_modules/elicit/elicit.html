@@ -29,7 +29,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
-    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -403,7 +403,8 @@ document.write(`
     <span class="n">dtype_dim</span> <span class="o">=</span> <span class="n">Dtype</span><span class="p">(</span><span class="n">vtype</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span>
 
     <span class="n">hyppar_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">constraint</span><span class="o">=</span><span class="n">transform</span><span class="p">,</span> <span class="n">vtype</span><span class="o">=</span><span class="n">dtype_dim</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="n">dim</span><span class="p">,</span> <span class="n">shared</span><span class="o">=</span><span class="n">shared</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">constraint</span><span class="o">=</span><span class="n">transform</span><span class="p">,</span> <span class="n">vtype</span><span class="o">=</span><span class="n">dtype_dim</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="n">dim</span><span class="p">,</span>
+        <span class="n">shared</span><span class="o">=</span><span class="n">shared</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">hyppar_dict</span></div>
@@ -452,7 +453,7 @@ document.write(`
 <span class="sd">    &gt;&gt;&gt;                               )</span>
 <span class="sd">    &gt;&gt;&gt;              )</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
 
     <span class="n">param_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="n">family</span><span class="p">,</span> <span class="n">hyperparams</span><span class="o">=</span><span class="n">hyperparams</span><span class="p">)</span>
 
@@ -510,7 +511,7 @@ document.write(`
 <span class="sd">    &gt;&gt;&gt; el.model(obj=ToyModel,</span>
 <span class="sd">    &gt;&gt;&gt;          design_matrix=std_predictor(N=200, quantiles=[25,50,75])</span>
 <span class="sd">    &gt;&gt;&gt;          )</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
     <span class="n">generator_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="n">obj</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
@@ -595,10 +596,9 @@ document.write(`
 <span class="sd">        elicit_dict : dict</span>
 <span class="sd">            Dictionary including the custom settings.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
-            <span class="s2">&quot;The use of custom elicitation methods hasn&#39;t been implemented yet.&quot;</span>
-            <span class="p">)</span></div>
+<span class="sd">        &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;The use of custom elicitation methods &quot;</span> <span class="o">+</span>
+                                  <span class="s2">&quot;hasn&#39;t been implemented yet.&quot;</span><span class="p">)</span></div>
 </div>
 
         <span class="c1"># args_dict = dict()</span>
@@ -632,7 +632,7 @@ document.write(`
 <span class="sd">        model: The name must match the output variable name. (2) Custom target</span>
 <span class="sd">        quantity is computed using the **target_method** argument.</span>
 <span class="sd">    query : callable</span>
-<span class="sd">        Specify the elicitation technique by using one of the methods </span>
+<span class="sd">        Specify the elicitation technique by using one of the methods</span>
 <span class="sd">        implemented in :func:`Queries`.</span>
 <span class="sd">        See `How-To specify custom elicitation techniques (TODO) &lt;url&gt;`_.</span>
 <span class="sd">    loss : callable</span>
@@ -670,11 +670,11 @@ document.write(`
 <span class="sd">    &gt;&gt;&gt;           loss=el.losses.L2,</span>
 <span class="sd">    &gt;&gt;&gt;           weight=1.0</span>
 <span class="sd">    &gt;&gt;&gt;           )</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">target_method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+    <span class="k">except</span> <span class="ne">NotImplementedError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
             <span class="s2">&quot;The use of a custom target quantity hasn&#39;t been implemented yet.&quot;</span>
             <span class="p">)</span>
 
@@ -770,7 +770,7 @@ document.write(`
 <span class="sd">        &gt;&gt;&gt;     },</span>
 <span class="sd">        &gt;&gt;&gt;     num_samples = 10_000</span>
 <span class="sd">        &gt;&gt;&gt; )</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">ground_truth</span><span class="o">=</span><span class="n">ground_truth</span><span class="p">,</span> <span class="n">num_samples</span><span class="o">=</span><span class="n">num_samples</span><span class="p">)</span></div>
 </div>
 
@@ -805,7 +805,7 @@ document.write(`
 <span class="sd">    &gt;&gt;&gt;     learning_rate=0.1,</span>
 <span class="sd">    &gt;&gt;&gt;     clipnorm=1.0</span>
 <span class="sd">    &gt;&gt;&gt; )</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
     <span class="n">optimizer_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
         <span class="n">optimizer_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
@@ -935,7 +935,7 @@ document.write(`
 <span class="sd">    &gt;&gt;&gt;     save_configs_history=el.configs.save_history(loss_component=False),</span>
 <span class="sd">    &gt;&gt;&gt;     save_configs_results=el.configs.save_results(model=False)</span>
 <span class="sd">    &gt;&gt;&gt; )</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
     <span class="n">train_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
         <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
@@ -1031,7 +1031,7 @@ document.write(`
 <span class="sd">        ----------</span>
 <span class="sd">        save_dir : str or None, optional</span>
 <span class="sd">            If None the results are only saved as attribute in eliobj loaded in</span>
-<span class="sd">            current working environment, If string is provided, results are </span>
+<span class="sd">            current working environment, If string is provided, results are</span>
 <span class="sd">            saved in folder with with name ``save_dir``.</span>
 <span class="sd">            The default is ``None.``</span>
 <span class="sd">        silent : bool, optional</span>
@@ -1039,7 +1039,7 @@ document.write(`
 <span class="sd">            is finished (``True``) or only saved as attribute of the eliobj</span>
 <span class="sd">            (``False``). The default is ``False``.</span>
 <span class="sd">        force_fit : bool, optional</span>
-<span class="sd">            If the eliobj was already fitted and the user wants to refit it, </span>
+<span class="sd">            If the eliobj was already fitted and the user wants to refit it,</span>
 <span class="sd">            the user is asked whether they want to overwrite the previous</span>
 <span class="sd">            fitting results. Setting ``force_fit=True`` allows the user to</span>
 <span class="sd">            force overfitting without being prompted. The default is ``False``.</span>
@@ -1047,13 +1047,13 @@ document.write(`
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        history : dict</span>
-<span class="sd">            Results saved across epochs (e.g., loss). If ``silent=True`` the </span>
+<span class="sd">            Results saved across epochs (e.g., loss). If ``silent=True`` the</span>
 <span class="sd">            fit method returns nothing.</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
 <span class="sd">        &gt;&gt;&gt; eliobj.fit(save_dir=None, silent=True)</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; history = eliobj.fit(save_dir=&quot;results&quot;, force_fit=True)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1097,7 +1097,7 @@ document.write(`
 
         <span class="c1"># initialization of hyperparameter</span>
         <span class="p">(</span><span class="n">init_prior_model</span><span class="p">,</span> <span class="n">loss_list</span><span class="p">,</span> <span class="n">init_prior</span><span class="p">,</span> <span class="n">init_matrix</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">el</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">pre_training</span><span class="p">(</span>
+            <span class="n">el</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">init_prior</span><span class="p">(</span>
                 <span class="n">expert_elicits</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">initializer</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span>
@@ -1148,7 +1148,7 @@ document.write(`
 
             <span class="n">final_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;history&quot;</span><span class="p">:</span> <span class="n">save_hist</span><span class="p">,</span> <span class="s2">&quot;results&quot;</span><span class="p">:</span> <span class="n">save_res</span><span class="p">}</span>
 
-            <span class="n">el</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">save_as_pkl</span><span class="p">(</span><span class="n">final_dict</span><span class="p">,</span> 
+            <span class="n">el</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">save_as_pkl</span><span class="p">(</span><span class="n">final_dict</span><span class="p">,</span>
                                    <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.pkl&quot;</span><span class="p">)</span>
 
         <span class="c1"># return history by default</span>

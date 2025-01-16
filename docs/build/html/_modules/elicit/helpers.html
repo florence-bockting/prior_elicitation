@@ -308,34 +308,37 @@ document.write(`
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">pythonjsonlogger</span> <span class="kn">import</span> <span class="n">jsonlogger</span> <span class="c1"># noqa</span>
+<span class="kn">from</span> <span class="nn">pythonjsonlogger</span> <span class="kn">import</span> <span class="n">jsonlogger</span>  <span class="c1"># noqa</span>
 
 
 <div class="viewcode-block" id="save_as_pkl">
 <a class="viewcode-back" href="../../api/elicit.helpers.html#elicit.helpers.save_as_pkl">[docs]</a>
-<span class="k">def</span> <span class="nf">save_as_pkl</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="n">path_to_file</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">save_as_pkl</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="nb">any</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Helper functions to save a file as pickle.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    variable : any</span>
-<span class="sd">        file that needs to be saved.</span>
-<span class="sd">    path_to_file : str</span>
+<span class="sd">    obj : any</span>
+<span class="sd">        variable that needs to be saved.</span>
+<span class="sd">    save_dir : str</span>
 <span class="sd">        path indicating the file location.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    None.</span>
 
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; save_as_pkl(obj, &quot;results/file.pkl&quot;)</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># if directory does not exists, create it</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path_to_file</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="c1"># save file to location as pickle</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path_to_file</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">df_file</span><span class="p">:</span>
-        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">df_file</span><span class="p">)</span></div>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">save_dir</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># save obj to location as pickle</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">file</span><span class="p">)</span></div>
 
 
 
@@ -345,39 +348,147 @@ document.write(`
     <span class="k">return</span> <span class="n">x</span></div>
 
 
+
 <div class="viewcode-block" id="DoubleBound">
 <a class="viewcode-back" href="../../api/elicit.helpers.html#elicit.helpers.DoubleBound">[docs]</a>
 <span class="k">class</span> <span class="nc">DoubleBound</span><span class="p">:</span>
 <div class="viewcode-block" id="DoubleBound.__init__">
 <a class="viewcode-back" href="../../api/elicit.helpers.html#elicit.helpers.DoubleBound.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="o">=</span><span class="n">lower</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">upper</span><span class="o">=</span><span class="n">upper</span></div>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lower</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">upper</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A variable constrained to be in the open interval</span>
+<span class="sd">        (``lower``, ``upper``) is transformed to an unconstrained variable Y</span>
+<span class="sd">        via a scaled and translated log-odds transform.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        lower : float</span>
+<span class="sd">            lower bound of variable x.</span>
+<span class="sd">        upper : float</span>
+<span class="sd">            upper bound of variable x.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">=</span> <span class="n">lower</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">=</span> <span class="n">upper</span></div>
 
 
 <div class="viewcode-block" id="DoubleBound.logit">
 <a class="viewcode-back" href="../../api/elicit.helpers.html#elicit.helpers.DoubleBound.logit">[docs]</a>
-    <span class="k">def</span> <span class="nf">logit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">x</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">logit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper function that implements the logit transformation for</span>
+<span class="sd">        :math:`u \in (0,1)`:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            logit(u) = \log\left(\frac{u}{1-u}\right)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        u : float</span>
+<span class="sd">            variable in open unit interval.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        v : float</span>
+<span class="sd">            log-odds of u.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># log-odds definition</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">-</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">u</span><span class="p">)</span>
+        <span class="c1"># cast v into correct dtype</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
 
 
 <div class="viewcode-block" id="DoubleBound.inv_logit">
 <a class="viewcode-back" href="../../api/elicit.helpers.html#elicit.helpers.DoubleBound.inv_logit">[docs]</a>
-    <span class="k">def</span> <span class="nf">inv_logit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">inv_logit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper function that implements the inverse-logit transformation (i.e.,</span>
+<span class="sd">        the logistic sigmoid for :math:`v \in (-\infty,+\infty)`:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            logit^{-1}(v) = \frac{1}{1+\exp(-v)}</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        v : float</span>
+<span class="sd">            unconstrained variable</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        u : float</span>
+<span class="sd">            logistic sigmoid of the unconstrained variable</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># logistic sigmoid transform</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">tf</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">v</span><span class="p">)))</span>
+        <span class="c1"># cast v to correct dtype</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">u</span></div>
 
 
 <div class="viewcode-block" id="DoubleBound.forward">
 <a class="viewcode-back" href="../../api/elicit.helpers.html#elicit.helpers.DoubleBound.forward">[docs]</a>
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logit</span><span class="p">((</span><span class="n">x</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">upper</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        scaled and translated logit transform of variable x with ``lower`` and</span>
+<span class="sd">        ``upper`` bound into an unconstrained variable y.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            Y = logit\left(\frac{X - lower}{upper - lower}\right)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : float</span>
+<span class="sd">            variable with lower and upper bound.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        y : float</span>
+<span class="sd">            unconstrained variable.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># scaled and translated logit transform</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">logit</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">divide</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">),</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)))</span>
+        <span class="c1"># cast y to correct dtype</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">y</span></div>
 
 
 <div class="viewcode-block" id="DoubleBound.inverse">
 <a class="viewcode-back" href="../../api/elicit.helpers.html#elicit.helpers.DoubleBound.inverse">[docs]</a>
-    <span class="k">def</span> <span class="nf">inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="o">+</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">upper</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">inv_logit</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        inverse of the log-odds transform applied to the unconstrained</span>
+<span class="sd">        variable y in order to transform it into a constrained variable x</span>
+<span class="sd">        with ``lower`` and ``upper`` bound.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            X = lower + (upper - lower) \cdot logit^{-1}(Y)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y : float</span>
+<span class="sd">            unconstrained variable</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        x : float</span>
+<span class="sd">        constrained variable with lower and upper bound</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># inverse of log-odds transform</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">inv_logit</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="c1"># cast x to correct dtype</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span></div>
 </div>
+
 
 
 <div class="viewcode-block" id="LowerBound">
@@ -385,38 +496,155 @@ document.write(`
 <span class="k">class</span> <span class="nc">LowerBound</span><span class="p">:</span>
 <div class="viewcode-block" id="LowerBound.__init__">
 <a class="viewcode-back" href="../../api/elicit.helpers.html#elicit.helpers.LowerBound.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lower</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="o">=</span><span class="n">lower</span></div>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lower</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A variable with a ``lower`` bound is transformed to an</span>
+<span class="sd">        unconstrained variable Y via a logarithmic transform.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        lower : float</span>
+<span class="sd">            lower bound of variable X.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">=</span> <span class="n">lower</span></div>
+
 
 <div class="viewcode-block" id="LowerBound.forward">
 <a class="viewcode-back" href="../../api/elicit.helpers.html#elicit.helpers.LowerBound.forward">[docs]</a>
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        logarithmic transform of variable x with ``lower`` bound into an</span>
+<span class="sd">        unconstrained variable y.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            Y = \log(X - lower)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : float</span>
+<span class="sd">            variable with a lower bound.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        y : float</span>
+<span class="sd">            unconstrained variable.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># logarithmic transform</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span>
+        <span class="c1"># cast y into correct type</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">y</span></div>
+
 
 <div class="viewcode-block" id="LowerBound.inverse">
 <a class="viewcode-back" href="../../api/elicit.helpers.html#elicit.helpers.LowerBound.inverse">[docs]</a>
-    <span class="k">def</span> <span class="nf">inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        exponential transform of unconstrained variable y into a constrained</span>
+<span class="sd">        variable x with ``lower`` bound.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            X = \exp(Y) + lower</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y : float</span>
+<span class="sd">            unconstrained variable.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        x : float</span>
+<span class="sd">            variable with a lower bound.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># exponential transform</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span>
+        <span class="c1"># cast x into correct dtype</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span></div>
 </div>
 
-    
+
+
 <div class="viewcode-block" id="UpperBound">
 <a class="viewcode-back" href="../../api/elicit.helpers.html#elicit.helpers.UpperBound">[docs]</a>
 <span class="k">class</span> <span class="nc">UpperBound</span><span class="p">:</span>
 <div class="viewcode-block" id="UpperBound.__init__">
 <a class="viewcode-back" href="../../api/elicit.helpers.html#elicit.helpers.UpperBound.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">upper</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">upper</span><span class="o">=</span><span class="n">upper</span></div>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">upper</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A variable with an ``upper`` bound is transformed into an</span>
+<span class="sd">        unconstrained variable Y via a logarithmic transform.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        upper : float</span>
+<span class="sd">            upper bound of variable X.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">=</span> <span class="n">upper</span></div>
+
 
 <div class="viewcode-block" id="UpperBound.forward">
 <a class="viewcode-back" href="../../api/elicit.helpers.html#elicit.helpers.UpperBound.forward">[docs]</a>
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">upper</span><span class="o">-</span><span class="n">x</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        logarithmic transform of variable x with ``upper`` bound into an</span>
+<span class="sd">        unconstrained variable y.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            Y = \log(upper - X)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : float</span>
+<span class="sd">            variable with an upper bound.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        y : float</span>
+<span class="sd">            unconstrained variable.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># logarithmic transform</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span>
+        <span class="c1"># cast y into correct dtype</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">y</span></div>
+
 
 <div class="viewcode-block" id="UpperBound.inverse">
 <a class="viewcode-back" href="../../api/elicit.helpers.html#elicit.helpers.UpperBound.inverse">[docs]</a>
-    <span class="k">def</span> <span class="nf">inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">upper</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        exponential transform of unconstrained variable y into a constrained</span>
+<span class="sd">        variable x with ``upper`` bound.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            X = upper - \exp(Y)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y : float</span>
+<span class="sd">            unconstrained variable.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        x : float</span>
+<span class="sd">            variable with an upper bound.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># exponential transform</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">-</span> <span class="n">tf</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="c1"># cast x into correct dtype</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span></div>
 </div>
 
 </pre></div>

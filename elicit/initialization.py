@@ -4,7 +4,6 @@
 
 import tensorflow as tf
 import tensorflow_probability as tfp
-import numpy as np
 import logging
 import elicit as el
 
@@ -14,22 +13,52 @@ from tqdm import tqdm
 tfd = tfp.distributions
 
 
-def init_method(seed, hyppar, n_samples, method, mean, radius, parameters):
+def uniform_samples(
+        seed: int, hyppar: list or None, n_samples: int, method: str,
+        mean: float or list, radius: float or list, parameters: dict):
     """
-    Initialize multivariate normal prior over hyperparameter values
+    Sample from uniform distribution for each hyperparameter.
 
     Parameters
     ----------
-    n_hypparam : int
-        Number of hyperparameters.
+    seed : int
+        user-specified seed defined in :func:`elicit.elicit.trainer`.
+    hyppar : list or None
+        list of hyperparameter names (strings) declaring the order for the
+        list of **means** and **radius**.
+        If **means** and **radius** are each a float, then this number is
+        applied to all hyperparameter such that no order of hyperparameter
+        needs to be specified. In this case ``hyppar=None``
     n_samples : int
-        number of warmup iterations.
+        number of samples from the uniform distribution for each
+        hyperparameter.
+    method : str
+        name of sampling method used for drawing samples from uniform.
+        Currently implemented are "random", "lhs", and "sobol".
+    mean : float or list
+        Specification of the uniform distribution. The uniform distribution
+        ranges from (**mean-radius**) to (**mean+radius**).
+    radius : float or list
+        Specification of the uniform distribution. The uniform distribution
+        ranges from (**mean-radius**) to (**mean+radius**).
+    parameters : dict
+        dictionary including all information about the (hyper-)parameters.
+        Can be retrieved as attribute from the initialized
+        :mod:`elicit.elicit.Elicit` obj (i.e., ``eliobj.parameters``)
+
+    Raises
+    ------
+    ValueError
+        ``method`` must be either "sobol", "lhs", or "random".
+        ``n_samples`` must be a positive integer
+    TypeError
+        arises if ``method`` is not a string.
 
     Returns
     -------
-    mvdist : tf.tensor
-        samples from the multivariate prior
-        (shape=(n_warm_up, n_hyperparameters).
+    res_dict : dict
+        dictionary with *keys* being the hyperparameters and *values* the
+        samples from the uniform distribution.
 
     """
     # set seed
@@ -112,48 +141,56 @@ def init_method(seed, hyppar, n_samples, method, mean, radius, parameters):
     return res_dict
 
 
-def initialization_phase(
-    expert_elicited_statistics, initializer, parameters, trainer, model,
-    targets, network, expert):
+def init_runs(
+    expert_elicited_statistics: dict, initializer: dict, parameters: dict,
+    trainer: dict, model: dict, targets: dict, network: dict, expert: dict):
     """
-    For the method "parametric_prior" it might be helpful to run different
-    initializations before the actual training starts in order to find a
-    'good' set of initial values. For this purpose the burnin phase can be
-    used. It rans multiple initializations and computes for each the
-    respective loss value. At the end that set of initial values is chosen
-    which leads to the smallest loss.
+    Computes the discrepancy between expert data and simulated data for
+    multiple hyperparameter initialization values. 
 
     Parameters
     ----------
     expert_elicited_statistics : dict
-        dictionary with expert elicited statistics.
-    one_forward_simulation : callable
-        one forward simulation from prior samples to model-simulated elicited
-        statistics.
-    compute_loss : callable
-        wrapper for loss computation from loss components to (weighted) total
-        loss.
-    global_dict : dict
-        global dictionary with all user input specifications.
+        user-specified expert data as provided by :func:`elicit.elicit.Expert`.
+    initializer : dict
+        user-input from :func:`elicit.elicit.initializer`.
+    parameters : dict
+        user-input from :func:`elicit.elicit.parameter`.
+    trainer : dict
+        user-input from :func:`elicit.elicit.trainer`.
+    model : dict
+        user-input from :func:`elicit.elicit.model`.
+    targets : dict
+        user-input from :func:`elicit.elicit.target`.
+    network : dict
+        user-input from one of the methods implemented in the
+        :mod:`elicit.networks` module.
+    expert : dict
+        user-input from :func:`elicit.elicit.Expert`.
 
     Returns
     -------
     loss_list : list
-        list containing the loss values for each set of initial values.
+        list with all losses computed for each initialization run.
     init_var_list : list
-        set of initial values for each run.
+        list with initializer prior model for each run.
+    init_matrix : dict
+        dictionary with *keys* being the hyperparameter names and *values*
+        being the drawn initial values per run.
 
     """
-
+    # create a copy of the seed variable for incremental increase of seed
+    # for each initialization run
     seed=tf.identity(trainer["seed"])
+    # set seed
     tf.random.set_seed(seed)
-
+    # initialize saving of results
     loss_list = []
     init_var_list = []
     save_prior = []
 
-    # create initializations
-    init_matrix = init_method(
+    # sample initial values
+    init_matrix = uniform_samples(
         seed,
         initializer["distribution"]["hyper"],
         initializer["iterations"],
@@ -166,12 +203,13 @@ def initialization_phase(
     print("Initialization")
 
     for i in tqdm(range(initializer["iterations"])):
+        # update seed
         seed = seed+1
-        # create init-matrix-slice
+        # extract initial hyperparameter value for each run
         init_matrix_slice = {
-            f"{key}": init_matrix[key][i] for key in init_matrix}
-
-        # prepare generative model
+            f"{key}": init_matrix[key][i] for key in init_matrix
+            }
+        # initialize prior distributions based on initial hyperparameters
         prior_model = el.simulations.Priors(
             ground_truth=False,
             init_matrix_slice=init_matrix_slice,
@@ -182,19 +220,22 @@ def initialization_phase(
             seed=seed
             )
 
-        # generate simulations from model
+        # simulate from priors and generative model and compute the
+        # elicited statistics corresponding to the initial hyperparameters
         (training_elicited_statistics,
          *_) = el.utils.one_forward_simulation(prior_model, trainer, model,
                                                targets)
 
-        # compute loss for each set of initial values
+        # compute discrepancy between expert elicited statistics and
+        # simulated data corresponding to initial hyperparameter values
         (weighted_total_loss, *_) = el.losses.compute_loss(
             training_elicited_statistics,
             expert_elicited_statistics,
             epoch=0,
             targets=targets
         )
-
+        # save loss value, initial hyperparameter values and initialized prior
+        # model for each run
         init_var_list.append(prior_model)
         save_prior.append(prior_model.trainable_variables)
         loss_list.append(weighted_total_loss.numpy())
@@ -203,15 +244,50 @@ def initialization_phase(
     return loss_list, init_var_list, init_matrix
 
 
-def pre_training(expert_elicited_statistics, initializer, parameters, trainer,
-                 model, targets, network, expert):
-    logger = logging.getLogger(__name__)
+def init_prior(expert_elicited_statistics: dict, initializer: dict,
+               parameters: dict, trainer: dict, model: dict, targets: dict,
+               network: dict, expert: dict):
+    """
+    Extracts target loss, corresponding initial hyperparameter values, and
+    initialized prior model from :func:`init_runs`.
+
+    Parameters
+    ----------
+    expert_elicited_statistics : dict
+        user-specified expert data as provided by :func:`elicit.elicit.Expert`.
+    initializer : dict
+        user-input from :func:`elicit.elicit.initializer`.
+    parameters : dict
+        user-input from :func:`elicit.elicit.parameter`.
+    trainer : dict
+        user-input from :func:`elicit.elicit.trainer`.
+    model : dict
+        user-input from :func:`elicit.elicit.model`.
+    targets : dict
+        user-input from :func:`elicit.elicit.target`.
+    network : dict
+        user-input from one of the methods implemented in the
+        :mod:`elicit.networks` module.
+    expert : dict
+        user-input from :func:`elicit.elicit.Expert`.
+
+    Returns
+    -------
+    init_prior_model : :mod:`elicit.simulations.Priors` object
+        initialized priors that will be used for the training phase.
+    loss_list : list
+        list with all losses computed for each initialization run.
+    init_prior : list
+        list with initializer prior model for each run.
+    init_matrix : dict
+        dictionary with *keys* being the hyperparameter names and *values*
+        being the drawn initial values per run.
+
+    """
 
     if trainer["method"] == "parametric_prior":
 
-        logger.info("Pre-training phase (only first run)")
-
-        loss_list, init_prior, init_matrix = initialization_phase(
+        loss_list, init_prior, init_matrix = init_runs(
             expert_elicited_statistics, initializer, parameters, trainer,
             model, targets, network, expert
         )
@@ -233,14 +309,14 @@ def pre_training(expert_elicited_statistics, initializer, parameters, trainer,
             network=network,
             expert=expert,
             seed=trainer["seed"])
-
+        # initialize empty variables for avoiding return conflicts
         loss_list, init_prior, init_matrix = (None,None,None)
 
     return init_prior_model, loss_list, init_prior, init_matrix
 
 
-def uniform(radius: list or float=1., mean: list or float=0.,
-            hyper: list or None=None):
+def uniform(radius: float or list=1., mean: float or list=0.,
+            hyper: None or list=None):
     """
     Specification of uniform distribution used for drawing initial values for
     each hyperparameter. Initial values are drawn from a uniform distribution
@@ -249,26 +325,28 @@ def uniform(radius: list or float=1., mean: list or float=0.,
     Parameters
     ----------
     radius : float or list
-        Initial values are drawn from a uniform distribution
-        ranging from ``mean-radius`` to ``mean+radius``.
-        If a float is provided the same setting will be used for all hyperparameters.
-        If different settings per hyperparameter are required a list of length
-        equal to the number of hyperparameters should be provided.
+        Initial values are drawn from a uniform distribution ranging from
+        ``mean-radius`` to ``mean+radius``.
+        If a ``float`` is provided the same setting will be used for all
+        hyperparameters.
+        If different settings per hyperparameter are required, a ``list`` of
+        length equal to the number of hyperparameters should be provided.
         The order of values should be equivalent to the order of hyperparameter
         names provided in **hyper**.
         The default is ``1.``.
     mean : float or list
-        Initial values are drawn from a uniform distribution
-        ranging from ``mean-radius`` to ``mean+radius``.
-        If a float is provided the same setting will be used for all hyperparameters.
-        If different settings per hyperparameter are required a list of length
-        equal to the number of hyperparameters should be provided.
+        Initial values are drawn from a uniform distribution ranging from
+        ``mean-radius`` to ``mean+radius``.
+        If a ``float`` is provided the same setting will be used for all
+        hyperparameters.
+        If different settings per hyperparameter are required, a ``list`` of
+        length equal to the number of hyperparameters should be provided.
         The order of values should be equivalent to the order of hyperparameter
         names provided in **hyper**.
         The default is ``0.``.
     hyper : None or list, optional
-        List of hyperparameter names as specified in :func:`hyper`. The values
-        provided in **radius** and **mean** should follow the order
+        List of hyperparameter names as specified in :func:`elicit.elicit.hyper`.
+        The values provided in **radius** and **mean** should follow the order
         of hyperparameters indicated in this list.
         If a float is passed to **radius** and **mean** this argument is not
         necessary.

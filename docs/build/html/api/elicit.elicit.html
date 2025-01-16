@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=87e54e7c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -641,7 +641,7 @@ corresponding <a class="reference external" href="https://github.com/florence-bo
 model: The name must match the output variable name. (2) Custom target
 quantity is computed using the <strong>target_method</strong> argument.</p>
 </dd>
-<dt><strong>query</strong><span class="classifier">callable</span></dt><dd><p>Specify the elicitation technique by using one of the methods 
+<dt><strong>query</strong><span class="classifier">callable</span></dt><dd><p>Specify the elicitation technique by using one of the methods
 implemented in <a class="reference internal" href="#elicit.elicit.Queries" title="elicit.elicit.Queries"><code class="xref py py-func docutils literal notranslate"><span class="pre">Queries()</span></code></a>.
 See <a class="reference external" href="url">How-To specify custom elicitation techniques (TODO)</a>.</p>
 </dd>
@@ -997,7 +997,7 @@ fit the eliobj.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>save_dir</strong><span class="classifier">str or None, optional</span></dt><dd><p>If None the results are only saved as attribute in eliobj loaded in
-current working environment, If string is provided, results are 
+current working environment, If string is provided, results are
 saved in folder with with name <code class="docutils literal notranslate"><span class="pre">save_dir</span></code>.
 The default is <code class="docutils literal notranslate"><span class="pre">None.</span></code></p>
 </dd>
@@ -1005,7 +1005,7 @@ The default is <code class="docutils literal notranslate"><span class="pre">None
 is finished (<code class="docutils literal notranslate"><span class="pre">True</span></code>) or only saved as attribute of the eliobj
 (<code class="docutils literal notranslate"><span class="pre">False</span></code>). The default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </dd>
-<dt><strong>force_fit</strong><span class="classifier">bool, optional</span></dt><dd><p>If the eliobj was already fitted and the user wants to refit it, 
+<dt><strong>force_fit</strong><span class="classifier">bool, optional</span></dt><dd><p>If the eliobj was already fitted and the user wants to refit it,
 the user is asked whether they want to overwrite the previous
 fitting results. Setting <code class="docutils literal notranslate"><span class="pre">force_fit=True</span></code> allows the user to
 force overfitting without being prompted. The default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
@@ -1014,7 +1014,7 @@ force overfitting without being prompted. The default is <code class="docutils l
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>history</strong><span class="classifier">dict</span></dt><dd><p>Results saved across epochs (e.g., loss). If <code class="docutils literal notranslate"><span class="pre">silent=True</span></code> the 
+<dt><strong>history</strong><span class="classifier">dict</span></dt><dd><p>Results saved across epochs (e.g., loss). If <code class="docutils literal notranslate"><span class="pre">silent=True</span></code> the
 fit method returns nothing.</p>
 </dd>
 </dl>

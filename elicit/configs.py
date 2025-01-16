@@ -11,27 +11,27 @@ def save_history(
     hyperparameter_gradient: bool = True,
 ):
     """
-        Controls whether sub-results of the history object should be included
-        or excluded. Results are saved across epochs. By default all
-        sub-results are included.
+    Controls whether sub-results of the history object should be included
+    or excluded. Results are saved across epochs. By default all
+    sub-results are included.
 
     Parameters
     ----------
     loss : bool, optional
-        total loss per epoch. The default is True.
+        total loss per epoch. The default is ``True``.
     loss_component : bool, optional
-        loss per loss-component per epoch. The default is True.
+        loss per loss-component per epoch. The default is ``True``.
     time : bool, optional
-        time in sec per epoch. The default is True.
+        time in sec per epoch. The default is ``True``.
     hyperparameter : bool, optional
         'parametric_prior' method: Trainable hyperparameters of parametric
         prior distributions.
         'deep_prior' method: Mean and standard deviation of each marginal
         from the joint prior.
-        The default is True.
+        The default is ``True``.
     hyperparameter_gradient : bool, optional
         Gradients of the hyperparameter. Only for 'parametric_prior' method.
-        The default is True.
+        The default is ``True``.
 
     Returns
     -------
@@ -64,57 +64,57 @@ def save_results(
     loss_tensor_model: bool = True,
 ):
     """
-        Controls whether sub-results of the result object should be included
-        or excluded in the final result file. Results are based on the
-        computation of the last epoch.
-        By default all sub-results are included.
+    Controls whether sub-results of the result object should be included
+    or excluded in the final result file. Results are based on the
+    computation of the last epoch.
+    By default all sub-results are included.
 
-        Parameters
-        ----------
-        target_quantities : bool, optional
-            simulation-based target quantities. The default is True.
-        elicited_statistics : bool, optional
-            simulation-based elicited statistics. The default is True.
-        prior_samples : bool, optional
-            samples from simulation-based prior distributions.
-            The default is True.
-        model_samples : bool, optional
-            output variables from the simulation-based generative model.
-            The default is True.
-        model : bool, optional
-            fitted elicit model object including the trainable variables.
-            The default is True.
-        expert_elicited_statistics : bool, optional
-            expert-elicited statistics. The default is True.
-        expert_prior_samples : bool, optional
-            if oracle is used: samples from the true prior distribution,
-            otherwise it is None. The default is True.
-        init_loss_list : bool, optional
-            initialization phase: Losses related to the samples drawn from the
-            initialization distribution.
-            Only included for method 'parametric_prior'.
-            The default is True.
-        init_prior : bool, optional
-            initialized elicit model object including the trainable variables.
-            Only included for method 'parametric_prior'.
-            The default is True.
-        init_matrix : bool, optional
-            initialization phase: samples drawn from the initialization
-            distribution for each hyperparameter.
-            Only included for method 'parametric_prior'.
-            The default is True.
-        loss_tensor_expert : bool, optional
-            expert term in loss component for computing the discrepancy.
-            The default is True.
-        loss_tensor_model : bool, optional
-            simulation-based term in loss component for computing the
-            discrepancy. The default is True.
+    Parameters
+    ----------
+    target_quantities : bool, optional
+        simulation-based target quantities. The default is ``True``.
+    elicited_statistics : bool, optional
+        simulation-based elicited statistics. The default is ``True``.
+    prior_samples : bool, optional
+        samples from simulation-based prior distributions.
+        The default is ``True``.
+    model_samples : bool, optional
+        output variables from the simulation-based generative model.
+        The default is ``True``.
+    model : bool, optional
+        fitted elicit model object including the trainable variables.
+        The default is ``True``.
+    expert_elicited_statistics : bool, optional
+        expert-elicited statistics. The default is ``True``.
+    expert_prior_samples : bool, optional
+        if oracle is used: samples from the true prior distribution,
+        otherwise it is None. The default is ``True``.
+    init_loss_list : bool, optional
+        initialization phase: Losses related to the samples drawn from the
+        initialization distribution.
+        Only included for method 'parametric_prior'.
+        The default is ``True``.
+    init_prior : bool, optional
+        initialized elicit model object including the trainable variables.
+        Only included for method 'parametric_prior'.
+        The default is ``True``.
+    init_matrix : bool, optional
+        initialization phase: samples drawn from the initialization
+        distribution for each hyperparameter.
+        Only included for method 'parametric_prior'.
+        The default is ``True``.
+    loss_tensor_expert : bool, optional
+        expert term in loss component for computing the discrepancy.
+        The default is ``True``.
+    loss_tensor_model : bool, optional
+        simulation-based term in loss component for computing the
+        discrepancy. The default is ``True``.
 
-        Returns
-        -------
-        save_res_dict : dict
-            dictionary with inclusion/exclusion settings for each sub-result
-            in results object.
+    Returns
+    -------
+    save_res_dict : dict
+        dictionary with inclusion/exclusion settings for each sub-result
+        in results object.
 
         """
     save_res_dict = dict(

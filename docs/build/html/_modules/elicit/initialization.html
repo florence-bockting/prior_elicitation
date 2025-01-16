@@ -29,7 +29,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
-    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -307,7 +307,6 @@ document.write(`
 
 <span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
 <span class="kn">import</span> <span class="nn">tensorflow_probability</span> <span class="k">as</span> <span class="nn">tfp</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">elicit</span> <span class="k">as</span> <span class="nn">el</span>
 
@@ -317,24 +316,54 @@ document.write(`
 <span class="n">tfd</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">distributions</span>
 
 
-<div class="viewcode-block" id="init_method">
-<a class="viewcode-back" href="../../api/elicit.initialization.html#elicit.initialization.init_method">[docs]</a>
-<span class="k">def</span> <span class="nf">init_method</span><span class="p">(</span><span class="n">seed</span><span class="p">,</span> <span class="n">hyppar</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="uniform_samples">
+<a class="viewcode-back" href="../../api/elicit.initialization.html#elicit.initialization.uniform_samples">[docs]</a>
+<span class="k">def</span> <span class="nf">uniform_samples</span><span class="p">(</span>
+        <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">hyppar</span><span class="p">:</span> <span class="nb">list</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">mean</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="nb">list</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="nb">list</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Initialize multivariate normal prior over hyperparameter values</span>
+<span class="sd">    Sample from uniform distribution for each hyperparameter.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    n_hypparam : int</span>
-<span class="sd">        Number of hyperparameters.</span>
+<span class="sd">    seed : int</span>
+<span class="sd">        user-specified seed defined in :func:`elicit.elicit.trainer`.</span>
+<span class="sd">    hyppar : list or None</span>
+<span class="sd">        list of hyperparameter names (strings) declaring the order for the</span>
+<span class="sd">        list of **means** and **radius**.</span>
+<span class="sd">        If **means** and **radius** are each a float, then this number is</span>
+<span class="sd">        applied to all hyperparameter such that no order of hyperparameter</span>
+<span class="sd">        needs to be specified. In this case ``hyppar=None``</span>
 <span class="sd">    n_samples : int</span>
-<span class="sd">        number of warmup iterations.</span>
+<span class="sd">        number of samples from the uniform distribution for each</span>
+<span class="sd">        hyperparameter.</span>
+<span class="sd">    method : str</span>
+<span class="sd">        name of sampling method used for drawing samples from uniform.</span>
+<span class="sd">        Currently implemented are &quot;random&quot;, &quot;lhs&quot;, and &quot;sobol&quot;.</span>
+<span class="sd">    mean : float or list</span>
+<span class="sd">        Specification of the uniform distribution. The uniform distribution</span>
+<span class="sd">        ranges from (**mean-radius**) to (**mean+radius**).</span>
+<span class="sd">    radius : float or list</span>
+<span class="sd">        Specification of the uniform distribution. The uniform distribution</span>
+<span class="sd">        ranges from (**mean-radius**) to (**mean+radius**).</span>
+<span class="sd">    parameters : dict</span>
+<span class="sd">        dictionary including all information about the (hyper-)parameters.</span>
+<span class="sd">        Can be retrieved as attribute from the initialized</span>
+<span class="sd">        :mod:`elicit.elicit.Elicit` obj (i.e., ``eliobj.parameters``)</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        ``method`` must be either &quot;sobol&quot;, &quot;lhs&quot;, or &quot;random&quot;.</span>
+<span class="sd">        ``n_samples`` must be a positive integer</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        arises if ``method`` is not a string.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    mvdist : tf.tensor</span>
-<span class="sd">        samples from the multivariate prior</span>
-<span class="sd">        (shape=(n_warm_up, n_hyperparameters).</span>
+<span class="sd">    res_dict : dict</span>
+<span class="sd">        dictionary with *keys* being the hyperparameters and *values* the</span>
+<span class="sd">        samples from the uniform distribution.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># set seed</span>
@@ -418,50 +447,58 @@ document.write(`
 
 
 
-<div class="viewcode-block" id="initialization_phase">
-<a class="viewcode-back" href="../../api/elicit.initialization.html#elicit.initialization.initialization_phase">[docs]</a>
-<span class="k">def</span> <span class="nf">initialization_phase</span><span class="p">(</span>
-    <span class="n">expert_elicited_statistics</span><span class="p">,</span> <span class="n">initializer</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">trainer</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span>
-    <span class="n">targets</span><span class="p">,</span> <span class="n">network</span><span class="p">,</span> <span class="n">expert</span><span class="p">):</span>
+<div class="viewcode-block" id="init_runs">
+<a class="viewcode-back" href="../../api/elicit.initialization.html#elicit.initialization.init_runs">[docs]</a>
+<span class="k">def</span> <span class="nf">init_runs</span><span class="p">(</span>
+    <span class="n">expert_elicited_statistics</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">initializer</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">trainer</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">targets</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">network</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">expert</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    For the method &quot;parametric_prior&quot; it might be helpful to run different</span>
-<span class="sd">    initializations before the actual training starts in order to find a</span>
-<span class="sd">    &#39;good&#39; set of initial values. For this purpose the burnin phase can be</span>
-<span class="sd">    used. It rans multiple initializations and computes for each the</span>
-<span class="sd">    respective loss value. At the end that set of initial values is chosen</span>
-<span class="sd">    which leads to the smallest loss.</span>
+<span class="sd">    Computes the discrepancy between expert data and simulated data for</span>
+<span class="sd">    multiple hyperparameter initialization values. </span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    expert_elicited_statistics : dict</span>
-<span class="sd">        dictionary with expert elicited statistics.</span>
-<span class="sd">    one_forward_simulation : callable</span>
-<span class="sd">        one forward simulation from prior samples to model-simulated elicited</span>
-<span class="sd">        statistics.</span>
-<span class="sd">    compute_loss : callable</span>
-<span class="sd">        wrapper for loss computation from loss components to (weighted) total</span>
-<span class="sd">        loss.</span>
-<span class="sd">    global_dict : dict</span>
-<span class="sd">        global dictionary with all user input specifications.</span>
+<span class="sd">        user-specified expert data as provided by :func:`elicit.elicit.Expert`.</span>
+<span class="sd">    initializer : dict</span>
+<span class="sd">        user-input from :func:`elicit.elicit.initializer`.</span>
+<span class="sd">    parameters : dict</span>
+<span class="sd">        user-input from :func:`elicit.elicit.parameter`.</span>
+<span class="sd">    trainer : dict</span>
+<span class="sd">        user-input from :func:`elicit.elicit.trainer`.</span>
+<span class="sd">    model : dict</span>
+<span class="sd">        user-input from :func:`elicit.elicit.model`.</span>
+<span class="sd">    targets : dict</span>
+<span class="sd">        user-input from :func:`elicit.elicit.target`.</span>
+<span class="sd">    network : dict</span>
+<span class="sd">        user-input from one of the methods implemented in the</span>
+<span class="sd">        :mod:`elicit.networks` module.</span>
+<span class="sd">    expert : dict</span>
+<span class="sd">        user-input from :func:`elicit.elicit.Expert`.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    loss_list : list</span>
-<span class="sd">        list containing the loss values for each set of initial values.</span>
+<span class="sd">        list with all losses computed for each initialization run.</span>
 <span class="sd">    init_var_list : list</span>
-<span class="sd">        set of initial values for each run.</span>
+<span class="sd">        list with initializer prior model for each run.</span>
+<span class="sd">    init_matrix : dict</span>
+<span class="sd">        dictionary with *keys* being the hyperparameter names and *values*</span>
+<span class="sd">        being the drawn initial values per run.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-
+    <span class="c1"># create a copy of the seed variable for incremental increase of seed</span>
+    <span class="c1"># for each initialization run</span>
     <span class="n">seed</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">])</span>
+    <span class="c1"># set seed</span>
     <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
-
+    <span class="c1"># initialize saving of results</span>
     <span class="n">loss_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">init_var_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">save_prior</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="c1"># create initializations</span>
-    <span class="n">init_matrix</span> <span class="o">=</span> <span class="n">init_method</span><span class="p">(</span>
+    <span class="c1"># sample initial values</span>
+    <span class="n">init_matrix</span> <span class="o">=</span> <span class="n">uniform_samples</span><span class="p">(</span>
         <span class="n">seed</span><span class="p">,</span>
         <span class="n">initializer</span><span class="p">[</span><span class="s2">&quot;distribution&quot;</span><span class="p">][</span><span class="s2">&quot;hyper&quot;</span><span class="p">],</span>
         <span class="n">initializer</span><span class="p">[</span><span class="s2">&quot;iterations&quot;</span><span class="p">],</span>
@@ -474,12 +511,13 @@ document.write(`
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization&quot;</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">initializer</span><span class="p">[</span><span class="s2">&quot;iterations&quot;</span><span class="p">])):</span>
+        <span class="c1"># update seed</span>
         <span class="n">seed</span> <span class="o">=</span> <span class="n">seed</span><span class="o">+</span><span class="mi">1</span>
-        <span class="c1"># create init-matrix-slice</span>
+        <span class="c1"># extract initial hyperparameter value for each run</span>
         <span class="n">init_matrix_slice</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">init_matrix</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">init_matrix</span><span class="p">}</span>
-
-        <span class="c1"># prepare generative model</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">init_matrix</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">init_matrix</span>
+            <span class="p">}</span>
+        <span class="c1"># initialize prior distributions based on initial hyperparameters</span>
         <span class="n">prior_model</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">Priors</span><span class="p">(</span>
             <span class="n">ground_truth</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">init_matrix_slice</span><span class="o">=</span><span class="n">init_matrix_slice</span><span class="p">,</span>
@@ -490,19 +528,22 @@ document.write(`
             <span class="n">seed</span><span class="o">=</span><span class="n">seed</span>
             <span class="p">)</span>
 
-        <span class="c1"># generate simulations from model</span>
+        <span class="c1"># simulate from priors and generative model and compute the</span>
+        <span class="c1"># elicited statistics corresponding to the initial hyperparameters</span>
         <span class="p">(</span><span class="n">training_elicited_statistics</span><span class="p">,</span>
          <span class="o">*</span><span class="n">_</span><span class="p">)</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">one_forward_simulation</span><span class="p">(</span><span class="n">prior_model</span><span class="p">,</span> <span class="n">trainer</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span>
                                                <span class="n">targets</span><span class="p">)</span>
 
-        <span class="c1"># compute loss for each set of initial values</span>
+        <span class="c1"># compute discrepancy between expert elicited statistics and</span>
+        <span class="c1"># simulated data corresponding to initial hyperparameter values</span>
         <span class="p">(</span><span class="n">weighted_total_loss</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span><span class="p">)</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">compute_loss</span><span class="p">(</span>
             <span class="n">training_elicited_statistics</span><span class="p">,</span>
             <span class="n">expert_elicited_statistics</span><span class="p">,</span>
             <span class="n">epoch</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
             <span class="n">targets</span><span class="o">=</span><span class="n">targets</span>
         <span class="p">)</span>
-
+        <span class="c1"># save loss value, initial hyperparameter values and initialized prior</span>
+        <span class="c1"># model for each run</span>
         <span class="n">init_var_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prior_model</span><span class="p">)</span>
         <span class="n">save_prior</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prior_model</span><span class="o">.</span><span class="n">trainable_variables</span><span class="p">)</span>
         <span class="n">loss_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">weighted_total_loss</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
@@ -512,17 +553,52 @@ document.write(`
 
 
 
-<div class="viewcode-block" id="pre_training">
-<a class="viewcode-back" href="../../api/elicit.initialization.html#elicit.initialization.pre_training">[docs]</a>
-<span class="k">def</span> <span class="nf">pre_training</span><span class="p">(</span><span class="n">expert_elicited_statistics</span><span class="p">,</span> <span class="n">initializer</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">trainer</span><span class="p">,</span>
-                 <span class="n">model</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">network</span><span class="p">,</span> <span class="n">expert</span><span class="p">):</span>
-    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<div class="viewcode-block" id="init_prior">
+<a class="viewcode-back" href="../../api/elicit.initialization.html#elicit.initialization.init_prior">[docs]</a>
+<span class="k">def</span> <span class="nf">init_prior</span><span class="p">(</span><span class="n">expert_elicited_statistics</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">initializer</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+               <span class="n">parameters</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">trainer</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">targets</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+               <span class="n">network</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">expert</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extracts target loss, corresponding initial hyperparameter values, and</span>
+<span class="sd">    initialized prior model from :func:`init_runs`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    expert_elicited_statistics : dict</span>
+<span class="sd">        user-specified expert data as provided by :func:`elicit.elicit.Expert`.</span>
+<span class="sd">    initializer : dict</span>
+<span class="sd">        user-input from :func:`elicit.elicit.initializer`.</span>
+<span class="sd">    parameters : dict</span>
+<span class="sd">        user-input from :func:`elicit.elicit.parameter`.</span>
+<span class="sd">    trainer : dict</span>
+<span class="sd">        user-input from :func:`elicit.elicit.trainer`.</span>
+<span class="sd">    model : dict</span>
+<span class="sd">        user-input from :func:`elicit.elicit.model`.</span>
+<span class="sd">    targets : dict</span>
+<span class="sd">        user-input from :func:`elicit.elicit.target`.</span>
+<span class="sd">    network : dict</span>
+<span class="sd">        user-input from one of the methods implemented in the</span>
+<span class="sd">        :mod:`elicit.networks` module.</span>
+<span class="sd">    expert : dict</span>
+<span class="sd">        user-input from :func:`elicit.elicit.Expert`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    init_prior_model : :mod:`elicit.simulations.Priors` object</span>
+<span class="sd">        initialized priors that will be used for the training phase.</span>
+<span class="sd">    loss_list : list</span>
+<span class="sd">        list with all losses computed for each initialization run.</span>
+<span class="sd">    init_prior : list</span>
+<span class="sd">        list with initializer prior model for each run.</span>
+<span class="sd">    init_matrix : dict</span>
+<span class="sd">        dictionary with *keys* being the hyperparameter names and *values*</span>
+<span class="sd">        being the drawn initial values per run.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;parametric_prior&quot;</span><span class="p">:</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Pre-training phase (only first run)&quot;</span><span class="p">)</span>
-
-        <span class="n">loss_list</span><span class="p">,</span> <span class="n">init_prior</span><span class="p">,</span> <span class="n">init_matrix</span> <span class="o">=</span> <span class="n">initialization_phase</span><span class="p">(</span>
+        <span class="n">loss_list</span><span class="p">,</span> <span class="n">init_prior</span><span class="p">,</span> <span class="n">init_matrix</span> <span class="o">=</span> <span class="n">init_runs</span><span class="p">(</span>
             <span class="n">expert_elicited_statistics</span><span class="p">,</span> <span class="n">initializer</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">trainer</span><span class="p">,</span>
             <span class="n">model</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">network</span><span class="p">,</span> <span class="n">expert</span>
         <span class="p">)</span>
@@ -544,7 +620,7 @@ document.write(`
             <span class="n">network</span><span class="o">=</span><span class="n">network</span><span class="p">,</span>
             <span class="n">expert</span><span class="o">=</span><span class="n">expert</span><span class="p">,</span>
             <span class="n">seed</span><span class="o">=</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">])</span>
-
+        <span class="c1"># initialize empty variables for avoiding return conflicts</span>
         <span class="n">loss_list</span><span class="p">,</span> <span class="n">init_prior</span><span class="p">,</span> <span class="n">init_matrix</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">init_prior_model</span><span class="p">,</span> <span class="n">loss_list</span><span class="p">,</span> <span class="n">init_prior</span><span class="p">,</span> <span class="n">init_matrix</span></div>
@@ -553,8 +629,8 @@ document.write(`
 
 <div class="viewcode-block" id="uniform">
 <a class="viewcode-back" href="../../api/elicit.initialization.html#elicit.initialization.uniform">[docs]</a>
-<span class="k">def</span> <span class="nf">uniform</span><span class="p">(</span><span class="n">radius</span><span class="p">:</span> <span class="nb">list</span> <span class="ow">or</span> <span class="nb">float</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">mean</span><span class="p">:</span> <span class="nb">list</span> <span class="ow">or</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
-            <span class="n">hyper</span><span class="p">:</span> <span class="nb">list</span> <span class="ow">or</span> <span class="kc">None</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">uniform</span><span class="p">(</span><span class="n">radius</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="nb">list</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">mean</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="nb">list</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+            <span class="n">hyper</span><span class="p">:</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Specification of uniform distribution used for drawing initial values for</span>
 <span class="sd">    each hyperparameter. Initial values are drawn from a uniform distribution</span>
@@ -563,26 +639,28 @@ document.write(`
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    radius : float or list</span>
-<span class="sd">        Initial values are drawn from a uniform distribution</span>
-<span class="sd">        ranging from ``mean-radius`` to ``mean+radius``.</span>
-<span class="sd">        If a float is provided the same setting will be used for all hyperparameters.</span>
-<span class="sd">        If different settings per hyperparameter are required a list of length</span>
-<span class="sd">        equal to the number of hyperparameters should be provided.</span>
+<span class="sd">        Initial values are drawn from a uniform distribution ranging from</span>
+<span class="sd">        ``mean-radius`` to ``mean+radius``.</span>
+<span class="sd">        If a ``float`` is provided the same setting will be used for all</span>
+<span class="sd">        hyperparameters.</span>
+<span class="sd">        If different settings per hyperparameter are required, a ``list`` of</span>
+<span class="sd">        length equal to the number of hyperparameters should be provided.</span>
 <span class="sd">        The order of values should be equivalent to the order of hyperparameter</span>
 <span class="sd">        names provided in **hyper**.</span>
 <span class="sd">        The default is ``1.``.</span>
 <span class="sd">    mean : float or list</span>
-<span class="sd">        Initial values are drawn from a uniform distribution</span>
-<span class="sd">        ranging from ``mean-radius`` to ``mean+radius``.</span>
-<span class="sd">        If a float is provided the same setting will be used for all hyperparameters.</span>
-<span class="sd">        If different settings per hyperparameter are required a list of length</span>
-<span class="sd">        equal to the number of hyperparameters should be provided.</span>
+<span class="sd">        Initial values are drawn from a uniform distribution ranging from</span>
+<span class="sd">        ``mean-radius`` to ``mean+radius``.</span>
+<span class="sd">        If a ``float`` is provided the same setting will be used for all</span>
+<span class="sd">        hyperparameters.</span>
+<span class="sd">        If different settings per hyperparameter are required, a ``list`` of</span>
+<span class="sd">        length equal to the number of hyperparameters should be provided.</span>
 <span class="sd">        The order of values should be equivalent to the order of hyperparameter</span>
 <span class="sd">        names provided in **hyper**.</span>
 <span class="sd">        The default is ``0.``.</span>
 <span class="sd">    hyper : None or list, optional</span>
-<span class="sd">        List of hyperparameter names as specified in :func:`hyper`. The values</span>
-<span class="sd">        provided in **radius** and **mean** should follow the order</span>
+<span class="sd">        List of hyperparameter names as specified in :func:`elicit.elicit.hyper`.</span>
+<span class="sd">        The values provided in **radius** and **mean** should follow the order</span>
 <span class="sd">        of hyperparameters indicated in this list.</span>
 <span class="sd">        If a float is passed to **radius** and **mean** this argument is not</span>
 <span class="sd">        necessary.</span>

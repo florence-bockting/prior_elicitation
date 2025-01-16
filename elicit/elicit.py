@@ -89,7 +89,8 @@ def hyper(
     dtype_dim = Dtype(vtype, dim)
 
     hyppar_dict = dict(
-        name=name, constraint=transform, vtype=dtype_dim, dim=dim, shared=shared
+        name=name, constraint=transform, vtype=dtype_dim, dim=dim,
+        shared=shared
     )
 
     return hyppar_dict
@@ -135,7 +136,7 @@ def parameter(
     >>>                               )
     >>>              )
 
-    """
+    """  # noqa: E501
 
     param_dict = dict(name=name, family=family, hyperparams=hyperparams)
 
@@ -190,7 +191,7 @@ def model(obj: callable, **kwargs):
     >>> el.model(obj=ToyModel,
     >>>          design_matrix=std_predictor(N=200, quantiles=[25,50,75])
     >>>          )
-    """
+    """  # noqa: E501
     generator_dict = dict(obj=obj)
 
     for key in kwargs:
@@ -261,10 +262,9 @@ class Queries:
         elicit_dict : dict
             Dictionary including the custom settings.
 
-        """
-        raise NotImplementedError(
-            "The use of custom elicitation methods hasn't been implemented yet."
-            )
+        """  # noqa: E501
+        raise NotImplementedError("The use of custom elicitation methods " +
+                                  "hasn't been implemented yet.")
         # args_dict = dict()
         # for key in kwargs:
         #     args_dict[key] = kwargs[key]
@@ -294,7 +294,7 @@ def target(
         model: The name must match the output variable name. (2) Custom target
         quantity is computed using the **target_method** argument.
     query : callable
-        Specify the elicitation technique by using one of the methods 
+        Specify the elicitation technique by using one of the methods
         implemented in :func:`Queries`.
         See `How-To specify custom elicitation techniques (TODO) <url>`_.
     loss : callable
@@ -332,11 +332,11 @@ def target(
     >>>           loss=el.losses.L2,
     >>>           weight=1.0
     >>>           )
-    """
+    """  # noqa: E501
     try:
         target_method is not None
-    except:
-        raise NotImplementedError(
+    except NotImplementedError:
+        print(
             "The use of a custom target quantity hasn't been implemented yet."
             )
 
@@ -424,7 +424,7 @@ class Expert:
         >>>     },
         >>>     num_samples = 10_000
         >>> )
-        """
+        """  # noqa: E501
         return dict(ground_truth=ground_truth, num_samples=num_samples)
 
 
@@ -455,7 +455,7 @@ def optimizer(optimizer: callable = tf.keras.optimizers.Adam(), **kwargs):
     >>>     learning_rate=0.1,
     >>>     clipnorm=1.0
     >>> )
-    """
+    """  # noqa: E501
     optimizer_dict = dict(optimizer=optimizer)
     for key in kwargs:
         optimizer_dict[key] = kwargs[key]
@@ -579,7 +579,7 @@ def trainer(
     >>>     save_configs_history=el.configs.save_history(loss_component=False),
     >>>     save_configs_results=el.configs.save_results(model=False)
     >>> )
-    """
+    """  # noqa: E501
     train_dict = dict(
         method=method,
         name=name,
@@ -667,7 +667,7 @@ class Elicit:
         ----------
         save_dir : str or None, optional
             If None the results are only saved as attribute in eliobj loaded in
-            current working environment, If string is provided, results are 
+            current working environment, If string is provided, results are
             saved in folder with with name ``save_dir``.
             The default is ``None.``
         silent : bool, optional
@@ -675,7 +675,7 @@ class Elicit:
             is finished (``True``) or only saved as attribute of the eliobj
             (``False``). The default is ``False``.
         force_fit : bool, optional
-            If the eliobj was already fitted and the user wants to refit it, 
+            If the eliobj was already fitted and the user wants to refit it,
             the user is asked whether they want to overwrite the previous
             fitting results. Setting ``force_fit=True`` allows the user to
             force overfitting without being prompted. The default is ``False``.
@@ -683,13 +683,13 @@ class Elicit:
         Returns
         -------
         history : dict
-            Results saved across epochs (e.g., loss). If ``silent=True`` the 
+            Results saved across epochs (e.g., loss). If ``silent=True`` the
             fit method returns nothing.
 
         Examples
         --------
         >>> eliobj.fit(save_dir=None, silent=True)
-        
+
         >>> history = eliobj.fit(save_dir="results", force_fit=True)
 
         """
@@ -733,7 +733,7 @@ class Elicit:
 
         # initialization of hyperparameter
         (init_prior_model, loss_list, init_prior, init_matrix) = (
-            el.initialization.pre_training(
+            el.initialization.init_prior(
                 expert_elicits,
                 self.initializer,
                 self.parameters,
@@ -784,7 +784,7 @@ class Elicit:
 
             final_dict = {"history": save_hist, "results": save_res}
 
-            el.helpers.save_as_pkl(final_dict, 
+            el.helpers.save_as_pkl(final_dict,
                                    self.trainer["output_path"] + ".pkl")
 
         # return history by default

@@ -43,6 +43,8 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/elicit.helpers';</script>
     <link rel="icon" href="../_static/favicon-light.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -384,14 +386,14 @@ document.write(`
 <span id="elicit-helpers-module"></span><h1>elicit.helpers module<a class="headerlink" href="#module-elicit.helpers" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.helpers.save_as_pkl">
-<span class="sig-prename descclassname"><span class="pre">elicit.helpers.</span></span><span class="sig-name descname"><span class="pre">save_as_pkl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_to_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#save_as_pkl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.save_as_pkl" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.helpers.</span></span><span class="sig-name descname"><span class="pre">save_as_pkl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#save_as_pkl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.save_as_pkl" title="Link to this definition">#</a></dt>
 <dd><p>Helper functions to save a file as pickle.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>variable</strong><span class="classifier">any</span></dt><dd><p>file that needs to be saved.</p>
+<dt><strong>obj</strong><span class="classifier">any</span></dt><dd><p>variable that needs to be saved.</p>
 </dd>
-<dt><strong>path_to_file</strong><span class="classifier">str</span></dt><dd><p>path indicating the file location.</p>
+<dt><strong>save_dir</strong><span class="classifier">str</span></dt><dd><p>path indicating the file location.</p>
 </dd>
 </dl>
 </dd>
@@ -401,6 +403,10 @@ document.write(`
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">save_as_pkl</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;results/file.pkl&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -410,74 +416,285 @@ document.write(`
 
 <dl class="py class">
 <dt class="sig sig-object py" id="elicit.helpers.DoubleBound">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">elicit.helpers.</span></span><span class="sig-name descname"><span class="pre">DoubleBound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lower</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#DoubleBound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.DoubleBound" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">elicit.helpers.</span></span><span class="sig-name descname"><span class="pre">DoubleBound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lower</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#DoubleBound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.DoubleBound" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A variable constrained to be in the open interval
+(<code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code>) is transformed to an unconstrained variable Y
+via a scaled and translated log-odds transform.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>lower</strong><span class="classifier">float</span></dt><dd><p>lower bound of variable x.</p>
+</dd>
+<dt><strong>upper</strong><span class="classifier">float</span></dt><dd><p>upper bound of variable x.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.helpers.DoubleBound.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lower</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#DoubleBound.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.DoubleBound.__init__" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lower</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#DoubleBound.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.DoubleBound.__init__" title="Link to this definition">#</a></dt>
+<dd><p>A variable constrained to be in the open interval
+(<code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code>) is transformed to an unconstrained variable Y
+via a scaled and translated log-odds transform.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>lower</strong><span class="classifier">float</span></dt><dd><p>lower bound of variable x.</p>
+</dd>
+<dt><strong>upper</strong><span class="classifier">float</span></dt><dd><p>upper bound of variable x.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.helpers.DoubleBound.logit">
-<span class="sig-name descname"><span class="pre">logit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#DoubleBound.logit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.DoubleBound.logit" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">logit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#DoubleBound.logit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.DoubleBound.logit" title="Link to this definition">#</a></dt>
+<dd><p>Helper function that implements the logit transformation for
+<span class="math notranslate nohighlight">\(u \in (0,1)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[logit(u) = \log\left(\frac{u}{1-u}\right)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>u</strong><span class="classifier">float</span></dt><dd><p>variable in open unit interval.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>v</strong><span class="classifier">float</span></dt><dd><p>log-odds of u.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.helpers.DoubleBound.inv_logit">
-<span class="sig-name descname"><span class="pre">inv_logit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#DoubleBound.inv_logit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.DoubleBound.inv_logit" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">inv_logit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#DoubleBound.inv_logit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.DoubleBound.inv_logit" title="Link to this definition">#</a></dt>
+<dd><p>Helper function that implements the inverse-logit transformation (i.e.,
+the logistic sigmoid for <span class="math notranslate nohighlight">\(v \in (-\infty,+\infty)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[logit^{-1}(v) = \frac{1}{1+\exp(-v)}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>v</strong><span class="classifier">float</span></dt><dd><p>unconstrained variable</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>u</strong><span class="classifier">float</span></dt><dd><p>logistic sigmoid of the unconstrained variable</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.helpers.DoubleBound.forward">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#DoubleBound.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.DoubleBound.forward" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#DoubleBound.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.DoubleBound.forward" title="Link to this definition">#</a></dt>
+<dd><p>scaled and translated logit transform of variable x with <code class="docutils literal notranslate"><span class="pre">lower</span></code> and
+<code class="docutils literal notranslate"><span class="pre">upper</span></code> bound into an unconstrained variable y.</p>
+<div class="math notranslate nohighlight">
+\[Y = logit\left(\frac{X - lower}{upper - lower}\right)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">float</span></dt><dd><p>variable with lower and upper bound.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>y</strong><span class="classifier">float</span></dt><dd><p>unconstrained variable.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.helpers.DoubleBound.inverse">
-<span class="sig-name descname"><span class="pre">inverse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#DoubleBound.inverse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.DoubleBound.inverse" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">inverse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#DoubleBound.inverse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.DoubleBound.inverse" title="Link to this definition">#</a></dt>
+<dd><p>inverse of the log-odds transform applied to the unconstrained
+variable y in order to transform it into a constrained variable x
+with <code class="docutils literal notranslate"><span class="pre">lower</span></code> and <code class="docutils literal notranslate"><span class="pre">upper</span></code> bound.</p>
+<div class="math notranslate nohighlight">
+\[X = lower + (upper - lower) \cdot logit^{-1}(Y)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>y</strong><span class="classifier">float</span></dt><dd><p>unconstrained variable</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">float</span></dt><dd></dd>
+<dt>constrained variable with lower and upper bound</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="elicit.helpers.LowerBound">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">elicit.helpers.</span></span><span class="sig-name descname"><span class="pre">LowerBound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lower</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#LowerBound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.LowerBound" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">elicit.helpers.</span></span><span class="sig-name descname"><span class="pre">LowerBound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lower</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#LowerBound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.LowerBound" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A variable with a <code class="docutils literal notranslate"><span class="pre">lower</span></code> bound is transformed to an
+unconstrained variable Y via a logarithmic transform.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>lower</strong><span class="classifier">float</span></dt><dd><p>lower bound of variable X.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.helpers.LowerBound.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lower</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#LowerBound.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.LowerBound.__init__" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lower</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#LowerBound.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.LowerBound.__init__" title="Link to this definition">#</a></dt>
+<dd><p>A variable with a <code class="docutils literal notranslate"><span class="pre">lower</span></code> bound is transformed to an
+unconstrained variable Y via a logarithmic transform.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>lower</strong><span class="classifier">float</span></dt><dd><p>lower bound of variable X.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.helpers.LowerBound.forward">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#LowerBound.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.LowerBound.forward" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#LowerBound.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.LowerBound.forward" title="Link to this definition">#</a></dt>
+<dd><p>logarithmic transform of variable x with <code class="docutils literal notranslate"><span class="pre">lower</span></code> bound into an
+unconstrained variable y.</p>
+<div class="math notranslate nohighlight">
+\[Y = \log(X - lower)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">float</span></dt><dd><p>variable with a lower bound.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>y</strong><span class="classifier">float</span></dt><dd><p>unconstrained variable.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.helpers.LowerBound.inverse">
-<span class="sig-name descname"><span class="pre">inverse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#LowerBound.inverse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.LowerBound.inverse" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">inverse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#LowerBound.inverse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.LowerBound.inverse" title="Link to this definition">#</a></dt>
+<dd><p>exponential transform of unconstrained variable y into a constrained
+variable x with <code class="docutils literal notranslate"><span class="pre">lower</span></code> bound.</p>
+<div class="math notranslate nohighlight">
+\[X = \exp(Y) + lower\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>y</strong><span class="classifier">float</span></dt><dd><p>unconstrained variable.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">float</span></dt><dd><p>variable with a lower bound.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="elicit.helpers.UpperBound">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">elicit.helpers.</span></span><span class="sig-name descname"><span class="pre">UpperBound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upper</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#UpperBound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.UpperBound" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">elicit.helpers.</span></span><span class="sig-name descname"><span class="pre">UpperBound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upper</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#UpperBound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.UpperBound" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A variable with an <code class="docutils literal notranslate"><span class="pre">upper</span></code> bound is transformed into an
+unconstrained variable Y via a logarithmic transform.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>upper</strong><span class="classifier">float</span></dt><dd><p>upper bound of variable X.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.helpers.UpperBound.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upper</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#UpperBound.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.UpperBound.__init__" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upper</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#UpperBound.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.UpperBound.__init__" title="Link to this definition">#</a></dt>
+<dd><p>A variable with an <code class="docutils literal notranslate"><span class="pre">upper</span></code> bound is transformed into an
+unconstrained variable Y via a logarithmic transform.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>upper</strong><span class="classifier">float</span></dt><dd><p>upper bound of variable X.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.helpers.UpperBound.forward">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#UpperBound.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.UpperBound.forward" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#UpperBound.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.UpperBound.forward" title="Link to this definition">#</a></dt>
+<dd><p>logarithmic transform of variable x with <code class="docutils literal notranslate"><span class="pre">upper</span></code> bound into an
+unconstrained variable y.</p>
+<div class="math notranslate nohighlight">
+\[Y = \log(upper - X)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">float</span></dt><dd><p>variable with an upper bound.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>y</strong><span class="classifier">float</span></dt><dd><p>unconstrained variable.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.helpers.UpperBound.inverse">
-<span class="sig-name descname"><span class="pre">inverse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#UpperBound.inverse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.UpperBound.inverse" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">inverse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/helpers.html#UpperBound.inverse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.helpers.UpperBound.inverse" title="Link to this definition">#</a></dt>
+<dd><p>exponential transform of unconstrained variable y into a constrained
+variable x with <code class="docutils literal notranslate"><span class="pre">upper</span></code> bound.</p>
+<div class="math notranslate nohighlight">
+\[X = upper - \exp(Y)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>y</strong><span class="classifier">float</span></dt><dd><p>unconstrained variable.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">float</span></dt><dd><p>variable with an upper bound.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 

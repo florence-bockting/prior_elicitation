@@ -365,28 +365,26 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.configs.save_history">
 <span class="sig-prename descclassname"><span class="pre">elicit.configs.</span></span><span class="sig-name descname"><span class="pre">save_history</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loss</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_component</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyperparameter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyperparameter_gradient</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/configs.html#save_history"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.configs.save_history" title="Link to this definition">#</a></dt>
-<dd><blockquote>
-<div><p>Controls whether sub-results of the history object should be included
+<dd><p>Controls whether sub-results of the history object should be included
 or excluded. Results are saved across epochs. By default all
 sub-results are included.</p>
-</div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>loss</strong><span class="classifier">bool, optional</span></dt><dd><p>total loss per epoch. The default is True.</p>
+<dt><strong>loss</strong><span class="classifier">bool, optional</span></dt><dd><p>total loss per epoch. The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
-<dt><strong>loss_component</strong><span class="classifier">bool, optional</span></dt><dd><p>loss per loss-component per epoch. The default is True.</p>
+<dt><strong>loss_component</strong><span class="classifier">bool, optional</span></dt><dd><p>loss per loss-component per epoch. The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
-<dt><strong>time</strong><span class="classifier">bool, optional</span></dt><dd><p>time in sec per epoch. The default is True.</p>
+<dt><strong>time</strong><span class="classifier">bool, optional</span></dt><dd><p>time in sec per epoch. The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
 <dt><strong>hyperparameter</strong><span class="classifier">bool, optional</span></dt><dd><p>‘parametric_prior’ method: Trainable hyperparameters of parametric
 prior distributions.
 ‘deep_prior’ method: Mean and standard deviation of each marginal
 from the joint prior.
-The default is True.</p>
+The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
 <dt><strong>hyperparameter_gradient</strong><span class="classifier">bool, optional</span></dt><dd><p>Gradients of the hyperparameter. Only for ‘parametric_prior’ method.
-The default is True.</p>
+The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
 </dl>
 </dd>
@@ -410,43 +408,43 @@ By default all sub-results are included.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>target_quantities</strong><span class="classifier">bool, optional</span></dt><dd><p>simulation-based target quantities. The default is True.</p>
+<dt><strong>target_quantities</strong><span class="classifier">bool, optional</span></dt><dd><p>simulation-based target quantities. The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
-<dt><strong>elicited_statistics</strong><span class="classifier">bool, optional</span></dt><dd><p>simulation-based elicited statistics. The default is True.</p>
+<dt><strong>elicited_statistics</strong><span class="classifier">bool, optional</span></dt><dd><p>simulation-based elicited statistics. The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
 <dt><strong>prior_samples</strong><span class="classifier">bool, optional</span></dt><dd><p>samples from simulation-based prior distributions.
-The default is True.</p>
+The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
 <dt><strong>model_samples</strong><span class="classifier">bool, optional</span></dt><dd><p>output variables from the simulation-based generative model.
-The default is True.</p>
+The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
 <dt><strong>model</strong><span class="classifier">bool, optional</span></dt><dd><p>fitted elicit model object including the trainable variables.
-The default is True.</p>
+The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
-<dt><strong>expert_elicited_statistics</strong><span class="classifier">bool, optional</span></dt><dd><p>expert-elicited statistics. The default is True.</p>
+<dt><strong>expert_elicited_statistics</strong><span class="classifier">bool, optional</span></dt><dd><p>expert-elicited statistics. The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
 <dt><strong>expert_prior_samples</strong><span class="classifier">bool, optional</span></dt><dd><p>if oracle is used: samples from the true prior distribution,
-otherwise it is None. The default is True.</p>
+otherwise it is None. The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
 <dt><strong>init_loss_list</strong><span class="classifier">bool, optional</span></dt><dd><p>initialization phase: Losses related to the samples drawn from the
 initialization distribution.
 Only included for method ‘parametric_prior’.
-The default is True.</p>
+The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
 <dt><strong>init_prior</strong><span class="classifier">bool, optional</span></dt><dd><p>initialized elicit model object including the trainable variables.
 Only included for method ‘parametric_prior’.
-The default is True.</p>
+The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
 <dt><strong>init_matrix</strong><span class="classifier">bool, optional</span></dt><dd><p>initialization phase: samples drawn from the initialization
 distribution for each hyperparameter.
 Only included for method ‘parametric_prior’.
-The default is True.</p>
+The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
 <dt><strong>loss_tensor_expert</strong><span class="classifier">bool, optional</span></dt><dd><p>expert term in loss component for computing the discrepancy.
-The default is True.</p>
+The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
 <dt><strong>loss_tensor_model</strong><span class="classifier">bool, optional</span></dt><dd><p>simulation-based term in loss component for computing the
-discrepancy. The default is True.</p>
+discrepancy. The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
 </dl>
 </dd>

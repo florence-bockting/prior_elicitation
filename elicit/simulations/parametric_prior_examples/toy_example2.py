@@ -121,7 +121,7 @@ elicit = el.Elicit(
         ),
         el.target(
             name="log_R2",
-            query=el.queries.custom(test_func),
+            query=el.queries.quantiles((5, 25, 50, 75, 95)),
             loss=el.losses.MMD2(kernel="energy"),
             weight=1.0
         )
@@ -140,7 +140,7 @@ elicit = el.Elicit(
         method="parametric_prior",
         name="toy2_lhs",
         seed=0,
-        epochs=4
+        epochs=400
     ),
     initializer=el.initializer(
         method="lhs",
@@ -154,7 +154,7 @@ elicit = el.Elicit(
     #network = el.networks.NF(...) # TODO vs. el.normalizing_flow(...)
 )
 
-hist = elicit.fit(save_dir="results")
+hist = elicit.fit(save_dir=None)
 
 final_res = pd.read_pickle("./results/parametric_prior/toy2_lhs_0.pkl")
 
