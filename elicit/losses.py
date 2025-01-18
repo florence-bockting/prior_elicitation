@@ -10,37 +10,29 @@ tfd = tfp.distributions
 bfn = bf.networks
 
 
-def compute_loss_components(elicited_statistics):
+def preprocess(elicited_statistics: dict):
     """
-    Computes the single loss components used for computing the discrepancy
-    between the elicited statistics. This computation depends on the
-    method as specified in the 'combine-loss' argument.
+    Preprocess elicited statistics such that they have the required format for
+    computing the individual losses between expert- and simulated statistics.
 
     Parameters
     ----------
     elicited_statistics : dict
         dictionary including the elicited statistics.
-    glob_dict : dict
-        dictionary including all user-input settings.
-    expert : bool
-        if workflow is run to simulate a pre-specified ground truth; expert is
-        set as 'True'. As consequence the files are saved in a special 'expert'
-        folder.
 
     Returns
     -------
-    loss_comp_res : dict
-        dictionary including all loss components which will be used to compute
-        the discrepancy.
+    preprocessed_elicits : dict
+        dictionary including all preprocessed elicited statistics which will
+        enter the loss function to compute the individual loss components.
 
     """
 
     # extract names from elicited statistics
     name_elicits = list(elicited_statistics.keys())
 
-
     # prepare dictionary for storing results
-    loss_comp_res = dict()
+    preprocessed_elicits = dict()
     # initialize some helpers for keeping track of target quantity
     target_control = []
     i_target = 0
@@ -58,163 +50,108 @@ def compute_loss_components(elicited_statistics):
         # if target quantity changes go with index one up
         if not eval_target:
             i_target += 1
-        # extract loss component
-        loss_comp = elicited_statistics[name]
+        # extract data
+        tensor_elicit = elicited_statistics[name]
 
-        assert tf.rank(loss_comp) <= 2, "elicited statistics can only have 2 dimensions."  # noqa
+        assert tf.rank(tensor_elicit) <= 2, "elicited statistics can only have 2 dimensions."  # noqa
 
-        if tf.rank(loss_comp) == 1:
+        if tf.rank(tensor_elicit) == 1:
             # add a last axis for loss computation
-            final_loss_comp = tf.expand_dims(loss_comp, axis=-1)
+            prep_elicit = tf.expand_dims(tensor_elicit, axis=-1)
             # store result
-            loss_comp_res[f"{name}_loss"] = final_loss_comp
+            preprocessed_elicits[f"{name}_loss"] = prep_elicit
         else:
-            loss_comp_res[f"{name}_loss_{i_target}"] = loss_comp
+            preprocessed_elicits[f"{name}_loss_{i_target}"] = tensor_elicit
 
-    return loss_comp_res
+    return preprocessed_elicits
 
 
-def compute_discrepancy(loss_components_expert, loss_components_training,
-                        targets):
+def indiv_loss(elicit_expert, elicit_training, targets):
     """
-    Computes the discrepancy between all loss components using a specified
-    discrepancy measure and returns a list with all loss values.
+    Computes the individual loss between expert data and model-simulated data.
 
     Parameters
     ----------
-    loss_components_expert : dict
-        dictionary including all loss components derived from the
-        expert-elicited statistics.
-    loss_components_training : dict
-        dictionary including all loss components derived from the model
-        simulations. (The names (keys) between loss_components_expert and \
-                      loss_components_training must match)
-    glob_dict : dict
-        dictionary including all user-input settings.
+    elicit_expert : dict
+        dictionary including all preprocessed elicited statistics
+    elicit_training : dict
+        dictionary including all preprocessed model statistics
+    targets : dict
+        user-input from :func:`elicit.elicit.target`
 
     Returns
     -------
-    loss_per_component : list
-        list of loss value for each loss component
+    indiv_losses : list
+        list of individual losses for each loss component
 
     """
 
     # create dictionary for storing results
-    loss_per_component = []
+    indiv_losses = []
     # extract expert loss components by name
-    keys_loss_comps = list(loss_components_expert.keys())
+    name_prep_elicits = list(elicit_expert.keys())
     # compute discrepancy
-    for i, name in enumerate(keys_loss_comps):
+    for i, name in enumerate(name_prep_elicits):
         # import loss function
         loss_function = targets[i]["loss"]
-        # broadcast expert loss to training-shape
-        loss_comp_expert = tf.broadcast_to(
-            loss_components_expert[name],
+        # broadcast expert loss to training data-shape
+        elicit_expert_brdcst = tf.broadcast_to(
+            elicit_expert[name],
             shape=(
-                loss_components_training[name].shape[0],
-                loss_components_expert[name].shape[1],
-            ),
-        )
+                elicit_training[name].shape[0], elicit_expert[name].shape[1])
+            )
         # compute loss
-        loss = loss_function(loss_comp_expert, loss_components_training[name])
-        loss_per_component.append(loss)
+        indiv_loss = loss_function(elicit_expert_brdcst, elicit_training[name])
+        indiv_losses.append(indiv_loss)
 
-    return loss_per_component
+    return indiv_losses
 
 
-def compute_loss(
-    training_elicited_statistics, expert_elicited_statistics, epoch, targets
-):
+def total_loss(elicit_training: dict, elicit_expert: dict, epoch: int,
+               targets: dict):
     """
-    Wrapper around the loss computation from elicited statistics to final
-    loss value.
+    Computes the weighted average across all individual losses between expert
+    data and model simulations.
 
     Parameters
     ----------
-    training_elicited_statistics : dict
-        dictionary containing the expert elicited statistics.
-    expert_elicited_statistics : dict
-        dictionary containing the model-simulated elicited statistics.
-    global_dict : dict
-        global dictionary with all user input specifications.
+    elicit_training : dict
+        elicited statistics simulated by the model.
+    elicit_expert : dict
+        elicited statistics as queried from the expert.
     epoch : int
-        epoch .
+        epoch (iteration within optimization process).
+    targets : dict
+        user-input from :func:`elicit.elicit.target`
 
     Returns
     -------
-    total_loss : float
-        total loss value.
+    loss : float
+        weighted average across individual losses quantifying the discrepancy
+        between expert data and model simulations.
+    individual_losses : list
+        list of individual losses for each loss component.
+    elicit_expert_prep : dict
+        dictionary including all preprocessed expert elicited statistics.
+    elicit_training_prep : dict
+        dictionary including all preprocessed model-simulated elicited
+        statistics.
 
     """
-    # regularization term for preventing degenerated solutions in var
-    # collapse to zero used from Manderson and Goudie (2024)
-    def regulariser(prior_samples):
-        """
-        Regularizer term for loss function: minus log sd of each prior
-        distribution (priors with larger sds should be prefered)
+    # preprocess expert data and simulated data for usage in loss computation
+    elicit_expert_prep = preprocess(elicit_expert)
+    elicit_training_prep = preprocess(elicit_training)
+    # compute individual losses for each loss component
+    individual_losses = indiv_loss(
+        elicit_expert_prep, elicit_training_prep, targets)
+    # compute weighted average across individual losses to get the final loss
+    # TODO: check whether order of loss_per_component and target quantities
+    # is equivalent!
+    loss=0
+    for i in range(len(targets)):
+        loss += tf.multiply(individual_losses[i], targets[i]["weight"])
 
-        Parameters
-        ----------
-        prior_samples : tf.Tensor
-            samples from prior distributions.
-
-        Returns
-        -------
-        float
-            the negative mean log std across all prior distributions.
-
-        """
-        log_sd = tf.math.log(tf.math.reduce_std(prior_samples, 1))
-        mean_log_sd = tf.reduce_mean(log_sd)
-        return -mean_log_sd
-
-    def compute_total_loss(epoch, loss_per_component, targets):
-        """
-        applies dynamic weight averaging for multi-objective loss function
-        if specified. If loss_weighting has been set to None, all weights
-        get an equal weight of 1.
-
-        Parameters
-        ----------
-        epoch : int
-            curernt epoch.
-        loss_per_component : list of floats
-            list of loss values per loss component.
-        global_dict : dict
-            global dictionary with all user input specifications.
-
-        Returns
-        -------
-        total_loss : float
-            total loss value (either weighted or unweighted).
-
-        """
-
-        # loss_per_component_current = loss_per_component
-        # TODO: check whether order of loss_per_component and target quantities
-        # is equivalent!
-        total_loss=0
-        # create subdictionary for better readability
-        for i in range(len(targets)):
-            total_loss += tf.multiply(
-                loss_per_component[i], targets[i]["weight"]
-                )
-
-        return total_loss
-
-    loss_components_expert = compute_loss_components(
-        expert_elicited_statistics
-    )
-    loss_components_training = compute_loss_components(
-        training_elicited_statistics
-    )
-    loss_per_component = compute_discrepancy(
-        loss_components_expert, loss_components_training, targets
-    )
-    weighted_total_loss=compute_total_loss(epoch, loss_per_component, targets)
-
-    return (weighted_total_loss, loss_components_expert,
-            loss_components_training, loss_per_component)
+    return (loss, individual_losses, elicit_expert_prep, elicit_training_prep)
 
 
 def L2(loss_component_expert, loss_component_training,
@@ -241,25 +178,35 @@ def L2(loss_component_expert, loss_component_training,
 
 
 class MMD2:
-    def __init__(self, kernel : str = "energy", sigma : int or None = None,
-                 **kwargs):
+    def __init__(self, kernel : str = "energy", **kwargs):
         """
         Computes the biased, squared maximum mean discrepancy
 
         Parameters
         ----------
         kernel : str
-            kernel type used for computing the MMD such as "gaussian", "energy"
-            The default is "energy".
-        sigma : int, optional
-            Variance parameter used in the gaussian kernel.
-            The default is None.
-        **kwargs : keyword arguments
-            Additional keyword arguments.
+            kernel type used for computing the MMD.
+            Currently implemented kernels are "gaussian", "energy".
+            When using a gaussian kernel an additional 'sigma' argument has to
+            be passed.
+            The default kernel is "energy".
+        **kwargs : any
+            additional keyword arguments that might be required by the 
+            different individual kernels
+
+        Examples
+        --------
+        >>> el.losses.MMD2(kernel="energy")
+
+        >>> el.losses.MMD2(kernel="gaussian", sigma = 1.)
 
         """
         self.kernel_name = kernel
-        self.sigma = sigma
+        # ensure that all additionally, required arguments are provided for
+        # the respective kernel
+        if kernel == "gaussian":
+            assert "sigma" in list(kwargs.keys()), "You need to pass a 'sigma' argument when using a gaussian kernel in the MMD loss"  # noqa
+            self.sigma=kwargs["sigma"]
 
     def __call__(self, x, y):
         """
@@ -298,30 +245,78 @@ class MMD2:
         u_yy = self.diag(yy)[:,:,None] - 2*yy + self.diag(yy)[:,None,:]
 
         # apply kernel function to squared difference
-        XX = self.kernel(u_xx, self.kernel_name, self.sigma)
-        XY = self.kernel(u_xy, self.kernel_name, self.sigma)
-        YY = self.kernel(u_yy, self.kernel_name, self.sigma)
+        XX = self.kernel(u_xx, self.kernel_name)
+        XY = self.kernel(u_xy, self.kernel_name)
+        YY = self.kernel(u_yy, self.kernel_name)
 
         # Step 2
         # compute biased, squared MMD
-        MMD2 = tf.reduce_mean(XX, (1,2)) - 2*tf.reduce_mean(XY, (1,2)) + tf.reduce_mean(YY, (1,2))
+        MMD2 = tf.reduce_mean(XX, (1,2))
+        MMD2 -= 2*tf.reduce_mean(XY, (1,2))
+        MMD2 += tf.reduce_mean(YY, (1,2))
+
         MMD2_mean = tf.reduce_mean(MMD2)
 
         return MMD2_mean
 
-    def clip(self, u):
+    def clip(self, u: float):
+        """
+        upper and lower clipping of value `u` to improve numerical stability
+
+        Parameters
+        ----------
+        u : float
+            result of prior computation.
+
+        Returns
+        -------
+        u_clipped : float
+            clipped u value with ``min=1e-8`` and ``max=1e10``.
+
+        """
         u_clipped = tf.clip_by_value(u, clip_value_min=1e-8, 
                                      clip_value_max=int(1e10))
         return u_clipped
 
     def diag(self, xx):
+        """
+        get diagonale elements of a matrix, whereby the first tensor dimension
+        are batches and should not be considered to get diagonale elements.
+
+        Parameters
+        ----------
+        xx : tensor
+            Similarity matrices with batch dimension in axis=0.
+
+        Returns
+        -------
+        diag : tensor
+            diagonale elements of matrices per batch.
+
+        """
         diag = tf.experimental.numpy.diagonal(xx, axis1=1, axis2=2)
         return diag
 
-    def kernel(self, u, kernel, sigma):
+    def kernel(self, u: float, kernel: str):
+        """
+        Kernel used in MMD to compute discrepancy between samples.
+
+        Parameters
+        ----------
+        u : float
+            squared distance between samples.
+        kernel : str
+            name of kernel used for computing discrepancy.
+
+        Returns
+        -------
+        d : float
+            discrepancy between samples.
+
+        """
         if kernel=="energy":
             # clipping for numerical stability reasons
             d=-tf.math.sqrt(self.clip(u))
         if kernel=="gaussian":
-            d=tf.exp(-0.5*tf.divide(u, sigma))
+            d=tf.exp(-0.5*tf.divide(u, self.sigma))
         return d

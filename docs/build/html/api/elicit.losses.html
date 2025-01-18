@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=87e54e7c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -166,13 +166,12 @@
 <li class="toctree-l4"><a class="reference internal" href="elicit.extras.utils.html">elicit.extras.utils module</a></li>
 </ul>
 </details></li>
-<li class="toctree-l3"><a class="reference internal" href="elicit.configs.html">elicit.configs module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.elicit.html">elicit.elicit module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="elicit.helpers.html">elicit.helpers module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.initialization.html">elicit.initialization module</a></li>
 <li class="toctree-l3 current active"><a class="current reference internal" href="#">elicit.losses module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.networks.html">elicit.networks module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.optimization.html">elicit.optimization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.plots.html">elicit.plots module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.simulations.html">elicit.simulations module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.targets.html">elicit.targets module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.utils.html">elicit.utils module</a></li>
@@ -347,9 +346,9 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.losses.compute_loss_components"><code class="docutils literal notranslate"><span class="pre">compute_loss_components()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.losses.compute_discrepancy"><code class="docutils literal notranslate"><span class="pre">compute_discrepancy()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.losses.compute_loss"><code class="docutils literal notranslate"><span class="pre">compute_loss()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.losses.preprocess"><code class="docutils literal notranslate"><span class="pre">preprocess()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.losses.indiv_loss"><code class="docutils literal notranslate"><span class="pre">indiv_loss()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.losses.total_loss"><code class="docutils literal notranslate"><span class="pre">total_loss()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.losses.L2"><code class="docutils literal notranslate"><span class="pre">L2()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.losses.MMD2"><code class="docutils literal notranslate"><span class="pre">MMD2</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.losses.MMD2.__init__"><code class="docutils literal notranslate"><span class="pre">MMD2.__init__()</span></code></a></li>
@@ -373,28 +372,21 @@ document.write(`
   <section id="module-elicit.losses">
 <span id="elicit-losses-module"></span><h1>elicit.losses module<a class="headerlink" href="#module-elicit.losses" title="Link to this heading">#</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="elicit.losses.compute_loss_components">
-<span class="sig-prename descclassname"><span class="pre">elicit.losses.</span></span><span class="sig-name descname"><span class="pre">compute_loss_components</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elicited_statistics</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#compute_loss_components"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.compute_loss_components" title="Link to this definition">#</a></dt>
-<dd><p>Computes the single loss components used for computing the discrepancy
-between the elicited statistics. This computation depends on the
-method as specified in the ‘combine-loss’ argument.</p>
+<dt class="sig sig-object py" id="elicit.losses.preprocess">
+<span class="sig-prename descclassname"><span class="pre">elicit.losses.</span></span><span class="sig-name descname"><span class="pre">preprocess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elicited_statistics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#preprocess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.preprocess" title="Link to this definition">#</a></dt>
+<dd><p>Preprocess elicited statistics such that they have the required format for
+computing the individual losses between expert- and simulated statistics.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>elicited_statistics</strong><span class="classifier">dict</span></dt><dd><p>dictionary including the elicited statistics.</p>
 </dd>
-<dt><strong>glob_dict</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all user-input settings.</p>
-</dd>
-<dt><strong>expert</strong><span class="classifier">bool</span></dt><dd><p>if workflow is run to simulate a pre-specified ground truth; expert is
-set as ‘True’. As consequence the files are saved in a special ‘expert’
-folder.</p>
-</dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>loss_comp_res</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all loss components which will be used to compute
-the discrepancy.</p>
+<dt><strong>preprocessed_elicits</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all preprocessed elicited statistics which will
+enter the loss function to compute the individual loss components.</p>
 </dd>
 </dl>
 </dd>
@@ -402,26 +394,23 @@ the discrepancy.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="elicit.losses.compute_discrepancy">
-<span class="sig-prename descclassname"><span class="pre">elicit.losses.</span></span><span class="sig-name descname"><span class="pre">compute_discrepancy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loss_components_expert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_components_training</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#compute_discrepancy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.compute_discrepancy" title="Link to this definition">#</a></dt>
-<dd><p>Computes the discrepancy between all loss components using a specified
-discrepancy measure and returns a list with all loss values.</p>
+<dt class="sig sig-object py" id="elicit.losses.indiv_loss">
+<span class="sig-prename descclassname"><span class="pre">elicit.losses.</span></span><span class="sig-name descname"><span class="pre">indiv_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elicit_expert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elicit_training</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#indiv_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.indiv_loss" title="Link to this definition">#</a></dt>
+<dd><p>Computes the individual loss between expert data and model-simulated data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>loss_components_expert</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all loss components derived from the
-expert-elicited statistics.</p>
+<dt><strong>elicit_expert</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all preprocessed elicited statistics</p>
 </dd>
-<dt><strong>loss_components_training</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all loss components derived from the model
-simulations. (The names (keys) between loss_components_expert and                       loss_components_training must match)</p>
+<dt><strong>elicit_training</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all preprocessed model statistics</p>
 </dd>
-<dt><strong>glob_dict</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all user-input settings.</p>
+<dt><strong>targets</strong><span class="classifier">dict</span></dt><dd><p>user-input from <a class="reference internal" href="elicit.elicit.html#elicit.elicit.target" title="elicit.elicit.target"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.target()</span></code></a></p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>loss_per_component</strong><span class="classifier">list</span></dt><dd><p>list of loss value for each loss component</p>
+<dt><strong>indiv_losses</strong><span class="classifier">list</span></dt><dd><p>list of individual losses for each loss component</p>
 </dd>
 </dl>
 </dd>
@@ -429,26 +418,34 @@ simulations. (The names (keys) between loss_components_expert and               
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="elicit.losses.compute_loss">
-<span class="sig-prename descclassname"><span class="pre">elicit.losses.</span></span><span class="sig-name descname"><span class="pre">compute_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">training_elicited_statistics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expert_elicited_statistics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#compute_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.compute_loss" title="Link to this definition">#</a></dt>
-<dd><p>Wrapper around the loss computation from elicited statistics to final
-loss value.</p>
+<dt class="sig sig-object py" id="elicit.losses.total_loss">
+<span class="sig-prename descclassname"><span class="pre">elicit.losses.</span></span><span class="sig-name descname"><span class="pre">total_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elicit_training</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elicit_expert</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#total_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.total_loss" title="Link to this definition">#</a></dt>
+<dd><p>Computes the weighted average across all individual losses between expert
+data and model simulations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>training_elicited_statistics</strong><span class="classifier">dict</span></dt><dd><p>dictionary containing the expert elicited statistics.</p>
+<dt><strong>elicit_training</strong><span class="classifier">dict</span></dt><dd><p>elicited statistics simulated by the model.</p>
 </dd>
-<dt><strong>expert_elicited_statistics</strong><span class="classifier">dict</span></dt><dd><p>dictionary containing the model-simulated elicited statistics.</p>
+<dt><strong>elicit_expert</strong><span class="classifier">dict</span></dt><dd><p>elicited statistics as queried from the expert.</p>
 </dd>
-<dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>global dictionary with all user input specifications.</p>
+<dt><strong>epoch</strong><span class="classifier">int</span></dt><dd><p>epoch (iteration within optimization process).</p>
 </dd>
-<dt><strong>epoch</strong><span class="classifier">int</span></dt><dd><p>epoch .</p>
+<dt><strong>targets</strong><span class="classifier">dict</span></dt><dd><p>user-input from <a class="reference internal" href="elicit.elicit.html#elicit.elicit.target" title="elicit.elicit.target"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.target()</span></code></a></p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>total_loss</strong><span class="classifier">float</span></dt><dd><p>total loss value.</p>
+<dt><strong>loss</strong><span class="classifier">float</span></dt><dd><p>weighted average across individual losses quantifying the discrepancy
+between expert data and model simulations.</p>
+</dd>
+<dt><strong>individual_losses</strong><span class="classifier">list</span></dt><dd><p>list of individual losses for each loss component.</p>
+</dd>
+<dt><strong>elicit_expert_prep</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all preprocessed expert elicited statistics.</p>
+</dd>
+<dt><strong>elicit_training_prep</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all preprocessed model-simulated elicited
+statistics.</p>
 </dd>
 </dl>
 </dd>
@@ -478,41 +475,57 @@ supported by tf.norm. Default is ‘euclidean’.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="elicit.losses.MMD2">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">elicit.losses.</span></span><span class="sig-name descname"><span class="pre">MMD2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kernel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'energy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#MMD2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.MMD2" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">elicit.losses.</span></span><span class="sig-name descname"><span class="pre">MMD2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kernel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'energy'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#MMD2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.MMD2" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Computes the biased, squared maximum mean discrepancy</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>kernel</strong><span class="classifier">str</span></dt><dd><p>kernel type used for computing the MMD such as “gaussian”, “energy”
-The default is “energy”.</p>
+<dt><strong>kernel</strong><span class="classifier">str</span></dt><dd><p>kernel type used for computing the MMD.
+Currently implemented kernels are “gaussian”, “energy”.
+When using a gaussian kernel an additional ‘sigma’ argument has to
+be passed.
+The default kernel is “energy”.</p>
 </dd>
-<dt><strong>sigma</strong><span class="classifier">int, optional</span></dt><dd><p>Variance parameter used in the gaussian kernel.
-The default is None.</p>
-</dd>
-<dt><strong>**kwargs</strong><span class="classifier">keyword arguments</span></dt><dd><p>Additional keyword arguments.</p>
+<dt><strong>**kwargs</strong><span class="classifier">any</span></dt><dd><p>additional keyword arguments that might be required by the 
+different individual kernels</p>
 </dd>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">el</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">MMD2</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;energy&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">el</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">MMD2</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;gaussian&quot;</span><span class="p">,</span> <span class="n">sigma</span> <span class="o">=</span> <span class="mf">1.</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.losses.MMD2.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kernel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'energy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#MMD2.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.MMD2.__init__" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kernel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'energy'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#MMD2.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.MMD2.__init__" title="Link to this definition">#</a></dt>
 <dd><p>Computes the biased, squared maximum mean discrepancy</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>kernel</strong><span class="classifier">str</span></dt><dd><p>kernel type used for computing the MMD such as “gaussian”, “energy”
-The default is “energy”.</p>
+<dt><strong>kernel</strong><span class="classifier">str</span></dt><dd><p>kernel type used for computing the MMD.
+Currently implemented kernels are “gaussian”, “energy”.
+When using a gaussian kernel an additional ‘sigma’ argument has to
+be passed.
+The default kernel is “energy”.</p>
 </dd>
-<dt><strong>sigma</strong><span class="classifier">int, optional</span></dt><dd><p>Variance parameter used in the gaussian kernel.
-The default is None.</p>
-</dd>
-<dt><strong>**kwargs</strong><span class="classifier">keyword arguments</span></dt><dd><p>Additional keyword arguments.</p>
+<dt><strong>**kwargs</strong><span class="classifier">any</span></dt><dd><p>additional keyword arguments that might be required by the 
+different individual kernels</p>
 </dd>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">el</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">MMD2</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;energy&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">el</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">MMD2</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;gaussian&quot;</span><span class="p">,</span> <span class="n">sigma</span> <span class="o">=</span> <span class="mf">1.</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -543,18 +556,66 @@ elicited and model simulated data.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.losses.MMD2.clip">
-<span class="sig-name descname"><span class="pre">clip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#MMD2.clip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.MMD2.clip" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">clip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#MMD2.clip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.MMD2.clip" title="Link to this definition">#</a></dt>
+<dd><p>upper and lower clipping of value <cite>u</cite> to improve numerical stability</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>u</strong><span class="classifier">float</span></dt><dd><p>result of prior computation.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>u_clipped</strong><span class="classifier">float</span></dt><dd><p>clipped u value with <code class="docutils literal notranslate"><span class="pre">min=1e-8</span></code> and <code class="docutils literal notranslate"><span class="pre">max=1e10</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.losses.MMD2.diag">
 <span class="sig-name descname"><span class="pre">diag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#MMD2.diag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.MMD2.diag" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>get diagonale elements of a matrix, whereby the first tensor dimension
+are batches and should not be considered to get diagonale elements.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>xx</strong><span class="classifier">tensor</span></dt><dd><p>Similarity matrices with batch dimension in axis=0.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>diag</strong><span class="classifier">tensor</span></dt><dd><p>diagonale elements of matrices per batch.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.losses.MMD2.kernel">
-<span class="sig-name descname"><span class="pre">kernel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#MMD2.kernel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.MMD2.kernel" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">kernel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#MMD2.kernel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.MMD2.kernel" title="Link to this definition">#</a></dt>
+<dd><p>Kernel used in MMD to compute discrepancy between samples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>u</strong><span class="classifier">float</span></dt><dd><p>squared distance between samples.</p>
+</dd>
+<dt><strong>kernel</strong><span class="classifier">str</span></dt><dd><p>name of kernel used for computing discrepancy.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>d</strong><span class="classifier">float</span></dt><dd><p>discrepancy between samples.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -605,9 +666,9 @@ elicited and model simulated data.</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.losses.compute_loss_components"><code class="docutils literal notranslate"><span class="pre">compute_loss_components()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.losses.compute_discrepancy"><code class="docutils literal notranslate"><span class="pre">compute_discrepancy()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.losses.compute_loss"><code class="docutils literal notranslate"><span class="pre">compute_loss()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.losses.preprocess"><code class="docutils literal notranslate"><span class="pre">preprocess()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.losses.indiv_loss"><code class="docutils literal notranslate"><span class="pre">indiv_loss()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.losses.total_loss"><code class="docutils literal notranslate"><span class="pre">total_loss()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.losses.L2"><code class="docutils literal notranslate"><span class="pre">L2()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.losses.MMD2"><code class="docutils literal notranslate"><span class="pre">MMD2</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.losses.MMD2.__init__"><code class="docutils literal notranslate"><span class="pre">MMD2.__init__()</span></code></a></li>

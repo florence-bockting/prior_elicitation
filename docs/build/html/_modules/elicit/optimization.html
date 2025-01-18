@@ -29,7 +29,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
-    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -165,9 +165,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../api/elicit.extras.utils.html">elicit.extras.utils module</a></li>
 </ul>
 </details></li>
-<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.configs.html">elicit.configs module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.elicit.html">elicit.elicit module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.helpers.html">elicit.helpers module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.initialization.html">elicit.initialization module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.losses.html">elicit.losses module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.networks.html">elicit.networks module</a></li>
@@ -307,12 +305,8 @@ document.write(`
 
 <span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
 <span class="kn">import</span> <span class="nn">tensorflow_probability</span> <span class="k">as</span> <span class="nn">tfp</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">elicit</span> <span class="k">as</span> <span class="nn">el</span>
+<span class="kn">import</span> <span class="nn">time</span>
 
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
 
@@ -358,8 +352,6 @@ document.write(`
     <span class="n">prior_model</span> <span class="o">=</span> <span class="n">prior_model_init</span>
     <span class="n">total_loss</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">component_losses</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">loss_comp_expert</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">loss_comp_model</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">gradients_ep</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">time_per_epoch</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -372,8 +364,7 @@ document.write(`
     <span class="c1"># start training loop</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Training&quot;</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;epochs&quot;</span><span class="p">])):</span>
-        <span class="k">if</span> <span class="n">epoch</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">disable</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+
         <span class="c1"># runtime of one epoch</span>
         <span class="n">epoch_time_start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
@@ -384,19 +375,17 @@ document.write(`
                 <span class="n">prior_model</span><span class="p">,</span> <span class="n">trainer</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">targets</span>
             <span class="p">)</span>
             <span class="c1"># compute total loss as weighted sum</span>
-            <span class="p">(</span><span class="n">weighted_total_loss</span><span class="p">,</span> <span class="n">loss_components_expert</span><span class="p">,</span>
-             <span class="n">loss_components_training</span><span class="p">,</span> <span class="n">loss_per_component</span>
-             <span class="p">)</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">compute_loss</span><span class="p">(</span>
-                <span class="n">train_elicits</span><span class="p">,</span>
-                <span class="n">expert_elicited_statistics</span><span class="p">,</span>
-                <span class="n">epoch</span><span class="p">,</span>
-                <span class="n">targets</span>
-            <span class="p">)</span>
+            <span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="n">indiv_losses</span><span class="p">,</span> <span class="n">loss_components_expert</span><span class="p">,</span>
+             <span class="n">loss_components_training</span><span class="p">)</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">total_loss</span><span class="p">(</span>
+                 <span class="n">train_elicits</span><span class="p">,</span>
+                 <span class="n">expert_elicited_statistics</span><span class="p">,</span>
+                 <span class="n">epoch</span><span class="p">,</span>
+                 <span class="n">targets</span>
+                 <span class="p">)</span>
 
             <span class="c1"># compute gradient of loss wrt trainable_variables</span>
-            <span class="n">gradients</span> <span class="o">=</span> <span class="n">tape</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span>
-                <span class="n">weighted_total_loss</span><span class="p">,</span> <span class="n">prior_model</span><span class="o">.</span><span class="n">trainable_variables</span>
-            <span class="p">)</span>
+            <span class="n">gradients</span> <span class="o">=</span> <span class="n">tape</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="n">prior_model</span><span class="o">.</span><span class="n">trainable_variables</span><span class="p">)</span>
+
             <span class="c1"># update trainable_variables using gradient info with adam</span>
             <span class="c1"># optimizer</span>
             <span class="n">sgd_optimizer</span><span class="o">.</span><span class="n">apply_gradients</span><span class="p">(</span>
@@ -408,7 +397,7 @@ document.write(`
         <span class="n">epoch_time</span> <span class="o">=</span> <span class="n">epoch_time_end</span> <span class="o">-</span> <span class="n">epoch_time_start</span>
 
         <span class="c1"># break for loop if loss is NAN and inform about cause</span>
-        <span class="k">if</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">is_nan</span><span class="p">(</span><span class="n">weighted_total_loss</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">is_nan</span><span class="p">(</span><span class="n">loss</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Loss is NAN. The training process has been stopped.&quot;</span><span class="p">)</span>
             <span class="k">break</span>
 
@@ -456,8 +445,8 @@ document.write(`
 
         <span class="c1"># savings per epoch (independent from chosen method)</span>
         <span class="n">time_per_epoch</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">epoch_time</span><span class="p">)</span>
-        <span class="n">total_loss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">weighted_total_loss</span><span class="p">)</span>
-        <span class="n">component_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">loss_per_component</span><span class="p">)</span>
+        <span class="n">total_loss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span>
+        <span class="n">component_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">indiv_losses</span><span class="p">)</span>
 
     <span class="n">res_ep</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;loss&quot;</span><span class="p">:</span> <span class="n">total_loss</span><span class="p">,</span>

@@ -47,8 +47,8 @@
     <link rel="icon" href="../_static/favicon-light.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="elicit.helpers module" href="elicit.helpers.html" />
-    <link rel="prev" title="elicit.configs module" href="elicit.configs.html" />
+    <link rel="next" title="elicit.initialization module" href="elicit.initialization.html" />
+    <link rel="prev" title="elicit.extras.utils module" href="elicit.extras.utils.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -166,13 +166,12 @@
 <li class="toctree-l4"><a class="reference internal" href="elicit.extras.utils.html">elicit.extras.utils module</a></li>
 </ul>
 </details></li>
-<li class="toctree-l3"><a class="reference internal" href="elicit.configs.html">elicit.configs module</a></li>
 <li class="toctree-l3 current active"><a class="current reference internal" href="#">elicit.elicit module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="elicit.helpers.html">elicit.helpers module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.initialization.html">elicit.initialization module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.losses.html">elicit.losses module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.networks.html">elicit.networks module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.optimization.html">elicit.optimization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.plots.html">elicit.plots module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.simulations.html">elicit.simulations module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.targets.html">elicit.targets module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.utils.html">elicit.utils module</a></li>
@@ -374,6 +373,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.elicit.Elicit"><code class="docutils literal notranslate"><span class="pre">Elicit</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.elicit.Elicit.__init__"><code class="docutils literal notranslate"><span class="pre">Elicit.__init__()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.elicit.Elicit.fit"><code class="docutils literal notranslate"><span class="pre">Elicit.fit()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.elicit.Elicit.save"><code class="docutils literal notranslate"><span class="pre">Elicit.save()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -848,7 +848,7 @@ The default is <code class="docutils literal notranslate"><span class="pre">100<
 
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.elicit.trainer">
-<span class="sig-prename descclassname"><span class="pre">elicit.elicit.</span></span><span class="sig-name descname"><span class="pre">trainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">128</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_configs_history</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{'hyperparameter':</span> <span class="pre">True,</span> <span class="pre">'hyperparameter_gradient':</span> <span class="pre">True,</span> <span class="pre">'loss':</span> <span class="pre">True,</span> <span class="pre">'loss_component':</span> <span class="pre">True}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_configs_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{'elicited_statistics':</span> <span class="pre">True,</span> <span class="pre">'expert_elicited_statistics':</span> <span class="pre">True,</span> <span class="pre">'expert_prior_samples':</span> <span class="pre">True,</span> <span class="pre">'init_loss_list':</span> <span class="pre">True,</span> <span class="pre">'init_matrix':</span> <span class="pre">True,</span> <span class="pre">'init_prior':</span> <span class="pre">True,</span> <span class="pre">'loss_tensor_expert':</span> <span class="pre">True,</span> <span class="pre">'loss_tensor_model':</span> <span class="pre">True,</span> <span class="pre">'model':</span> <span class="pre">True,</span> <span class="pre">'model_samples':</span> <span class="pre">True,</span> <span class="pre">'prior_samples':</span> <span class="pre">True,</span> <span class="pre">'target_quantities':</span> <span class="pre">True}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/elicit.html#trainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.elicit.trainer" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.elicit.</span></span><span class="sig-name descname"><span class="pre">trainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">128</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_history</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{'hyperparameter':</span> <span class="pre">True,</span> <span class="pre">'hyperparameter_gradient':</span> <span class="pre">True,</span> <span class="pre">'loss':</span> <span class="pre">True,</span> <span class="pre">'loss_component':</span> <span class="pre">True}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{'elicited_statistics':</span> <span class="pre">True,</span> <span class="pre">'expert_elicited_statistics':</span> <span class="pre">True,</span> <span class="pre">'expert_prior_samples':</span> <span class="pre">True,</span> <span class="pre">'init_loss_list':</span> <span class="pre">True,</span> <span class="pre">'init_matrix':</span> <span class="pre">True,</span> <span class="pre">'init_prior':</span> <span class="pre">True,</span> <span class="pre">'loss_tensor_expert':</span> <span class="pre">True,</span> <span class="pre">'loss_tensor_model':</span> <span class="pre">True,</span> <span class="pre">'model':</span> <span class="pre">True,</span> <span class="pre">'model_samples':</span> <span class="pre">True,</span> <span class="pre">'prior_samples':</span> <span class="pre">True,</span> <span class="pre">'target_quantities':</span> <span class="pre">True}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/elicit.html#trainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.elicit.trainer" title="Link to this definition">#</a></dt>
 <dd><p>Specification of training settings for learning the prior distribution(s).</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -867,15 +867,15 @@ or <code class="docutils literal notranslate"><span class="pre">deep_prior</span
 </dd>
 <dt><strong>num_samples</strong><span class="classifier">int, optional</span></dt><dd><p>number of samples from the prior(s). The default is 200.</p>
 </dd>
-<dt><strong>save_configs_history</strong><span class="classifier">callable, <a class="reference internal" href="elicit.configs.html#elicit.configs.save_history" title="elicit.configs.save_history"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.configs.save_history()</span></code></a></span></dt><dd><p>Exclude or include sub-results in the final result file.
+<dt><strong>save_history</strong><span class="classifier">callable, <a class="reference internal" href="elicit.utils.html#elicit.utils.save_history" title="elicit.utils.save_history"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.utils.save_history()</span></code></a></span></dt><dd><p>Exclude or include sub-results in the final result file.
 In the <code class="docutils literal notranslate"><span class="pre">history</span></code> object are all results that are saved across epochs.
 For usage information see
-<a class="reference external" href="https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html">How-To: Save and load the elicit object</a></p>
+<a class="reference external" href="https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html">How-To: Save and load the eliobj</a></p>
 </dd>
-<dt><strong>save_configs_results</strong><span class="classifier">callable, <a class="reference internal" href="elicit.configs.html#elicit.configs.save_results" title="elicit.configs.save_results"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.configs.save_results()</span></code></a></span></dt><dd><p>Exclude or include sub-results in the final result file.
+<dt><strong>save_results</strong><span class="classifier">callable, <a class="reference internal" href="elicit.utils.html#elicit.utils.save_results" title="elicit.utils.save_results"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.utils.save_results()</span></code></a></span></dt><dd><p>Exclude or include sub-results in the final result file.
 In the <code class="docutils literal notranslate"><span class="pre">results</span></code> object are all results that are saved for the last
 epoch only. For usage information see
-<a class="reference external" href="https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html">How-To: Save and load the elicit object</a></p>
+<a class="reference external" href="https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html">How-To: Save and load the eliobj</a></p>
 </dd>
 </dl>
 </dd>
@@ -895,8 +895,8 @@ distribution(s).</p>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="n">epochs</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="n">B</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="n">num_samples</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="n">save_configs_history</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">configs</span><span class="o">.</span><span class="n">save_history</span><span class="p">(</span><span class="n">loss_component</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="n">save_configs_results</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">configs</span><span class="o">.</span><span class="n">save_results</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">save_history</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">save_history</span><span class="p">(</span><span class="n">loss_component</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">save_results</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">save_results</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
 </pre></div>
 </div>
@@ -991,43 +991,37 @@ fit the eliobj.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.elicit.Elicit.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_fit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/elicit.html#Elicit.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.elicit.Elicit.fit" title="Link to this definition">#</a></dt>
-<dd><p>Fit the eliobj and learn the prior distributions.</p>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/elicit.html#Elicit.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.elicit.Elicit.fit" title="Link to this definition">#</a></dt>
+<dd><p>Fit eliobj and learn prior distributions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>save_dir</strong><span class="classifier">str or None, optional</span></dt><dd><p>If None the results are only saved as attribute in eliobj loaded in
-current working environment, If string is provided, results are
-saved in folder with with name <code class="docutils literal notranslate"><span class="pre">save_dir</span></code>.
-The default is <code class="docutils literal notranslate"><span class="pre">None.</span></code></p>
-</dd>
-<dt><strong>silent</strong><span class="classifier">bool, optional</span></dt><dd><p>Specifies whether the <code class="docutils literal notranslate"><span class="pre">history</span></code> object is returned when fitting
-is finished (<code class="docutils literal notranslate"><span class="pre">True</span></code>) or only saved as attribute of the eliobj
-(<code class="docutils literal notranslate"><span class="pre">False</span></code>). The default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
-</dd>
-<dt><strong>force_fit</strong><span class="classifier">bool, optional</span></dt><dd><p>If the eliobj was already fitted and the user wants to refit it,
+<dt><strong>overwrite</strong><span class="classifier">bool, optional</span></dt><dd><p>If the eliobj was already fitted and the user wants to refit it,
 the user is asked whether they want to overwrite the previous
-fitting results. Setting <code class="docutils literal notranslate"><span class="pre">force_fit=True</span></code> allows the user to
+fitting results. Setting <code class="docutils literal notranslate"><span class="pre">overwrite=True</span></code> allows the user to
 force overfitting without being prompted. The default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>history</strong><span class="classifier">dict</span></dt><dd><p>Results saved across epochs (e.g., loss). If <code class="docutils literal notranslate"><span class="pre">silent=True</span></code> the
-fit method returns nothing.</p>
-</dd>
+<dt>None</dt><dd></dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eliobj</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">save_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eliobj</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">history</span> <span class="o">=</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">save_dir</span><span class="o">=</span><span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="n">force_fit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eliobj</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="elicit.elicit.Elicit.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/elicit.html#Elicit.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.elicit.Elicit.save" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -1045,20 +1039,20 @@ fit method returns nothing.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="elicit.configs.html"
+       href="elicit.extras.utils.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">elicit.configs module</p>
+        <p class="prev-next-title">elicit.extras.utils module</p>
       </div>
     </a>
     <a class="right-next"
-       href="elicit.helpers.html"
+       href="elicit.initialization.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">elicit.helpers module</p>
+        <p class="prev-next-title">elicit.initialization module</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1105,6 +1099,7 @@ fit method returns nothing.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.elicit.Elicit"><code class="docutils literal notranslate"><span class="pre">Elicit</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.elicit.Elicit.__init__"><code class="docutils literal notranslate"><span class="pre">Elicit.__init__()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.elicit.Elicit.fit"><code class="docutils literal notranslate"><span class="pre">Elicit.fit()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.elicit.Elicit.save"><code class="docutils literal notranslate"><span class="pre">Elicit.save()</span></code></a></li>
 </ul>
 </li>
 </ul>

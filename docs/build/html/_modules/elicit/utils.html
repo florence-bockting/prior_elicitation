@@ -165,13 +165,12 @@
 <li class="toctree-l4"><a class="reference internal" href="../../api/elicit.extras.utils.html">elicit.extras.utils module</a></li>
 </ul>
 </details></li>
-<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.configs.html">elicit.configs module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.elicit.html">elicit.elicit module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.helpers.html">elicit.helpers module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.initialization.html">elicit.initialization module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.losses.html">elicit.losses module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.networks.html">elicit.networks module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.optimization.html">elicit.optimization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.plots.html">elicit.plots module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.simulations.html">elicit.simulations module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.targets.html">elicit.targets module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.utils.html">elicit.utils module</a></li>
@@ -306,12 +305,359 @@ document.write(`
 <span class="c1"># noqa SPDX-License-Identifier: Apache-2.0</span>
 
 <span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">import</span> <span class="nn">tensorflow_probability</span> <span class="k">as</span> <span class="nn">tfp</span>
 <span class="kn">import</span> <span class="nn">elicit</span> <span class="k">as</span> <span class="nn">el</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
 
-<span class="c1">#%% wrapper for workflow</span>
+<div class="viewcode-block" id="save_as_pkl">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.save_as_pkl">[docs]</a>
+<span class="k">def</span> <span class="nf">save_as_pkl</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="nb">any</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Helper functions to save a file as pickle.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    obj : any</span>
+<span class="sd">        variable that needs to be saved.</span>
+<span class="sd">    save_dir : str</span>
+<span class="sd">        path indicating the file location.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; save_as_pkl(obj, &quot;results/file.pkl&quot;)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># if directory does not exists, create it</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">save_dir</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># save obj to location as pickle</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">file</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="identity">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.identity">[docs]</a>
+<span class="k">def</span> <span class="nf">identity</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span></div>
+
+
+
+<div class="viewcode-block" id="DoubleBound">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.DoubleBound">[docs]</a>
+<span class="k">class</span> <span class="nc">DoubleBound</span><span class="p">:</span>
+<div class="viewcode-block" id="DoubleBound.__init__">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.DoubleBound.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lower</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">upper</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A variable constrained to be in the open interval</span>
+<span class="sd">        (``lower``, ``upper``) is transformed to an unconstrained variable Y</span>
+<span class="sd">        via a scaled and translated log-odds transform.</span>
+
+<span class="sd">        Basis for the here used constraints, is the </span>
+<span class="sd">        `constraint transforms implementation in Stan &lt;https://mc-stan.org/docs/reference-manual/transforms.html&gt;`_.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        lower : float</span>
+<span class="sd">            lower bound of variable x.</span>
+<span class="sd">        upper : float</span>
+<span class="sd">            upper bound of variable x.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">=</span> <span class="n">lower</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">=</span> <span class="n">upper</span></div>
+
+
+<div class="viewcode-block" id="DoubleBound.logit">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.DoubleBound.logit">[docs]</a>
+    <span class="k">def</span> <span class="nf">logit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper function that implements the logit transformation for</span>
+<span class="sd">        :math:`u \in (0,1)`:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            logit(u) = \log\left(\frac{u}{1-u}\right)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        u : float</span>
+<span class="sd">            variable in open unit interval.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        v : float</span>
+<span class="sd">            log-odds of u.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># log-odds definition</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">-</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">u</span><span class="p">)</span>
+        <span class="c1"># cast v into correct dtype</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="DoubleBound.inv_logit">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.DoubleBound.inv_logit">[docs]</a>
+    <span class="k">def</span> <span class="nf">inv_logit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper function that implements the inverse-logit transformation (i.e.,</span>
+<span class="sd">        the logistic sigmoid for :math:`v \in (-\infty,+\infty)`:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            logit^{-1}(v) = \frac{1}{1+\exp(-v)}</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        v : float</span>
+<span class="sd">            unconstrained variable</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        u : float</span>
+<span class="sd">            logistic sigmoid of the unconstrained variable</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># logistic sigmoid transform</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">tf</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">v</span><span class="p">)))</span>
+        <span class="c1"># cast v to correct dtype</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">u</span></div>
+
+
+<div class="viewcode-block" id="DoubleBound.forward">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.DoubleBound.forward">[docs]</a>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        scaled and translated logit transform of variable x with ``lower`` and</span>
+<span class="sd">        ``upper`` bound into an unconstrained variable y.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            Y = logit\left(\frac{X - lower}{upper - lower}\right)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : float</span>
+<span class="sd">            variable with lower and upper bound.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        y : float</span>
+<span class="sd">            unconstrained variable.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># scaled and translated logit transform</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">logit</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">divide</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">),</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)))</span>
+        <span class="c1"># cast y to correct dtype</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">y</span></div>
+
+
+<div class="viewcode-block" id="DoubleBound.inverse">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.DoubleBound.inverse">[docs]</a>
+    <span class="k">def</span> <span class="nf">inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        inverse of the log-odds transform applied to the unconstrained</span>
+<span class="sd">        variable y in order to transform it into a constrained variable x</span>
+<span class="sd">        with ``lower`` and ``upper`` bound.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            X = lower + (upper - lower) \cdot logit^{-1}(Y)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y : float</span>
+<span class="sd">            unconstrained variable</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        x : float</span>
+<span class="sd">        constrained variable with lower and upper bound</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># inverse of log-odds transform</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">inv_logit</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="c1"># cast x to correct dtype</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="LowerBound">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.LowerBound">[docs]</a>
+<span class="k">class</span> <span class="nc">LowerBound</span><span class="p">:</span>
+<div class="viewcode-block" id="LowerBound.__init__">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.LowerBound.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lower</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A variable with a ``lower`` bound is transformed to an</span>
+<span class="sd">        unconstrained variable Y via an inverse-softplus transform.</span>
+
+<span class="sd">        Basis for the here used constraints, is the </span>
+<span class="sd">        `constraint transforms implementation in Stan &lt;https://mc-stan.org/docs/reference-manual/transforms.html&gt;`_.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        lower : float</span>
+<span class="sd">            lower bound of variable X.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">=</span> <span class="n">lower</span></div>
+
+
+<div class="viewcode-block" id="LowerBound.forward">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.LowerBound.forward">[docs]</a>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        inverse-softplus transform of variable x with ``lower`` bound into an</span>
+<span class="sd">        unconstrained variable y.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            Y = softplus^{-1}(X - lower)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : float</span>
+<span class="sd">            variable with a lower bound.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        y : float</span>
+<span class="sd">            unconstrained variable.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># logarithmic transform</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">softplus_inverse</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span>
+        <span class="c1"># cast y into correct type</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">y</span></div>
+
+
+<div class="viewcode-block" id="LowerBound.inverse">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.LowerBound.inverse">[docs]</a>
+    <span class="k">def</span> <span class="nf">inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        softplus transform of unconstrained variable y into a constrained</span>
+<span class="sd">        variable x with ``lower`` bound.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            X = softplus(Y) + lower</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y : float</span>
+<span class="sd">            unconstrained variable.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        x : float</span>
+<span class="sd">            variable with a lower bound.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># exponential transform</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">softplus</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span>
+        <span class="c1"># cast x into correct dtype</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="UpperBound">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.UpperBound">[docs]</a>
+<span class="k">class</span> <span class="nc">UpperBound</span><span class="p">:</span>
+<div class="viewcode-block" id="UpperBound.__init__">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.UpperBound.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">upper</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A variable with an ``upper`` bound is transformed into an</span>
+<span class="sd">        unconstrained variable Y via an inverse-softplus transform.</span>
+
+<span class="sd">        Basis for the here used constraints, is the </span>
+<span class="sd">        `constraint transforms implementation in Stan &lt;https://mc-stan.org/docs/reference-manual/transforms.html&gt;`_.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        upper : float</span>
+<span class="sd">            upper bound of variable X.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">=</span> <span class="n">upper</span></div>
+
+
+<div class="viewcode-block" id="UpperBound.forward">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.UpperBound.forward">[docs]</a>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        inverse-softplus transform of variable x with ``upper`` bound into an</span>
+<span class="sd">        unconstrained variable y.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            Y = softplus^{-1}(upper - X)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : float</span>
+<span class="sd">            variable with an upper bound.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        y : float</span>
+<span class="sd">            unconstrained variable.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># logarithmic transform</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">softplus_inverse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span>
+        <span class="c1"># cast y into correct dtype</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">y</span></div>
+
+
+<div class="viewcode-block" id="UpperBound.inverse">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.UpperBound.inverse">[docs]</a>
+    <span class="k">def</span> <span class="nf">inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        softplus transform of unconstrained variable y into a constrained</span>
+<span class="sd">        variable x with ``upper`` bound.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            X = upper - softplus(Y)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y : float</span>
+<span class="sd">            unconstrained variable.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        x : float</span>
+<span class="sd">            variable with an upper bound.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># exponential transform</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">-</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">softplus</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="c1"># cast x into correct dtype</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span></div>
+</div>
+
+
+
 <div class="viewcode-block" id="one_forward_simulation">
 <a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.one_forward_simulation">[docs]</a>
 <span class="k">def</span> <span class="nf">one_forward_simulation</span><span class="p">(</span><span class="n">prior_model</span><span class="p">,</span> <span class="n">trainer</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
@@ -413,11 +759,13 @@ document.write(`
 
 
 
-<div class="viewcode-block" id="save_elicit">
-<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.save_elicit">[docs]</a>
-<span class="k">def</span> <span class="nf">save_elicit</span><span class="p">(</span><span class="n">elicit_obj</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">,</span> <span class="n">force_overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="save">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.save">[docs]</a>
+<span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="n">eliobj</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="c1"># create saving path</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;./</span><span class="si">{</span><span class="n">save_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">+</span><span class="n">eliobj</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span>
     <span class="c1"># check whether saving path is already used</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">save_dir</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">force_overwrite</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
         <span class="n">user_ans</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;In provided directory exists already a file with&quot;</span><span class="o">+</span>
                          <span class="s2">&quot; identical name. Do you want to overwrite it?&quot;</span><span class="o">+</span>
                          <span class="s2">&quot; Press &#39;y&#39; for overwriting and &#39;n&#39; for abording.&quot;</span><span class="p">)</span>
@@ -430,29 +778,29 @@ document.write(`
 
     <span class="n">storage</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="c1"># user inputs</span>
-    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elicit_obj</span><span class="o">.</span><span class="n">model</span>
-    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elicit_obj</span><span class="o">.</span><span class="n">parameters</span>
-    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;targets&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elicit_obj</span><span class="o">.</span><span class="n">targets</span>
-    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;expert&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elicit_obj</span><span class="o">.</span><span class="n">expert</span>
-    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;optimizer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elicit_obj</span><span class="o">.</span><span class="n">optimizer</span>
-    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;trainer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elicit_obj</span><span class="o">.</span><span class="n">trainer</span>
-    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;initializer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elicit_obj</span><span class="o">.</span><span class="n">initializer</span>
-    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;network&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elicit_obj</span><span class="o">.</span><span class="n">network</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">model</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">parameters</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;targets&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">targets</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;expert&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">expert</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;optimizer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">optimizer</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;trainer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">trainer</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;initializer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">initializer</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;network&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">network</span>
     <span class="c1"># results</span>
-    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elicit_obj</span><span class="o">.</span><span class="n">results</span>
-    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;history&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elicit_obj</span><span class="o">.</span><span class="n">history</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">results</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;history&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">history</span>
 
-    <span class="n">el</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">save_as_pkl</span><span class="p">(</span><span class="n">storage</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;saved elicit as: </span><span class="si">{</span><span class="n">save_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+    <span class="n">save_as_pkl</span><span class="p">(</span><span class="n">storage</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;saved in: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
 
-<div class="viewcode-block" id="load_elicit">
-<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.load_elicit">[docs]</a>
-<span class="k">def</span> <span class="nf">load_elicit</span><span class="p">(</span><span class="n">save_dir</span><span class="p">):</span>
+<div class="viewcode-block" id="load">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.load">[docs]</a>
+<span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">save_dir</span><span class="p">):</span>
     <span class="n">obj</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">save_dir</span><span class="p">)</span>
 
-    <span class="n">elicit</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">Elicit</span><span class="p">(</span>
+    <span class="n">eliobj</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">Elicit</span><span class="p">(</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">],</span>
         <span class="n">parameters</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">],</span>
         <span class="n">targets</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;targets&quot;</span><span class="p">],</span>
@@ -464,10 +812,159 @@ document.write(`
         <span class="p">)</span>
 
     <span class="c1"># add results if already fitted</span>
-    <span class="n">elicit</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;history&quot;</span><span class="p">]</span>
-    <span class="n">elicit</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">]</span>
+    <span class="n">eliobj</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;history&quot;</span><span class="p">]</span>
+    <span class="n">eliobj</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">]</span>
 
-    <span class="k">return</span> <span class="n">elicit</span></div>
+    <span class="k">return</span> <span class="n">eliobj</span></div>
+
+
+
+<div class="viewcode-block" id="save_history">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.save_history">[docs]</a>
+<span class="k">def</span> <span class="nf">save_history</span><span class="p">(</span>
+    <span class="n">loss</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">loss_component</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">time</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">hyperparameter</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">hyperparameter_gradient</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Controls whether sub-results of the history object should be included</span>
+<span class="sd">    or excluded. Results are saved across epochs. By default all</span>
+<span class="sd">    sub-results are included.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    loss : bool, optional</span>
+<span class="sd">        total loss per epoch. The default is ``True``.</span>
+<span class="sd">    loss_component : bool, optional</span>
+<span class="sd">        loss per loss-component per epoch. The default is ``True``.</span>
+<span class="sd">    time : bool, optional</span>
+<span class="sd">        time in sec per epoch. The default is ``True``.</span>
+<span class="sd">    hyperparameter : bool, optional</span>
+<span class="sd">        &#39;parametric_prior&#39; method: Trainable hyperparameters of parametric</span>
+<span class="sd">        prior distributions.</span>
+<span class="sd">        &#39;deep_prior&#39; method: Mean and standard deviation of each marginal</span>
+<span class="sd">        from the joint prior.</span>
+<span class="sd">        The default is ``True``.</span>
+<span class="sd">    hyperparameter_gradient : bool, optional</span>
+<span class="sd">        Gradients of the hyperparameter. Only for &#39;parametric_prior&#39; method.</span>
+<span class="sd">        The default is ``True``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    save_hist_dict : dict</span>
+<span class="sd">        dictionary with inclusion/exclusion settings for each sub-result in</span>
+<span class="sd">        history object.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">loss</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">loss_component</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">&quot;INFO: el.plots.loss() requires information about &quot;</span><span class="o">+</span>
+            <span class="s2">&quot;&#39;loss&#39; and &#39;loss_component&#39;. If you don&#39;t save this information &quot;</span><span class="o">+</span>
+            <span class="s2">&quot;el.plot.loss() can&#39;t be used.&quot;</span><span class="p">)</span>
+
+    <span class="n">save_hist_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">loss</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span>
+        <span class="n">loss_component</span><span class="o">=</span><span class="n">loss_component</span><span class="p">,</span>
+        <span class="n">hyperparameter</span><span class="o">=</span><span class="n">hyperparameter</span><span class="p">,</span>
+        <span class="n">hyperparameter_gradient</span><span class="o">=</span><span class="n">hyperparameter_gradient</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">save_hist_dict</span></div>
+
+
+
+<div class="viewcode-block" id="save_results">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.save_results">[docs]</a>
+<span class="k">def</span> <span class="nf">save_results</span><span class="p">(</span>
+    <span class="n">target_quantities</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">elicited_statistics</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">prior_samples</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">model_samples</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">expert_elicited_statistics</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">expert_prior_samples</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">init_loss_list</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">init_prior</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">init_matrix</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">loss_tensor_expert</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">loss_tensor_model</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Controls whether sub-results of the result object should be included</span>
+<span class="sd">    or excluded in the final result file. Results are based on the</span>
+<span class="sd">    computation of the last epoch.</span>
+<span class="sd">    By default all sub-results are included.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    target_quantities : bool, optional</span>
+<span class="sd">        simulation-based target quantities. The default is ``True``.</span>
+<span class="sd">    elicited_statistics : bool, optional</span>
+<span class="sd">        simulation-based elicited statistics. The default is ``True``.</span>
+<span class="sd">    prior_samples : bool, optional</span>
+<span class="sd">        samples from simulation-based prior distributions.</span>
+<span class="sd">        The default is ``True``.</span>
+<span class="sd">    model_samples : bool, optional</span>
+<span class="sd">        output variables from the simulation-based generative model.</span>
+<span class="sd">        The default is ``True``.</span>
+<span class="sd">    model : bool, optional</span>
+<span class="sd">        fitted elicit model object including the trainable variables.</span>
+<span class="sd">        The default is ``True``.</span>
+<span class="sd">    expert_elicited_statistics : bool, optional</span>
+<span class="sd">        expert-elicited statistics. The default is ``True``.</span>
+<span class="sd">    expert_prior_samples : bool, optional</span>
+<span class="sd">        if oracle is used: samples from the true prior distribution,</span>
+<span class="sd">        otherwise it is None. The default is ``True``.</span>
+<span class="sd">    init_loss_list : bool, optional</span>
+<span class="sd">        initialization phase: Losses related to the samples drawn from the</span>
+<span class="sd">        initialization distribution.</span>
+<span class="sd">        Only included for method &#39;parametric_prior&#39;.</span>
+<span class="sd">        The default is ``True``.</span>
+<span class="sd">    init_prior : bool, optional</span>
+<span class="sd">        initialized elicit model object including the trainable variables.</span>
+<span class="sd">        Only included for method &#39;parametric_prior&#39;.</span>
+<span class="sd">        The default is ``True``.</span>
+<span class="sd">    init_matrix : bool, optional</span>
+<span class="sd">        initialization phase: samples drawn from the initialization</span>
+<span class="sd">        distribution for each hyperparameter.</span>
+<span class="sd">        Only included for method &#39;parametric_prior&#39;.</span>
+<span class="sd">        The default is ``True``.</span>
+<span class="sd">    loss_tensor_expert : bool, optional</span>
+<span class="sd">        expert term in loss component for computing the discrepancy.</span>
+<span class="sd">        The default is ``True``.</span>
+<span class="sd">    loss_tensor_model : bool, optional</span>
+<span class="sd">        simulation-based term in loss component for computing the</span>
+<span class="sd">        discrepancy. The default is ``True``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    save_res_dict : dict</span>
+<span class="sd">        dictionary with inclusion/exclusion settings for each sub-result</span>
+<span class="sd">        in results object.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">elicited_statistics</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">&quot;INFO: el.plots.loss() requires information about &quot;</span><span class="o">+</span>
+            <span class="s2">&quot;&#39;elicited_statistics&#39;. If you don&#39;t save this information &quot;</span><span class="o">+</span>
+            <span class="s2">&quot;el.plot.loss() can&#39;t be used.&quot;</span><span class="p">)</span>
+
+    <span class="n">save_res_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">target_quantities</span><span class="o">=</span><span class="n">target_quantities</span><span class="p">,</span>
+        <span class="n">elicited_statistics</span><span class="o">=</span><span class="n">elicited_statistics</span><span class="p">,</span>
+        <span class="n">prior_samples</span><span class="o">=</span><span class="n">prior_samples</span><span class="p">,</span>
+        <span class="n">model_samples</span><span class="o">=</span><span class="n">model_samples</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">expert_elicited_statistics</span><span class="o">=</span><span class="n">expert_elicited_statistics</span><span class="p">,</span>
+        <span class="n">expert_prior_samples</span><span class="o">=</span><span class="n">expert_prior_samples</span><span class="p">,</span>
+        <span class="n">init_loss_list</span><span class="o">=</span><span class="n">init_loss_list</span><span class="p">,</span>
+        <span class="n">init_prior</span><span class="o">=</span><span class="n">init_prior</span><span class="p">,</span>
+        <span class="n">init_matrix</span><span class="o">=</span><span class="n">init_matrix</span><span class="p">,</span>
+        <span class="n">loss_tensor_expert</span><span class="o">=</span><span class="n">loss_tensor_expert</span><span class="p">,</span>
+        <span class="n">loss_tensor_model</span><span class="o">=</span><span class="n">loss_tensor_model</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">save_res_dict</span></div>
 
 </pre></div>
 

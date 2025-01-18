@@ -29,7 +29,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
-    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -165,9 +165,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../api/elicit.extras.utils.html">elicit.extras.utils module</a></li>
 </ul>
 </details></li>
-<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.configs.html">elicit.configs module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.elicit.html">elicit.elicit module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.helpers.html">elicit.helpers module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.initialization.html">elicit.initialization module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.losses.html">elicit.losses module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.networks.html">elicit.networks module</a></li>
@@ -385,19 +383,19 @@ document.write(`
     <span class="c1"># constraints</span>
     <span class="c1"># only lower bound</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">lower</span> <span class="o">!=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="n">upper</span> <span class="o">==</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)):</span>
-        <span class="n">lower_bound</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">LowerBound</span><span class="p">(</span><span class="n">lower</span><span class="p">)</span>
+        <span class="n">lower_bound</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">LowerBound</span><span class="p">(</span><span class="n">lower</span><span class="p">)</span>
         <span class="n">transform</span> <span class="o">=</span> <span class="n">lower_bound</span><span class="o">.</span><span class="n">inverse</span>
     <span class="c1"># only upper bound</span>
     <span class="k">elif</span> <span class="p">(</span><span class="n">upper</span> <span class="o">!=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="n">lower</span> <span class="o">==</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">)):</span>
-        <span class="n">upper_bound</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">UpperBound</span><span class="p">(</span><span class="n">upper</span><span class="p">)</span>
+        <span class="n">upper_bound</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">UpperBound</span><span class="p">(</span><span class="n">upper</span><span class="p">)</span>
         <span class="n">transform</span> <span class="o">=</span> <span class="n">upper_bound</span><span class="o">.</span><span class="n">inverse</span>
     <span class="c1"># upper and lower bound</span>
     <span class="k">elif</span> <span class="p">(</span><span class="n">upper</span> <span class="o">!=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="n">lower</span> <span class="o">!=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">)):</span>
-        <span class="n">double_bound</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">DoubleBound</span><span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">)</span>
+        <span class="n">double_bound</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">DoubleBound</span><span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">)</span>
         <span class="n">transform</span> <span class="o">=</span> <span class="n">double_bound</span><span class="o">.</span><span class="n">inverse</span>
     <span class="c1"># unbounded</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">transform</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">identity</span>
+        <span class="n">transform</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">identity</span>
 
     <span class="c1"># value type</span>
     <span class="n">dtype_dim</span> <span class="o">=</span> <span class="n">Dtype</span><span class="p">(</span><span class="n">vtype</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span>
@@ -884,8 +882,8 @@ document.write(`
     <span class="n">epochs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">B</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">128</span><span class="p">,</span>
     <span class="n">num_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span>
-    <span class="n">save_configs_history</span><span class="p">:</span> <span class="nb">callable</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">configs</span><span class="o">.</span><span class="n">save_history</span><span class="p">(),</span>
-    <span class="n">save_configs_results</span><span class="p">:</span> <span class="nb">callable</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">configs</span><span class="o">.</span><span class="n">save_results</span><span class="p">(),</span>
+    <span class="n">save_history</span><span class="p">:</span> <span class="nb">callable</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">save_history</span><span class="p">(),</span>
+    <span class="n">save_results</span><span class="p">:</span> <span class="nb">callable</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">save_results</span><span class="p">(),</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Specification of training settings for learning the prior distribution(s).</span>
@@ -906,16 +904,16 @@ document.write(`
 <span class="sd">        batch size. The default is 128.</span>
 <span class="sd">    num_samples : int, optional</span>
 <span class="sd">        number of samples from the prior(s). The default is 200.</span>
-<span class="sd">    save_configs_history : callable, :func:`elicit.configs.save_history`</span>
+<span class="sd">    save_history : callable, :func:`elicit.utils.save_history`</span>
 <span class="sd">        Exclude or include sub-results in the final result file.</span>
 <span class="sd">        In the ``history`` object are all results that are saved across epochs.</span>
 <span class="sd">        For usage information see</span>
-<span class="sd">        `How-To: Save and load the elicit object &lt;https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html&gt;`_</span>
-<span class="sd">    save_configs_results : callable, :func:`elicit.configs.save_results`</span>
+<span class="sd">        `How-To: Save and load the eliobj &lt;https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html&gt;`_</span>
+<span class="sd">    save_results : callable, :func:`elicit.utils.save_results`</span>
 <span class="sd">        Exclude or include sub-results in the final result file.</span>
 <span class="sd">        In the ``results`` object are all results that are saved for the last</span>
 <span class="sd">        epoch only. For usage information see</span>
-<span class="sd">        `How-To: Save and load the elicit object &lt;https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html&gt;`_</span>
+<span class="sd">        `How-To: Save and load the eliobj &lt;https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html&gt;`_</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -932,8 +930,8 @@ document.write(`
 <span class="sd">    &gt;&gt;&gt;     epochs=400,</span>
 <span class="sd">    &gt;&gt;&gt;     B=128,</span>
 <span class="sd">    &gt;&gt;&gt;     num_samples=200,</span>
-<span class="sd">    &gt;&gt;&gt;     save_configs_history=el.configs.save_history(loss_component=False),</span>
-<span class="sd">    &gt;&gt;&gt;     save_configs_results=el.configs.save_results(model=False)</span>
+<span class="sd">    &gt;&gt;&gt;     save_history=el.utils.save_history(loss_component=False),</span>
+<span class="sd">    &gt;&gt;&gt;     save_results=el.utils.save_results(model=False)</span>
 <span class="sd">    &gt;&gt;&gt; )</span>
 <span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
     <span class="n">train_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
@@ -943,8 +941,8 @@ document.write(`
         <span class="n">B</span><span class="o">=</span><span class="n">B</span><span class="p">,</span>
         <span class="n">num_samples</span><span class="o">=</span><span class="n">num_samples</span><span class="p">,</span>
         <span class="n">epochs</span><span class="o">=</span><span class="n">epochs</span><span class="p">,</span>
-        <span class="n">save_configs_history</span><span class="o">=</span><span class="n">save_configs_history</span><span class="p">,</span>
-        <span class="n">save_configs_results</span><span class="o">=</span><span class="n">save_configs_results</span><span class="p">,</span>
+        <span class="n">save_history</span><span class="o">=</span><span class="n">save_history</span><span class="p">,</span>
+        <span class="n">save_results</span><span class="o">=</span><span class="n">save_results</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">train_dict</span></div>
@@ -1023,44 +1021,33 @@ document.write(`
 
 <div class="viewcode-block" id="Elicit.fit">
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.Elicit.fit">[docs]</a>
-    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">force_fit</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Fit the eliobj and learn the prior distributions.</span>
+<span class="sd">        Fit eliobj and learn prior distributions.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        save_dir : str or None, optional</span>
-<span class="sd">            If None the results are only saved as attribute in eliobj loaded in</span>
-<span class="sd">            current working environment, If string is provided, results are</span>
-<span class="sd">            saved in folder with with name ``save_dir``.</span>
-<span class="sd">            The default is ``None.``</span>
-<span class="sd">        silent : bool, optional</span>
-<span class="sd">            Specifies whether the ``history`` object is returned when fitting</span>
-<span class="sd">            is finished (``True``) or only saved as attribute of the eliobj</span>
-<span class="sd">            (``False``). The default is ``False``.</span>
-<span class="sd">        force_fit : bool, optional</span>
+<span class="sd">        overwrite : bool, optional</span>
 <span class="sd">            If the eliobj was already fitted and the user wants to refit it,</span>
 <span class="sd">            the user is asked whether they want to overwrite the previous</span>
-<span class="sd">            fitting results. Setting ``force_fit=True`` allows the user to</span>
+<span class="sd">            fitting results. Setting ``overwrite=True`` allows the user to</span>
 <span class="sd">            force overfitting without being prompted. The default is ``False``.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        history : dict</span>
-<span class="sd">            Results saved across epochs (e.g., loss). If ``silent=True`` the</span>
-<span class="sd">            fit method returns nothing.</span>
+<span class="sd">        None</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; eliobj.fit(save_dir=None, silent=True)</span>
+<span class="sd">        &gt;&gt;&gt; eliobj.fit()</span>
 
-<span class="sd">        &gt;&gt;&gt; history = eliobj.fit(save_dir=&quot;results&quot;, force_fit=True)</span>
+<span class="sd">        &gt;&gt;&gt; eliobj.fit(overwrite=True)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># check whether elicit object is already fitted</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">force_fit</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
             <span class="n">user_answ</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span>
-                <span class="s2">&quot;elicit object is already fitted.&quot;</span>
+                <span class="s2">&quot;eliobj is already fitted.&quot;</span>
                 <span class="o">+</span> <span class="s2">&quot; Do you want to fit it again and overwrite the results?&quot;</span>
                 <span class="o">+</span> <span class="s2">&quot; Press &#39;n&#39; to stop process and &#39;y&#39; to continue fitting.&quot;</span>
             <span class="p">)</span>
@@ -1072,18 +1059,10 @@ document.write(`
                 <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">user_answ</span> <span class="o">==</span> <span class="s2">&quot;n&quot;</span><span class="p">:</span>
-                <span class="k">return</span> <span class="s2">&quot;Process aborded; elicit object is not re-fitted.&quot;</span>
+                <span class="k">return</span> <span class="s2">&quot;Process aborded; eliobj is not re-fitted.&quot;</span>
 
         <span class="c1"># set seed</span>
         <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">])</span>
-
-        <span class="k">if</span> <span class="n">save_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="c1"># create saving path</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;./</span><span class="si">{</span><span class="n">save_dir</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s1">&#39;seed&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>  <span class="c1"># noqa</span>
-            <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># get expert data</span>
         <span class="n">expert_elicits</span><span class="p">,</span> <span class="n">expert_prior</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_expert_data</span><span class="p">(</span>
@@ -1119,6 +1098,8 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">,</span>
         <span class="p">)</span>
+        <span class="c1"># add saving path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s1">&#39;seed&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>  <span class="c1"># noqa</span>
         <span class="c1"># add some additional results</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;expert_elicited_statistics&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">expert_elicits</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1133,27 +1114,21 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;init_prior&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">init_prior</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;init_matrix&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">init_matrix</span>
 
-        <span class="c1"># save results if desired and remove unrelevant sub-results</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">save_hist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-            <span class="n">save_res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
-            <span class="k">for</span> <span class="n">key_hist</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;save_configs_history&quot;</span><span class="p">]:</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;save_configs_history&quot;</span><span class="p">][</span><span class="n">key_hist</span><span class="p">]:</span>
-                    <span class="n">save_hist</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key_hist</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">key_hist</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;save_history&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;save_history&quot;</span><span class="p">][</span><span class="n">key_hist</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key_hist</span><span class="p">)</span>
 
-            <span class="k">for</span> <span class="n">key_res</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;save_configs_results&quot;</span><span class="p">]:</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;save_configs_results&quot;</span><span class="p">][</span><span class="n">key_res</span><span class="p">]:</span>
-                    <span class="n">save_res</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key_res</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">key_res</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;save_results&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;save_results&quot;</span><span class="p">][</span><span class="n">key_res</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key_res</span><span class="p">)</span></div>
 
-            <span class="n">final_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;history&quot;</span><span class="p">:</span> <span class="n">save_hist</span><span class="p">,</span> <span class="s2">&quot;results&quot;</span><span class="p">:</span> <span class="n">save_res</span><span class="p">}</span>
-
-            <span class="n">el</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">save_as_pkl</span><span class="p">(</span><span class="n">final_dict</span><span class="p">,</span>
-                                   <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.pkl&quot;</span><span class="p">)</span>
-
-        <span class="c1"># return history by default</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">silent</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span></div>
+    
+<div class="viewcode-block" id="Elicit.save">
+<a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.Elicit.save">[docs]</a>
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="c1"># add a saving path</span>
+        <span class="k">return</span> <span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span></div>
 </div>
 
 </pre></div>

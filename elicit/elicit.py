@@ -71,19 +71,19 @@ def hyper(
     # constraints
     # only lower bound
     if (lower != float("-inf")) and (upper == float("inf")):
-        lower_bound = el.helpers.LowerBound(lower)
+        lower_bound = el.utils.LowerBound(lower)
         transform = lower_bound.inverse
     # only upper bound
     elif (upper != float("inf")) and (lower == float("-inf")):
-        upper_bound = el.helpers.UpperBound(upper)
+        upper_bound = el.utils.UpperBound(upper)
         transform = upper_bound.inverse
     # upper and lower bound
     elif (upper != float("inf")) and (lower != float("-inf")):
-        double_bound = el.helpers.DoubleBound(lower, upper)
+        double_bound = el.utils.DoubleBound(lower, upper)
         transform = double_bound.inverse
     # unbounded
     else:
-        transform = el.helpers.identity
+        transform = el.utils.identity
 
     # value type
     dtype_dim = Dtype(vtype, dim)
@@ -528,8 +528,8 @@ def trainer(
     epochs: int,
     B: int = 128,
     num_samples: int = 200,
-    save_configs_history: callable = el.configs.save_history(),
-    save_configs_results: callable = el.configs.save_results(),
+    save_history: callable = el.utils.save_history(),
+    save_results: callable = el.utils.save_results(),
 ):
     """
     Specification of training settings for learning the prior distribution(s).
@@ -550,16 +550,16 @@ def trainer(
         batch size. The default is 128.
     num_samples : int, optional
         number of samples from the prior(s). The default is 200.
-    save_configs_history : callable, :func:`elicit.configs.save_history`
+    save_history : callable, :func:`elicit.utils.save_history`
         Exclude or include sub-results in the final result file.
         In the ``history`` object are all results that are saved across epochs.
         For usage information see
-        `How-To: Save and load the elicit object <https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html>`_
-    save_configs_results : callable, :func:`elicit.configs.save_results`
+        `How-To: Save and load the eliobj <https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html>`_
+    save_results : callable, :func:`elicit.utils.save_results`
         Exclude or include sub-results in the final result file.
         In the ``results`` object are all results that are saved for the last
         epoch only. For usage information see
-        `How-To: Save and load the elicit object <https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html>`_
+        `How-To: Save and load the eliobj <https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html>`_
 
     Returns
     -------
@@ -576,8 +576,8 @@ def trainer(
     >>>     epochs=400,
     >>>     B=128,
     >>>     num_samples=200,
-    >>>     save_configs_history=el.configs.save_history(loss_component=False),
-    >>>     save_configs_results=el.configs.save_results(model=False)
+    >>>     save_history=el.utils.save_history(loss_component=False),
+    >>>     save_results=el.utils.save_results(model=False)
     >>> )
     """  # noqa: E501
     train_dict = dict(
@@ -587,8 +587,8 @@ def trainer(
         B=B,
         num_samples=num_samples,
         epochs=epochs,
-        save_configs_history=save_configs_history,
-        save_configs_results=save_configs_results,
+        save_history=save_history,
+        save_results=save_results,
     )
 
     return train_dict
@@ -659,44 +659,33 @@ class Elicit:
         # set seed
         tf.random.set_seed(self.trainer["seed"])
 
-    def fit(self, save_dir: str or None = None, silent=False, force_fit=False):
+    def fit(self, overwrite=False):
         """
-        Fit the eliobj and learn the prior distributions.
+        Fit eliobj and learn prior distributions.
 
         Parameters
         ----------
-        save_dir : str or None, optional
-            If None the results are only saved as attribute in eliobj loaded in
-            current working environment, If string is provided, results are
-            saved in folder with with name ``save_dir``.
-            The default is ``None.``
-        silent : bool, optional
-            Specifies whether the ``history`` object is returned when fitting
-            is finished (``True``) or only saved as attribute of the eliobj
-            (``False``). The default is ``False``.
-        force_fit : bool, optional
+        overwrite : bool, optional
             If the eliobj was already fitted and the user wants to refit it,
             the user is asked whether they want to overwrite the previous
-            fitting results. Setting ``force_fit=True`` allows the user to
+            fitting results. Setting ``overwrite=True`` allows the user to
             force overfitting without being prompted. The default is ``False``.
 
         Returns
         -------
-        history : dict
-            Results saved across epochs (e.g., loss). If ``silent=True`` the
-            fit method returns nothing.
+        None
 
         Examples
         --------
-        >>> eliobj.fit(save_dir=None, silent=True)
+        >>> eliobj.fit()
 
-        >>> history = eliobj.fit(save_dir="results", force_fit=True)
+        >>> eliobj.fit(overwrite=True)
 
         """
         # check whether elicit object is already fitted
-        if len(self.history.keys()) != 0 and not force_fit:
+        if len(self.history.keys()) != 0 and not overwrite:
             user_answ = input(
-                "elicit object is already fitted."
+                "eliobj is already fitted."
                 + " Do you want to fit it again and overwrite the results?"
                 + " Press 'n' to stop process and 'y' to continue fitting."
             )
@@ -708,18 +697,10 @@ class Elicit:
                 )
 
             if user_answ == "n":
-                return "Process aborded; elicit object is not re-fitted."
+                return "Process aborded; eliobj is not re-fitted."
 
         # set seed
         tf.random.set_seed(self.trainer["seed"])
-
-        if save_dir is not None:
-            # create saving path
-            self.trainer["output_path"] = (
-                f"./{save_dir}/{self.trainer['method']}/{self.trainer['name']}_{self.trainer['seed']}"  # noqa
-            )
-        else:
-            self.trainer["output_path"] = None
 
         # get expert data
         expert_elicits, expert_prior = el.utils.get_expert_data(
@@ -755,6 +736,8 @@ class Elicit:
             self.model,
             self.targets,
         )
+        # add saving path
+        self.trainer["output_path"] = f"/{self.trainer['method']}/{self.trainer['name']}_{self.trainer['seed']}"  # noqa
         # add some additional results
         self.results["expert_elicited_statistics"] = expert_elicits
         try:
@@ -769,24 +752,15 @@ class Elicit:
             self.results["init_prior"] = init_prior
             self.results["init_matrix"] = init_matrix
 
-        # save results if desired and remove unrelevant sub-results
-        if self.trainer["output_path"] is not None:
-            save_hist = self.history.copy()
-            save_res = self.results.copy()
 
-            for key_hist in self.trainer["save_configs_history"]:
-                if not self.trainer["save_configs_history"][key_hist]:
-                    save_hist.pop(key_hist)
+        for key_hist in self.trainer["save_history"]:
+            if not self.trainer["save_history"][key_hist]:
+                self.history.pop(key_hist)
 
-            for key_res in self.trainer["save_configs_results"]:
-                if not self.trainer["save_configs_results"][key_res]:
-                    save_res.pop(key_res)
-
-            final_dict = {"history": save_hist, "results": save_res}
-
-            el.helpers.save_as_pkl(final_dict,
-                                   self.trainer["output_path"] + ".pkl")
-
-        # return history by default
-        if not silent:
-            return self.history
+        for key_res in self.trainer["save_results"]:
+            if not self.trainer["save_results"][key_res]:
+                self.results.pop(key_res)
+    
+    def save(self, save_dir: str, overwrite: bool=False):
+        # add a saving path
+        return el.utils.save(self, save_dir=save_dir, overwrite=overwrite)

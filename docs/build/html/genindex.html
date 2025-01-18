@@ -165,13 +165,12 @@
 <li class="toctree-l4"><a class="reference internal" href="api/elicit.extras.utils.html">elicit.extras.utils module</a></li>
 </ul>
 </details></li>
-<li class="toctree-l3"><a class="reference internal" href="api/elicit.configs.html">elicit.configs module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.elicit.html">elicit.elicit module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/elicit.helpers.html">elicit.helpers module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.initialization.html">elicit.initialization module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.losses.html">elicit.losses module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.networks.html">elicit.networks module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.optimization.html">elicit.optimization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/elicit.plots.html">elicit.plots module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.simulations.html">elicit.simulations module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.targets.html">elicit.targets module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/elicit.utils.html">elicit.utils module</a></li>
@@ -343,15 +342,15 @@ document.write(`
       <ul>
         <li><a href="api/elicit.elicit.html#elicit.elicit.Elicit.__init__">(elicit.elicit.Elicit method)</a>
 </li>
-        <li><a href="api/elicit.helpers.html#elicit.helpers.DoubleBound.__init__">(elicit.helpers.DoubleBound method)</a>
-</li>
-        <li><a href="api/elicit.helpers.html#elicit.helpers.LowerBound.__init__">(elicit.helpers.LowerBound method)</a>
-</li>
-        <li><a href="api/elicit.helpers.html#elicit.helpers.UpperBound.__init__">(elicit.helpers.UpperBound method)</a>
-</li>
         <li><a href="api/elicit.losses.html#elicit.losses.MMD2.__init__">(elicit.losses.MMD2 method)</a>
 </li>
         <li><a href="api/elicit.simulations.html#elicit.simulations.Priors.__init__">(elicit.simulations.Priors method)</a>
+</li>
+        <li><a href="api/elicit.utils.html#elicit.utils.DoubleBound.__init__">(elicit.utils.DoubleBound method)</a>
+</li>
+        <li><a href="api/elicit.utils.html#elicit.utils.LowerBound.__init__">(elicit.utils.LowerBound method)</a>
+</li>
+        <li><a href="api/elicit.utils.html#elicit.utils.UpperBound.__init__">(elicit.utils.UpperBound method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -372,15 +371,9 @@ document.write(`
 </li>
       <li><a href="api/elicit.targets.html#elicit.targets.computation_elicited_statistics">computation_elicited_statistics() (in module elicit.targets)</a>
 </li>
-      <li><a href="api/elicit.targets.html#elicit.targets.computation_target_quantities">computation_target_quantities() (in module elicit.targets)</a>
-</li>
-      <li><a href="api/elicit.losses.html#elicit.losses.compute_discrepancy">compute_discrepancy() (in module elicit.losses)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/elicit.losses.html#elicit.losses.compute_loss">compute_loss() (in module elicit.losses)</a>
-</li>
-      <li><a href="api/elicit.losses.html#elicit.losses.compute_loss_components">compute_loss_components() (in module elicit.losses)</a>
+      <li><a href="api/elicit.targets.html#elicit.targets.computation_target_quantities">computation_target_quantities() (in module elicit.targets)</a>
 </li>
       <li><a href="api/elicit.elicit.html#elicit.elicit.Queries.correlation">correlation() (elicit.elicit.Queries method)</a>
 </li>
@@ -398,7 +391,7 @@ document.write(`
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/elicit.helpers.html#elicit.helpers.DoubleBound">DoubleBound (class in elicit.helpers)</a>
+      <li><a href="api/elicit.utils.html#elicit.utils.DoubleBound">DoubleBound (class in elicit.utils)</a>
 </li>
       <li><a href="api/elicit.elicit.html#elicit.elicit.Dtype">Dtype (class in elicit.elicit)</a>
 </li>
@@ -417,13 +410,6 @@ document.write(`
       </ul></li>
       <li><a href="api/elicit.elicit.html#elicit.elicit.Elicit">Elicit (class in elicit.elicit)</a>
 </li>
-      <li>
-    elicit.configs
-
-      <ul>
-        <li><a href="api/elicit.configs.html#module-elicit.configs">module</a>
-</li>
-      </ul></li>
       <li>
     elicit.elicit
 
@@ -446,21 +432,12 @@ document.write(`
 </li>
       </ul></li>
       <li>
-    elicit.helpers
-
-      <ul>
-        <li><a href="api/elicit.helpers.html#module-elicit.helpers">module</a>
-</li>
-      </ul></li>
-      <li>
     elicit.initialization
 
       <ul>
         <li><a href="api/elicit.initialization.html#module-elicit.initialization">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     elicit.losses
 
@@ -468,6 +445,8 @@ document.write(`
         <li><a href="api/elicit.losses.html#module-elicit.losses">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     elicit.networks
 
@@ -480,6 +459,13 @@ document.write(`
 
       <ul>
         <li><a href="api/elicit.optimization.html#module-elicit.optimization">module</a>
+</li>
+      </ul></li>
+      <li>
+    elicit.plots
+
+      <ul>
+        <li><a href="api/elicit.plots.html#module-elicit.plots">module</a>
 </li>
       </ul></li>
       <li>
@@ -503,6 +489,8 @@ document.write(`
         <li><a href="api/elicit.utils.html#module-elicit.utils">module</a>
 </li>
       </ul></li>
+      <li><a href="api/elicit.plots.html#elicit.plots.elicits">elicits() (in module elicit.plots)</a>
+</li>
       <li><a href="api/elicit.elicit.html#elicit.elicit.Expert">Expert (class in elicit.elicit)</a>
 </li>
   </ul></td>
@@ -513,12 +501,12 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/elicit.elicit.html#elicit.elicit.Elicit.fit">fit() (elicit.elicit.Elicit method)</a>
 </li>
-      <li><a href="api/elicit.helpers.html#elicit.helpers.DoubleBound.forward">forward() (elicit.helpers.DoubleBound method)</a>
+      <li><a href="api/elicit.utils.html#elicit.utils.DoubleBound.forward">forward() (elicit.utils.DoubleBound method)</a>
 
       <ul>
-        <li><a href="api/elicit.helpers.html#elicit.helpers.LowerBound.forward">(elicit.helpers.LowerBound method)</a>
+        <li><a href="api/elicit.utils.html#elicit.utils.LowerBound.forward">(elicit.utils.LowerBound method)</a>
 </li>
-        <li><a href="api/elicit.helpers.html#elicit.helpers.UpperBound.forward">(elicit.helpers.UpperBound method)</a>
+        <li><a href="api/elicit.utils.html#elicit.utils.UpperBound.forward">(elicit.utils.UpperBound method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -538,6 +526,10 @@ document.write(`
       <li><a href="api/elicit.elicit.html#elicit.elicit.hyper">hyper() (in module elicit.elicit)</a>
 </li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/elicit.plots.html#elicit.plots.hyperparameter">hyperparameter() (in module elicit.plots)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="I">I</h2>
@@ -546,27 +538,31 @@ document.write(`
       <li><a href="api/elicit.elicit.html#elicit.elicit.Queries.identity">identity() (elicit.elicit.Queries method)</a>
 
       <ul>
-        <li><a href="api/elicit.helpers.html#elicit.helpers.identity">(in module elicit.helpers)</a>
+        <li><a href="api/elicit.utils.html#elicit.utils.identity">(in module elicit.utils)</a>
 </li>
       </ul></li>
+      <li><a href="api/elicit.losses.html#elicit.losses.indiv_loss">indiv_loss() (in module elicit.losses)</a>
+</li>
       <li><a href="api/elicit.initialization.html#elicit.initialization.init_prior">init_prior() (in module elicit.initialization)</a>
 </li>
       <li><a href="api/elicit.initialization.html#elicit.initialization.init_runs">init_runs() (in module elicit.initialization)</a>
 </li>
-      <li><a href="api/elicit.elicit.html#elicit.elicit.initializer">initializer() (in module elicit.elicit)</a>
+      <li><a href="api/elicit.plots.html#elicit.plots.initialization">initialization() (in module elicit.plots)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/elicit.elicit.html#elicit.elicit.initializer">initializer() (in module elicit.elicit)</a>
+</li>
       <li><a href="api/elicit.simulations.html#elicit.simulations.intialize_priors">intialize_priors() (in module elicit.simulations)</a>
 </li>
-      <li><a href="api/elicit.helpers.html#elicit.helpers.DoubleBound.inv_logit">inv_logit() (elicit.helpers.DoubleBound method)</a>
+      <li><a href="api/elicit.utils.html#elicit.utils.DoubleBound.inv_logit">inv_logit() (elicit.utils.DoubleBound method)</a>
 </li>
-      <li><a href="api/elicit.helpers.html#elicit.helpers.DoubleBound.inverse">inverse() (elicit.helpers.DoubleBound method)</a>
+      <li><a href="api/elicit.utils.html#elicit.utils.DoubleBound.inverse">inverse() (elicit.utils.DoubleBound method)</a>
 
       <ul>
-        <li><a href="api/elicit.helpers.html#elicit.helpers.LowerBound.inverse">(elicit.helpers.LowerBound method)</a>
+        <li><a href="api/elicit.utils.html#elicit.utils.LowerBound.inverse">(elicit.utils.LowerBound method)</a>
 </li>
-        <li><a href="api/elicit.helpers.html#elicit.helpers.UpperBound.inverse">(elicit.helpers.UpperBound method)</a>
+        <li><a href="api/elicit.utils.html#elicit.utils.UpperBound.inverse">(elicit.utils.UpperBound method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -585,15 +581,17 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/elicit.losses.html#elicit.losses.L2">L2() (in module elicit.losses)</a>
 </li>
-      <li><a href="api/elicit.utils.html#elicit.utils.load_elicit">load_elicit() (in module elicit.utils)</a>
+      <li><a href="api/elicit.utils.html#elicit.utils.load">load() (in module elicit.utils)</a>
+</li>
+      <li><a href="api/elicit.extras.utils.html#elicit.extras.utils.log_R2">log_R2() (in module elicit.extras.utils)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/elicit.extras.utils.html#elicit.extras.utils.log_R2">log_R2() (in module elicit.extras.utils)</a>
+      <li><a href="api/elicit.utils.html#elicit.utils.DoubleBound.logit">logit() (elicit.utils.DoubleBound method)</a>
 </li>
-      <li><a href="api/elicit.helpers.html#elicit.helpers.DoubleBound.logit">logit() (elicit.helpers.DoubleBound method)</a>
+      <li><a href="api/elicit.plots.html#elicit.plots.loss">loss() (in module elicit.plots)</a>
 </li>
-      <li><a href="api/elicit.helpers.html#elicit.helpers.LowerBound">LowerBound (class in elicit.helpers)</a>
+      <li><a href="api/elicit.utils.html#elicit.utils.LowerBound">LowerBound (class in elicit.utils)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -611,15 +609,11 @@ document.write(`
       <ul>
         <li><a href="api/elicit.html#module-elicit">elicit</a>
 </li>
-        <li><a href="api/elicit.configs.html#module-elicit.configs">elicit.configs</a>
-</li>
         <li><a href="api/elicit.elicit.html#module-elicit.elicit">elicit.elicit</a>
 </li>
         <li><a href="api/elicit.extras.html#module-elicit.extras">elicit.extras</a>
 </li>
         <li><a href="api/elicit.extras.utils.html#module-elicit.extras.utils">elicit.extras.utils</a>
-</li>
-        <li><a href="api/elicit.helpers.html#module-elicit.helpers">elicit.helpers</a>
 </li>
         <li><a href="api/elicit.initialization.html#module-elicit.initialization">elicit.initialization</a>
 </li>
@@ -628,6 +622,8 @@ document.write(`
         <li><a href="api/elicit.networks.html#module-elicit.networks">elicit.networks</a>
 </li>
         <li><a href="api/elicit.optimization.html#module-elicit.optimization">elicit.optimization</a>
+</li>
+        <li><a href="api/elicit.plots.html#module-elicit.plots">elicit.plots</a>
 </li>
         <li><a href="api/elicit.simulations.html#module-elicit.simulations">elicit.simulations</a>
 </li>
@@ -664,11 +660,15 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/elicit.elicit.html#elicit.elicit.parameter">parameter() (in module elicit.elicit)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/elicit.extras.utils.html#elicit.extras.utils.pearson_correlation">pearson_correlation() (in module elicit.extras.utils)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/elicit.losses.html#elicit.losses.preprocess">preprocess() (in module elicit.losses)</a>
+</li>
       <li><a href="api/elicit.simulations.html#elicit.simulations.Priors">Priors (class in elicit.simulations)</a>
+</li>
+      <li><a href="api/elicit.plots.html#elicit.plots.priors">priors() (in module elicit.plots)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -690,15 +690,19 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/elicit.simulations.html#elicit.simulations.sample_from_priors">sample_from_priors() (in module elicit.simulations)</a>
 </li>
-      <li><a href="api/elicit.helpers.html#elicit.helpers.save_as_pkl">save_as_pkl() (in module elicit.helpers)</a>
+      <li><a href="api/elicit.elicit.html#elicit.elicit.Elicit.save">save() (elicit.elicit.Elicit method)</a>
+
+      <ul>
+        <li><a href="api/elicit.utils.html#elicit.utils.save">(in module elicit.utils)</a>
 </li>
-      <li><a href="api/elicit.utils.html#elicit.utils.save_elicit">save_elicit() (in module elicit.utils)</a>
+      </ul></li>
+      <li><a href="api/elicit.utils.html#elicit.utils.save_as_pkl">save_as_pkl() (in module elicit.utils)</a>
 </li>
-      <li><a href="api/elicit.configs.html#elicit.configs.save_history">save_history() (in module elicit.configs)</a>
+      <li><a href="api/elicit.utils.html#elicit.utils.save_history">save_history() (in module elicit.utils)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/elicit.configs.html#elicit.configs.save_results">save_results() (in module elicit.configs)</a>
+      <li><a href="api/elicit.utils.html#elicit.utils.save_results">save_results() (in module elicit.utils)</a>
 </li>
       <li><a href="api/elicit.optimization.html#elicit.optimization.sgd_training">sgd_training() (in module elicit.optimization)</a>
 </li>
@@ -718,6 +722,8 @@ document.write(`
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/elicit.losses.html#elicit.losses.total_loss">total_loss() (in module elicit.losses)</a>
+</li>
       <li><a href="api/elicit.elicit.html#elicit.elicit.trainer">trainer() (in module elicit.elicit)</a>
 </li>
   </ul></td>
@@ -732,7 +738,7 @@ document.write(`
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/elicit.helpers.html#elicit.helpers.UpperBound">UpperBound (class in elicit.helpers)</a>
+      <li><a href="api/elicit.utils.html#elicit.utils.UpperBound">UpperBound (class in elicit.utils)</a>
 </li>
       <li><a href="api/elicit.targets.html#elicit.targets.use_custom_functions">use_custom_functions() (in module elicit.targets)</a>
 </li>

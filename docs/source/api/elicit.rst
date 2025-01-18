@@ -15,13 +15,12 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   elicit.configs
    elicit.elicit
-   elicit.helpers
    elicit.initialization
    elicit.losses
    elicit.networks
    elicit.optimization
+   elicit.plots
    elicit.simulations
    elicit.targets
    elicit.utils

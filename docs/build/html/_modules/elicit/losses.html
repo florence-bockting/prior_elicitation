@@ -165,13 +165,12 @@
 <li class="toctree-l4"><a class="reference internal" href="../../api/elicit.extras.utils.html">elicit.extras.utils module</a></li>
 </ul>
 </details></li>
-<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.configs.html">elicit.configs module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.elicit.html">elicit.elicit module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.helpers.html">elicit.helpers module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.initialization.html">elicit.initialization module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.losses.html">elicit.losses module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.networks.html">elicit.networks module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.optimization.html">elicit.optimization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.plots.html">elicit.plots module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.simulations.html">elicit.simulations module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.targets.html">elicit.targets module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.utils.html">elicit.utils module</a></li>
@@ -313,39 +312,31 @@ document.write(`
 <span class="n">bfn</span> <span class="o">=</span> <span class="n">bf</span><span class="o">.</span><span class="n">networks</span>
 
 
-<div class="viewcode-block" id="compute_loss_components">
-<a class="viewcode-back" href="../../api/elicit.losses.html#elicit.losses.compute_loss_components">[docs]</a>
-<span class="k">def</span> <span class="nf">compute_loss_components</span><span class="p">(</span><span class="n">elicited_statistics</span><span class="p">):</span>
+<div class="viewcode-block" id="preprocess">
+<a class="viewcode-back" href="../../api/elicit.losses.html#elicit.losses.preprocess">[docs]</a>
+<span class="k">def</span> <span class="nf">preprocess</span><span class="p">(</span><span class="n">elicited_statistics</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Computes the single loss components used for computing the discrepancy</span>
-<span class="sd">    between the elicited statistics. This computation depends on the</span>
-<span class="sd">    method as specified in the &#39;combine-loss&#39; argument.</span>
+<span class="sd">    Preprocess elicited statistics such that they have the required format for</span>
+<span class="sd">    computing the individual losses between expert- and simulated statistics.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    elicited_statistics : dict</span>
 <span class="sd">        dictionary including the elicited statistics.</span>
-<span class="sd">    glob_dict : dict</span>
-<span class="sd">        dictionary including all user-input settings.</span>
-<span class="sd">    expert : bool</span>
-<span class="sd">        if workflow is run to simulate a pre-specified ground truth; expert is</span>
-<span class="sd">        set as &#39;True&#39;. As consequence the files are saved in a special &#39;expert&#39;</span>
-<span class="sd">        folder.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    loss_comp_res : dict</span>
-<span class="sd">        dictionary including all loss components which will be used to compute</span>
-<span class="sd">        the discrepancy.</span>
+<span class="sd">    preprocessed_elicits : dict</span>
+<span class="sd">        dictionary including all preprocessed elicited statistics which will</span>
+<span class="sd">        enter the loss function to compute the individual loss components.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># extract names from elicited statistics</span>
     <span class="n">name_elicits</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">elicited_statistics</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
-
     <span class="c1"># prepare dictionary for storing results</span>
-    <span class="n">loss_comp_res</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">preprocessed_elicits</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="c1"># initialize some helpers for keeping track of target quantity</span>
     <span class="n">target_control</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">i_target</span> <span class="o">=</span> <span class="mi">0</span>
@@ -363,169 +354,114 @@ document.write(`
         <span class="c1"># if target quantity changes go with index one up</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">eval_target</span><span class="p">:</span>
             <span class="n">i_target</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="c1"># extract loss component</span>
-        <span class="n">loss_comp</span> <span class="o">=</span> <span class="n">elicited_statistics</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="c1"># extract data</span>
+        <span class="n">tensor_elicit</span> <span class="o">=</span> <span class="n">elicited_statistics</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
 
-        <span class="k">assert</span> <span class="n">tf</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">loss_comp</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;elicited statistics can only have 2 dimensions.&quot;</span>  <span class="c1"># noqa</span>
+        <span class="k">assert</span> <span class="n">tf</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">tensor_elicit</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;elicited statistics can only have 2 dimensions.&quot;</span>  <span class="c1"># noqa</span>
 
-        <span class="k">if</span> <span class="n">tf</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">loss_comp</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">tf</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">tensor_elicit</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="c1"># add a last axis for loss computation</span>
-            <span class="n">final_loss_comp</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">loss_comp</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">prep_elicit</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">tensor_elicit</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
             <span class="c1"># store result</span>
-            <span class="n">loss_comp_res</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_loss&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">final_loss_comp</span>
+            <span class="n">preprocessed_elicits</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_loss&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prep_elicit</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">loss_comp_res</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_loss_</span><span class="si">{</span><span class="n">i_target</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">loss_comp</span>
+            <span class="n">preprocessed_elicits</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_loss_</span><span class="si">{</span><span class="n">i_target</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tensor_elicit</span>
 
-    <span class="k">return</span> <span class="n">loss_comp_res</span></div>
+    <span class="k">return</span> <span class="n">preprocessed_elicits</span></div>
 
 
 
-<div class="viewcode-block" id="compute_discrepancy">
-<a class="viewcode-back" href="../../api/elicit.losses.html#elicit.losses.compute_discrepancy">[docs]</a>
-<span class="k">def</span> <span class="nf">compute_discrepancy</span><span class="p">(</span><span class="n">loss_components_expert</span><span class="p">,</span> <span class="n">loss_components_training</span><span class="p">,</span>
-                        <span class="n">targets</span><span class="p">):</span>
+<div class="viewcode-block" id="indiv_loss">
+<a class="viewcode-back" href="../../api/elicit.losses.html#elicit.losses.indiv_loss">[docs]</a>
+<span class="k">def</span> <span class="nf">indiv_loss</span><span class="p">(</span><span class="n">elicit_expert</span><span class="p">,</span> <span class="n">elicit_training</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Computes the discrepancy between all loss components using a specified</span>
-<span class="sd">    discrepancy measure and returns a list with all loss values.</span>
+<span class="sd">    Computes the individual loss between expert data and model-simulated data.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    loss_components_expert : dict</span>
-<span class="sd">        dictionary including all loss components derived from the</span>
-<span class="sd">        expert-elicited statistics.</span>
-<span class="sd">    loss_components_training : dict</span>
-<span class="sd">        dictionary including all loss components derived from the model</span>
-<span class="sd">        simulations. (The names (keys) between loss_components_expert and \</span>
-<span class="sd">                      loss_components_training must match)</span>
-<span class="sd">    glob_dict : dict</span>
-<span class="sd">        dictionary including all user-input settings.</span>
+<span class="sd">    elicit_expert : dict</span>
+<span class="sd">        dictionary including all preprocessed elicited statistics</span>
+<span class="sd">    elicit_training : dict</span>
+<span class="sd">        dictionary including all preprocessed model statistics</span>
+<span class="sd">    targets : dict</span>
+<span class="sd">        user-input from :func:`elicit.elicit.target`</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    loss_per_component : list</span>
-<span class="sd">        list of loss value for each loss component</span>
+<span class="sd">    indiv_losses : list</span>
+<span class="sd">        list of individual losses for each loss component</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># create dictionary for storing results</span>
-    <span class="n">loss_per_component</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">indiv_losses</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="c1"># extract expert loss components by name</span>
-    <span class="n">keys_loss_comps</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">loss_components_expert</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="n">name_prep_elicits</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">elicit_expert</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
     <span class="c1"># compute discrepancy</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">keys_loss_comps</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">name_prep_elicits</span><span class="p">):</span>
         <span class="c1"># import loss function</span>
         <span class="n">loss_function</span> <span class="o">=</span> <span class="n">targets</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;loss&quot;</span><span class="p">]</span>
-        <span class="c1"># broadcast expert loss to training-shape</span>
-        <span class="n">loss_comp_expert</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span>
-            <span class="n">loss_components_expert</span><span class="p">[</span><span class="n">name</span><span class="p">],</span>
+        <span class="c1"># broadcast expert loss to training data-shape</span>
+        <span class="n">elicit_expert_brdcst</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span>
+            <span class="n">elicit_expert</span><span class="p">[</span><span class="n">name</span><span class="p">],</span>
             <span class="n">shape</span><span class="o">=</span><span class="p">(</span>
-                <span class="n">loss_components_training</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                <span class="n">loss_components_expert</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-            <span class="p">),</span>
-        <span class="p">)</span>
+                <span class="n">elicit_training</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">elicit_expert</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="p">)</span>
         <span class="c1"># compute loss</span>
-        <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_function</span><span class="p">(</span><span class="n">loss_comp_expert</span><span class="p">,</span> <span class="n">loss_components_training</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
-        <span class="n">loss_per_component</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span>
+        <span class="n">indiv_loss</span> <span class="o">=</span> <span class="n">loss_function</span><span class="p">(</span><span class="n">elicit_expert_brdcst</span><span class="p">,</span> <span class="n">elicit_training</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
+        <span class="n">indiv_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">indiv_loss</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">loss_per_component</span></div>
+    <span class="k">return</span> <span class="n">indiv_losses</span></div>
 
 
 
-<div class="viewcode-block" id="compute_loss">
-<a class="viewcode-back" href="../../api/elicit.losses.html#elicit.losses.compute_loss">[docs]</a>
-<span class="k">def</span> <span class="nf">compute_loss</span><span class="p">(</span>
-    <span class="n">training_elicited_statistics</span><span class="p">,</span> <span class="n">expert_elicited_statistics</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">targets</span>
-<span class="p">):</span>
+<div class="viewcode-block" id="total_loss">
+<a class="viewcode-back" href="../../api/elicit.losses.html#elicit.losses.total_loss">[docs]</a>
+<span class="k">def</span> <span class="nf">total_loss</span><span class="p">(</span><span class="n">elicit_training</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">elicit_expert</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">epoch</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+               <span class="n">targets</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Wrapper around the loss computation from elicited statistics to final</span>
-<span class="sd">    loss value.</span>
+<span class="sd">    Computes the weighted average across all individual losses between expert</span>
+<span class="sd">    data and model simulations.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    training_elicited_statistics : dict</span>
-<span class="sd">        dictionary containing the expert elicited statistics.</span>
-<span class="sd">    expert_elicited_statistics : dict</span>
-<span class="sd">        dictionary containing the model-simulated elicited statistics.</span>
-<span class="sd">    global_dict : dict</span>
-<span class="sd">        global dictionary with all user input specifications.</span>
+<span class="sd">    elicit_training : dict</span>
+<span class="sd">        elicited statistics simulated by the model.</span>
+<span class="sd">    elicit_expert : dict</span>
+<span class="sd">        elicited statistics as queried from the expert.</span>
 <span class="sd">    epoch : int</span>
-<span class="sd">        epoch .</span>
+<span class="sd">        epoch (iteration within optimization process).</span>
+<span class="sd">    targets : dict</span>
+<span class="sd">        user-input from :func:`elicit.elicit.target`</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    total_loss : float</span>
-<span class="sd">        total loss value.</span>
+<span class="sd">    loss : float</span>
+<span class="sd">        weighted average across individual losses quantifying the discrepancy</span>
+<span class="sd">        between expert data and model simulations.</span>
+<span class="sd">    individual_losses : list</span>
+<span class="sd">        list of individual losses for each loss component.</span>
+<span class="sd">    elicit_expert_prep : dict</span>
+<span class="sd">        dictionary including all preprocessed expert elicited statistics.</span>
+<span class="sd">    elicit_training_prep : dict</span>
+<span class="sd">        dictionary including all preprocessed model-simulated elicited</span>
+<span class="sd">        statistics.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># regularization term for preventing degenerated solutions in var</span>
-    <span class="c1"># collapse to zero used from Manderson and Goudie (2024)</span>
-    <span class="k">def</span> <span class="nf">regulariser</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Regularizer term for loss function: minus log sd of each prior</span>
-<span class="sd">        distribution (priors with larger sds should be prefered)</span>
+    <span class="c1"># preprocess expert data and simulated data for usage in loss computation</span>
+    <span class="n">elicit_expert_prep</span> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><span class="n">elicit_expert</span><span class="p">)</span>
+    <span class="n">elicit_training_prep</span> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><span class="n">elicit_training</span><span class="p">)</span>
+    <span class="c1"># compute individual losses for each loss component</span>
+    <span class="n">individual_losses</span> <span class="o">=</span> <span class="n">indiv_loss</span><span class="p">(</span>
+        <span class="n">elicit_expert_prep</span><span class="p">,</span> <span class="n">elicit_training_prep</span><span class="p">,</span> <span class="n">targets</span><span class="p">)</span>
+    <span class="c1"># compute weighted average across individual losses to get the final loss</span>
+    <span class="c1"># TODO: check whether order of loss_per_component and target quantities</span>
+    <span class="c1"># is equivalent!</span>
+    <span class="n">loss</span><span class="o">=</span><span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">)):</span>
+        <span class="n">loss</span> <span class="o">+=</span> <span class="n">tf</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">individual_losses</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">targets</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;weight&quot;</span><span class="p">])</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        prior_samples : tf.Tensor</span>
-<span class="sd">            samples from prior distributions.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        float</span>
-<span class="sd">            the negative mean log std across all prior distributions.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">log_sd</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_std</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="n">mean_log_sd</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">log_sd</span><span class="p">)</span>
-        <span class="k">return</span> <span class="o">-</span><span class="n">mean_log_sd</span>
-
-    <span class="k">def</span> <span class="nf">compute_total_loss</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">loss_per_component</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        applies dynamic weight averaging for multi-objective loss function</span>
-<span class="sd">        if specified. If loss_weighting has been set to None, all weights</span>
-<span class="sd">        get an equal weight of 1.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        epoch : int</span>
-<span class="sd">            curernt epoch.</span>
-<span class="sd">        loss_per_component : list of floats</span>
-<span class="sd">            list of loss values per loss component.</span>
-<span class="sd">        global_dict : dict</span>
-<span class="sd">            global dictionary with all user input specifications.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        total_loss : float</span>
-<span class="sd">            total loss value (either weighted or unweighted).</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="c1"># loss_per_component_current = loss_per_component</span>
-        <span class="c1"># TODO: check whether order of loss_per_component and target quantities</span>
-        <span class="c1"># is equivalent!</span>
-        <span class="n">total_loss</span><span class="o">=</span><span class="mi">0</span>
-        <span class="c1"># create subdictionary for better readability</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">)):</span>
-            <span class="n">total_loss</span> <span class="o">+=</span> <span class="n">tf</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span>
-                <span class="n">loss_per_component</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">targets</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;weight&quot;</span><span class="p">]</span>
-                <span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">total_loss</span>
-
-    <span class="n">loss_components_expert</span> <span class="o">=</span> <span class="n">compute_loss_components</span><span class="p">(</span>
-        <span class="n">expert_elicited_statistics</span>
-    <span class="p">)</span>
-    <span class="n">loss_components_training</span> <span class="o">=</span> <span class="n">compute_loss_components</span><span class="p">(</span>
-        <span class="n">training_elicited_statistics</span>
-    <span class="p">)</span>
-    <span class="n">loss_per_component</span> <span class="o">=</span> <span class="n">compute_discrepancy</span><span class="p">(</span>
-        <span class="n">loss_components_expert</span><span class="p">,</span> <span class="n">loss_components_training</span><span class="p">,</span> <span class="n">targets</span>
-    <span class="p">)</span>
-    <span class="n">weighted_total_loss</span><span class="o">=</span><span class="n">compute_total_loss</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">loss_per_component</span><span class="p">,</span> <span class="n">targets</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="p">(</span><span class="n">weighted_total_loss</span><span class="p">,</span> <span class="n">loss_components_expert</span><span class="p">,</span>
-            <span class="n">loss_components_training</span><span class="p">,</span> <span class="n">loss_per_component</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="n">individual_losses</span><span class="p">,</span> <span class="n">elicit_expert_prep</span><span class="p">,</span> <span class="n">elicit_training_prep</span><span class="p">)</span></div>
 
 
 
@@ -560,25 +496,35 @@ document.write(`
 <span class="k">class</span> <span class="nc">MMD2</span><span class="p">:</span>
 <div class="viewcode-block" id="MMD2.__init__">
 <a class="viewcode-back" href="../../api/elicit.losses.html#elicit.losses.MMD2.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kernel</span> <span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;energy&quot;</span><span class="p">,</span> <span class="n">sigma</span> <span class="p">:</span> <span class="nb">int</span> <span class="ow">or</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kernel</span> <span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;energy&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Computes the biased, squared maximum mean discrepancy</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        kernel : str</span>
-<span class="sd">            kernel type used for computing the MMD such as &quot;gaussian&quot;, &quot;energy&quot;</span>
-<span class="sd">            The default is &quot;energy&quot;.</span>
-<span class="sd">        sigma : int, optional</span>
-<span class="sd">            Variance parameter used in the gaussian kernel.</span>
-<span class="sd">            The default is None.</span>
-<span class="sd">        **kwargs : keyword arguments</span>
-<span class="sd">            Additional keyword arguments.</span>
+<span class="sd">            kernel type used for computing the MMD.</span>
+<span class="sd">            Currently implemented kernels are &quot;gaussian&quot;, &quot;energy&quot;.</span>
+<span class="sd">            When using a gaussian kernel an additional &#39;sigma&#39; argument has to</span>
+<span class="sd">            be passed.</span>
+<span class="sd">            The default kernel is &quot;energy&quot;.</span>
+<span class="sd">        **kwargs : any</span>
+<span class="sd">            additional keyword arguments that might be required by the </span>
+<span class="sd">            different individual kernels</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; el.losses.MMD2(kernel=&quot;energy&quot;)</span>
+
+<span class="sd">        &gt;&gt;&gt; el.losses.MMD2(kernel=&quot;gaussian&quot;, sigma = 1.)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">kernel_name</span> <span class="o">=</span> <span class="n">kernel</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span> <span class="o">=</span> <span class="n">sigma</span></div>
+        <span class="c1"># ensure that all additionally, required arguments are provided for</span>
+        <span class="c1"># the respective kernel</span>
+        <span class="k">if</span> <span class="n">kernel</span> <span class="o">==</span> <span class="s2">&quot;gaussian&quot;</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="s2">&quot;sigma&quot;</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="s2">&quot;You need to pass a &#39;sigma&#39; argument when using a gaussian kernel in the MMD loss&quot;</span>  <span class="c1"># noqa</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="MMD2.__call__">
@@ -620,13 +566,16 @@ document.write(`
         <span class="n">u_yy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">yy</span><span class="p">)[:,:,</span><span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">yy</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">yy</span><span class="p">)[:,</span><span class="kc">None</span><span class="p">,:]</span>
 
         <span class="c1"># apply kernel function to squared difference</span>
-        <span class="n">XX</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">u_xx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">)</span>
-        <span class="n">XY</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">u_xy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">)</span>
-        <span class="n">YY</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">u_yy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">)</span>
+        <span class="n">XX</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">u_xx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel_name</span><span class="p">)</span>
+        <span class="n">XY</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">u_xy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel_name</span><span class="p">)</span>
+        <span class="n">YY</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">u_yy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel_name</span><span class="p">)</span>
 
         <span class="c1"># Step 2</span>
         <span class="c1"># compute biased, squared MMD</span>
-        <span class="n">MMD2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">XX</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">XY</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">YY</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">MMD2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">XX</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">MMD2</span> <span class="o">-=</span> <span class="mi">2</span><span class="o">*</span><span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">XY</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">MMD2</span> <span class="o">+=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">YY</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+
         <span class="n">MMD2_mean</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">MMD2</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">MMD2_mean</span></div>
@@ -634,7 +583,21 @@ document.write(`
 
 <div class="viewcode-block" id="MMD2.clip">
 <a class="viewcode-back" href="../../api/elicit.losses.html#elicit.losses.MMD2.clip">[docs]</a>
-    <span class="k">def</span> <span class="nf">clip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">clip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        upper and lower clipping of value `u` to improve numerical stability</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        u : float</span>
+<span class="sd">            result of prior computation.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        u_clipped : float</span>
+<span class="sd">            clipped u value with ``min=1e-8`` and ``max=1e10``.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">u_clipped</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">clip_by_value</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">clip_value_min</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> 
                                      <span class="n">clip_value_max</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">1e10</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">u_clipped</span></div>
@@ -643,18 +606,49 @@ document.write(`
 <div class="viewcode-block" id="MMD2.diag">
 <a class="viewcode-back" href="../../api/elicit.losses.html#elicit.losses.MMD2.diag">[docs]</a>
     <span class="k">def</span> <span class="nf">diag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xx</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        get diagonale elements of a matrix, whereby the first tensor dimension</span>
+<span class="sd">        are batches and should not be considered to get diagonale elements.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        xx : tensor</span>
+<span class="sd">            Similarity matrices with batch dimension in axis=0.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        diag : tensor</span>
+<span class="sd">            diagonale elements of matrices per batch.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">diag</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">experimental</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">diagonal</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">axis1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis2</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">diag</span></div>
 
 
 <div class="viewcode-block" id="MMD2.kernel">
 <a class="viewcode-back" href="../../api/elicit.losses.html#elicit.losses.MMD2.kernel">[docs]</a>
-    <span class="k">def</span> <span class="nf">kernel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">kernel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">kernel</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Kernel used in MMD to compute discrepancy between samples.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        u : float</span>
+<span class="sd">            squared distance between samples.</span>
+<span class="sd">        kernel : str</span>
+<span class="sd">            name of kernel used for computing discrepancy.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        d : float</span>
+<span class="sd">            discrepancy between samples.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">kernel</span><span class="o">==</span><span class="s2">&quot;energy&quot;</span><span class="p">:</span>
             <span class="c1"># clipping for numerical stability reasons</span>
             <span class="n">d</span><span class="o">=-</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">u</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">kernel</span><span class="o">==</span><span class="s2">&quot;gaussian&quot;</span><span class="p">:</span>
-            <span class="n">d</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">tf</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">sigma</span><span class="p">))</span>
+            <span class="n">d</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">tf</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">d</span></div>
 </div>
 

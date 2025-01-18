@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=87e54e7c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -43,6 +43,8 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/elicit.utils';</script>
     <link rel="icon" href="../_static/favicon-light.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -166,13 +168,12 @@
 <li class="toctree-l4"><a class="reference internal" href="elicit.extras.utils.html">elicit.extras.utils module</a></li>
 </ul>
 </details></li>
-<li class="toctree-l3"><a class="reference internal" href="elicit.configs.html">elicit.configs module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.elicit.html">elicit.elicit module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="elicit.helpers.html">elicit.helpers module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.initialization.html">elicit.initialization module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.losses.html">elicit.losses module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.networks.html">elicit.networks module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.optimization.html">elicit.optimization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.plots.html">elicit.plots module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.simulations.html">elicit.simulations module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.targets.html">elicit.targets module</a></li>
 <li class="toctree-l3 current active"><a class="current reference internal" href="#">elicit.utils module</a></li>
@@ -347,10 +348,34 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.save_as_pkl"><code class="docutils literal notranslate"><span class="pre">save_as_pkl()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.identity"><code class="docutils literal notranslate"><span class="pre">identity()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.DoubleBound"><code class="docutils literal notranslate"><span class="pre">DoubleBound</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.DoubleBound.__init__"><code class="docutils literal notranslate"><span class="pre">DoubleBound.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.DoubleBound.logit"><code class="docutils literal notranslate"><span class="pre">DoubleBound.logit()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.DoubleBound.inv_logit"><code class="docutils literal notranslate"><span class="pre">DoubleBound.inv_logit()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.DoubleBound.forward"><code class="docutils literal notranslate"><span class="pre">DoubleBound.forward()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.DoubleBound.inverse"><code class="docutils literal notranslate"><span class="pre">DoubleBound.inverse()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.LowerBound"><code class="docutils literal notranslate"><span class="pre">LowerBound</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.LowerBound.__init__"><code class="docutils literal notranslate"><span class="pre">LowerBound.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.LowerBound.forward"><code class="docutils literal notranslate"><span class="pre">LowerBound.forward()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.LowerBound.inverse"><code class="docutils literal notranslate"><span class="pre">LowerBound.inverse()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.UpperBound"><code class="docutils literal notranslate"><span class="pre">UpperBound</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.UpperBound.__init__"><code class="docutils literal notranslate"><span class="pre">UpperBound.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.UpperBound.forward"><code class="docutils literal notranslate"><span class="pre">UpperBound.forward()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.UpperBound.inverse"><code class="docutils literal notranslate"><span class="pre">UpperBound.inverse()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.one_forward_simulation"><code class="docutils literal notranslate"><span class="pre">one_forward_simulation()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.get_expert_data"><code class="docutils literal notranslate"><span class="pre">get_expert_data()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.save_elicit"><code class="docutils literal notranslate"><span class="pre">save_elicit()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.load_elicit"><code class="docutils literal notranslate"><span class="pre">load_elicit()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.save_history"><code class="docutils literal notranslate"><span class="pre">save_history()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.save_results"><code class="docutils literal notranslate"><span class="pre">save_results()</span></code></a></li>
 </ul>
             </nav>
         </div>
@@ -364,6 +389,332 @@ document.write(`
                   
   <section id="module-elicit.utils">
 <span id="elicit-utils-module"></span><h1>elicit.utils module<a class="headerlink" href="#module-elicit.utils" title="Link to this heading">#</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="elicit.utils.save_as_pkl">
+<span class="sig-prename descclassname"><span class="pre">elicit.utils.</span></span><span class="sig-name descname"><span class="pre">save_as_pkl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#save_as_pkl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.save_as_pkl" title="Link to this definition">#</a></dt>
+<dd><p>Helper functions to save a file as pickle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>obj</strong><span class="classifier">any</span></dt><dd><p>variable that needs to be saved.</p>
+</dd>
+<dt><strong>save_dir</strong><span class="classifier">str</span></dt><dd><p>path indicating the file location.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>None.</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">save_as_pkl</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;results/file.pkl&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="elicit.utils.identity">
+<span class="sig-prename descclassname"><span class="pre">elicit.utils.</span></span><span class="sig-name descname"><span class="pre">identity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.identity" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="elicit.utils.DoubleBound">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">elicit.utils.</span></span><span class="sig-name descname"><span class="pre">DoubleBound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lower</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#DoubleBound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.DoubleBound" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A variable constrained to be in the open interval
+(<code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code>) is transformed to an unconstrained variable Y
+via a scaled and translated log-odds transform.</p>
+<p>Basis for the here used constraints, is the 
+<a class="reference external" href="https://mc-stan.org/docs/reference-manual/transforms.html">constraint transforms implementation in Stan</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>lower</strong><span class="classifier">float</span></dt><dd><p>lower bound of variable x.</p>
+</dd>
+<dt><strong>upper</strong><span class="classifier">float</span></dt><dd><p>upper bound of variable x.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="elicit.utils.DoubleBound.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lower</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#DoubleBound.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.DoubleBound.__init__" title="Link to this definition">#</a></dt>
+<dd><p>A variable constrained to be in the open interval
+(<code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code>) is transformed to an unconstrained variable Y
+via a scaled and translated log-odds transform.</p>
+<p>Basis for the here used constraints, is the 
+<a class="reference external" href="https://mc-stan.org/docs/reference-manual/transforms.html">constraint transforms implementation in Stan</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>lower</strong><span class="classifier">float</span></dt><dd><p>lower bound of variable x.</p>
+</dd>
+<dt><strong>upper</strong><span class="classifier">float</span></dt><dd><p>upper bound of variable x.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="elicit.utils.DoubleBound.logit">
+<span class="sig-name descname"><span class="pre">logit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#DoubleBound.logit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.DoubleBound.logit" title="Link to this definition">#</a></dt>
+<dd><p>Helper function that implements the logit transformation for
+<span class="math notranslate nohighlight">\(u \in (0,1)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[logit(u) = \log\left(\frac{u}{1-u}\right)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>u</strong><span class="classifier">float</span></dt><dd><p>variable in open unit interval.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>v</strong><span class="classifier">float</span></dt><dd><p>log-odds of u.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="elicit.utils.DoubleBound.inv_logit">
+<span class="sig-name descname"><span class="pre">inv_logit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#DoubleBound.inv_logit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.DoubleBound.inv_logit" title="Link to this definition">#</a></dt>
+<dd><p>Helper function that implements the inverse-logit transformation (i.e.,
+the logistic sigmoid for <span class="math notranslate nohighlight">\(v \in (-\infty,+\infty)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[logit^{-1}(v) = \frac{1}{1+\exp(-v)}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>v</strong><span class="classifier">float</span></dt><dd><p>unconstrained variable</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>u</strong><span class="classifier">float</span></dt><dd><p>logistic sigmoid of the unconstrained variable</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="elicit.utils.DoubleBound.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#DoubleBound.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.DoubleBound.forward" title="Link to this definition">#</a></dt>
+<dd><p>scaled and translated logit transform of variable x with <code class="docutils literal notranslate"><span class="pre">lower</span></code> and
+<code class="docutils literal notranslate"><span class="pre">upper</span></code> bound into an unconstrained variable y.</p>
+<div class="math notranslate nohighlight">
+\[Y = logit\left(\frac{X - lower}{upper - lower}\right)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">float</span></dt><dd><p>variable with lower and upper bound.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>y</strong><span class="classifier">float</span></dt><dd><p>unconstrained variable.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="elicit.utils.DoubleBound.inverse">
+<span class="sig-name descname"><span class="pre">inverse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#DoubleBound.inverse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.DoubleBound.inverse" title="Link to this definition">#</a></dt>
+<dd><p>inverse of the log-odds transform applied to the unconstrained
+variable y in order to transform it into a constrained variable x
+with <code class="docutils literal notranslate"><span class="pre">lower</span></code> and <code class="docutils literal notranslate"><span class="pre">upper</span></code> bound.</p>
+<div class="math notranslate nohighlight">
+\[X = lower + (upper - lower) \cdot logit^{-1}(Y)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>y</strong><span class="classifier">float</span></dt><dd><p>unconstrained variable</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">float</span></dt><dd></dd>
+<dt>constrained variable with lower and upper bound</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="elicit.utils.LowerBound">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">elicit.utils.</span></span><span class="sig-name descname"><span class="pre">LowerBound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lower</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#LowerBound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.LowerBound" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A variable with a <code class="docutils literal notranslate"><span class="pre">lower</span></code> bound is transformed to an
+unconstrained variable Y via an inverse-softplus transform.</p>
+<p>Basis for the here used constraints, is the 
+<a class="reference external" href="https://mc-stan.org/docs/reference-manual/transforms.html">constraint transforms implementation in Stan</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>lower</strong><span class="classifier">float</span></dt><dd><p>lower bound of variable X.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="elicit.utils.LowerBound.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lower</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#LowerBound.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.LowerBound.__init__" title="Link to this definition">#</a></dt>
+<dd><p>A variable with a <code class="docutils literal notranslate"><span class="pre">lower</span></code> bound is transformed to an
+unconstrained variable Y via an inverse-softplus transform.</p>
+<p>Basis for the here used constraints, is the 
+<a class="reference external" href="https://mc-stan.org/docs/reference-manual/transforms.html">constraint transforms implementation in Stan</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>lower</strong><span class="classifier">float</span></dt><dd><p>lower bound of variable X.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="elicit.utils.LowerBound.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#LowerBound.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.LowerBound.forward" title="Link to this definition">#</a></dt>
+<dd><p>inverse-softplus transform of variable x with <code class="docutils literal notranslate"><span class="pre">lower</span></code> bound into an
+unconstrained variable y.</p>
+<div class="math notranslate nohighlight">
+\[Y = softplus^{-1}(X - lower)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">float</span></dt><dd><p>variable with a lower bound.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>y</strong><span class="classifier">float</span></dt><dd><p>unconstrained variable.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="elicit.utils.LowerBound.inverse">
+<span class="sig-name descname"><span class="pre">inverse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#LowerBound.inverse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.LowerBound.inverse" title="Link to this definition">#</a></dt>
+<dd><p>softplus transform of unconstrained variable y into a constrained
+variable x with <code class="docutils literal notranslate"><span class="pre">lower</span></code> bound.</p>
+<div class="math notranslate nohighlight">
+\[X = softplus(Y) + lower\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>y</strong><span class="classifier">float</span></dt><dd><p>unconstrained variable.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">float</span></dt><dd><p>variable with a lower bound.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="elicit.utils.UpperBound">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">elicit.utils.</span></span><span class="sig-name descname"><span class="pre">UpperBound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upper</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#UpperBound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.UpperBound" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A variable with an <code class="docutils literal notranslate"><span class="pre">upper</span></code> bound is transformed into an
+unconstrained variable Y via an inverse-softplus transform.</p>
+<p>Basis for the here used constraints, is the 
+<a class="reference external" href="https://mc-stan.org/docs/reference-manual/transforms.html">constraint transforms implementation in Stan</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>upper</strong><span class="classifier">float</span></dt><dd><p>upper bound of variable X.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="elicit.utils.UpperBound.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upper</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#UpperBound.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.UpperBound.__init__" title="Link to this definition">#</a></dt>
+<dd><p>A variable with an <code class="docutils literal notranslate"><span class="pre">upper</span></code> bound is transformed into an
+unconstrained variable Y via an inverse-softplus transform.</p>
+<p>Basis for the here used constraints, is the 
+<a class="reference external" href="https://mc-stan.org/docs/reference-manual/transforms.html">constraint transforms implementation in Stan</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>upper</strong><span class="classifier">float</span></dt><dd><p>upper bound of variable X.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="elicit.utils.UpperBound.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#UpperBound.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.UpperBound.forward" title="Link to this definition">#</a></dt>
+<dd><p>inverse-softplus transform of variable x with <code class="docutils literal notranslate"><span class="pre">upper</span></code> bound into an
+unconstrained variable y.</p>
+<div class="math notranslate nohighlight">
+\[Y = softplus^{-1}(upper - X)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">float</span></dt><dd><p>variable with an upper bound.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>y</strong><span class="classifier">float</span></dt><dd><p>unconstrained variable.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="elicit.utils.UpperBound.inverse">
+<span class="sig-name descname"><span class="pre">inverse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#UpperBound.inverse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.UpperBound.inverse" title="Link to this definition">#</a></dt>
+<dd><p>softplus transform of unconstrained variable y into a constrained
+variable x with <code class="docutils literal notranslate"><span class="pre">upper</span></code> bound.</p>
+<div class="math notranslate nohighlight">
+\[X = upper - softplus(Y)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>y</strong><span class="classifier">float</span></dt><dd><p>unconstrained variable.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">float</span></dt><dd><p>variable with an upper bound.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.utils.one_forward_simulation">
 <span class="sig-prename descclassname"><span class="pre">elicit.utils.</span></span><span class="sig-name descname"><span class="pre">one_forward_simulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prior_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trainer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#one_forward_simulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.one_forward_simulation" title="Link to this definition">#</a></dt>
@@ -415,14 +766,110 @@ model-simulated elicited statistics.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="elicit.utils.save_elicit">
-<span class="sig-prename descclassname"><span class="pre">elicit.utils.</span></span><span class="sig-name descname"><span class="pre">save_elicit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elicit_obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#save_elicit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.save_elicit" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="elicit.utils.save">
+<span class="sig-prename descclassname"><span class="pre">elicit.utils.</span></span><span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eliobj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.save" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="elicit.utils.load_elicit">
-<span class="sig-prename descclassname"><span class="pre">elicit.utils.</span></span><span class="sig-name descname"><span class="pre">load_elicit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#load_elicit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.load_elicit" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="elicit.utils.load">
+<span class="sig-prename descclassname"><span class="pre">elicit.utils.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.load" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="elicit.utils.save_history">
+<span class="sig-prename descclassname"><span class="pre">elicit.utils.</span></span><span class="sig-name descname"><span class="pre">save_history</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loss</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_component</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyperparameter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyperparameter_gradient</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#save_history"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.save_history" title="Link to this definition">#</a></dt>
+<dd><p>Controls whether sub-results of the history object should be included
+or excluded. Results are saved across epochs. By default all
+sub-results are included.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>loss</strong><span class="classifier">bool, optional</span></dt><dd><p>total loss per epoch. The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd>
+<dt><strong>loss_component</strong><span class="classifier">bool, optional</span></dt><dd><p>loss per loss-component per epoch. The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd>
+<dt><strong>time</strong><span class="classifier">bool, optional</span></dt><dd><p>time in sec per epoch. The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd>
+<dt><strong>hyperparameter</strong><span class="classifier">bool, optional</span></dt><dd><p>‘parametric_prior’ method: Trainable hyperparameters of parametric
+prior distributions.
+‘deep_prior’ method: Mean and standard deviation of each marginal
+from the joint prior.
+The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd>
+<dt><strong>hyperparameter_gradient</strong><span class="classifier">bool, optional</span></dt><dd><p>Gradients of the hyperparameter. Only for ‘parametric_prior’ method.
+The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>save_hist_dict</strong><span class="classifier">dict</span></dt><dd><p>dictionary with inclusion/exclusion settings for each sub-result in
+history object.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="elicit.utils.save_results">
+<span class="sig-prename descclassname"><span class="pre">elicit.utils.</span></span><span class="sig-name descname"><span class="pre">save_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_quantities</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elicited_statistics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expert_elicited_statistics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expert_prior_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_loss_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_prior</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_matrix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_tensor_expert</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_tensor_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#save_results"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.save_results" title="Link to this definition">#</a></dt>
+<dd><p>Controls whether sub-results of the result object should be included
+or excluded in the final result file. Results are based on the
+computation of the last epoch.
+By default all sub-results are included.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>target_quantities</strong><span class="classifier">bool, optional</span></dt><dd><p>simulation-based target quantities. The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd>
+<dt><strong>elicited_statistics</strong><span class="classifier">bool, optional</span></dt><dd><p>simulation-based elicited statistics. The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd>
+<dt><strong>prior_samples</strong><span class="classifier">bool, optional</span></dt><dd><p>samples from simulation-based prior distributions.
+The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd>
+<dt><strong>model_samples</strong><span class="classifier">bool, optional</span></dt><dd><p>output variables from the simulation-based generative model.
+The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd>
+<dt><strong>model</strong><span class="classifier">bool, optional</span></dt><dd><p>fitted elicit model object including the trainable variables.
+The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd>
+<dt><strong>expert_elicited_statistics</strong><span class="classifier">bool, optional</span></dt><dd><p>expert-elicited statistics. The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd>
+<dt><strong>expert_prior_samples</strong><span class="classifier">bool, optional</span></dt><dd><p>if oracle is used: samples from the true prior distribution,
+otherwise it is None. The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd>
+<dt><strong>init_loss_list</strong><span class="classifier">bool, optional</span></dt><dd><p>initialization phase: Losses related to the samples drawn from the
+initialization distribution.
+Only included for method ‘parametric_prior’.
+The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd>
+<dt><strong>init_prior</strong><span class="classifier">bool, optional</span></dt><dd><p>initialized elicit model object including the trainable variables.
+Only included for method ‘parametric_prior’.
+The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd>
+<dt><strong>init_matrix</strong><span class="classifier">bool, optional</span></dt><dd><p>initialization phase: samples drawn from the initialization
+distribution for each hyperparameter.
+Only included for method ‘parametric_prior’.
+The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd>
+<dt><strong>loss_tensor_expert</strong><span class="classifier">bool, optional</span></dt><dd><p>expert term in loss component for computing the discrepancy.
+The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd>
+<dt><strong>loss_tensor_model</strong><span class="classifier">bool, optional</span></dt><dd><p>simulation-based term in loss component for computing the
+discrepancy. The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>save_res_dict</strong><span class="classifier">dict</span></dt><dd><p>dictionary with inclusion/exclusion settings for each sub-result
+in results object.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 
@@ -471,10 +918,34 @@ model-simulated elicited statistics.</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.save_as_pkl"><code class="docutils literal notranslate"><span class="pre">save_as_pkl()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.identity"><code class="docutils literal notranslate"><span class="pre">identity()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.DoubleBound"><code class="docutils literal notranslate"><span class="pre">DoubleBound</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.DoubleBound.__init__"><code class="docutils literal notranslate"><span class="pre">DoubleBound.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.DoubleBound.logit"><code class="docutils literal notranslate"><span class="pre">DoubleBound.logit()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.DoubleBound.inv_logit"><code class="docutils literal notranslate"><span class="pre">DoubleBound.inv_logit()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.DoubleBound.forward"><code class="docutils literal notranslate"><span class="pre">DoubleBound.forward()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.DoubleBound.inverse"><code class="docutils literal notranslate"><span class="pre">DoubleBound.inverse()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.LowerBound"><code class="docutils literal notranslate"><span class="pre">LowerBound</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.LowerBound.__init__"><code class="docutils literal notranslate"><span class="pre">LowerBound.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.LowerBound.forward"><code class="docutils literal notranslate"><span class="pre">LowerBound.forward()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.LowerBound.inverse"><code class="docutils literal notranslate"><span class="pre">LowerBound.inverse()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.UpperBound"><code class="docutils literal notranslate"><span class="pre">UpperBound</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.UpperBound.__init__"><code class="docutils literal notranslate"><span class="pre">UpperBound.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.UpperBound.forward"><code class="docutils literal notranslate"><span class="pre">UpperBound.forward()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.UpperBound.inverse"><code class="docutils literal notranslate"><span class="pre">UpperBound.inverse()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.one_forward_simulation"><code class="docutils literal notranslate"><span class="pre">one_forward_simulation()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.get_expert_data"><code class="docutils literal notranslate"><span class="pre">get_expert_data()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.save_elicit"><code class="docutils literal notranslate"><span class="pre">save_elicit()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.load_elicit"><code class="docutils literal notranslate"><span class="pre">load_elicit()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.save_history"><code class="docutils literal notranslate"><span class="pre">save_history()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.save_results"><code class="docutils literal notranslate"><span class="pre">save_results()</span></code></a></li>
 </ul>
   </nav></div>
 

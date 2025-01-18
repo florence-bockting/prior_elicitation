@@ -140,10 +140,10 @@ elicit = el.Elicit(
         method="parametric_prior",
         name="toy2_lhs",
         seed=0,
-        epochs=400
+        epochs=4#0
     ),
     initializer=el.initializer(
-        method="lhs",
+        method="random",
         loss_quantile=0,
         iterations=32,
         distribution=el.initialization.uniform(
@@ -154,13 +154,20 @@ elicit = el.Elicit(
     #network = el.networks.NF(...) # TODO vs. el.normalizing_flow(...)
 )
 
-hist = elicit.fit(save_dir=None)
+elicit.fit()
+elicit.save("res")
+
+el.plots.initialization(elicit, cols=5, figsize=(7,3))
+el.plots.loss(elicit, figsize=(7,3))
+
+el.utils.save(elicit, "res")
 
 final_res = pd.read_pickle("./results/parametric_prior/toy2_lhs_0.pkl")
 
 final_res["history"].keys()
 final_res["results"].keys()
 
+elicit.history
 
 elicit.results.keys() # additional saved results
 elicit.history.keys() # equiv. "across_epochs" (loss, loss_component, time, hyperparameter, hyperparameter_gradient)

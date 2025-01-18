@@ -4,12 +4,8 @@
 
 import tensorflow as tf
 import tensorflow_probability as tfp
-import time
-import numpy as np
-import pandas as pd
-import logging
-import os
 import elicit as el
+import time
 
 from tqdm import tqdm
 
@@ -53,8 +49,6 @@ def sgd_training(
     prior_model = prior_model_init
     total_loss = []
     component_losses = []
-    loss_comp_expert = []
-    loss_comp_model = []
     gradients_ep = []
     time_per_epoch = []
 
@@ -67,8 +61,7 @@ def sgd_training(
     # start training loop
     print("Training")
     for epoch in tqdm(tf.range(trainer["epochs"])):
-        if epoch > 0:
-            logging.disable(logging.INFO)
+
         # runtime of one epoch
         epoch_time_start = time.time()
 
@@ -79,19 +72,17 @@ def sgd_training(
                 prior_model, trainer, model, targets
             )
             # compute total loss as weighted sum
-            (weighted_total_loss, loss_components_expert,
-             loss_components_training, loss_per_component
-             ) = el.losses.compute_loss(
-                train_elicits,
-                expert_elicited_statistics,
-                epoch,
-                targets
-            )
+            (loss, indiv_losses, loss_components_expert,
+             loss_components_training) = el.losses.total_loss(
+                 train_elicits,
+                 expert_elicited_statistics,
+                 epoch,
+                 targets
+                 )
 
             # compute gradient of loss wrt trainable_variables
-            gradients = tape.gradient(
-                weighted_total_loss, prior_model.trainable_variables
-            )
+            gradients = tape.gradient(loss, prior_model.trainable_variables)
+
             # update trainable_variables using gradient info with adam
             # optimizer
             sgd_optimizer.apply_gradients(
@@ -103,7 +94,7 @@ def sgd_training(
         epoch_time = epoch_time_end - epoch_time_start
 
         # break for loop if loss is NAN and inform about cause
-        if tf.math.is_nan(weighted_total_loss):
+        if tf.math.is_nan(loss):
             print("Loss is NAN. The training process has been stopped.")
             break
 
@@ -151,8 +142,8 @@ def sgd_training(
 
         # savings per epoch (independent from chosen method)
         time_per_epoch.append(epoch_time)
-        total_loss.append(weighted_total_loss)
-        component_losses.append(loss_per_component)
+        total_loss.append(loss)
+        component_losses.append(indiv_losses)
 
     res_ep = {
         "loss": total_loss,

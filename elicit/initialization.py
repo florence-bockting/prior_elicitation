@@ -4,7 +4,6 @@
 
 import tensorflow as tf
 import tensorflow_probability as tfp
-import logging
 import elicit as el
 
 from scipy.stats import qmc
@@ -228,7 +227,7 @@ def init_runs(
 
         # compute discrepancy between expert elicited statistics and
         # simulated data corresponding to initial hyperparameter values
-        (weighted_total_loss, *_) = el.losses.compute_loss(
+        (loss, *_) = el.losses.total_loss(
             training_elicited_statistics,
             expert_elicited_statistics,
             epoch=0,
@@ -238,7 +237,7 @@ def init_runs(
         # model for each run
         init_var_list.append(prior_model)
         save_prior.append(prior_model.trainable_variables)
-        loss_list.append(weighted_total_loss.numpy())
+        loss_list.append(loss.numpy())
 
     print(" ")
     return loss_list, init_var_list, init_matrix

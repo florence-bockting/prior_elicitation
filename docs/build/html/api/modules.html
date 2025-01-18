@@ -168,13 +168,12 @@
 <li class="toctree-l4"><a class="reference internal" href="elicit.extras.utils.html">elicit.extras.utils module</a></li>
 </ul>
 </details></li>
-<li class="toctree-l3"><a class="reference internal" href="elicit.configs.html">elicit.configs module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.elicit.html">elicit.elicit module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="elicit.helpers.html">elicit.helpers module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.initialization.html">elicit.initialization module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.losses.html">elicit.losses module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.networks.html">elicit.networks module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.optimization.html">elicit.optimization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.plots.html">elicit.plots module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.simulations.html">elicit.simulations module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.targets.html">elicit.targets module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.utils.html">elicit.utils module</a></li>
@@ -365,11 +364,6 @@ document.write(`
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="elicit.html#submodules">Submodules</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="elicit.configs.html">elicit.configs module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="elicit.configs.html#elicit.configs.save_history"><code class="docutils literal notranslate"><span class="pre">save_history()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="elicit.configs.html#elicit.configs.save_results"><code class="docutils literal notranslate"><span class="pre">save_results()</span></code></a></li>
-</ul>
-</li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.elicit.html">elicit.elicit module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="elicit.elicit.html#elicit.elicit.Dtype"><code class="docutils literal notranslate"><span class="pre">Dtype</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="elicit.elicit.html#elicit.elicit.hyper"><code class="docutils literal notranslate"><span class="pre">hyper()</span></code></a></li>
@@ -384,14 +378,6 @@ document.write(`
 <li class="toctree-l4"><a class="reference internal" href="elicit.elicit.html#elicit.elicit.Elicit"><code class="docutils literal notranslate"><span class="pre">Elicit</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="elicit.helpers.html">elicit.helpers module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="elicit.helpers.html#elicit.helpers.save_as_pkl"><code class="docutils literal notranslate"><span class="pre">save_as_pkl()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="elicit.helpers.html#elicit.helpers.identity"><code class="docutils literal notranslate"><span class="pre">identity()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="elicit.helpers.html#elicit.helpers.DoubleBound"><code class="docutils literal notranslate"><span class="pre">DoubleBound</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="elicit.helpers.html#elicit.helpers.LowerBound"><code class="docutils literal notranslate"><span class="pre">LowerBound</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="elicit.helpers.html#elicit.helpers.UpperBound"><code class="docutils literal notranslate"><span class="pre">UpperBound</span></code></a></li>
-</ul>
-</li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.initialization.html">elicit.initialization module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="elicit.initialization.html#elicit.initialization.uniform_samples"><code class="docutils literal notranslate"><span class="pre">uniform_samples()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="elicit.initialization.html#elicit.initialization.init_runs"><code class="docutils literal notranslate"><span class="pre">init_runs()</span></code></a></li>
@@ -400,9 +386,9 @@ document.write(`
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.losses.html">elicit.losses module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="elicit.losses.html#elicit.losses.compute_loss_components"><code class="docutils literal notranslate"><span class="pre">compute_loss_components()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="elicit.losses.html#elicit.losses.compute_discrepancy"><code class="docutils literal notranslate"><span class="pre">compute_discrepancy()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="elicit.losses.html#elicit.losses.compute_loss"><code class="docutils literal notranslate"><span class="pre">compute_loss()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="elicit.losses.html#elicit.losses.preprocess"><code class="docutils literal notranslate"><span class="pre">preprocess()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="elicit.losses.html#elicit.losses.indiv_loss"><code class="docutils literal notranslate"><span class="pre">indiv_loss()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="elicit.losses.html#elicit.losses.total_loss"><code class="docutils literal notranslate"><span class="pre">total_loss()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="elicit.losses.html#elicit.losses.L2"><code class="docutils literal notranslate"><span class="pre">L2()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="elicit.losses.html#elicit.losses.MMD2"><code class="docutils literal notranslate"><span class="pre">MMD2</span></code></a></li>
 </ul>
@@ -414,6 +400,10 @@ document.write(`
 </li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.optimization.html">elicit.optimization module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="elicit.optimization.html#elicit.optimization.sgd_training"><code class="docutils literal notranslate"><span class="pre">sgd_training()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.plots.html">elicit.plots module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="elicit.plots.html#elicit.plots.initialization"><code class="docutils literal notranslate"><span class="pre">initialization()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.simulations.html">elicit.simulations module</a><ul>
@@ -431,10 +421,17 @@ document.write(`
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="elicit.utils.html">elicit.utils module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="elicit.utils.html#elicit.utils.save_as_pkl"><code class="docutils literal notranslate"><span class="pre">save_as_pkl()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="elicit.utils.html#elicit.utils.identity"><code class="docutils literal notranslate"><span class="pre">identity()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="elicit.utils.html#elicit.utils.DoubleBound"><code class="docutils literal notranslate"><span class="pre">DoubleBound</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="elicit.utils.html#elicit.utils.LowerBound"><code class="docutils literal notranslate"><span class="pre">LowerBound</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="elicit.utils.html#elicit.utils.UpperBound"><code class="docutils literal notranslate"><span class="pre">UpperBound</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="elicit.utils.html#elicit.utils.one_forward_simulation"><code class="docutils literal notranslate"><span class="pre">one_forward_simulation()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="elicit.utils.html#elicit.utils.get_expert_data"><code class="docutils literal notranslate"><span class="pre">get_expert_data()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="elicit.utils.html#elicit.utils.save_elicit"><code class="docutils literal notranslate"><span class="pre">save_elicit()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="elicit.utils.html#elicit.utils.load_elicit"><code class="docutils literal notranslate"><span class="pre">load_elicit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="elicit.utils.html#elicit.utils.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="elicit.utils.html#elicit.utils.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="elicit.utils.html#elicit.utils.save_history"><code class="docutils literal notranslate"><span class="pre">save_history()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="elicit.utils.html#elicit.utils.save_results"><code class="docutils literal notranslate"><span class="pre">save_results()</span></code></a></li>
 </ul>
 </li>
 </ul>
