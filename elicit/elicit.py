@@ -765,9 +765,8 @@ class Elicit:
         save_dir : str
             directory name where to store the eliobj. For example, if
             ``save_dir="res"`` the eliobj is saved under following path:
-                ``res/{method}/{name}_{seed}.pkl`` whereby method, name, and
-                seed are values of the arguments in
-                :func:`elicit.elicit.trainer`.
+            ``res/{method}/{name}_{seed}.pkl`` whereby 'method', 'name', and
+            'seed' are arguments of :func:`elicit.elicit.trainer`.
         overwrite : bool, optional
             If already a fitted object exists in the same path, the user is
             asked whether the eliobj should be refitted and the results
