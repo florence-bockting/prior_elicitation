@@ -595,7 +595,6 @@ def trainer(
 
 
 class Elicit:
-
     def __init__(
         self,
         model: callable,
@@ -661,7 +660,7 @@ class Elicit:
 
     def fit(self, overwrite=False):
         """
-        Fit eliobj and learn prior distributions.
+        method for fitting the eliobj and learn prior distributions.
 
         Parameters
         ----------
@@ -670,10 +669,6 @@ class Elicit:
             the user is asked whether they want to overwrite the previous
             fitting results. Setting ``overwrite=True`` allows the user to
             force overfitting without being prompted. The default is ``False``.
-
-        Returns
-        -------
-        None
 
         Examples
         --------
@@ -760,7 +755,52 @@ class Elicit:
         for key_res in self.trainer["save_results"]:
             if not self.trainer["save_results"][key_res]:
                 self.results.pop(key_res)
-    
+
     def save(self, save_dir: str, overwrite: bool=False):
+        """
+        method for saving the eliobj on disk
+
+        Parameters
+        ----------
+        save_dir : str
+            directory name where to store the eliobj. For example, if
+            ``save_dir="res"`` the eliobj is saved under following path:
+                ``res/{method}/{name}_{seed}.pkl`` whereby method, name, and
+                seed are values of the arguments in
+                :func:`elicit.elicit.trainer`.
+        overwrite : bool, optional
+            If already a fitted object exists in the same path, the user is
+            asked whether the eliobj should be refitted and the results
+            overwritten. With the ``overwrite`` argument you can silent this
+            behavior. In this case the results are automatically overwritten
+            without prompting the user. The default is ``False``.
+
+        Examples
+        --------
+        >>> eliobj.save(save_dir="res")
+
+        >>> eliobj.save(save_dir="res", overwrite=True)
+
+        """
         # add a saving path
         return el.utils.save(self, save_dir=save_dir, overwrite=overwrite)
+
+    def update(self, **kwargs):
+        """
+        method for updating the attributes of the Elicit class.
+
+        Parameters
+        ----------
+        **kwargs : any
+            keyword argument used for updating an attribute of Elicit class.
+            Key must correspond to one attribute of the class and value refers
+            to the updated value.
+
+        Examples
+        --------
+        >>> eliobj.update(parameter = updated_parameter_dict)
+
+        """
+        for key in kwargs:
+            setattr(self, key, kwargs[key])
+            print(f"updated attribute {key}")

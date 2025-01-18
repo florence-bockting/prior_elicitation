@@ -67,9 +67,6 @@ expert_dat = {
     "quantiles_y_X2": [-9.279653, 3.0914488, 6.8263884, 10.551274, 23.285913]
 }
 
-def test_func():
-    pass
-
 elicit = el.Elicit(
     model=el.model(
         obj=ToyModel2,
@@ -153,6 +150,10 @@ elicit = el.Elicit(
         ),
     #network = el.networks.NF(...) # TODO vs. el.normalizing_flow(...)
 )
+
+elicit.update(expert=el.expert.data(dat = expert_dat))
+
+elicit.expert
 
 elicit.fit()
 elicit.save("res")
