@@ -151,9 +151,12 @@ elicit = el.Elicit(
     #network = el.networks.NF(...) # TODO vs. el.normalizing_flow(...)
 )
 
-elicit.update(expert=el.expert.data(dat = expert_dat))
+elicit.update(overwrite=True, expert=el.expert.data(dat = expert_dat),
+              name="update_eliobj")
 
-elicit.expert
+
+
+elicit.trainer
 
 elicit.fit()
 elicit.save("res")

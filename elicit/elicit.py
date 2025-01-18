@@ -784,12 +784,19 @@ class Elicit:
         # add a saving path
         return el.utils.save(self, save_dir=save_dir, overwrite=overwrite)
 
-    def update(self, **kwargs):
+    def update(self, overwrite: bool=False, name: str or None=None, **kwargs):
         """
         method for updating the attributes of the Elicit class.
 
         Parameters
         ----------
+        overwrite : bool
+            must be True in order to perform updating and results in overwriting
+            any results that might exist from the 'original' eliobj that should
+            be update. The default is ``False``
+        name : str or None
+            updates the name of the new eliobj as set in the corresponding
+            argument in :func:`elicit.elicit.trainer`. The default is ``None``.
         **kwargs : any
             keyword argument used for updating an attribute of Elicit class.
             Key must correspond to one attribute of the class and value refers
@@ -797,9 +804,21 @@ class Elicit:
 
         Examples
         --------
-        >>> eliobj.update(parameter = updated_parameter_dict)
+        >>> eliobj.update(parameter = updated_parameter_dict,
+        >>>               overwrite=True,
+        >>>               name="updated_eliobj")
 
         """
+        assert overwrite, ("If you want to update the eliobj you must set "+
+                           "``overwrite=True`` in order to overwrite previous"+
+                           " results that might have been created by the"+
+                           " original eliobj.")
         for key in kwargs:
             setattr(self, key, kwargs[key])
+            # reset results
+            self.results = dict()
+            self.history = dict()
+            # reset name
+            if name is not None:
+                self.trainer["name"] = name
             print(f"updated attribute {key}")
