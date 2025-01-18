@@ -11,7 +11,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'prior-elicitation'
-copyright = '2024, Florence Bockting'
+copyright = '2025, Florence Bockting'
 author = 'Florence Bockting'
 release = '0.0.1'
 
