@@ -236,13 +236,18 @@ def priors(eliobj, constraints: dict, **kwargs):
     ----------
     eliobj : instance of :func:`elicit.elicit.Elicit`
         fitted ``eliobj`` object.
+    constraints : dict
+        constraints that apply to the model parameters. *Keys* refer to the 
+        model parameter names and *values* to the constraints, which are either
+        None (no constraint) or "positive".
     **kwargs : any, optional
         additional keyword arguments that can be passed to specify
         `plt.subplots() <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html>`_
 
     Examples
     --------
-    >>> el.plots.priors(eliobj, figsize=(4,4))
+    >>> el.plots.priors(eliobj, constraints=dict(beta0=None, sigma="positive"),
+    >>>                 figsize=(4,4))
 
     """  # noqa: E501
     # get shape of prior samples
@@ -304,8 +309,6 @@ def elicits(eliobj, cols: int=4, **kwargs):
     def quantiles(axs, expert, training):
         return (axs.axline((0,0), slope=1, color="darkgrey", linestyle="dashed", lw=1),
                 axs.plot(expert[0,:], tf.reduce_mean(training, axis=0), "o", ms=5, color="black"))
-
-#cor = eliobj.results["elicited_statistics"]["pearson_correlation"]
 
     def correlation(axs, expert, training):
         return (axs.plot(0, expert[:,0], "s", color="black", label="expert"),
