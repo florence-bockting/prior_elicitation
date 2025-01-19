@@ -227,7 +227,7 @@ def hyperparameter(eliobj, cols: int=4, span: int=30, **kwargs):
     plt.show()
 
 
-def priors(eliobj, **kwargs):
+def priors(eliobj, constraints: dict, **kwargs):
     """
     plot learned prior distributions of each model parameter based on prior
     samples from last epoch.
@@ -257,12 +257,21 @@ def priors(eliobj, **kwargs):
     fig, axs = plt.subplots(n_params, n_params, constrained_layout=True,
                             **kwargs)
     for i in range(n_params):
-        sns.kdeplot(priors[:, i], ax=axs[i,i], color="black", lw=2)
+        if constraints[name_params[i]]=="positive":
+            prior=tf.abs(priors[:, i])
+        else:
+            prior=priors[:, i]
+        sns.kdeplot(prior, ax=axs[i,i], color="black", lw=2)
         axs[i,i].set_xlabel(name_params[i], size="small")
         [axs[i,i].tick_params(axis=a, labelsize="x-small") for a in ["x","y"]]
         axs[i,i].grid(color='lightgrey', linestyle='dotted', linewidth=1)
         axs[i,i].spines[['right', 'top']].set_visible(False)
     for i,j in itertools.combinations(range(n_params), 2):
+        if constraints[name_params[i]]=="positive":
+            prior=tf.abs(priors[:, i])
+        else:
+            prior=priors[:, i]
+        sns.kdeplot(prior, ax=axs[i,i], color="black", lw=2)
         axs[i,j].plot(priors[:,i], priors[:,j], ",", color="black", alpha=0.1)
         [axs[i,j].tick_params(axis=a, labelsize=7) for a in ["x","y"]]
         axs[j,i].set_axis_off()
@@ -295,7 +304,20 @@ def elicits(eliobj, cols: int=4, **kwargs):
     def quantiles(axs, expert, training):
         return (axs.axline((0,0), slope=1, color="darkgrey", linestyle="dashed", lw=1),
                 axs.plot(expert[0,:], tf.reduce_mean(training, axis=0), "o", ms=5, color="black"))
-    
+
+#cor = eliobj.results["elicited_statistics"]["pearson_correlation"]
+
+    def correlation(axs, expert, training):
+        return (axs.plot(0, expert[:,0], "s", color="black", label="expert"),
+         axs.plot(0, tf.reduce_mean(training[:,0]), "^", color="lightgrey", label="train"),
+         [axs.plot(i, expert[:,i], "s", color="black") for i in range(1,training.shape[-1])],
+         [axs.plot(i, tf.reduce_mean(training[:,i]), "^", color="lightgrey") for i in range(1,training.shape[-1])],
+         [axs.set_ylim(-1,1) for i in range(1,training.shape[-1])],
+         axs.set_xlim(-0.5,training.shape[-1]),
+         axs.set_xticks([i for i in range(training.shape[-1])], 
+                        [f"cor{i}" for i in range(training.shape[-1])]),
+         axs.legend(fontsize="x-small", markerscale=0.5))
+
     # get number of hyperparameter
     n_elicits = len(eliobj.results["expert_elicited_statistics"].keys())
     # make sure that user uses only as many columns as hyperparameter 
@@ -320,6 +342,8 @@ def elicits(eliobj, cols: int=4, **kwargs):
         for c, (elicit, meth) in enumerate(zip(names_elicits, method)):
             if meth == "quantiles":
                 method=quantiles
+            if meth == "pearson":
+                method=correlation
             method(axs[c], eliobj.results["expert_elicited_statistics"][elicit], 
                    eliobj.results["elicited_statistics"][elicit])
             axs[c].set_title(elicit, fontsize="small")
@@ -334,6 +358,8 @@ def elicits(eliobj, cols: int=4, **kwargs):
                 itertools.product(tf.range(rows), tf.range(cols)), names_elicits, method):
             if meth == "quantiles":
                 method=quantiles
+            if meth == "pearson":
+                method=correlation
             method(axs[r,c], eliobj.results["expert_elicited_statistics"][elicit], 
                    eliobj.results["elicited_statistics"][elicit])
             axs[r,c].set_title(elicit, fontsize="small")

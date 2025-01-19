@@ -51,16 +51,16 @@ class ToyModel:
         # log R2 (log for numerical stability)
         log_R2 = utils.log_R2(ypred, epred)
 
-        # correlation
-        cor = utils.pearson_correlation(prior_samples)
+        prior_samples = tf.concat([prior_samples[:,:,:2],
+                                 tf.abs(prior_samples[:, :, -1])[:,:,None]],
+                                  -1)
 
         return dict(
             likelihood=likelihood,
             ypred=ypred, epred=epred,
             prior_samples=prior_samples,
             y_X0=y_X0, y_X1=y_X1, y_X2=y_X2,y_X3=y_X3, y_X4=y_X4,
-            log_R2=log_R2,
-            cor=cor
+            log_R2=log_R2
         )
 
 ground_truth = {
@@ -75,7 +75,7 @@ expert_dat = {
     "quantiles_y_X2": [-9.279653, 3.0914488, 6.8263884, 10.551274, 23.285913]
 }
 
-elicit = el.Elicit(
+eliobj = el.Elicit(
     model=el.model(
         obj=ToyModel,
         design_matrix=std_predictor(N=200, quantiles=[5,25,50,75,95])
@@ -120,7 +120,7 @@ elicit = el.Elicit(
         method="deep_prior",
         name="toy2",
         seed=3,
-        epochs=2,#00
+        epochs=200
     ),
     network=el.networks.NF(
         inference_network=InvertibleNetwork,
@@ -143,10 +143,19 @@ elicit = el.Elicit(
     )
 )
 
-hist = elicit.fit(save_dir=None)
+eliobj.fit()
 
 
-elicit.results["expert_elicited_statistics"]["quantiles_y_X2"]
+el.plots.loss(eliobj, figsize=(7,3))
+el.plots.priors(eliobj, 
+                constraints={"beta0":None, "beta1":None, "sigma":"positive"})
+
+el.plots.elicits(eliobj)
+
+m = tf.stack(eliobj.history["hyperparameter"]["means"])
+
+plt.plot(m[:,0])
+
 
 
 _, axs = plt.subplots(3,3, constrained_layout=True)
