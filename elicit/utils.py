@@ -403,9 +403,16 @@ def get_expert_data(trainer, model, targets, expert, parameters, network):
         return expert_data, None
 
 
-def save(eliobj: callable, path: str, overwrite: bool = False):
-    # create saving path
-    path = f"./{path}"+eliobj.trainer["output_path"]
+def save(eliobj: callable, name: str or None=None, file: str or None=None,
+         overwrite: bool = False):
+    # either name or file must be specified
+    assert (name is None) ^ (file is None), ("Name and file cannot be both "+
+                        "None or both specified. Either one has to be None.")
+    if (name is not None) and (file is None):
+        # create saving path
+        path = f"./res/{eliobj.trainer['method']}/{name}_{eliobj.trainer['seed']}"
+    if (name is None) and (file is not None):
+        path = "./"+file
     # check whether saving path is already used
     if os.path.isfile(path) and not overwrite:
         user_ans = input("In provided directory exists already a file with"+
@@ -436,8 +443,8 @@ def save(eliobj: callable, path: str, overwrite: bool = False):
     print(f"saved in: {path}")
 
 
-def load(path: str):
-    obj = pd.read_pickle(path)
+def load(file: str):
+    obj = pd.read_pickle(file)
 
     eliobj = el.Elicit(
         model = obj["model"],

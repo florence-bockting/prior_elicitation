@@ -135,7 +135,6 @@ elicit = el.Elicit(
         ),
     trainer=el.trainer(
         method="parametric_prior",
-        name="toy2_lhs",
         seed=0,
         epochs=4#0
     ),
@@ -151,10 +150,18 @@ elicit = el.Elicit(
     #network = el.networks.NF(...) # TODO vs. el.normalizing_flow(...)
 )
 
+elicit.fit()
+
 elicit.update(overwrite=True, expert=el.expert.data(dat = expert_dat),
               name="update_eliobj")
 
+elicit_copy.update(parameters=parameters_updated)
+elicit.save(name="toytest") # saved in ./model1.pkl
+elicit.save(file=None, name="model1") # saved in ./res/parametric_prior/model1_1.pkl
 
+
+
+elicit_copy.save(file="model1.pkl")
 
 elicit.trainer
 

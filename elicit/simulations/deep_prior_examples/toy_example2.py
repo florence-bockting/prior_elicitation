@@ -148,71 +148,7 @@ eliobj.fit()
 span = 30
 cols=4
 
-elicits_means = tf.stack(eliobj.history["hyperparameter"]["means"])
-elicits_std = tf.stack(eliobj.history["hyperparameter"]["stds"])
 
-fig = plt.figure(layout='constrained', figsize=(10, 4))
-subfigs = fig.subfigures(2,1, wspace=0.07)
-
-convergence_plot(subfigs[0], elicits_means, span=30, cols=4, label="mean")
-convergence_plot(subfigs[1], elicits_std, span=30, cols=4, label="sd")
-
-fig.suptitle("Convergence of model parameter mean and sd", fontsize="medium")
-plt.show()
-
-def convergence_plot(subfigs, elicits, span, cols, label):
-    # get number of hyperparameter
-    n_par = elicits.shape[-1]
-    # make sure that user uses only as many columns as hyperparameter 
-    # such that session does not crash...
-    if cols > n_par:
-        cols = n_par
-        print(f"INFO: Reset cols={cols} (total number of hyperparameters)")
-    # compute number of rows for subplots
-    rows, remainder = np.divmod(n_par,cols)
-    # use remainder to track which plots should be turned-off/hidden
-    if remainder != 0:
-        rows += 1
-        k = cols - remainder 
-    else:
-        k = remainder
-    
-    axs = subfigs.subplots(rows, cols)
-    if rows == 1:
-        for c,n_hyp in zip(tf.range(cols), tf.range(n_par)):
-            # compute mean of last c hyperparameter values
-            avg_hyp = tf.reduce_mean(elicits[-span:, n_hyp])
-            axs[c].axhline(avg_hyp.numpy(), color="darkgrey",
-                           linestyle="dotted")
-            # plot convergence
-            axs[c].plot(elicits[:,n_hyp], color="black", lw=2)
-            axs[c].set_title(fr"{label}($\theta_{n_hyp}$)", fontsize="small")
-            axs[c].tick_params(axis="y", labelsize="x-small")
-            axs[c].tick_params(axis="x", labelsize="x-small")
-            axs[c].set_xlabel("epochs", fontsize="small")
-            axs[c].grid(color='lightgrey', linestyle='dotted', linewidth=1)
-            axs[c].spines[['right', 'top']].set_visible(False)
-        for k_idx in range(k):
-            axs[cols-k_idx-1].set_axis_off()
-    else:
-        for (r,c),n_hyp in zip(
-                itertools.product(tf.range(rows), tf.range(cols)), tf.range(n_par)):
-            # compute mean of last c hyperparameter values
-            avg_hyp = tf.reduce_mean(elicits[-span:, n_hyp])
-            # plot convergence
-            axs[r,c].axhline(avg_hyp.numpy(), color="darkgrey",
-                             linestyle="dotted")
-            axs[r,c].plot(elicits[:,n_hyp], color="black", lw=2)
-            axs[r,c].set_title(fr"$\theta_{n_hyp}$", fontsize="small") 
-            axs[r,c].tick_params(axis="y", labelsize="x-small")
-            axs[r,c].tick_params(axis="x", labelsize="x-small")
-            axs[r,c].set_xlabel("epochs", fontsize="small")
-            axs[r,c].grid(color='lightgrey', linestyle='dotted', linewidth=1)
-            axs[r,c].spines[['right', 'top']].set_visible(False)
-        for k_idx in range(k):
-            axs[rows-1, cols-k_idx-1].set_axis_off()
-    return axs
-    # 
 
 
 

@@ -523,7 +523,6 @@ def initializer(
 
 def trainer(
     method: str,
-    name: str,
     seed: int,
     epochs: int,
     B: int = 128,
@@ -540,8 +539,6 @@ def trainer(
         Method for learning the prior distribution. Available is either
         ``parametric_prior`` for learning independent parametric priors
         or ``deep_prior`` for learning a joint non-parameteric prior.
-    name : str
-        provides model a unique identifier used for saving results.
     seed : int
         seed used for learning.
     epochs : int
@@ -571,7 +568,6 @@ def trainer(
     --------
     >>> el.trainer(
     >>>     method="parametric_prior",
-    >>>     name="toymodel",
     >>>     seed=0,
     >>>     epochs=400,
     >>>     B=128,
@@ -582,7 +578,6 @@ def trainer(
     """  # noqa: E501
     train_dict = dict(
         method=method,
-        name=name,
         seed=seed,
         B=B,
         num_samples=num_samples,
@@ -731,8 +726,6 @@ class Elicit:
             self.model,
             self.targets,
         )
-        # add saving path
-        self.trainer["output_path"] = f"/{self.trainer['method']}/{self.trainer['name']}_{self.trainer['seed']}"  # noqa
         # add some additional results
         self.results["expert_elicited_statistics"] = expert_elicits
         try:
@@ -756,17 +749,21 @@ class Elicit:
             if not self.trainer["save_results"][key_res]:
                 self.results.pop(key_res)
 
-    def save(self, save_dir: str, overwrite: bool=False):
+    def save(self, name: str or None=None, file: str or None=None,
+             overwrite: bool=False):
         """
         method for saving the eliobj on disk
 
         Parameters
         ----------
-        save_dir : str
-            directory name where to store the eliobj. For example, if
-            ``save_dir="res"`` the eliobj is saved under following path:
-            ``res/{method}/{name}_{seed}.pkl`` whereby 'method', 'name', and
-            'seed' are arguments of :func:`elicit.elicit.trainer`.
+        name.: str or None
+            file name used to store the eliobj, whereby saving is done
+            according to the following rule: ``./{method}/{name}_{seed}.pkl``
+            whereby 'method' and 'seed' are arguments of
+            :func:`elicit.elicit.trainer`.
+        file : str or None
+            user-specific path for saving the eliobj. If file is specified
+            **name** must be ``None``. The default value is ``None``.
         overwrite : bool, optional
             If already a fitted object exists in the same path, the user is
             asked whether the eliobj should be refitted and the results
@@ -776,27 +773,21 @@ class Elicit:
 
         Examples
         --------
-        >>> eliobj.save(save_dir="res")
+        >>> eliobj.save(name="toymodel")
 
-        >>> eliobj.save(save_dir="res", overwrite=True)
+        >>> eliobj.save(file="res/toymodel", overwrite=True)
 
         """
         # add a saving path
-        return el.utils.save(self, save_dir=save_dir, overwrite=overwrite)
+        return el.utils.save(self, name=name, file=file, overwrite=overwrite)
 
-    def update(self, overwrite: bool=False, name: str or None=None, **kwargs):
+    def update(self, **kwargs):
         """
-        method for updating the attributes of the Elicit class.
+        method for updating the attributes of the Elicit class. Updating
+        an eliobj leads to an automatic reset of results.
 
         Parameters
         ----------
-        overwrite : bool
-            must be True in order to perform updating and results in overwriting
-            any results that might exist from the 'original' eliobj that should
-            be update. The default is ``False``
-        name : str or None
-            updates the name of the new eliobj as set in the corresponding
-            argument in :func:`elicit.elicit.trainer`. The default is ``None``.
         **kwargs : any
             keyword argument used for updating an attribute of Elicit class.
             Key must correspond to one attribute of the class and value refers
@@ -804,21 +795,14 @@ class Elicit:
 
         Examples
         --------
-        >>> eliobj.update(parameter = updated_parameter_dict,
-        >>>               overwrite=True,
-        >>>               name="updated_eliobj")
+        >>> eliobj.update(parameter = updated_parameter_dict")
 
         """
-        assert overwrite, ("If you want to update the eliobj you must set "+
-                           "``overwrite=True`` in order to overwrite previous"+
-                           " results that might have been created by the"+
-                           " original eliobj.")
+
         for key in kwargs:
             setattr(self, key, kwargs[key])
             # reset results
             self.results = dict()
             self.history = dict()
-            # reset name
-            if name is not None:
-                self.trainer["name"] = name
-            print(f"updated attribute {key}")
+            # inform user about reset of results
+            print("INFO: Results have been reset.")
