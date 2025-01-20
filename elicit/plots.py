@@ -227,7 +227,7 @@ def hyperparameter(eliobj, cols: int=4, span: int=30, **kwargs):
     plt.show()
 
 
-def priors(eliobj, constraints: dict, **kwargs):
+def priors(eliobj, constraints: dict or None=None, **kwargs):
     """
     plot learned prior distributions of each model parameter based on prior
     samples from last epoch.
@@ -236,10 +236,10 @@ def priors(eliobj, constraints: dict, **kwargs):
     ----------
     eliobj : instance of :func:`elicit.elicit.Elicit`
         fitted ``eliobj`` object.
-    constraints : dict
+    constraints : dict or None
         constraints that apply to the model parameters. *Keys* refer to the 
         model parameter names and *values* to the constraints, which are either
-        None (no constraint) or "positive".
+        None (no constraint) or "positive". The default value is ``None``.
     **kwargs : any, optional
         additional keyword arguments that can be passed to specify
         `plt.subplots() <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html>`_
@@ -307,14 +307,19 @@ def elicits(eliobj, cols: int=4, **kwargs):
 
     """
     def quantiles(axs, expert, training):
-        return (axs.axline((0,0), slope=1, color="darkgrey", linestyle="dashed", lw=1),
-                axs.plot(expert[0,:], tf.reduce_mean(training, axis=0), "o", ms=5, color="black"))
+        return (axs.axline((0,0), slope=1, color="darkgrey",
+                           linestyle="dashed", lw=1),
+                axs.plot(expert[0,:], tf.reduce_mean(training, axis=0),
+                         "o", ms=5, color="black"))
 
     def correlation(axs, expert, training):
         return (axs.plot(0, expert[:,0], "s", color="black", label="expert"),
-         axs.plot(0, tf.reduce_mean(training[:,0]), "^", color="lightgrey", label="train"),
-         [axs.plot(i, expert[:,i], "s", color="black") for i in range(1,training.shape[-1])],
-         [axs.plot(i, tf.reduce_mean(training[:,i]), "^", color="lightgrey") for i in range(1,training.shape[-1])],
+         axs.plot(0, tf.reduce_mean(training[:,0]), "^", color="lightgrey",
+                  label="train"),
+         [axs.plot(i, expert[:,i], "s", color="black") for i in
+          range(1,training.shape[-1])],
+         [axs.plot(i, tf.reduce_mean(training[:,i]), "^", color="lightgrey")
+          for i in range(1,training.shape[-1])],
          [axs.set_ylim(-1,1) for i in range(1,training.shape[-1])],
          axs.set_xlim(-0.5,training.shape[-1]),
          axs.set_xticks([i for i in range(training.shape[-1])], 
@@ -338,7 +343,9 @@ def elicits(eliobj, cols: int=4, **kwargs):
         k = remainder
     
     names_elicits = list(eliobj.results["expert_elicited_statistics"].keys())
-    method = [names_elicits[i].split("_")[0] for i in range(len(names_elicits))]
+    method = [
+        names_elicits[i].split("_")[0] for i in range(len(names_elicits))
+              ]
     
     fig, axs = plt.subplots(rows, cols, constrained_layout=True, **kwargs)
     if rows == 1:
@@ -347,8 +354,9 @@ def elicits(eliobj, cols: int=4, **kwargs):
                 method=quantiles
             if meth == "pearson":
                 method=correlation
-            method(axs[c], eliobj.results["expert_elicited_statistics"][elicit], 
-                   eliobj.results["elicited_statistics"][elicit])
+            method(
+                axs[c], eliobj.results["expert_elicited_statistics"][elicit],
+                eliobj.results["elicited_statistics"][elicit])
             axs[c].set_title(elicit, fontsize="small")
             axs[c].grid(color='lightgrey', linestyle='dotted', linewidth=1)
             axs[c].spines[['right', 'top']].set_visible(False)
@@ -358,13 +366,15 @@ def elicits(eliobj, cols: int=4, **kwargs):
             axs[cols-k_idx-1].set_axis_off()
     else:
         for (r,c),elicit,meth in zip(
-                itertools.product(tf.range(rows), tf.range(cols)), names_elicits, method):
+                itertools.product(tf.range(rows), tf.range(cols)),
+                names_elicits, method):
             if meth == "quantiles":
                 method=quantiles
             if meth == "pearson":
                 method=correlation
-            method(axs[r,c], eliobj.results["expert_elicited_statistics"][elicit], 
-                   eliobj.results["elicited_statistics"][elicit])
+            method(
+                axs[r,c], eliobj.results["expert_elicited_statistics"][elicit],
+                eliobj.results["elicited_statistics"][elicit])
             axs[r,c].set_title(elicit, fontsize="small")
             axs[r,c].grid(color='lightgrey', linestyle='dotted', linewidth=1)
             axs[r,c].spines[['right', 'top']].set_visible(False)
@@ -372,5 +382,96 @@ def elicits(eliobj, cols: int=4, **kwargs):
             axs[r,c].tick_params(axis="x", labelsize="x-small")
         for k_idx in range(k):
             axs[rows-1, cols-k_idx-1].set_axis_off()
-    fig.suptitle("Expert vs. model-simulated elicited statistics", fontsize="medium")
+    fig.suptitle("Expert vs. model-simulated elicited statistics",
+                 fontsize="medium")
+    plt.show()
+
+
+def marginals(eliobj, cols: int=4, span: int=30, **kwargs):
+    """
+    plots convergence of mean and sd of the prior marginals
+
+    eliobj : instance of :func:`elicit.elicit.Elicit`
+        fitted ``eliobj`` object.
+    cols : int, optional
+        number of columns for arranging the subplots in the figure.
+        The default is ``4``.
+    span : int, optional
+        number of last epochs used to get a final averaged value for mean and
+        sd of the prior marginal. The default is ``30``.
+    **kwargs : any, optional
+        additional keyword arguments that can be passed to specify
+        `plt.subplots() <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html>`_
+
+    Examples
+    --------
+    >>> el.plots.marginals(eliobj, figuresize=(8,3))
+
+    """
+    def convergence_plot(subfigs, elicits, span, cols, label):
+        # get number of hyperparameter
+        n_par = elicits.shape[-1]
+        # make sure that user uses only as many columns as hyperparameter 
+        # such that session does not crash...
+        if cols > n_par:
+            cols = n_par
+            print(f"INFO: Reset cols={cols} (total number of hyperparameters)")
+        # compute number of rows for subplots
+        rows, remainder = np.divmod(n_par,cols)
+        # use remainder to track which plots should be turned-off/hidden
+        if remainder != 0:
+            rows += 1
+            k = cols - remainder 
+        else:
+            k = remainder
+        
+        axs = subfigs.subplots(rows, cols)
+        if rows == 1:
+            for c,n_hyp in zip(tf.range(cols), tf.range(n_par)):
+                # compute mean of last c hyperparameter values
+                avg_hyp = tf.reduce_mean(elicits[-span:, n_hyp])
+                axs[c].axhline(avg_hyp.numpy(), color="darkgrey",
+                               linestyle="dotted")
+                # plot convergence
+                axs[c].plot(elicits[:,n_hyp], color="black", lw=2)
+                axs[c].set_title(fr"{label}($\theta_{n_hyp}$)", fontsize="small")
+                axs[c].tick_params(axis="y", labelsize="x-small")
+                axs[c].tick_params(axis="x", labelsize="x-small")
+                axs[c].set_xlabel("epochs", fontsize="small")
+                axs[c].grid(color='lightgrey', linestyle='dotted', linewidth=1)
+                axs[c].spines[['right', 'top']].set_visible(False)
+            for k_idx in range(k):
+                axs[cols-k_idx-1].set_axis_off()
+        else:
+            for (r,c),n_hyp in zip(
+                    itertools.product(tf.range(rows), tf.range(cols)), tf.range(n_par)):
+                # compute mean of last c hyperparameter values
+                avg_hyp = tf.reduce_mean(elicits[-span:, n_hyp])
+                # plot convergence
+                axs[r,c].axhline(avg_hyp.numpy(), color="darkgrey",
+                                 linestyle="dotted")
+                axs[r,c].plot(elicits[:,n_hyp], color="black", lw=2)
+                axs[r,c].set_title(fr"$\theta_{n_hyp}$", fontsize="small") 
+                axs[r,c].tick_params(axis="y", labelsize="x-small")
+                axs[r,c].tick_params(axis="x", labelsize="x-small")
+                axs[r,c].set_xlabel("epochs", fontsize="small")
+                axs[r,c].grid(color='lightgrey', linestyle='dotted', linewidth=1)
+                axs[r,c].spines[['right', 'top']].set_visible(False)
+            for k_idx in range(k):
+                axs[rows-1, cols-k_idx-1].set_axis_off()
+        return axs
+
+    elicits_means = tf.stack(eliobj.history["hyperparameter"]["means"])
+    elicits_std = tf.stack(eliobj.history["hyperparameter"]["stds"])
+
+    fig = plt.figure(layout='constrained', **kwargs)
+    subfigs = fig.subfigures(2,1, wspace=0.07)
+
+    convergence_plot(subfigs[0], elicits_means, span=span, cols=cols,
+                     label="mean")
+    convergence_plot(subfigs[1], elicits_std, span=span, cols=cols,
+                     label="sd")
+
+    fig.suptitle("Convergence of prior marginals mean and sd",
+                 fontsize="medium")
     plt.show()
