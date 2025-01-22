@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Save and load the elicit object &#8212; Prior Learning</title>
+    <title>Save and load the eliobj object &#8212; Prior Learning</title>
   
   
   
@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=87e54e7c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -171,6 +171,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../api/elicit.losses.html">elicit.losses module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/elicit.networks.html">elicit.networks module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/elicit.optimization.html">elicit.optimization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.plots.html">elicit.plots module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/elicit.simulations.html">elicit.simulations module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/elicit.targets.html">elicit.targets module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/elicit.utils.html">elicit.utils module</a></li>
@@ -335,7 +336,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Save and load the elicit object</h1>
+    <h1>Save and load the eliobj object</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -345,33 +346,32 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-an-unfitted-elicit-object-e-g-for-sharing-with-collaborators">Save an unfitted <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object (e.g., for sharing with collaborators)</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-an-unfitted-eliobj-object-e-g-for-sharing-with-collaborators">Save an unfitted <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object (e.g., for sharing with collaborators)</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-0-load-necessary-libraries-and-functions-classes">Step 0: Load necessary libraries and functions/classes</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-create-the-elicit-object">Step 1: Create the <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-save-the-unfitted-elicit-object">Step 2: Save the unfitted <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-create-the-eliobj-object">Step 1: Create the <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-save-the-unfitted-eliobj-object">Step 2: Save the unfitted <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-and-fit-the-unfitted-elicit-object">Load and fit the <em>unfitted</em> <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#load-the-elicit-object">Load the <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fit-the-loaded-elicit-object">Fit the loaded <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-and-fit-the-unfitted-eliobj-object">Load and fit the <em>unfitted</em> <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#load-the-eliobj-object">Load the <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fit-the-loaded-eliobj-object">Fit the loaded <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inspect-the-fitted-elicit-object">Inspect the <em>fitted</em> <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-results-on-disk">Save results on disk</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inspect-the-fitted-eliobj-object">Inspect the <em>fitted</em> <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#save-only-subset-of-results">Save only subset of results</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-and-reload-the-fitted-elicit-object">Save and reload the <em>fitted</em> <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-and-reload-the-fitted-eliobj-object">Save and reload the <em>fitted</em> <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-save-the-fitted-object">Step 1: Save the fitted object</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-load-and-inspect-the-fitted-elicit-object">Step 2: Load and inspect the fitted <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-load-and-inspect-the-fitted-eliobj-object">Step 2: Load and inspect the fitted <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#q-a">Q&amp;A</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-happens-when-i-want-to-fit-an-already-fitted-elicit-object">What happens when I want to fit an already fitted <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-happens-when-i-want-to-fit-an-already-fitted-eliobj-object">What happens when I want to fit an already fitted <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object?</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#can-i-force-re-fitting">Can I force re-fitting?</a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-happens-when-i-want-to-save-an-elicit-object-with-a-name-that-already-exists">What happens when I want to save an elicit object with a name that already exists?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-happens-when-i-want-to-save-an-eliobj-object-with-a-name-that-already-exists">What happens when I want to save an <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object with a name that already exists?</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#can-i-force-overwriting-of-file-while-saving">Can I force overwriting of file while saving?</a></li>
 </ul>
 </li>
@@ -388,10 +388,10 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="save-and-load-the-elicit-object">
-<h1>Save and load the <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object<a class="headerlink" href="#save-and-load-the-elicit-object" title="Link to this heading">#</a></h1>
-<section id="save-an-unfitted-elicit-object-e-g-for-sharing-with-collaborators">
-<h2>Save an unfitted <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object (e.g., for sharing with collaborators)<a class="headerlink" href="#save-an-unfitted-elicit-object-e-g-for-sharing-with-collaborators" title="Link to this heading">#</a></h2>
+  <section class="tex2jax_ignore mathjax_ignore" id="save-and-load-the-eliobj-object">
+<h1>Save and load the <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object<a class="headerlink" href="#save-and-load-the-eliobj-object" title="Link to this heading">#</a></h1>
+<section id="save-an-unfitted-eliobj-object-e-g-for-sharing-with-collaborators">
+<h2>Save an unfitted <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object (e.g., for sharing with collaborators)<a class="headerlink" href="#save-an-unfitted-eliobj-object-e-g-for-sharing-with-collaborators" title="Link to this heading">#</a></h2>
 <section id="step-0-load-necessary-libraries-and-functions-classes">
 <h3>Step 0: Load necessary libraries and functions/classes<a class="headerlink" href="#step-0-load-necessary-libraries-and-functions-classes" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
@@ -448,8 +448,8 @@ document.write(`
 </div>
 </div>
 </section>
-<section id="step-1-create-the-elicit-object">
-<h3>Step 1: Create the <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object<a class="headerlink" href="#step-1-create-the-elicit-object" title="Link to this heading">#</a></h3>
+<section id="step-1-create-the-eliobj-object">
+<h3>Step 1: Create the <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object<a class="headerlink" href="#step-1-create-the-eliobj-object" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># define the generative model</span>
@@ -512,10 +512,9 @@ document.write(`
         <span class="n">clipnorm</span><span class="o">=</span><span class="mf">1.0</span>
         <span class="p">)</span>
 
-<span class="c1"># define the trainer model with model name, used approach, seed, etc.</span>
+<span class="c1"># define the trainer model with used approach, seed, etc.</span>
 <span class="n">trainer</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">trainer</span><span class="p">(</span>
         <span class="n">method</span><span class="o">=</span><span class="s2">&quot;parametric_prior&quot;</span><span class="p">,</span>
-        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;toy0&quot;</span><span class="p">,</span>
         <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="n">epochs</span><span class="o">=</span><span class="mi">4</span>
     <span class="p">)</span>
@@ -537,7 +536,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">elicit</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">Elicit</span><span class="p">(</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eliobj</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">Elicit</span><span class="p">(</span>
     <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
     <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span>
     <span class="n">targets</span><span class="o">=</span><span class="n">targets</span><span class="p">,</span>
@@ -551,39 +550,58 @@ document.write(`
 </div>
 </div>
 </section>
-<section id="step-2-save-the-unfitted-elicit-object">
-<h3>Step 2: Save the unfitted <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object<a class="headerlink" href="#step-2-save-the-unfitted-elicit-object" title="Link to this heading">#</a></h3>
+<section id="step-2-save-the-unfitted-eliobj-object">
+<h3>Step 2: Save the unfitted <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object<a class="headerlink" href="#step-2-save-the-unfitted-eliobj-object" title="Link to this heading">#</a></h3>
+<p>Two approaches are possible:</p>
+<ul class="simple">
+<li><p>automatic saving: <code class="docutils literal notranslate"><span class="pre">name</span></code> has to be specified. The results are then saved according to the following rule: <code class="docutils literal notranslate"><span class="pre">res/{method}/{name}_{seed}.pkl</span></code></p></li>
+<li><p>user-specific path: <code class="docutils literal notranslate"><span class="pre">file</span></code> has to be specified. The path can be freely specified by the user.</p></li>
+</ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">save_elicit</span><span class="p">(</span><span class="n">elicit</span><span class="p">,</span> <span class="s2">&quot;./results/elicit_toy0.pkl&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># use automatic saving approach</span>
+<span class="n">eliobj</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;m1&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>saved elicit as: ./results/elicit_toy0.pkl
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>saved in: ./res/parametric_prior/m1_0
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># use user-specific file location</span>
+<span class="n">eliobj</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="s2">&quot;res/m1&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>saved in: ./res/m1
 </pre></div>
 </div>
 </div>
 </div>
 </section>
 </section>
-<section id="load-and-fit-the-unfitted-elicit-object">
-<h2>Load and fit the <em>unfitted</em> <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object<a class="headerlink" href="#load-and-fit-the-unfitted-elicit-object" title="Link to this heading">#</a></h2>
-<section id="load-the-elicit-object">
-<h3>Load the <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object<a class="headerlink" href="#load-the-elicit-object" title="Link to this heading">#</a></h3>
+<section id="load-and-fit-the-unfitted-eliobj-object">
+<h2>Load and fit the <em>unfitted</em> <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object<a class="headerlink" href="#load-and-fit-the-unfitted-eliobj-object" title="Link to this heading">#</a></h2>
+<section id="load-the-eliobj-object">
+<h3>Load the <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object<a class="headerlink" href="#load-the-eliobj-object" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">elicit_toy0</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">load_elicit</span><span class="p">(</span><span class="s2">&quot;./results/elicit_toy0.pkl&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eliobj_m1</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;res/m1&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 </section>
-<section id="fit-the-loaded-elicit-object">
-<h3>Fit the loaded <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object<a class="headerlink" href="#fit-the-loaded-elicit-object" title="Link to this heading">#</a></h3>
+<section id="fit-the-loaded-eliobj-object">
+<h3>Fit the loaded <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object<a class="headerlink" href="#fit-the-loaded-eliobj-object" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">elicit_toy0</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">save_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eliobj_m1</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -591,29 +609,29 @@ document.write(`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initialization
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 8/8 [00:01&lt;00:00,  7.18it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 8/8 [00:00&lt;00:00, 13.11it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 
 Training
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 4/4 [00:01&lt;00:00,  3.29it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 4/4 [00:00&lt;00:00,  6.25it/s]
 </pre></div>
 </div>
 </div>
 </div>
 </section>
 </section>
-<section id="inspect-the-fitted-elicit-object">
-<h2>Inspect the <em>fitted</em> <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object<a class="headerlink" href="#inspect-the-fitted-elicit-object" title="Link to this heading">#</a></h2>
+<section id="inspect-the-fitted-eliobj-object">
+<h2>Inspect the <em>fitted</em> <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object<a class="headerlink" href="#inspect-the-fitted-eliobj-object" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p>results saved for each epoch are stored in <code class="docutils literal notranslate"><span class="pre">history</span></code> (type: dictionary)</p></li>
 </ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># information saved in the history object</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">elicit_toy0</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">eliobj_m1</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
@@ -629,54 +647,12 @@ Training
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># information saved in the results object</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">elicit_toy0</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">eliobj_m1</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dict_keys([&#39;target_quantities&#39;, &#39;elicited_statistics&#39;, &#39;prior_samples&#39;, &#39;model_samples&#39;, &#39;model&#39;, &#39;loss_tensor_expert&#39;, &#39;loss_tensor_model&#39;, &#39;expert_elicited_statistics&#39;, &#39;expert_prior_samples&#39;, &#39;init_loss_list&#39;, &#39;init_prior&#39;, &#39;init_matrix&#39;])
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="save-results-on-disk">
-<h2>Save results on disk<a class="headerlink" href="#save-results-on-disk" title="Link to this heading">#</a></h2>
-<p>If you want to save the results locally, you need to specify a directory name through the attribute <code class="docutils literal notranslate"><span class="pre">save_dir</span></code>. The results are then saved according to the following rule: <code class="docutils literal notranslate"><span class="pre">{save_dir_value}/{method}/{model_name}_{seed}.pkl</span></code></p>
-<p><strong>Example:</strong></p>
-<ul class="simple">
-<li><p>consider the above created <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object (“elicit_toy0”)</p></li>
-<li><p>fit the elicit object with <code class="docutils literal notranslate"><span class="pre">save_dir=&quot;res&quot;</span></code></p></li>
-<li><p>results are saved in <code class="docutils literal notranslate"><span class="pre">./res/parametric_prior/toy0_0.pkl</span></code></p></li>
-</ul>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Note: </span>
-<span class="c1"># The silent argument controls whether the history is returned after fitting</span>
-<span class="c1"># If &quot;silent=True&quot; nothing is returned; if &quot;silent=False&quot; the history is returned.</span>
-<span class="c1"># by default &quot;silent=False&quot;</span>
-<span class="n">hist</span> <span class="o">=</span> <span class="n">elicit_toy0</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">save_dir</span><span class="o">=</span><span class="s2">&quot;res&quot;</span><span class="p">)</span>
-
-<span class="n">final_res</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="s2">&quot;res/parametric_prior/toy0_0.pkl&quot;</span><span class="p">)</span>
-<span class="n">final_res</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initialization
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 8/8 [00:01&lt;00:00,  6.44it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 
-Training
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 4/4 [00:01&lt;00:00,  3.34it/s]
-</pre></div>
-</div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dict_keys([&#39;history&#39;, &#39;results&#39;])
 </pre></div>
 </div>
 </div>
@@ -690,43 +666,43 @@ You can control this by the arguments <code class="docutils literal notranslate"
 This can be done as follows:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">elicit</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">Elicit</span><span class="p">(</span>
-    <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-    <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span>
-    <span class="n">targets</span><span class="o">=</span><span class="n">targets</span><span class="p">,</span>
-    <span class="n">expert</span><span class="o">=</span><span class="n">expert</span><span class="p">,</span>
-    <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
-    <span class="n">trainer</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">trainer</span><span class="p">(</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">copy</span>
+
+<span class="c1"># copy eliobj_m1</span>
+<span class="n">eliobj_m2</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">eliobj_m1</span><span class="p">)</span>
+
+<span class="c1"># update eliobj_m1 by changing the saving settings</span>
+<span class="n">trainer_new</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">trainer</span><span class="p">(</span>
         <span class="n">method</span><span class="o">=</span><span class="s2">&quot;parametric_prior&quot;</span><span class="p">,</span>
-        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;toy1&quot;</span><span class="p">,</span>
         <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="n">epochs</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-        <span class="n">save_configs_history</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">configs</span><span class="o">.</span><span class="n">save_history</span><span class="p">(</span><span class="n">hyperparameter_gradient</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">loss_component</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="p">),</span>
-    <span class="n">initializer</span><span class="o">=</span><span class="n">initializer</span>
-<span class="p">)</span>
+        <span class="n">save_history</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">save_history</span><span class="p">(</span><span class="n">hyperparameter_gradient</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">loss_component</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="p">)</span>
+<span class="n">eliobj_m2</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">trainer</span><span class="o">=</span><span class="n">trainer_new</span><span class="p">)</span>
 
-<span class="c1"># fit elicit obj</span>
-<span class="n">elicit</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">save_dir</span><span class="o">=</span><span class="s2">&quot;res&quot;</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># fit updated eliobj</span>
+<span class="n">eliobj_m2</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
 
 <span class="c1"># inspect saved results</span>
 <span class="c1"># note that loss_component and hyperparameter_gradient are not saved</span>
-<span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="s2">&quot;res/parametric_prior/toy1_0.pkl&quot;</span><span class="p">)[</span><span class="s2">&quot;history&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="n">eliobj_m2</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initialization
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO: el.plots.loss() requires information about &#39;loss&#39; and &#39;loss_component&#39;. If you don&#39;t save this information el.plot.loss() can&#39;t be used.
+INFO: Results have been reset.
+Initialization
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 8/8 [00:01&lt;00:00,  7.18it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 8/8 [00:00&lt;00:00, 12.30it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 
 Training
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 4/4 [00:01&lt;00:00,  2.93it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 4/4 [00:00&lt;00:00,  6.85it/s]
 </pre></div>
 </div>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dict_keys([&#39;loss&#39;, &#39;time&#39;, &#39;hyperparameter&#39;])
@@ -736,37 +712,37 @@ Training
 </div>
 </section>
 </section>
-<section id="save-and-reload-the-fitted-elicit-object">
-<h2>Save and reload the <em>fitted</em> <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object<a class="headerlink" href="#save-and-reload-the-fitted-elicit-object" title="Link to this heading">#</a></h2>
+<section id="save-and-reload-the-fitted-eliobj-object">
+<h2>Save and reload the <em>fitted</em> <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object<a class="headerlink" href="#save-and-reload-the-fitted-eliobj-object" title="Link to this heading">#</a></h2>
 <section id="step-1-save-the-fitted-object">
 <h3>Step 1: Save the fitted object<a class="headerlink" href="#step-1-save-the-fitted-object" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">save_elicit</span><span class="p">(</span><span class="n">elicit_toy0</span><span class="p">,</span> <span class="s2">&quot;./results/fit_toy0.pkl&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eliobj_m2</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;m2&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>saved elicit as: ./results/fit_toy0.pkl
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>saved in: ./res/parametric_prior/m2_0
 </pre></div>
 </div>
 </div>
 </div>
 </section>
-<section id="step-2-load-and-inspect-the-fitted-elicit-object">
-<h3>Step 2: Load and inspect the fitted <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object<a class="headerlink" href="#step-2-load-and-inspect-the-fitted-elicit-object" title="Link to this heading">#</a></h3>
+<section id="step-2-load-and-inspect-the-fitted-eliobj-object">
+<h3>Step 2: Load and inspect the fitted <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object<a class="headerlink" href="#step-2-load-and-inspect-the-fitted-eliobj-object" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit_toy0</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">load_elicit</span><span class="p">(</span><span class="s2">&quot;./results/fit_toy0.pkl&quot;</span><span class="p">)</span>
-<span class="n">fit_toy0</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s2">&quot;loss&quot;</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eliobj_m2_reload</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;res/parametric_prior/m2_0&quot;</span><span class="p">)</span>
+<span class="n">eliobj_m2_reload</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s2">&quot;loss&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;tf.Tensor: shape=(), dtype=float32, numpy=10.571016&gt;,
- &lt;tf.Tensor: shape=(), dtype=float32, numpy=10.069366&gt;,
- &lt;tf.Tensor: shape=(), dtype=float32, numpy=9.578753&gt;,
- &lt;tf.Tensor: shape=(), dtype=float32, numpy=9.098384&gt;]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;tf.Tensor: shape=(), dtype=float32, numpy=14.244483&gt;,
+ &lt;tf.Tensor: shape=(), dtype=float32, numpy=13.580679&gt;,
+ &lt;tf.Tensor: shape=(), dtype=float32, numpy=12.947874&gt;,
+ &lt;tf.Tensor: shape=(), dtype=float32, numpy=12.327484&gt;]
 </pre></div>
 </div>
 </div>
@@ -775,11 +751,11 @@ Training
 </section>
 <section id="q-a">
 <h2>Q&amp;A<a class="headerlink" href="#q-a" title="Link to this heading">#</a></h2>
-<section id="what-happens-when-i-want-to-fit-an-already-fitted-elicit-object">
-<h3>What happens when I want to fit an already fitted <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object?<a class="headerlink" href="#what-happens-when-i-want-to-fit-an-already-fitted-elicit-object" title="Link to this heading">#</a></h3>
+<section id="what-happens-when-i-want-to-fit-an-already-fitted-eliobj-object">
+<h3>What happens when I want to fit an already fitted <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object?<a class="headerlink" href="#what-happens-when-i-want-to-fit-an-already-fitted-eliobj-object" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit_toy0</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">save_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eliobj_m2_reload</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
 
 <span class="c1"># prompt: </span>
 <span class="c1"># elicit object is already fitted. </span>
@@ -791,28 +767,43 @@ Training
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;Process aborded; elicit object is not re-fitted.&#39;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;Process aborded; eliobj is not re-fitted.&#39;
 </pre></div>
 </div>
 </div>
 </div>
 <section id="can-i-force-re-fitting">
 <h4>Can I force re-fitting?<a class="headerlink" href="#can-i-force-re-fitting" title="Link to this heading">#</a></h4>
-<p>Sometimes, especially when we only want to test something, it can be inconvenient to repeatedly confirm whether results should be overwritten. To address this, you can use the <code class="docutils literal notranslate"><span class="pre">force_fit</span></code> argument in the <code class="docutils literal notranslate"><span class="pre">fit</span></code> method to enable re-fitting without any prompts.</p>
+<p>Sometimes, especially when we only want to test something, it can be inconvenient to repeatedly confirm whether results should be overwritten. To address this issue, you can set <code class="docutils literal notranslate"><span class="pre">overwrite=True</span></code> to enable re-fitting without any prompts.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit_toy0</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">save_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force_fit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eliobj_m2_reload</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initialization
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 8/8 [00:00&lt;00:00, 13.81it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 
+Training
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 4/4 [00:00&lt;00:00,  6.57it/s]
 </pre></div>
 </div>
 </div>
 </div>
 </section>
 </section>
-<section id="what-happens-when-i-want-to-save-an-elicit-object-with-a-name-that-already-exists">
-<h3>What happens when I want to save an elicit object with a name that already exists?<a class="headerlink" href="#what-happens-when-i-want-to-save-an-elicit-object-with-a-name-that-already-exists" title="Link to this heading">#</a></h3>
+<section id="what-happens-when-i-want-to-save-an-eliobj-object-with-a-name-that-already-exists">
+<h3>What happens when I want to save an <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object with a name that already exists?<a class="headerlink" href="#what-happens-when-i-want-to-save-an-eliobj-object-with-a-name-that-already-exists" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">save_elicit</span><span class="p">(</span><span class="n">elicit_toy0</span><span class="p">,</span> <span class="s2">&quot;./results/fit_toy0.pkl&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eliobj_m2_reload</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;m2&quot;</span><span class="p">)</span>
 
 <span class="c1"># prompt:</span>
 <span class="c1"># In provided directory exists already a file with identical name. Do you want to overwrite it? </span>
@@ -830,10 +821,15 @@ Training
 </div>
 <section id="can-i-force-overwriting-of-file-while-saving">
 <h4>Can I force overwriting of file while saving?<a class="headerlink" href="#can-i-force-overwriting-of-file-while-saving" title="Link to this heading">#</a></h4>
-<p>Sometimes, especially when we only want to test something, it can be inconvenient to repeatedly confirm whether the locally stored results file should be overwritten. To address this, you can use the <code class="docutils literal notranslate"><span class="pre">force_overwrite</span></code> argument in the <code class="docutils literal notranslate"><span class="pre">fit</span></code> method to enable re-fitting without any prompts.</p>
+<p>Sometimes, especially when we only want to test something, it can be inconvenient to repeatedly confirm whether the locally stored results file should be overwritten. To address this issue, you can set <code class="docutils literal notranslate"><span class="pre">overwrite=True</span></code> to enable re-fitting without any prompts.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">save_elicit</span><span class="p">(</span><span class="n">elicit_toy0</span><span class="p">,</span> <span class="s2">&quot;./results/fit_toy0.pkl&quot;</span><span class="p">,</span> <span class="n">force_overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eliobj_m2_reload</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;m2&quot;</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>saved in: ./res/parametric_prior/m2_0
 </pre></div>
 </div>
 </div>
@@ -870,33 +866,32 @@ Training
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-an-unfitted-elicit-object-e-g-for-sharing-with-collaborators">Save an unfitted <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object (e.g., for sharing with collaborators)</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-an-unfitted-eliobj-object-e-g-for-sharing-with-collaborators">Save an unfitted <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object (e.g., for sharing with collaborators)</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-0-load-necessary-libraries-and-functions-classes">Step 0: Load necessary libraries and functions/classes</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-create-the-elicit-object">Step 1: Create the <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-save-the-unfitted-elicit-object">Step 2: Save the unfitted <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-create-the-eliobj-object">Step 1: Create the <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-save-the-unfitted-eliobj-object">Step 2: Save the unfitted <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-and-fit-the-unfitted-elicit-object">Load and fit the <em>unfitted</em> <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#load-the-elicit-object">Load the <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fit-the-loaded-elicit-object">Fit the loaded <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-and-fit-the-unfitted-eliobj-object">Load and fit the <em>unfitted</em> <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#load-the-eliobj-object">Load the <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fit-the-loaded-eliobj-object">Fit the loaded <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inspect-the-fitted-elicit-object">Inspect the <em>fitted</em> <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-results-on-disk">Save results on disk</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inspect-the-fitted-eliobj-object">Inspect the <em>fitted</em> <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#save-only-subset-of-results">Save only subset of results</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-and-reload-the-fitted-elicit-object">Save and reload the <em>fitted</em> <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-and-reload-the-fitted-eliobj-object">Save and reload the <em>fitted</em> <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-save-the-fitted-object">Step 1: Save the fitted object</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-load-and-inspect-the-fitted-elicit-object">Step 2: Load and inspect the fitted <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-load-and-inspect-the-fitted-eliobj-object">Step 2: Load and inspect the fitted <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#q-a">Q&amp;A</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-happens-when-i-want-to-fit-an-already-fitted-elicit-object">What happens when I want to fit an already fitted <code class="docutils literal notranslate"><span class="pre">elicit</span></code> object?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-happens-when-i-want-to-fit-an-already-fitted-eliobj-object">What happens when I want to fit an already fitted <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object?</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#can-i-force-re-fitting">Can I force re-fitting?</a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-happens-when-i-want-to-save-an-elicit-object-with-a-name-that-already-exists">What happens when I want to save an elicit object with a name that already exists?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-happens-when-i-want-to-save-an-eliobj-object-with-a-name-that-already-exists">What happens when I want to save an <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object with a name that already exists?</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#can-i-force-overwriting-of-file-while-saving">Can I force overwriting of file while saving?</a></li>
 </ul>
 </li>
@@ -926,7 +921,7 @@ By Florence Bockting
 
   <p class="copyright">
     
-      © Copyright 2024, Florence Bockting.
+      © Copyright 2025, Florence Bockting.
       <br/>
     
   </p>

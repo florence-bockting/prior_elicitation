@@ -376,6 +376,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.save_history"><code class="docutils literal notranslate"><span class="pre">save_history()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.save_results"><code class="docutils literal notranslate"><span class="pre">save_results()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.get_expert_datformat"><code class="docutils literal notranslate"><span class="pre">get_expert_datformat()</span></code></a></li>
 </ul>
             </nav>
         </div>
@@ -767,12 +768,12 @@ model-simulated elicited statistics.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.utils.save">
-<span class="sig-prename descclassname"><span class="pre">elicit.utils.</span></span><span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eliobj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.save" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.utils.</span></span><span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eliobj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.save" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.utils.load">
-<span class="sig-prename descclassname"><span class="pre">elicit.utils.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.load" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.utils.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.load" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -871,6 +872,11 @@ in results object.</p>
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="elicit.utils.get_expert_datformat">
+<span class="sig-prename descclassname"><span class="pre">elicit.utils.</span></span><span class="sig-name descname"><span class="pre">get_expert_datformat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#get_expert_datformat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.get_expert_datformat" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
 </section>
 
 
@@ -946,6 +952,7 @@ in results object.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.save_history"><code class="docutils literal notranslate"><span class="pre">save_history()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.save_results"><code class="docutils literal notranslate"><span class="pre">save_results()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.get_expert_datformat"><code class="docutils literal notranslate"><span class="pre">get_expert_datformat()</span></code></a></li>
 </ul>
   </nav></div>
 
@@ -970,7 +977,7 @@ By Florence Bockting
 
   <p class="copyright">
     
-      © Copyright 2024, Florence Bockting.
+      © Copyright 2025, Florence Bockting.
       <br/>
     
   </p>

@@ -29,7 +29,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
-    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -170,6 +170,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.losses.html">elicit.losses module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.networks.html">elicit.networks module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.optimization.html">elicit.optimization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.plots.html">elicit.plots module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.simulations.html">elicit.simulations module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.targets.html">elicit.targets module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.utils.html">elicit.utils module</a></li>
@@ -306,6 +307,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
 <span class="kn">import</span> <span class="nn">tensorflow_probability</span> <span class="k">as</span> <span class="nn">tfp</span>
 <span class="kn">import</span> <span class="nn">elicit</span> <span class="k">as</span> <span class="nn">el</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
 
 <span class="n">tfd</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">distributions</span>
 
@@ -342,7 +344,7 @@ document.write(`
     <span class="n">vtype</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;real&quot;</span><span class="p">,</span>
     <span class="n">dim</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
     <span class="n">shared</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-<span class="p">):</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Specification of prior hyperparameters.</span>
 
@@ -371,6 +373,17 @@ document.write(`
 <span class="sd">    hyppar_dict : dict</span>
 <span class="sd">        Dictionary including all hyperparameter settings.</span>
 
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        &#39;lower&#39;, &#39;upper&#39; take only values that are float or &quot;-inf&quot;/&quot;inf&quot;.</span>
+
+<span class="sd">        &#39;lower&#39; value should not be higher than &#39;upper&#39; value.</span>
+
+<span class="sd">        &#39;vtype&#39; value can only be either &#39;real&#39; or &#39;array&#39;.</span>
+
+<span class="sd">        &#39;dim&#39; value can&#39;t be &#39;1&#39; if &#39;vtype=&quot;array&quot;&#39;</span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; # sigma hyperparameter of a parameteric distribution</span>
@@ -380,6 +393,43 @@ document.write(`
 <span class="sd">    &gt;&gt;&gt; el.hyper(name=&quot;sigma&quot;, lower=0, shared=True)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># check correct value for lower</span>
+    <span class="k">if</span> <span class="n">lower</span> <span class="o">==</span> <span class="s2">&quot;-inf&quot;</span><span class="p">:</span>
+        <span class="n">lower</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">lower</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">lower</span> <span class="o">!=</span> <span class="s2">&quot;-inf&quot;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;lower must be either &#39;-inf&#39; or a float.&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; Other strings are not allowed.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># check correct value for upper</span>
+    <span class="k">if</span> <span class="n">upper</span> <span class="o">==</span> <span class="s2">&quot;inf&quot;</span><span class="p">:</span>
+        <span class="n">upper</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">upper</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">upper</span> <span class="o">!=</span> <span class="s2">&quot;inf&quot;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;upper must be either &#39;inf&#39; or a float.&quot;</span> <span class="o">+</span>
+            <span class="s2">&quot; Other strings are not allowed.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">lower</span> <span class="o">&gt;</span> <span class="n">upper</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;The value for &#39;lower&#39; must be smaller than the value for &#39;upper&#39;.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># check values for vtype are implemented</span>
+    <span class="k">if</span> <span class="n">vtype</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;real&quot;</span><span class="p">,</span> <span class="s2">&quot;array&quot;</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;vtype must be either &#39;real&#39; or &#39;array&#39;. You provided &#39;</span><span class="si">{</span><span class="n">vtype</span><span class="si">}</span><span class="s2">&#39;.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># check that dimensionality is adapted when &quot;array&quot; is chosen</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">vtype</span> <span class="o">==</span> <span class="s2">&quot;array&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">dim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;For vtype=&#39;array&#39;, the &#39;dim&#39; argument must have a value &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;greater 1.&quot;</span>
+        <span class="p">)</span>
+
     <span class="c1"># constraints</span>
     <span class="c1"># only lower bound</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">lower</span> <span class="o">!=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="n">upper</span> <span class="o">==</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)):</span>
@@ -414,7 +464,7 @@ document.write(`
 <span class="k">def</span> <span class="nf">parameter</span><span class="p">(</span>
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">family</span><span class="p">:</span> <span class="nb">callable</span> <span class="ow">or</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">hyperparams</span><span class="p">:</span> <span class="nb">callable</span> <span class="ow">or</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="p">):</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Specification of model parameters.</span>
 
@@ -442,6 +492,15 @@ document.write(`
 <span class="sd">    param_dict : dict</span>
 <span class="sd">        Dictionary including all model (hyper)parameter settings.</span>
 
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        &#39;family&#39; has to be a tfp.distributions object.</span>
+
+<span class="sd">        &#39;hyperparams&#39; value is a dict with keys corresponding to arguments of</span>
+<span class="sd">        tfp.distributions object in &#39;family&#39;. Raises error if key does not</span>
+<span class="sd">        correspond to any argument of distribution.</span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; el.parameter(name=&quot;beta0&quot;,</span>
@@ -453,6 +512,23 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
 
+    <span class="c1"># check that family is a tfp.distributions object</span>
+    <span class="k">if</span> <span class="n">family</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">family</span><span class="o">.</span><span class="vm">__module__</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">tfd</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;[section: parameters] The argument &#39;family&#39;&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;has to be a tfp.distributions object.&quot;</span>
+            <span class="p">)</span>
+
+    <span class="c1"># check whether keys of hyperparams dict correspond to arguments of family</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">hyperparams</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getfullargspec</span><span class="p">(</span><span class="n">family</span><span class="p">)[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;[section: parameters] &#39;</span><span class="si">{</span><span class="n">family</span><span class="o">.</span><span class="vm">__module__</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+                <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; family has no argument &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39;. Check keys of &quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;&#39;hyperparams&#39; dict.&quot;</span>
+            <span class="p">)</span>
+
     <span class="n">param_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="n">family</span><span class="p">,</span> <span class="n">hyperparams</span><span class="o">=</span><span class="n">hyperparams</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">param_dict</span></div>
@@ -461,7 +537,7 @@ document.write(`
 
 <div class="viewcode-block" id="model">
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.model">[docs]</a>
-<span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Specification of the generative model.</span>
 
@@ -478,6 +554,15 @@ document.write(`
 <span class="sd">    generator_dict : dict</span>
 <span class="sd">        Dictionary including all generative model settings.</span>
 
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        generative model requires the input argument &#39;prior_samples&#39;, but</span>
+<span class="sd">        argument has not been found in &#39;obj&#39; value</span>
+
+<span class="sd">        optional argument(s) of the generative model specified in &#39;obj&#39; are not</span>
+<span class="sd">        specified</span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; # specify the generative model class</span>
@@ -488,7 +573,7 @@ document.write(`
 <span class="sd">    &gt;&gt;&gt;         # preprocess shape of design matrix</span>
 <span class="sd">    &gt;&gt;&gt;         X = tf.broadcast_to(design_matrix[None, None,:],</span>
 <span class="sd">    &gt;&gt;&gt;                            (B,S,len(design_matrix)))</span>
-<span class="sd">    &gt;&gt;&gt;         # linear predictor (= mu)</span>
+<span class="sd">    &gt;&gt;&gt;         # linear predictor</span>
 <span class="sd">    &gt;&gt;&gt;         epred = tf.add(prior_samples[:, :, 0][:,:,None],</span>
 <span class="sd">    &gt;&gt;&gt;                        tf.multiply(prior_samples[:, :, 1][:,:,None], X)</span>
 <span class="sd">    &gt;&gt;&gt;                        )</span>
@@ -496,7 +581,7 @@ document.write(`
 <span class="sd">    &gt;&gt;&gt;         likelihood = tfd.Normal(</span>
 <span class="sd">    &gt;&gt;&gt;             loc=epred, scale=tf.expand_dims(prior_samples[:, :, -1], -1)</span>
 <span class="sd">    &gt;&gt;&gt;             )</span>
-<span class="sd">    &gt;&gt;&gt;         # prior predictive distribution (=height)</span>
+<span class="sd">    &gt;&gt;&gt;         # prior predictive distribution</span>
 <span class="sd">    &gt;&gt;&gt;         ypred = likelihood.sample()</span>
 <span class="sd">    &gt;&gt;&gt;</span>
 <span class="sd">    &gt;&gt;&gt;         return dict(</span>
@@ -510,6 +595,25 @@ document.write(`
 <span class="sd">    &gt;&gt;&gt;          design_matrix=std_predictor(N=200, quantiles=[25,50,75])</span>
 <span class="sd">    &gt;&gt;&gt;          )</span>
 <span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
+    <span class="c1"># get input arguments of generative model class</span>
+    <span class="n">input_args</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getfullargspec</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="fm">__call__</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># check correct input form of generative model class</span>
+    <span class="k">if</span> <span class="s2">&quot;prior_samples&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">input_args</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;[section: model] The generative model class &#39;obj&#39; requires the&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; input variable &#39;prior_samples&#39; but argument has not been found&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; in &#39;obj&#39;.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># check that all optional arguments have been provided by the user</span>
+    <span class="n">optional_args</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">input_args</span><span class="p">)</span><span class="o">.</span><span class="n">difference</span><span class="p">({</span><span class="s2">&quot;prior_samples&quot;</span><span class="p">,</span> <span class="s2">&quot;self&quot;</span><span class="p">})</span>
+    <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">optional_args</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">arg</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;[section: model] The argument &#39;</span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2">&#39; required by the&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot; generative model class &#39;obj&#39; is missing.&quot;</span>
+            <span class="p">)</span>
+
     <span class="n">generator_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="n">obj</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
@@ -524,27 +628,45 @@ document.write(`
 <span class="k">class</span> <span class="nc">Queries</span><span class="p">:</span>
 <div class="viewcode-block" id="Queries.quantiles">
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.Queries.quantiles">[docs]</a>
-    <span class="k">def</span> <span class="nf">quantiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">quantiles</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">quantiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">quantiles</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Implements a quantile-based elicitation technique.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        quants : tuple</span>
-<span class="sd">            Tuple with respective quantiles ranging from 0 to 100.</span>
+<span class="sd">            Tuple with respective quantiles ranging between 0 and 1.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        elicit_dict : dict</span>
 <span class="sd">            Dictionary including the quantile settings.</span>
 
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            quantiles have to be specified as probability ranging between 0-1</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;quantiles&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">quantiles</span><span class="p">)</span></div>
+        <span class="c1"># compute percentage from probability</span>
+        <span class="n">quantiles_perc</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">q</span> <span class="o">*</span> <span class="mi">100</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">quantiles</span><span class="p">])</span>
+
+        <span class="c1"># check that quantiles are provided as percentage</span>
+        <span class="k">for</span> <span class="n">quantile</span> <span class="ow">in</span> <span class="n">quantiles_perc</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">quantile</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">quantile</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;[section: targets] Quantiles have to be expressed as&quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot; probability (between 0 and 1).&quot;</span>
+                    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; Found quantile=</span><span class="si">{</span><span class="n">quantile</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+
+        <span class="n">elicit_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;quantiles&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">quantiles_perc</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">elicit_dict</span></div>
 
 
 <div class="viewcode-block" id="Queries.identity">
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.Queries.identity">[docs]</a>
-    <span class="k">def</span> <span class="nf">identity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">identity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Implements an identity function. Should be used if no further</span>
 <span class="sd">        transformation of target quantity is required.</span>
@@ -555,12 +677,13 @@ document.write(`
 <span class="sd">            Dictionary including the identity settings.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;identity&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></div>
+        <span class="n">elicit_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;identity&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">elicit_dict</span></div>
 
 
 <div class="viewcode-block" id="Queries.correlation">
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.Queries.correlation">[docs]</a>
-    <span class="k">def</span> <span class="nf">correlation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">correlation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Implements a method to calculate the pearson correlation between</span>
 <span class="sd">        model parameters.</span>
@@ -571,7 +694,8 @@ document.write(`
 <span class="sd">            Dictionary including the correlation settings.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;pearson_correlation&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></div>
+        <span class="n">elicit_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;pearson_correlation&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">elicit_dict</span></div>
 
 
 <div class="viewcode-block" id="Queries.custom">
@@ -594,9 +718,16 @@ document.write(`
 <span class="sd">        elicit_dict : dict</span>
 <span class="sd">            Dictionary including the custom settings.</span>
 
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        NotImplementedError</span>
+<span class="sd">            The option for custom elicitation methods is not implemented yet.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;The use of custom elicitation methods &quot;</span> <span class="o">+</span>
-                                  <span class="s2">&quot;hasn&#39;t been implemented yet.&quot;</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+            <span class="s2">&quot;[section targets]: The use of custom elicitation methods &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;hasn&#39;t been implemented yet.&quot;</span>
+        <span class="p">)</span></div>
 </div>
 
         <span class="c1"># args_dict = dict()</span>
@@ -618,7 +749,7 @@ document.write(`
     <span class="n">loss</span><span class="p">:</span> <span class="nb">callable</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">MMD2</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;energy&quot;</span><span class="p">),</span>
     <span class="n">target_method</span><span class="p">:</span> <span class="nb">callable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
-<span class="p">):</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Specification of target quantity and corresponding elicitation technique.</span>
 
@@ -655,6 +786,11 @@ document.write(`
 <span class="sd">        Dictionary including all settings regarding the target quantity and</span>
 <span class="sd">        corresponding elicitation technique.</span>
 
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    NotImplementedError</span>
+<span class="sd">        The option for custom target quantity is not implemented yet.</span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; el.target(name=&quot;y_X0&quot;,</span>
@@ -673,8 +809,9 @@ document.write(`
         <span class="n">target_method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
     <span class="k">except</span> <span class="ne">NotImplementedError</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">&quot;The use of a custom target quantity hasn&#39;t been implemented yet.&quot;</span>
-            <span class="p">)</span>
+            <span class="s2">&quot;[section: targets] The use of a custom target quantity hasn&#39;t&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; been implemented yet.&quot;</span>
+        <span class="p">)</span>
 
     <span class="c1"># create instance of loss class</span>
     <span class="n">loss_instance</span> <span class="o">=</span> <span class="n">loss</span>
@@ -696,7 +833,7 @@ document.write(`
 <span class="k">class</span> <span class="nc">Expert</span><span class="p">:</span>
 <div class="viewcode-block" id="Expert.data">
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.Expert.data">[docs]</a>
-    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dat</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dat</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Provide elicited-expert data for learning prior distributions.</span>
 
@@ -704,8 +841,9 @@ document.write(`
 <span class="sd">        ----------</span>
 <span class="sd">        dat : dict</span>
 <span class="sd">            Elicited data from expert provided as dictionary. Data must be</span>
-<span class="sd">            provided in a standardized format which is explained in</span>
-<span class="sd">            `How-To specify the expert data (TODO) &lt;url&gt;`_</span>
+<span class="sd">            provided in a standardized format.</span>
+<span class="sd">            Use :func:`elicit.utils.get_expert_datformat` to get correct data</span>
+<span class="sd">            format for your method specification.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -720,6 +858,7 @@ document.write(`
 <span class="sd">        &gt;&gt;&gt;     &quot;quantiles_y_X2&quot;: [-9.28, 3.09, 6.83, 10.55, 23.29]</span>
 <span class="sd">        &gt;&gt;&gt; }</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Note: check for correct expert data format is done in Elicit class</span>
         <span class="n">dat_prep</span> <span class="o">=</span> <span class="p">{</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span>
                 <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span><span class="p">(</span><span class="n">dat</span><span class="p">[</span><span class="n">key</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span> <span class="mi">0</span>
@@ -732,7 +871,7 @@ document.write(`
 
 <div class="viewcode-block" id="Expert.simulator">
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.Expert.simulator">[docs]</a>
-    <span class="k">def</span> <span class="nf">simulator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10_000</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">simulator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10_000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Simulate data from an oracle by defining a ground truth (true prior</span>
 <span class="sd">        distribution(s)).</span>
@@ -742,11 +881,16 @@ document.write(`
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        ground_truth : dict</span>
-<span class="sd">            True prior distributions with *keys* matching the parameter names</span>
-<span class="sd">            as specified in :func:`parameter` and *values* being prior</span>
-<span class="sd">            distributions implemented as</span>
+<span class="sd">            True prior distribution(s). *Keys* refer to parameter names and</span>
+<span class="sd">            *values* to prior distributions implemented as</span>
 <span class="sd">            `tfp.distributions &lt;https://www.tensorflow.org/probability/api_docs/python/tfp/distributions&gt;`_</span>
 <span class="sd">            object with predetermined hyperparameter values.</span>
+<span class="sd">            You can specify a prior distribution for each model parameter or</span>
+<span class="sd">            a joint prior for all model parameters at once or any approach in</span>
+<span class="sd">            between. Only requirement is that the dimensionality of all priors</span>
+<span class="sd">            in ground truth match with the number of model parameters.</span>
+<span class="sd">            Order of priors in ground truth must match order of</span>
+<span class="sd">            :func:`elicit.elicit.Elicit` argument ``parameters``.</span>
 <span class="sd">        num_samples : int</span>
 <span class="sd">            Number of draws from the prior distribution.</span>
 <span class="sd">            It is recommended to use a high value to min. sampling variation.</span>
@@ -768,25 +912,49 @@ document.write(`
 <span class="sd">        &gt;&gt;&gt;     },</span>
 <span class="sd">        &gt;&gt;&gt;     num_samples = 10_000</span>
 <span class="sd">        &gt;&gt;&gt; )</span>
+
+<span class="sd">        &gt;&gt;&gt; el.expert.simulator(</span>
+<span class="sd">        &gt;&gt;&gt;     ground_truth = {</span>
+<span class="sd">        &gt;&gt;&gt;         &quot;betas&quot;: tfd.MultivariateNormalDiag([5.,2.], [1.,1.]),</span>
+<span class="sd">        &gt;&gt;&gt;         &quot;sigma&quot;: tfd.HalfNormal(scale=10.0),</span>
+<span class="sd">        &gt;&gt;&gt;     },</span>
+<span class="sd">        &gt;&gt;&gt;     num_samples = 10_000</span>
+<span class="sd">        &gt;&gt;&gt; )</span>
+
+<span class="sd">        &gt;&gt;&gt; el.expert.simulator(</span>
+<span class="sd">        &gt;&gt;&gt;     ground_truth = {</span>
+<span class="sd">        &gt;&gt;&gt;         &quot;thetas&quot;: tfd.MultivariateNormalDiag([5.,2.,1.],</span>
+<span class="sd">        &gt;&gt;&gt;                                              [1.,1.,1.]),</span>
+<span class="sd">        &gt;&gt;&gt;     },</span>
+<span class="sd">        &gt;&gt;&gt;     num_samples = 10_000</span>
+<span class="sd">        &gt;&gt;&gt; )</span>
 <span class="sd">        &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
-        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">ground_truth</span><span class="o">=</span><span class="n">ground_truth</span><span class="p">,</span> <span class="n">num_samples</span><span class="o">=</span><span class="n">num_samples</span><span class="p">)</span></div>
+        <span class="c1"># Note: check whether dimensionality of ground truth and number of</span>
+        <span class="c1"># model parameters is identical is done in Elicit class</span>
+
+        <span class="n">expert_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">ground_truth</span><span class="o">=</span><span class="n">ground_truth</span><span class="p">,</span>
+                           <span class="n">num_samples</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">num_samples</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">expert_data</span></div>
 </div>
 
 
 
+<span class="c1"># create an instantiation of Expert class</span>
 <span class="n">expert</span> <span class="o">=</span> <span class="n">Expert</span><span class="p">()</span>
 
 
 <div class="viewcode-block" id="optimizer">
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.optimizer">[docs]</a>
-<span class="k">def</span> <span class="nf">optimizer</span><span class="p">(</span><span class="n">optimizer</span><span class="p">:</span> <span class="nb">callable</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">optimizer</span><span class="p">(</span><span class="n">optimizer</span><span class="p">:</span> <span class="nb">callable</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">(),</span>
+              <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Specification of optimizer and its settings for SGD.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    optimizer : callable, `tf.keras.optimizers &lt;https://www.tensorflow.org/api_docs/python/tf/keras/optimizers&gt;`_ object.</span>
-<span class="sd">        Optimizer used for SGD implemented as `tf.keras.optimizers &lt;https://www.tensorflow.org/api_docs/python/tf/keras/optimizers&gt;`_ object.</span>
+<span class="sd">        Optimizer used for SGD implemented.</span>
+<span class="sd">        Must be an object implemented in `tf.keras.optimizers &lt;https://www.tensorflow.org/api_docs/python/tf/keras/optimizers&gt;`_ object.</span>
 <span class="sd">        The default is ``tf.keras.optimizers.Adam``.</span>
 <span class="sd">    **kwargs : keyword arguments, optional</span>
 <span class="sd">        Additional keyword arguments expected by **optimizer**.</span>
@@ -796,6 +964,13 @@ document.write(`
 <span class="sd">    optimizer_dict : dict</span>
 <span class="sd">        Dictionary specifying the SGD optimizer and its additional settings.</span>
 
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        &#39;optimizer&#39; is not a tf.keras.optimizers object</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        &#39;optimizer&#39; could not be found in tf.keras.optimizers</span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; optimizer=el.optimizer(</span>
@@ -804,6 +979,24 @@ document.write(`
 <span class="sd">    &gt;&gt;&gt;     clipnorm=1.0</span>
 <span class="sd">    &gt;&gt;&gt; )</span>
 <span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
+
+    <span class="c1"># check whether optimizer is a tf.keras.optimizers object</span>
+    <span class="n">opt_module</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">optimizer</span><span class="o">.</span><span class="vm">__module__</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">opt_module</span> <span class="o">!=</span> <span class="s2">&quot;keras.src.optimizers&quot;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s2">&quot;[section: optimizer] The &#39;optimizer&#39; must be a&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; tf.keras.optimizers object.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># check whether the optimizer object can be found in tf.keras.optimizers</span>
+    <span class="n">opt_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">opt_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;[section: optimizer] The argument &#39;optimizer&#39; has to be a&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; tf.keras.optimizers object.&quot;</span>
+            <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; Couldn&#39;t find </span><span class="si">{</span><span class="n">opt_name</span><span class="si">}</span><span class="s2"> in list of tf.keras.optimizers.&quot;</span>
+        <span class="p">)</span>
+
     <span class="n">optimizer_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
         <span class="n">optimizer_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
@@ -817,9 +1010,9 @@ document.write(`
 <span class="k">def</span> <span class="nf">initializer</span><span class="p">(</span>
     <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">distribution</span><span class="p">:</span> <span class="nb">callable</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">uniform</span><span class="p">(),</span>
-    <span class="n">loss_quantile</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">loss_quantile</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">.0</span><span class="p">,</span>
     <span class="n">iterations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
-<span class="p">):</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Initialization method for finding initial values of model hyperparameters</span>
 <span class="sd">    required for instantiating training with SGD. Initial values for each</span>
@@ -837,9 +1030,9 @@ document.write(`
 <span class="sd">    distribution : callable, :func:`elicit.initialization.uniform`</span>
 <span class="sd">        Specification of initialization distribution.</span>
 <span class="sd">        Currently implemented methods: :func:`elicit.initialization.uniform`</span>
-<span class="sd">    loss_quantile : int,</span>
+<span class="sd">    loss_quantile : float,</span>
 <span class="sd">        Quantile indicating which loss value should be used for selecting the</span>
-<span class="sd">        initial hyperparameters.</span>
+<span class="sd">        initial hyperparameters.Specified as probability value between 0-1.</span>
 <span class="sd">        The default is ``0`` i.e., the minimum loss.</span>
 <span class="sd">    iterations : int</span>
 <span class="sd">        Number of samples drawn from the initialization distribution.</span>
@@ -849,6 +1042,13 @@ document.write(`
 <span class="sd">    -------</span>
 <span class="sd">    init_dict : dict</span>
 <span class="sd">        Dictionary specifying the initialization method.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        &#39;method&#39; can only take the values &quot;random&quot;, &quot;sobol&quot;, or &quot;lhs&quot;</span>
+
+<span class="sd">        &#39;loss_quantile&#39; must be a probability ranging between 0 and 1.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -862,11 +1062,29 @@ document.write(`
 <span class="sd">    &gt;&gt;&gt;         )</span>
 <span class="sd">    &gt;&gt;&gt;     )</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># compute percentage from probability</span>
+    <span class="n">quantile_perc</span> <span class="o">=</span> <span class="n">loss_quantile</span> <span class="o">*</span> <span class="mi">100</span>
+
+    <span class="c1"># check that method is implemented</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;random&quot;</span><span class="p">,</span> <span class="s2">&quot;lhs&quot;</span><span class="p">,</span> <span class="s2">&quot;sobol&quot;</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;[section: initializer] Currently implemented initialization&quot;</span>
+            <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; methods are &#39;random&#39;, &#39;sobol&#39;, and &#39;lhs&#39;, but got &#39;</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; as input.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># check that quantile is provided as probability</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">quantile_perc</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">quantile_perc</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;[section: initializer] &#39;loss_quantile&#39; must be a value between 0&quot;</span>
+            <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; and 1. Found &#39;loss_quantile=</span><span class="si">{</span><span class="n">loss_quantile</span><span class="si">}</span><span class="s2">&#39;.&quot;</span>
+        <span class="p">)</span>
+
     <span class="n">init_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
         <span class="n">distribution</span><span class="o">=</span><span class="n">distribution</span><span class="p">,</span>
         <span class="n">loss_quantile</span><span class="o">=</span><span class="n">loss_quantile</span><span class="p">,</span>
-        <span class="n">iterations</span><span class="o">=</span><span class="n">iterations</span><span class="p">,</span>
+        <span class="n">iterations</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">iterations</span><span class="p">),</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">init_dict</span></div>
@@ -877,7 +1095,6 @@ document.write(`
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.trainer">[docs]</a>
 <span class="k">def</span> <span class="nf">trainer</span><span class="p">(</span>
     <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">epochs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">B</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">128</span><span class="p">,</span>
@@ -894,8 +1111,6 @@ document.write(`
 <span class="sd">        Method for learning the prior distribution. Available is either</span>
 <span class="sd">        ``parametric_prior`` for learning independent parametric priors</span>
 <span class="sd">        or ``deep_prior`` for learning a joint non-parameteric prior.</span>
-<span class="sd">    name : str</span>
-<span class="sd">        provides model a unique identifier used for saving results.</span>
 <span class="sd">    seed : int</span>
 <span class="sd">        seed used for learning.</span>
 <span class="sd">    epochs : int</span>
@@ -921,11 +1136,15 @@ document.write(`
 <span class="sd">        dictionary specifying the training settings for learning the prior</span>
 <span class="sd">        distribution(s).</span>
 
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        &#39;method&#39; can only take the value &quot;parametric_prior&quot; or &quot;deep_prior&quot;</span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; el.trainer(</span>
 <span class="sd">    &gt;&gt;&gt;     method=&quot;parametric_prior&quot;,</span>
-<span class="sd">    &gt;&gt;&gt;     name=&quot;toymodel&quot;,</span>
 <span class="sd">    &gt;&gt;&gt;     seed=0,</span>
 <span class="sd">    &gt;&gt;&gt;     epochs=400,</span>
 <span class="sd">    &gt;&gt;&gt;     B=128,</span>
@@ -934,13 +1153,19 @@ document.write(`
 <span class="sd">    &gt;&gt;&gt;     save_results=el.utils.save_results(model=False)</span>
 <span class="sd">    &gt;&gt;&gt; )</span>
 <span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
+    <span class="c1"># check that method is implemented</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;parametric_prior&quot;</span><span class="p">,</span> <span class="s2">&quot;deep_prior&quot;</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;[section: trainer] Currently only the methods &#39;deep_prior&#39; and&quot;</span>
+            <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; &#39;parametric prior&#39; are implemented but got &#39;</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">&#39;.&quot;</span>
+        <span class="p">)</span>
+
     <span class="n">train_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
-        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
-        <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
-        <span class="n">B</span><span class="o">=</span><span class="n">B</span><span class="p">,</span>
-        <span class="n">num_samples</span><span class="o">=</span><span class="n">num_samples</span><span class="p">,</span>
-        <span class="n">epochs</span><span class="o">=</span><span class="n">epochs</span><span class="p">,</span>
+        <span class="n">seed</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">seed</span><span class="p">),</span>
+        <span class="n">B</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">B</span><span class="p">),</span>
+        <span class="n">num_samples</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">num_samples</span><span class="p">),</span>
+        <span class="n">epochs</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">epochs</span><span class="p">),</span>
         <span class="n">save_history</span><span class="o">=</span><span class="n">save_history</span><span class="p">,</span>
         <span class="n">save_results</span><span class="o">=</span><span class="n">save_results</span><span class="p">,</span>
     <span class="p">)</span>
@@ -952,7 +1177,6 @@ document.write(`
 <div class="viewcode-block" id="Elicit">
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.Elicit">[docs]</a>
 <span class="k">class</span> <span class="nc">Elicit</span><span class="p">:</span>
-
 <div class="viewcode-block" id="Elicit.__init__">
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.Elicit.__init__">[docs]</a>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
@@ -1002,7 +1226,76 @@ document.write(`
 <span class="sd">            specification of all settings to run the elicitation workflow and</span>
 <span class="sd">            fit the eliobj.</span>
 
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    AssertionError</span>
+<span class="sd">        &#39;expert&#39; data are not in the required format. Correct specification of</span>
+<span class="sd">        keys can be checked using el.utils.get_expert_datformat</span>
+
+<span class="sd">        Dimensionality of &#39;ground_truth&#39; for simulating expert data, must be</span>
+<span class="sd">        the same as the number of model parameters.</span>
+
+<span class="sd">    ValueError</span>
+<span class="sd">        if method=&quot;deep_prior&quot;, &#39;network&#39; can&#39;t be None and &#39;initialization&#39;</span>
+<span class="sd">        should be None.</span>
+
+<span class="sd">        if &#39;method=&quot;parametric_prior&quot;&#39;, &#39;network&#39; should be None and</span>
+<span class="sd">        &#39;initialization&#39; can&#39;t be None.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># check expert data</span>
+        <span class="n">expected_dict</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_expert_datformat</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">expert</span><span class="p">[</span><span class="s2">&quot;ground_truth&quot;</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="c1"># input expert data: ensure data has expected format</span>
+            <span class="k">if</span> <span class="nb">list</span><span class="p">(</span><span class="n">expert</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">!=</span> <span class="nb">list</span><span class="p">(</span><span class="n">expected_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span>
+                    <span class="s2">&quot;[section: expert] Provided expert data is not in the &quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot;correct format. Please use &quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot;el.utils.get_expert_datformat to check expected format.&quot;</span>
+                <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># oracle: ensure ground truth has same dim as number of model param</span>
+            <span class="n">expected_params</span> <span class="o">=</span> <span class="p">[</span><span class="n">param</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">parameters</span><span class="p">]</span>
+            <span class="n">num_params</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">expert</span><span class="p">[</span><span class="s2">&quot;ground_truth&quot;</span><span class="p">]:</span>
+                <span class="n">num_params</span> <span class="o">+=</span> <span class="n">expert</span><span class="p">[</span><span class="s2">&quot;ground_truth&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">expected_params</span><span class="p">)</span> <span class="o">!=</span> <span class="n">num_params</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span>
+                    <span class="s2">&quot;[section: expert] Dimensionality of ground truth in&quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot; &#39;expert&#39; is not the same  as number of model&quot;</span>
+                    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; parameters.Got </span><span class="si">{</span><span class="n">num_params</span><span class="si">}</span><span class="s2">, expected&quot;</span>
+                    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">expected_params</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="p">)</span>
+        <span class="c1"># check that network architecture is provided when method is deep prior</span>
+        <span class="c1"># and initializer is none</span>
+        <span class="k">if</span> <span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;deep_prior&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">network</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;[section network] If method is &#39;deep prior&#39;,&quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot; the section &#39;network&#39; can&#39;t be None.&quot;</span>
+                <span class="p">)</span>
+            <span class="k">if</span> <span class="n">initializer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;[section initializer] For method &#39;deep_prior&#39; the &quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot;&#39;initializer&#39; is not used and should be set to None.&quot;</span>
+                <span class="p">)</span>
+        <span class="c1"># check that initializer is provided when method=parametric prior</span>
+        <span class="c1"># and network is none</span>
+        <span class="k">if</span> <span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;parametric_prior&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">initializer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;[section initializer] If method is &#39;parametric_prior&#39;,&quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot; the section &#39;initializer&#39; can&#39;t be None.&quot;</span>
+                <span class="p">)</span>
+            <span class="k">if</span> <span class="n">network</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;[section network] If method is &#39;parametric prior&#39;&quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot; the &#39;network&#39; is not used and should be set to None.&quot;</span>
+                <span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">parameters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="n">targets</span>
@@ -1023,7 +1316,7 @@ document.write(`
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.Elicit.fit">[docs]</a>
     <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Fit eliobj and learn prior distributions.</span>
+<span class="sd">        method for fitting the eliobj and learn prior distributions.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1032,10 +1325,6 @@ document.write(`
 <span class="sd">            the user is asked whether they want to overwrite the previous</span>
 <span class="sd">            fitting results. Setting ``overwrite=True`` allows the user to</span>
 <span class="sd">            force overfitting without being prompted. The default is ``False``.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        None</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
@@ -1098,8 +1387,6 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="c1"># add saving path</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s1">&#39;seed&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>  <span class="c1"># noqa</span>
         <span class="c1"># add some additional results</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;expert_elicited_statistics&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">expert_elicits</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1114,7 +1401,6 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;init_prior&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">init_prior</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;init_matrix&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">init_matrix</span>
 
-
         <span class="k">for</span> <span class="n">key_hist</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;save_history&quot;</span><span class="p">]:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;save_history&quot;</span><span class="p">][</span><span class="n">key_hist</span><span class="p">]:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key_hist</span><span class="p">)</span>
@@ -1123,12 +1409,107 @@ document.write(`
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;save_results&quot;</span><span class="p">][</span><span class="n">key_res</span><span class="p">]:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key_res</span><span class="p">)</span></div>
 
-    
+
 <div class="viewcode-block" id="Elicit.save">
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.Elicit.save">[docs]</a>
-    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">file</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        method for saving the eliobj on disk</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name.: str or None</span>
+<span class="sd">            file name used to store the eliobj, whereby saving is done</span>
+<span class="sd">            according to the following rule: ``./{method}/{name}_{seed}.pkl``</span>
+<span class="sd">            whereby &#39;method&#39; and &#39;seed&#39; are arguments of</span>
+<span class="sd">            :func:`elicit.elicit.trainer`.</span>
+<span class="sd">        file : str or None</span>
+<span class="sd">            user-specific path for saving the eliobj. If file is specified</span>
+<span class="sd">            **name** must be ``None``. The default value is ``None``.</span>
+<span class="sd">        overwrite : bool, optional</span>
+<span class="sd">            If already a fitted object exists in the same path, the user is</span>
+<span class="sd">            asked whether the eliobj should be refitted and the results</span>
+<span class="sd">            overwritten. With the ``overwrite`` argument you can silent this</span>
+<span class="sd">            behavior. In this case the results are automatically overwritten</span>
+<span class="sd">            without prompting the user. The default is ``False``.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    AssertionError</span>
+<span class="sd">        &#39;name&#39; and &#39;file&#39; can&#39;t be specified simultaneously.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; eliobj.save(name=&quot;toymodel&quot;)</span>
+
+<span class="sd">        &gt;&gt;&gt; eliobj.save(file=&quot;res/toymodel&quot;, overwrite=True)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># check that either name or file is specified</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">raise</span>  <span class="ne">AssertionError</span><span class="p">(</span>
+            <span class="s2">&quot;Name and file cannot be both None or both specified.&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; Either one has to be None.&quot;</span>
+        <span class="p">)</span>
+
         <span class="c1"># add a saving path</span>
-        <span class="k">return</span> <span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">file</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Elicit.update">
+<a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.Elicit.update">[docs]</a>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        method for updating the attributes of the Elicit class. Updating</span>
+<span class="sd">        an eliobj leads to an automatic reset of results.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        **kwargs : any</span>
+<span class="sd">            keyword argument used for updating an attribute of Elicit class.</span>
+<span class="sd">            Key must correspond to one attribute of the class and value refers</span>
+<span class="sd">            to the updated value.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        key of provided keyword argument is not an eliobj attribute. Please</span>
+<span class="sd">        check dir(eliobj).</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; eliobj.update(parameter = updated_parameter_dict&quot;)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># check that arguments exist as eliobj attributes</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span>
+                <span class="s2">&quot;model&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;parameters&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;targets&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;expert&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;trainer&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;optimizer&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;network&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;initializer&quot;</span><span class="p">,</span>
+            <span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> is not an eliobj attribute.&quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot; Use dir() to check for attributes.&quot;</span>
+                <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+            <span class="c1"># reset results</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+            <span class="c1"># inform user about reset of results</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;INFO: Results have been reset.&quot;</span><span class="p">)</span></div>
 </div>
 
 </pre></div>
@@ -1169,7 +1550,7 @@ By Florence Bockting
 
   <p class="copyright">
     
-      © Copyright 2024, Florence Bockting.
+      © Copyright 2025, Florence Bockting.
       <br/>
     
   </p>

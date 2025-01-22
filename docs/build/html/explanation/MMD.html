@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=87e54e7c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -173,6 +173,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../api/elicit.losses.html">elicit.losses module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/elicit.networks.html">elicit.networks module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/elicit.optimization.html">elicit.optimization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.plots.html">elicit.plots module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/elicit.simulations.html">elicit.simulations module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/elicit.targets.html">elicit.targets module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/elicit.utils.html">elicit.utils module</a></li>
@@ -437,25 +438,35 @@ consider <span class="math notranslate nohighlight">\(x, y\)</span> to be column
 <span class="n">tfd</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">distributions</span>
 
 <span class="k">class</span> <span class="nc">MMD2</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kernel</span> <span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;energy&quot;</span><span class="p">,</span> <span class="n">sigma</span> <span class="p">:</span> <span class="nb">int</span> <span class="ow">or</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kernel</span> <span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;energy&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Computes the biased, squared maximum mean discrepancy</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        kernel : str</span>
-<span class="sd">            kernel type used for computing the MMD such as &quot;gaussian&quot;, &quot;energy&quot;</span>
-<span class="sd">            The default is &quot;energy&quot;.</span>
-<span class="sd">        sigma : int, optional</span>
-<span class="sd">            Variance parameter used in the gaussian kernel.</span>
-<span class="sd">            The default is None.</span>
-<span class="sd">        **kwargs : keyword arguments</span>
-<span class="sd">            Additional keyword arguments.</span>
+<span class="sd">            kernel type used for computing the MMD.</span>
+<span class="sd">            Currently implemented kernels are &quot;gaussian&quot;, &quot;energy&quot;.</span>
+<span class="sd">            When using a gaussian kernel an additional &#39;sigma&#39; argument has to</span>
+<span class="sd">            be passed.</span>
+<span class="sd">            The default kernel is &quot;energy&quot;.</span>
+<span class="sd">        **kwargs : any</span>
+<span class="sd">            additional keyword arguments that might be required by the </span>
+<span class="sd">            different individual kernels</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; el.losses.MMD2(kernel=&quot;energy&quot;)</span>
+
+<span class="sd">        &gt;&gt;&gt; el.losses.MMD2(kernel=&quot;gaussian&quot;, sigma = 1.)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">kernel_name</span> <span class="o">=</span> <span class="n">kernel</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span> <span class="o">=</span> <span class="n">sigma</span>
+        <span class="c1"># ensure that all additionally, required arguments are provided for</span>
+        <span class="c1"># the respective kernel</span>
+        <span class="k">if</span> <span class="n">kernel</span> <span class="o">==</span> <span class="s2">&quot;gaussian&quot;</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="s2">&quot;sigma&quot;</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="s2">&quot;You need to pass a &#39;sigma&#39; argument when using a gaussian kernel in the MMD loss&quot;</span>  <span class="c1"># noqa</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -494,32 +505,80 @@ consider <span class="math notranslate nohighlight">\(x, y\)</span> to be column
         <span class="n">u_yy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">yy</span><span class="p">)[:,:,</span><span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">yy</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">yy</span><span class="p">)[:,</span><span class="kc">None</span><span class="p">,:]</span>
 
         <span class="c1"># apply kernel function to squared difference</span>
-        <span class="n">XX</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">u_xx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">)</span>
-        <span class="n">XY</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">u_xy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">)</span>
-        <span class="n">YY</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">u_yy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">)</span>
+        <span class="n">XX</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">u_xx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel_name</span><span class="p">)</span>
+        <span class="n">XY</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">u_xy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel_name</span><span class="p">)</span>
+        <span class="n">YY</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">u_yy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel_name</span><span class="p">)</span>
 
         <span class="c1"># Step 2</span>
         <span class="c1"># compute biased, squared MMD</span>
-        <span class="n">MMD2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">XX</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">XY</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">YY</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">MMD2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">XX</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">MMD2</span> <span class="o">-=</span> <span class="mi">2</span><span class="o">*</span><span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">XY</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">MMD2</span> <span class="o">+=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">YY</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+
         <span class="n">MMD2_mean</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">MMD2</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">MMD2_mean</span><span class="p">,</span> <span class="n">MMD2</span><span class="p">,</span> <span class="n">XX</span><span class="p">,</span> <span class="n">XY</span><span class="p">,</span> <span class="n">YY</span>
 
-    <span class="k">def</span> <span class="nf">clip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">clip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        upper and lower clipping of value `u` to improve numerical stability</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        u : float</span>
+<span class="sd">            result of prior computation.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        u_clipped : float</span>
+<span class="sd">            clipped u value with ``min=1e-8`` and ``max=1e10``.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">u_clipped</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">clip_by_value</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">clip_value_min</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> 
                                      <span class="n">clip_value_max</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">1e10</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">u_clipped</span>
 
     <span class="k">def</span> <span class="nf">diag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xx</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        get diagonale elements of a matrix, whereby the first tensor dimension</span>
+<span class="sd">        are batches and should not be considered to get diagonale elements.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        xx : tensor</span>
+<span class="sd">            Similarity matrices with batch dimension in axis=0.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        diag : tensor</span>
+<span class="sd">            diagonale elements of matrices per batch.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">diag</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">experimental</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">diagonal</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">axis1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis2</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">diag</span>
 
-    <span class="k">def</span> <span class="nf">kernel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">kernel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">kernel</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Kernel used in MMD to compute discrepancy between samples.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        u : float</span>
+<span class="sd">            squared distance between samples.</span>
+<span class="sd">        kernel : str</span>
+<span class="sd">            name of kernel used for computing discrepancy.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        d : float</span>
+<span class="sd">            discrepancy between samples.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">kernel</span><span class="o">==</span><span class="s2">&quot;energy&quot;</span><span class="p">:</span>
             <span class="c1"># clipping for numerical stability reasons</span>
             <span class="n">d</span><span class="o">=-</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">u</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">kernel</span><span class="o">==</span><span class="s2">&quot;gaussian&quot;</span><span class="p">:</span>
-            <span class="n">d</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">tf</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">sigma</span><span class="p">))</span>
+            <span class="n">d</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">tf</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">d</span>
 </pre></div>
 </div>
@@ -728,7 +787,7 @@ By Florence Bockting
 
   <p class="copyright">
     
-      © Copyright 2024, Florence Bockting.
+      © Copyright 2025, Florence Bockting.
       <br/>
     
   </p>

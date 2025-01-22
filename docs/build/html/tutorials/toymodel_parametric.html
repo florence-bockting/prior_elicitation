@@ -420,6 +420,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">elicit</span> <span class="k">as</span> <span class="nn">el</span>
+<span class="kn">import</span> <span class="nn">copy</span>
 
 <span class="kn">from</span> <span class="nn">elicit.extras</span> <span class="kn">import</span> <span class="n">utils</span>
 
@@ -668,7 +669,6 @@ document.write(`
         <span class="p">),</span>
     <span class="n">trainer</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">trainer</span><span class="p">(</span>
         <span class="n">method</span><span class="o">=</span><span class="s2">&quot;parametric_prior&quot;</span><span class="p">,</span>
-        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;toy2&quot;</span><span class="p">,</span>
         <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">epochs</span><span class="o">=</span><span class="mi">400</span>
     <span class="p">),</span>
@@ -685,9 +685,6 @@ document.write(`
 
 <span class="c1"># run method</span>
 <span class="n">eliobj</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
-
-<span class="c1"># save eliobj</span>
-<span class="n">eliobj</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">save_dir</span><span class="o">=</span><span class="s2">&quot;res&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -695,17 +692,27 @@ document.write(`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initialization
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 32/32 [00:02&lt;00:00, 12.07it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 32/32 [00:02&lt;00:00, 11.87it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 
 Training
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 400/400 [01:10&lt;00:00,  5.71it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 400/400 [01:10&lt;00:00,  5.64it/s]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>saved in: ./res/parametric_prior/toy2_1
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># save eliobj</span>
+<span class="n">eliobj</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;m1&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>saved in: ./res/parametric_prior/m1_1
 </pre></div>
 </div>
 </div>
@@ -753,14 +760,11 @@ Training
 <h3>Expert expectations<a class="headerlink" href="#expert-expectations" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">elicits</span><span class="p">(</span><span class="n">eliobj</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">elicits</span><span class="p">(</span><span class="n">eliobj</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO: Reset cols=4 (total number of elicited statistics)
-</pre></div>
-</div>
 <img alt="../_images/8b095b08a55aefa1b0fdc894416c268548880422b0729dcfe878c8eef40aea99.png" src="../_images/8b095b08a55aefa1b0fdc894416c268548880422b0729dcfe878c8eef40aea99.png" />
 </div>
 </div>
@@ -769,12 +773,12 @@ Training
 <h3>Learned priors<a class="headerlink" href="#learned-priors" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">priors</span><span class="p">(</span><span class="n">eliobj</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">priors</span><span class="p">(</span><span class="n">eliobj</span><span class="p">,</span> <span class="n">constraints</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">beta0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="s2">&quot;positive&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/a64b6142ccc89e8d123f6179ec8a052da888a46d6ed3a96153f6b0f855b291f0.png" src="../_images/a64b6142ccc89e8d123f6179ec8a052da888a46d6ed3a96153f6b0f855b291f0.png" />
+<img alt="../_images/45c5bb4758977b1cf8629c78bb0456df658b6ace8d7dfdd2b09bbb5e5075bd14.png" src="../_images/45c5bb4758977b1cf8629c78bb0456df658b6ace8d7dfdd2b09bbb5e5075bd14.png" />
 </div>
 </div>
 </section>
@@ -783,7 +787,11 @@ Training
 <h2>Add-on: Shared parameters<a class="headerlink" href="#add-on-shared-parameters" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">parameters_shared</span><span class="o">=</span><span class="p">[</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a copy of eliobj</span>
+<span class="n">eliobj_shared</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">eliobj</span><span class="p">)</span>
+
+<span class="c1"># share sigma hyperparameter of intercept and slope parameter </span>
+<span class="n">parameters_shared</span><span class="o">=</span><span class="p">[</span>
         <span class="n">el</span><span class="o">.</span><span class="n">parameter</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="s2">&quot;beta0&quot;</span><span class="p">,</span>
             <span class="n">family</span><span class="o">=</span><span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">,</span>
@@ -809,49 +817,27 @@ Training
         <span class="p">),</span>
     <span class="p">]</span>
 
-<span class="n">elicit_shared</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">Elicit</span><span class="p">(</span>
-    <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-    <span class="n">parameters</span><span class="o">=</span><span class="n">parameters_shared</span><span class="p">,</span>
-    <span class="n">targets</span><span class="o">=</span><span class="n">targets</span><span class="p">,</span>
-    <span class="n">expert</span><span class="o">=</span><span class="n">expert</span><span class="p">,</span>
-    <span class="n">optimizer</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">optimizer</span><span class="p">(</span>
-        <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">,</span>
-        <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
-        <span class="n">clipnorm</span><span class="o">=</span><span class="mf">1.0</span>
-        <span class="p">),</span>
-    <span class="n">trainer</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">trainer</span><span class="p">(</span>
-        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;parametric_prior&quot;</span><span class="p">,</span>
-        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;toy2&quot;</span><span class="p">,</span>
-        <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-        <span class="n">epochs</span><span class="o">=</span><span class="mi">400</span>
-    <span class="p">),</span>
-    <span class="n">initializer</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">initializer</span><span class="p">(</span>
-        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;sobol&quot;</span><span class="p">,</span>
-        <span class="n">loss_quantile</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-        <span class="n">iterations</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
-        <span class="n">distribution</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span>
-            <span class="n">radius</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span>
-            <span class="n">mean</span><span class="o">=</span><span class="mf">0.</span>
-            <span class="p">)</span>
-    <span class="p">)</span>
-<span class="p">)</span>
+<span class="c1"># update parameters in eliobj</span>
+<span class="n">eliobj_shared</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="n">parameters_shared</span><span class="p">)</span>
 
-<span class="n">elicit_shared</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="c1"># refit the model</span>
+<span class="n">eliobj_shared</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initialization
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO: Results have been reset.
+Initialization
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 32/32 [00:02&lt;00:00, 12.04it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 32/32 [00:02&lt;00:00, 11.91it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 
 Training
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 400/400 [01:13&lt;00:00,  5.47it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 400/400 [01:09&lt;00:00,  5.74it/s]
 </pre></div>
 </div>
 </div>
@@ -862,14 +848,11 @@ Training
 <h4>Initialization of hyperparameters<a class="headerlink" href="#id3" title="Link to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">initialization</span><span class="p">(</span><span class="n">elicit_shared</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">initialization</span><span class="p">(</span><span class="n">eliobj_shared</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO: Reset cols=4 (total number of hyperparameters)
-</pre></div>
-</div>
 <img alt="../_images/251f880fa119c14e873d1a2394533b212158577d9d5ac025268259f5c8d947da.png" src="../_images/251f880fa119c14e873d1a2394533b212158577d9d5ac025268259f5c8d947da.png" />
 </div>
 </div>
@@ -878,15 +861,12 @@ Training
 <h4>Convergence<a class="headerlink" href="#id4" title="Link to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">elicit_shared</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
-<span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">hyperparameter</span><span class="p">(</span><span class="n">elicit_shared</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">eliobj_shared</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">hyperparameter</span><span class="p">(</span><span class="n">eliobj_shared</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO: Reset cols=4 (total number of hyperparameters)
-</pre></div>
-</div>
 <img alt="../_images/24c374fb7d7bff408e1264375c891771de7ea1db75374023342a7cb840ab07c4.png" src="../_images/24c374fb7d7bff408e1264375c891771de7ea1db75374023342a7cb840ab07c4.png" />
 <img alt="../_images/4e8e7973e5e7dc444b027516882239d82a29f29fcc0c5c344ed32278bf261445.png" src="../_images/4e8e7973e5e7dc444b027516882239d82a29f29fcc0c5c344ed32278bf261445.png" />
 </div>
@@ -896,14 +876,11 @@ Training
 <h4>Expert expectations<a class="headerlink" href="#id5" title="Link to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">elicits</span><span class="p">(</span><span class="n">elicit_shared</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">elicits</span><span class="p">(</span><span class="n">eliobj_shared</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO: Reset cols=4 (total number of elicited statistics)
-</pre></div>
-</div>
 <img alt="../_images/5dd9ea2aa286def80733bb40347be6cd6faf5e53b2e7a93e0d378db2e0f61342.png" src="../_images/5dd9ea2aa286def80733bb40347be6cd6faf5e53b2e7a93e0d378db2e0f61342.png" />
 </div>
 </div>
@@ -912,12 +889,12 @@ Training
 <h4>Learned priors<a class="headerlink" href="#id6" title="Link to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">priors</span><span class="p">(</span><span class="n">elicit_shared</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">priors</span><span class="p">(</span><span class="n">eliobj_shared</span><span class="p">,</span> <span class="n">constraints</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">beta0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="s2">&quot;positive&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/ebcca31121a2f05a569606e6e304ecd5cb81b6a1134c9dccf5868aa9e19e0819.png" src="../_images/ebcca31121a2f05a569606e6e304ecd5cb81b6a1134c9dccf5868aa9e19e0819.png" />
+<img alt="../_images/49f9c50b93e2cd103ae2328908af383135a2976a6cd001484f01a40c58d299b0.png" src="../_images/49f9c50b93e2cd103ae2328908af383135a2976a6cd001484f01a40c58d299b0.png" />
 </div>
 </div>
 </section>
@@ -927,59 +904,38 @@ Training
 <h2>Add-on: Use expert data as input<a class="headerlink" href="#add-on-use-expert-data-as-input" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">expert_dat</span> <span class="o">=</span> <span class="p">{</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a copy of eliobj</span>
+<span class="n">eliobj_dat</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">eliobj</span><span class="p">)</span>
+
+<span class="c1"># use dictionary of elicited expert data (instead of simulating data)</span>
+<span class="n">expert_dat</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;quantiles_y_X0&quot;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">12.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">3.3</span><span class="p">,</span> <span class="mf">7.1</span><span class="p">,</span> <span class="mf">19.1</span><span class="p">],</span>
     <span class="s2">&quot;quantiles_y_X1&quot;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">11.2</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">8.8</span><span class="p">,</span> <span class="mf">20.4</span><span class="p">],</span>
     <span class="s2">&quot;quantiles_y_X2&quot;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">9.3</span><span class="p">,</span> <span class="mf">3.1</span><span class="p">,</span> <span class="mf">6.8</span><span class="p">,</span> <span class="mf">10.5</span><span class="p">,</span> <span class="mf">23.3</span><span class="p">],</span>
     <span class="s2">&quot;quantiles_log_R2&quot;</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">([</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.09</span><span class="p">,</span> <span class="mf">0.41</span><span class="p">,</span> <span class="mf">0.96</span><span class="p">])</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
 <span class="p">}</span>
 
-<span class="c1"># define expert data</span>
-<span class="n">expert</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">expert</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">dat</span> <span class="o">=</span> <span class="n">expert_dat</span><span class="p">)</span>
+<span class="c1"># update expert in eliobj</span>
+<span class="n">eliobj_dat</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">expert</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">expert</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">dat</span> <span class="o">=</span> <span class="n">expert_dat</span><span class="p">))</span>
 
-<span class="n">eliobj_dat</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">Elicit</span><span class="p">(</span>
-    <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-    <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span>
-    <span class="n">targets</span><span class="o">=</span><span class="n">targets</span><span class="p">,</span>
-    <span class="n">expert</span><span class="o">=</span><span class="n">expert</span><span class="p">,</span>
-    <span class="n">optimizer</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">optimizer</span><span class="p">(</span>
-        <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">,</span>
-        <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
-        <span class="n">clipnorm</span><span class="o">=</span><span class="mf">1.0</span>
-        <span class="p">),</span>
-    <span class="n">trainer</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">trainer</span><span class="p">(</span>
-        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;parametric_prior&quot;</span><span class="p">,</span>
-        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;toy2&quot;</span><span class="p">,</span>
-        <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-        <span class="n">epochs</span><span class="o">=</span><span class="mi">400</span>
-    <span class="p">),</span>
-    <span class="n">initializer</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">initializer</span><span class="p">(</span>
-        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;sobol&quot;</span><span class="p">,</span>
-        <span class="n">loss_quantile</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-        <span class="n">iterations</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
-        <span class="n">distribution</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span>
-            <span class="n">radius</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span>
-            <span class="n">mean</span><span class="o">=</span><span class="mf">0.</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
-<span class="p">)</span>
-
+<span class="c1"># refit the model</span>
 <span class="n">eliobj_dat</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initialization
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO: Results have been reset.
+Initialization
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 32/32 [00:02&lt;00:00, 11.91it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 32/32 [00:02&lt;00:00, 11.94it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 
 Training
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 400/400 [01:12&lt;00:00,  5.51it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 400/400 [01:14&lt;00:00,  5.40it/s]
 </pre></div>
 </div>
 </div>
@@ -1018,14 +974,11 @@ Training
 <h4>Expert expectations<a class="headerlink" href="#id10" title="Link to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">elicits</span><span class="p">(</span><span class="n">eliobj_dat</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">elicits</span><span class="p">(</span><span class="n">eliobj_dat</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO: Reset cols=4 (total number of elicited statistics)
-</pre></div>
-</div>
 <img alt="../_images/d03c5b71e568ba006fb085fea2ff10aba37aea1b1c0492fa4378b859fa8b6a2e.png" src="../_images/d03c5b71e568ba006fb085fea2ff10aba37aea1b1c0492fa4378b859fa8b6a2e.png" />
 </div>
 </div>
@@ -1034,12 +987,12 @@ Training
 <h4>Learned priors<a class="headerlink" href="#id11" title="Link to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">priors</span><span class="p">(</span><span class="n">eliobj_dat</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">priors</span><span class="p">(</span><span class="n">eliobj_dat</span><span class="p">,</span> <span class="n">constraints</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">beta0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="s2">&quot;positive&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/ba48aa02f0f2dba1e546e06aa14dcf19bf01cc6c0969d592ec0246172c3119ec.png" src="../_images/ba48aa02f0f2dba1e546e06aa14dcf19bf01cc6c0969d592ec0246172c3119ec.png" />
+<img alt="../_images/bd02bc50afea10bee4c9f4ce610c57ecfdfb82f62276367f7130587413c1cf02.png" src="../_images/bd02bc50afea10bee4c9f4ce610c57ecfdfb82f62276367f7130587413c1cf02.png" />
 </div>
 </div>
 </section>
@@ -1148,7 +1101,7 @@ By Florence Bockting
 
   <p class="copyright">
     
-      © Copyright 2024, Florence Bockting.
+      © Copyright 2025, Florence Bockting.
       <br/>
     
   </p>

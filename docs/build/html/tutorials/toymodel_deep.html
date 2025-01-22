@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=87e54e7c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -173,6 +173,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../api/elicit.losses.html">elicit.losses module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/elicit.networks.html">elicit.networks module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/elicit.optimization.html">elicit.optimization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.plots.html">elicit.plots module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/elicit.simulations.html">elicit.simulations module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/elicit.targets.html">elicit.targets module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/elicit.utils.html">elicit.utils module</a></li>
@@ -573,8 +574,8 @@ array([-1.5502049 , -0.85737586,  0.00866036,  0.85737586,  1.5502049 ],
             <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span>
         <span class="p">),</span>
         <span class="n">el</span><span class="o">.</span><span class="n">target</span><span class="p">(</span>
-            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;cor&quot;</span><span class="p">,</span>
-            <span class="n">query</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">queries</span><span class="o">.</span><span class="n">identity</span><span class="p">(),</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;correlation&quot;</span><span class="p">,</span>
+            <span class="n">query</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">queries</span><span class="o">.</span><span class="n">correlation</span><span class="p">(),</span>
             <span class="n">loss</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">L2</span><span class="p">,</span>
             <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span>
         <span class="p">)</span>
@@ -646,7 +647,7 @@ array([-1.5502049 , -0.85737586,  0.00866036,  0.85737586,  1.5502049 ],
 <p><strong>All inputs for elicit method</strong></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">elicit</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">Elicit</span><span class="p">(</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eliobj</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">Elicit</span><span class="p">(</span>
     <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
     <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span>
     <span class="n">targets</span><span class="o">=</span><span class="n">targets</span><span class="p">,</span>
@@ -658,7 +659,6 @@ array([-1.5502049 , -0.85737586,  0.00866036,  0.85737586,  1.5502049 ],
         <span class="p">),</span>
     <span class="n">trainer</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">trainer</span><span class="p">(</span>
         <span class="n">method</span><span class="o">=</span><span class="s2">&quot;deep_prior&quot;</span><span class="p">,</span>
-        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;toy&quot;</span><span class="p">,</span>
         <span class="n">seed</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
         <span class="n">epochs</span><span class="o">=</span><span class="mi">200</span>
     <span class="p">),</span>
@@ -666,7 +666,7 @@ array([-1.5502049 , -0.85737586,  0.00866036,  0.85737586,  1.5502049 ],
 <span class="p">)</span>
 
 <span class="c1"># run method</span>
-<span class="n">hist</span> <span class="o">=</span> <span class="n">elicit</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">save_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">eliobj</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -674,7 +674,7 @@ array([-1.5502049 , -0.85737586,  0.00866036,  0.85737586,  1.5502049 ],
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Training
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 200/200 [05:40&lt;00:00,  1.70s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 200/200 [05:20&lt;00:00,  1.60s/it]
 </pre></div>
 </div>
 </div>
@@ -686,26 +686,22 @@ array([-1.5502049 , -0.85737586,  0.00866036,  0.85737586,  1.5502049 ],
 <h3>Convergence<a class="headerlink" href="#convergence" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_convergence</span><span class="p">(</span><span class="n">hist</span><span class="p">):</span>
-    <span class="n">_</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span> <span class="n">constrained_layout</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hist</span><span class="p">[</span><span class="s2">&quot;loss&quot;</span><span class="p">])</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">hist</span><span class="p">[</span><span class="s2">&quot;hyperparameter&quot;</span><span class="p">]):</span>
-        <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hist</span><span class="p">[</span><span class="s2">&quot;hyperparameter&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="p">[</span><span class="sa">r</span><span class="s2">&quot;$\beta_0$&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\beta_1$&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\sigma$&quot;</span><span class="p">])</span>
-        <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handlelength</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;small&quot;</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">columnspacing</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
-        <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hyperparameter </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s2">&quot;small&quot;</span><span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Total loss&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s2">&quot;medium&quot;</span><span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\mathcal</span><span class="si">{L}</span><span class="s2">(\lambda)$&quot;</span><span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\lambda$&quot;</span><span class="p">)</span>
-    <span class="p">[</span><span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;epochs&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Convergence&quot;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-<span class="n">plot_convergence</span><span class="p">(</span><span class="n">hist</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">eliobj</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/ee12f0a145cf20b4248b3df2a55fd6f9e42c43519f348b349e1be6966792cd50.png" src="../_images/ee12f0a145cf20b4248b3df2a55fd6f9e42c43519f348b349e1be6966792cd50.png" />
+<img alt="../_images/211a11599c638fae321e28c88c37885fb12f5a085f159e8cb3564025837a5897.png" src="../_images/211a11599c638fae321e28c88c37885fb12f5a085f159e8cb3564025837a5897.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">marginals</span><span class="p">(</span><span class="n">eliobj</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/043e2d317dd423e1ee5a8da523e737feedd9c8e9cce3f4bdd09cc71636cf24e4.png" src="../_images/043e2d317dd423e1ee5a8da523e737feedd9c8e9cce3f4bdd09cc71636cf24e4.png" />
 </div>
 </div>
 </section>
@@ -713,32 +709,12 @@ array([-1.5502049 , -0.85737586,  0.00866036,  0.85737586,  1.5502049 ],
 <h3>Expert expectations<a class="headerlink" href="#expert-expectations" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_expert_data</span><span class="p">(</span><span class="n">res</span><span class="p">):</span>
-    <span class="n">_</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span> <span class="n">constrained_layout</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">j</span><span class="p">,</span><span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s2">&quot;expert_elicited_statistics&quot;</span><span class="p">]):</span>
-        <span class="k">if</span> <span class="n">key</span><span class="o">==</span><span class="s2">&quot;identity_cor&quot;</span><span class="p">:</span>
-            <span class="k">continue</span>
-        <span class="k">if</span> <span class="n">j</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">:</span>
-            <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">axline</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">slope</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;darkgrey&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;dashed&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-            <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s2">&quot;expert_elicited_statistics&quot;</span><span class="p">][</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">,:],</span> 
-                         <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s2">&quot;elicited_statistics&quot;</span><span class="p">][</span><span class="n">key</span><span class="p">],</span><span class="mi">0</span><span class="p">),</span> <span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
-            <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-            <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;expert&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">axline</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">slope</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;darkgrey&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;dashed&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-            <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s2">&quot;expert_elicited_statistics&quot;</span><span class="p">][</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">,:],</span> 
-                         <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s2">&quot;elicited_statistics&quot;</span><span class="p">][</span><span class="n">key</span><span class="p">],</span><span class="mi">0</span><span class="p">),</span> <span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
-            <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-            <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;expert&quot;</span><span class="p">)</span>
-    <span class="p">[</span><span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-<span class="n">plot_expert_data</span><span class="p">(</span><span class="n">elicit</span><span class="o">.</span><span class="n">results</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">elicits</span><span class="p">(</span><span class="n">eliobj</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/f6422393e437eb235c298f27c29b49480469ba67d392e1110569629f8039ae04.png" src="../_images/f6422393e437eb235c298f27c29b49480469ba67d392e1110569629f8039ae04.png" />
+<img alt="../_images/35375cc0297541741ae8a179f647f2911fda1d48d891b3a079bafed816451aeb.png" src="../_images/35375cc0297541741ae8a179f647f2911fda1d48d891b3a079bafed816451aeb.png" />
 </div>
 </div>
 </section>
@@ -746,30 +722,12 @@ array([-1.5502049 , -0.85737586,  0.00866036,  0.85737586,  1.5502049 ],
 <h3>Learned joint prior<a class="headerlink" href="#learned-joint-prior" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># extract number of samples from simulated priors </span>
-<span class="n">num_samples</span> <span class="o">=</span> <span class="n">elicit</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;num_samples&quot;</span><span class="p">]</span>
-
-<span class="c1"># create pandas dataframes out of trained priors and orcale priors</span>
-<span class="n">model_priors_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">elicit</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;prior_samples&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">,:,:],</span> 
-                               <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;b0&quot;</span><span class="p">,</span> <span class="s2">&quot;b1&quot;</span><span class="p">,</span> <span class="s2">&quot;sigma&quot;</span><span class="p">])</span>
-<span class="n">oracle_priors_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">elicit</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;expert_prior_samples&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">,:</span><span class="n">num_samples</span><span class="p">,:],</span>
-                                <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;b0&quot;</span><span class="p">,</span> <span class="s2">&quot;b1&quot;</span><span class="p">,</span> <span class="s2">&quot;sigma&quot;</span><span class="p">])</span>
-<span class="c1"># add label to sub-dataframes</span>
-<span class="n">model_priors_df</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span><span class="o">=</span><span class="s2">&quot;trained&quot;</span>
-<span class="n">oracle_priors_df</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span><span class="o">=</span><span class="s2">&quot;true&quot;</span>
-
-<span class="c1"># concat dataframes and ensure sigma is pos.</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">expert_priors_df</span><span class="p">,</span> <span class="n">model_priors_df</span><span class="p">])</span>
-<span class="n">df</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">])</span>
-
-<span class="c1"># plot joint prior distribution</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">pairplot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">diag_kind</span><span class="o">=</span><span class="s2">&quot;hist&quot;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;kde&quot;</span><span class="p">,</span> <span class="n">corner</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">priors</span><span class="p">(</span><span class="n">eliobj</span><span class="p">,</span> <span class="n">constraints</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">beta0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="s2">&quot;positive&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/72d305857b2e3f9d98fecb3c250a0657d2748db944ac5792c31599a6e5d74e4d.png" src="../_images/72d305857b2e3f9d98fecb3c250a0657d2748db944ac5792c31599a6e5d74e4d.png" />
+<img alt="../_images/c70bd720c1f97b006e7725324c31a3a5b3dab830dfd1cc7e508c7b121d8ae417.png" src="../_images/c70bd720c1f97b006e7725324c31a3a5b3dab830dfd1cc7e508c7b121d8ae417.png" />
 </div>
 </div>
 </section>
@@ -862,7 +820,7 @@ By Florence Bockting
 
   <p class="copyright">
     
-      © Copyright 2024, Florence Bockting.
+      © Copyright 2025, Florence Bockting.
       <br/>
     
   </p>

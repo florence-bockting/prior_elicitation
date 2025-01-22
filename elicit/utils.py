@@ -605,3 +605,13 @@ def save_results(
         loss_tensor_model=loss_tensor_model,
     )
     return save_res_dict
+
+def get_expert_datformat(targets: list):
+    elicit_dict = dict()
+    for tar in targets:
+        query = tar["query"]["name"]
+        target = tar["name"]
+        key = query+"_"+target
+        elicit_dict[key] = list()
+    
+    return elicit_dict

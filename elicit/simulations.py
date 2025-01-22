@@ -178,16 +178,15 @@ def sample_from_priors(initialized_priors, ground_truth, num_samples, B, seed,
 
         for prior in list(expert["ground_truth"].values()):
             # sample from the prior distribution
-            priors.append(prior.sample((1, rep_true)))
-
-        # this is a workaround for the changed shape when a
-        # multivariate prior is used
-        if type(priors[0]) is list:
-            prior_samples = tf.concat(priors[0], axis=-1)
-        elif tf.rank(priors[0]) > 2:
-            prior_samples = tf.concat(priors, axis=-1)
-        else:
-            prior_samples = tf.stack(priors, axis=-1)
+            prior_sample = prior.sample((1, rep_true))
+            # ensure that all samples have the same shape
+            if len(prior_sample.shape) < 3:
+                prior = tf.expand_dims(prior_sample, -1)
+            else:
+                prior = prior_sample
+            priors.append(prior)
+        # concatenate all prior samples into one tensor
+        prior_samples = tf.concat(priors, axis=-1)
 
     if (method == "parametric_prior") and (not ground_truth):
 

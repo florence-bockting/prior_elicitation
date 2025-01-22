@@ -761,9 +761,16 @@ document.write(`
 
 <div class="viewcode-block" id="save">
 <a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.save">[docs]</a>
-<span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="n">eliobj</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
-    <span class="c1"># create saving path</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;./</span><span class="si">{</span><span class="n">save_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">+</span><span class="n">eliobj</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;output_path&quot;</span><span class="p">]</span>
+<span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="n">eliobj</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+         <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="c1"># either name or file must be specified</span>
+    <span class="k">assert</span> <span class="p">(</span><span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;Name and file cannot be both &quot;</span><span class="o">+</span>
+                        <span class="s2">&quot;None or both specified. Either one has to be None.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># create saving path</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;./res/</span><span class="si">{</span><span class="n">eliobj</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">eliobj</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s1">&#39;seed&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;./&quot;</span><span class="o">+</span><span class="n">file</span>
     <span class="c1"># check whether saving path is already used</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
         <span class="n">user_ans</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;In provided directory exists already a file with&quot;</span><span class="o">+</span>
@@ -797,8 +804,8 @@ document.write(`
 
 <div class="viewcode-block" id="load">
 <a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.load">[docs]</a>
-<span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">save_dir</span><span class="p">):</span>
-    <span class="n">obj</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">save_dir</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
 
     <span class="n">eliobj</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">Elicit</span><span class="p">(</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">],</span>
@@ -966,6 +973,19 @@ document.write(`
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">save_res_dict</span></div>
 
+
+<div class="viewcode-block" id="get_expert_datformat">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.get_expert_datformat">[docs]</a>
+<span class="k">def</span> <span class="nf">get_expert_datformat</span><span class="p">(</span><span class="n">targets</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+    <span class="n">elicit_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">tar</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">tar</span><span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">tar</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">query</span><span class="o">+</span><span class="s2">&quot;_&quot;</span><span class="o">+</span><span class="n">target</span>
+        <span class="n">elicit_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    
+    <span class="k">return</span> <span class="n">elicit_dict</span></div>
+
 </pre></div>
 
                 </article>
@@ -1004,7 +1024,7 @@ By Florence Bockting
 
   <p class="copyright">
     
-      © Copyright 2024, Florence Bockting.
+      © Copyright 2025, Florence Bockting.
       <br/>
     
   </p>

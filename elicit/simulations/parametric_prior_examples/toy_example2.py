@@ -55,11 +55,21 @@ class ToyModel2:
         )
 
 
+# ground_truth = {
+#     "beta0": tfd.Normal(loc=5, scale=1),
+#     "beta1": tfd.Normal(loc=2, scale=1),
+#     "sigma": tfd.HalfNormal(scale=10.0),
+# }
+
+# ground_truth = {
+#     "theta": tfd.MultivariateNormalDiag(tf.zeros(3), tf.ones(3))
+#     }
+
 ground_truth = {
-    "beta0": tfd.Normal(loc=5, scale=1),
-    "beta1": tfd.Normal(loc=2, scale=1),
+    "betas": tfd.MultivariateNormalDiag([5.,2.], [1.,1.]),
     "sigma": tfd.HalfNormal(scale=10.0),
-}
+    }
+
 
 expert_dat = {
     "quantiles_y_X0": [-12.549973, -0.5716343, 3.294293, 7.1358547, 19.147377],
@@ -67,7 +77,7 @@ expert_dat = {
     "quantiles_y_X2": [-9.279653, 3.0914488, 6.8263884, 10.551274, 23.285913]
 }
 
-elicit = el.Elicit(
+eliobj = el.Elicit(
     model=el.model(
         obj=ToyModel2,
         design_matrix=std_predictor(N=200, quantiles=[25,50,75])
@@ -116,14 +126,14 @@ elicit = el.Elicit(
             loss=el.losses.MMD2(kernel="energy"),
             weight=1.0
         ),
-        el.target(
-            name="log_R2",
-            query=el.queries.quantiles((5, 25, 50, 75, 95)),
-            loss=el.losses.MMD2(kernel="energy"),
-            weight=1.0
-        )
+        # el.target(
+        #     name="log_R2",
+        #     query=el.queries.quantiles((5, 25, 50, 75, 95)),
+        #     loss=el.losses.MMD2(kernel="energy"),
+        #     weight=1.0
+        # )
     ],
-    #expert=el.expert.data(dat = expert_dat),
+    # expert=el.expert.data(dat = expert_dat),
     expert=el.expert.simulator(
         ground_truth = ground_truth,
         num_samples = 10_000
@@ -150,16 +160,20 @@ elicit = el.Elicit(
     #network = el.networks.NF(...) # TODO vs. el.normalizing_flow(...)
 )
 
-elicit.fit()
+#el.utils.get_expert_datformat(targets)
+
+eliobj.fit()
 
 elicit.update(overwrite=True, expert=el.expert.data(dat = expert_dat),
               name="update_eliobj")
 
-elicit_copy.update(parameters=parameters_updated)
+dir(eliobj)
+
+elicit.update(parameter={"some":12})
 elicit.save(name="toytest") # saved in ./model1.pkl
 elicit.save(file=None, name="model1") # saved in ./res/parametric_prior/model1_1.pkl
 
-
+tf.reduce_mean(eliobj.results["expert_prior_samples"], (0,1))
 
 elicit_copy.save(file="model1.pkl")
 
