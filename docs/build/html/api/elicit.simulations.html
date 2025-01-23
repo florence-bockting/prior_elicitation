@@ -370,7 +370,7 @@ document.write(`
 <span id="elicit-simulations-module"></span><h1>elicit.simulations module<a class="headerlink" href="#module-elicit.simulations" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="elicit.simulations.Priors">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">elicit.simulations.</span></span><span class="sig-name descname"><span class="pre">Priors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_matrix_slice</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trainer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/simulations.html#Priors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.simulations.Priors" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">elicit.simulations.</span></span><span class="sig-name descname"><span class="pre">Priors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_matrix_slice</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trainer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expert</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/simulations.html#Priors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.simulations.Priors" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <p>Initializes the hyperparameters of the prior distributions.</p>
 <dl class="field-list simple">
@@ -392,23 +392,59 @@ None if ground_truth = True</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>ground_truth</strong><span class="classifier">bool</span></dt><dd><p>whether samples are drawn from a true prior (‘oracle’)</p>
+<dt><strong>ground_truth</strong><span class="classifier">bool</span></dt><dd><p>True if expert data are simulated from a given ground truth (oracle)</p>
 </dd>
-<dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>dictionary containing all user and default input settings.</p>
+<dt><strong>init_matrix_slice</strong><span class="classifier">tf.Tensor or None</span></dt><dd><p>samples drawn from the initialization distribution to initialize
+the hyperparameter of the parametric prior distributions
+Only required for method=”parametric_prior” otherwise None.</p>
+</dd>
+<dt><strong>trainer</strong><span class="classifier">callable</span></dt><dd><p>specification of training settings and meta-information for
+workflow using <code class="xref py py-func docutils literal notranslate"><span class="pre">trainer()</span></code></p>
+</dd>
+<dt><strong>parameters</strong><span class="classifier">list</span></dt><dd><p>list of model parameters specified with <code class="xref py py-func docutils literal notranslate"><span class="pre">parameter()</span></code>.</p>
+</dd>
+<dt><strong>network</strong><span class="classifier">callable or None</span></dt><dd><p>specification of neural network using a method implemented in
+<a class="reference internal" href="elicit.networks.html#module-elicit.networks" title="elicit.networks"><code class="xref py py-mod docutils literal notranslate"><span class="pre">elicit.networks</span></code></a>.
+Only required for <code class="docutils literal notranslate"><span class="pre">deep_prior</span></code> method. For <code class="docutils literal notranslate"><span class="pre">parametric_prior</span></code>
+use <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default value is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd>
+<dt><strong>expert</strong><span class="classifier">callable</span></dt><dd><p>provide input data from expert or simulate data from oracle with
+either the <code class="docutils literal notranslate"><span class="pre">data</span></code> or <code class="docutils literal notranslate"><span class="pre">simulator</span></code> method of the
+<a class="reference internal" href="elicit.elicit.html#elicit.elicit.Expert" title="elicit.elicit.Expert"><code class="xref py py-mod docutils literal notranslate"><span class="pre">elicit.elicit.Expert</span></code></a> module.</p>
+</dd>
+<dt><strong>seed</strong><span class="classifier">int</span></dt><dd><p>seed used for learning.</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.simulations.Priors.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_matrix_slice</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trainer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/simulations.html#Priors.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.simulations.Priors.__init__" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_matrix_slice</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trainer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expert</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/simulations.html#Priors.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.simulations.Priors.__init__" title="Link to this definition">#</a></dt>
 <dd><p>Initializes the hyperparameters (i.e., trainable variables)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>ground_truth</strong><span class="classifier">bool</span></dt><dd><p>whether samples are drawn from a true prior (‘oracle’)</p>
+<dt><strong>ground_truth</strong><span class="classifier">bool</span></dt><dd><p>True if expert data are simulated from a given ground truth (oracle)</p>
 </dd>
-<dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>dictionary containing all user and default input settings.</p>
+<dt><strong>init_matrix_slice</strong><span class="classifier">tf.Tensor or None</span></dt><dd><p>samples drawn from the initialization distribution to initialize
+the hyperparameter of the parametric prior distributions
+Only required for method=”parametric_prior” otherwise None.</p>
+</dd>
+<dt><strong>trainer</strong><span class="classifier">callable</span></dt><dd><p>specification of training settings and meta-information for
+workflow using <code class="xref py py-func docutils literal notranslate"><span class="pre">trainer()</span></code></p>
+</dd>
+<dt><strong>parameters</strong><span class="classifier">list</span></dt><dd><p>list of model parameters specified with <code class="xref py py-func docutils literal notranslate"><span class="pre">parameter()</span></code>.</p>
+</dd>
+<dt><strong>network</strong><span class="classifier">callable or None</span></dt><dd><p>specification of neural network using a method implemented in
+<a class="reference internal" href="elicit.networks.html#module-elicit.networks" title="elicit.networks"><code class="xref py py-mod docutils literal notranslate"><span class="pre">elicit.networks</span></code></a>.
+Only required for <code class="docutils literal notranslate"><span class="pre">deep_prior</span></code> method. For <code class="docutils literal notranslate"><span class="pre">parametric_prior</span></code>
+use <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default value is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd>
+<dt><strong>expert</strong><span class="classifier">callable</span></dt><dd><p>provide input data from expert or simulate data from oracle with
+either the <code class="docutils literal notranslate"><span class="pre">data</span></code> or <code class="docutils literal notranslate"><span class="pre">simulator</span></code> method of the
+<a class="reference internal" href="elicit.elicit.html#elicit.elicit.Expert" title="elicit.elicit.Expert"><code class="xref py py-mod docutils literal notranslate"><span class="pre">elicit.elicit.Expert</span></code></a> module.</p>
+</dd>
+<dt><strong>seed</strong><span class="classifier">int</span></dt><dd><p>seed used for learning.</p>
 </dd>
 </dl>
 </dd>
@@ -417,12 +453,12 @@ None if ground_truth = True</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.simulations.Priors.__call__">
-<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/simulations.html#Priors.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.simulations.Priors.__call__" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="reference internal" href="../_modules/elicit/simulations.html#Priors.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.simulations.Priors.__call__" title="Link to this definition">#</a></dt>
 <dd><p>Samples from the initialized prior distribution(s).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>prior_samples</strong><span class="classifier">dict</span></dt><dd><p>Samples from prior distribution(s).</p>
+<dt><strong>prior_samples</strong><span class="classifier">tf.Tensor, shape: [B,num_samples,num_params]</span></dt><dd><p>Samples from prior distribution(s).</p>
 </dd>
 </dl>
 </dd>
@@ -433,18 +469,33 @@ None if ground_truth = True</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.simulations.intialize_priors">
-<span class="sig-prename descclassname"><span class="pre">elicit.simulations.</span></span><span class="sig-name descname"><span class="pre">intialize_priors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">init_matrix_slice</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/simulations.html#intialize_priors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.simulations.intialize_priors" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.simulations.</span></span><span class="sig-name descname"><span class="pre">intialize_priors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">init_matrix_slice</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Variable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/elicit/simulations.html#intialize_priors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.simulations.intialize_priors" title="Link to this definition">#</a></dt>
 <dd><p>Initialize prior distributions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all user-and default input settings.</p>
+<dt><strong>init_matrix_slice</strong><span class="classifier">tf.Tensor or None</span></dt><dd><p>samples drawn from the initialization distribution to initialize
+the hyperparameter of the parametric prior distributions
+Only for method=”parametric_prior”, otherwise None.</p>
+</dd>
+<dt><strong>method</strong><span class="classifier">str</span></dt><dd><p>parametric_prior or deep_prior method as specified in
+<a class="reference internal" href="elicit.elicit.html#elicit.elicit.trainer" title="elicit.elicit.trainer"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.trainer()</span></code></a></p>
+</dd>
+<dt><strong>seed</strong><span class="classifier">int</span></dt><dd><p>seed of current workflow run as specified in
+<a class="reference internal" href="elicit.elicit.html#elicit.elicit.trainer" title="elicit.elicit.trainer"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.trainer()</span></code></a></p>
+</dd>
+<dt><strong>parameters</strong><span class="classifier">list[dict]</span></dt><dd><p>list of model parameter specifications using <code class="xref py py-func docutils literal notranslate"><span class="pre">parameter()</span></code>.</p>
+</dd>
+<dt><strong>network</strong><span class="classifier">dict</span></dt><dd><p>specification of neural network using a method implemented in
+<a class="reference internal" href="elicit.networks.html#module-elicit.networks" title="elicit.networks"><code class="xref py py-mod docutils literal notranslate"><span class="pre">elicit.networks</span></code></a>.
+Only required for <code class="docutils literal notranslate"><span class="pre">deep_prior</span></code> method. For <code class="docutils literal notranslate"><span class="pre">parametric_prior</span></code>
+use <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default value is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>init_prior</strong><span class="classifier">dict</span></dt><dd><p>returns initialized prior distributions ready for sampling.</p>
+<dt><strong>init_prior</strong><span class="classifier">dict[str, tf.Tensor]</span></dt><dd><p>returns initialized prior distributions ready for prior sampling.</p>
 </dd>
 </dl>
 </dd>
@@ -453,23 +504,40 @@ None if ground_truth = True</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.simulations.sample_from_priors">
-<span class="sig-prename descclassname"><span class="pre">elicit.simulations.</span></span><span class="sig-name descname"><span class="pre">sample_from_priors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initialized_priors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expert</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/simulations.html#sample_from_priors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.simulations.sample_from_priors" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.simulations.</span></span><span class="sig-name descname"><span class="pre">sample_from_priors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initialized_priors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Variable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expert</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="reference internal" href="../_modules/elicit/simulations.html#sample_from_priors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.simulations.sample_from_priors" title="Link to this definition">#</a></dt>
 <dd><p>Samples from initialized prior distributions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>initialized_priors</strong><span class="classifier">dict</span></dt><dd><p>initialized prior distributions ready for sampling.</p>
+<dt><strong>initialized_priors</strong><span class="classifier">dict[str, tf.Variable]</span></dt><dd><p>initialized prior distributions ready for prior sampling.</p>
 </dd>
-<dt><strong>ground_truth</strong><span class="classifier">bool</span></dt><dd><p>whether simulations are based on ground truth
-(then sampling is performed from true distribution).</p>
+<dt><strong>ground_truth</strong><span class="classifier">bool</span></dt><dd><p>True if expert data is simulated from ground truth.</p>
 </dd>
-<dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all user-input settings..</p>
+<dt><strong>num_samples</strong><span class="classifier">int, optional</span></dt><dd><p>number of samples from the prior(s). The default is 200.</p>
+</dd>
+<dt><strong>B</strong><span class="classifier">int, optional</span></dt><dd><p>batch size. The default is 128.</p>
+</dd>
+<dt><strong>seed</strong><span class="classifier">int</span></dt><dd><p>seed used for learning.</p>
+</dd>
+<dt><strong>method</strong><span class="classifier">str</span></dt><dd><p>parametric_prior or deep_prior method as specified in
+<a class="reference internal" href="elicit.elicit.html#elicit.elicit.trainer" title="elicit.elicit.trainer"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.trainer()</span></code></a></p>
+</dd>
+<dt><strong>parameters</strong><span class="classifier">list</span></dt><dd><p>list of model parameters specified with <code class="xref py py-func docutils literal notranslate"><span class="pre">parameter()</span></code>.</p>
+</dd>
+<dt><strong>network</strong><span class="classifier">dict</span></dt><dd><p>specification of neural network using a method implemented in
+<a class="reference internal" href="elicit.networks.html#module-elicit.networks" title="elicit.networks"><code class="xref py py-mod docutils literal notranslate"><span class="pre">elicit.networks</span></code></a>.
+Only required for <code class="docutils literal notranslate"><span class="pre">deep_prior</span></code> method. For <code class="docutils literal notranslate"><span class="pre">parametric_prior</span></code>
+use <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default value is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd>
+<dt><strong>expert</strong><span class="classifier">callable</span></dt><dd><p>provide input data from expert or simulate data from oracle with
+either the <code class="docutils literal notranslate"><span class="pre">data</span></code> or <code class="docutils literal notranslate"><span class="pre">simulator</span></code> method of the
+<a class="reference internal" href="elicit.elicit.html#elicit.elicit.Expert" title="elicit.elicit.Expert"><code class="xref py py-mod docutils literal notranslate"><span class="pre">elicit.elicit.Expert</span></code></a> module.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>prior_samples</strong><span class="classifier">dict</span></dt><dd><p>Samples from prior distributions.</p>
+<dt><strong>prior_samples</strong><span class="classifier">tf.Tensor, shape: [B, num_samples, num_params]</span></dt><dd><p>Samples from prior distributions.</p>
 </dd>
 </dl>
 </dd>
@@ -523,20 +591,22 @@ generative model.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.simulations.simulate_from_generator">
-<span class="sig-prename descclassname"><span class="pre">elicit.simulations.</span></span><span class="sig-name descname"><span class="pre">simulate_from_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/simulations.html#simulate_from_generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.simulations.simulate_from_generator" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.simulations.</span></span><span class="sig-name descname"><span class="pre">simulate_from_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prior_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/elicit/simulations.html#simulate_from_generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.simulations.simulate_from_generator" title="Link to this definition">#</a></dt>
 <dd><p>Simulates data from the specified generative model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>prior_samples</strong><span class="classifier">dict</span></dt><dd><p>samples from prior distributions.</p>
+<dt><strong>prior_samples</strong><span class="classifier">tf.Tensor, shape: [B, num_samples, num_params]</span></dt><dd><p>samples from prior distributions.</p>
 </dd>
-<dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all user-input settings.</p>
+<dt><strong>seed</strong><span class="classifier">int</span></dt><dd><p>seed used for learning.</p>
+</dd>
+<dt><strong>model</strong><span class="classifier">callable</span></dt><dd><p>specification of generative model using <code class="xref py py-func docutils literal notranslate"><span class="pre">model()</span></code>.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>model_simulations</strong><span class="classifier">dict</span></dt><dd><p>simulated data from generative model.</p>
+<dt><strong>model_simulations</strong><span class="classifier">dict[str, tf.Tensor]</span></dt><dd><p>simulated data from generative model.</p>
 </dd>
 </dl>
 </dd>

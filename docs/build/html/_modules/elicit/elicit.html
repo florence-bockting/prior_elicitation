@@ -1101,9 +1101,7 @@ document.write(`
     <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">epochs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">B</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">128</span><span class="p">,</span>
-    <span class="n">num_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span>
-    <span class="n">save_history</span><span class="p">:</span> <span class="nb">callable</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">save_history</span><span class="p">(),</span>
-    <span class="n">save_results</span><span class="p">:</span> <span class="nb">callable</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">save_results</span><span class="p">(),</span>
+    <span class="n">num_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Specification of training settings for learning the prior distribution(s).</span>
@@ -1122,16 +1120,6 @@ document.write(`
 <span class="sd">        batch size. The default is 128.</span>
 <span class="sd">    num_samples : int, optional</span>
 <span class="sd">        number of samples from the prior(s). The default is 200.</span>
-<span class="sd">    save_history : callable, :func:`elicit.utils.save_history`</span>
-<span class="sd">        Exclude or include sub-results in the final result file.</span>
-<span class="sd">        In the ``history`` object are all results that are saved across epochs.</span>
-<span class="sd">        For usage information see</span>
-<span class="sd">        `How-To: Save and load the eliobj &lt;https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html&gt;`_</span>
-<span class="sd">    save_results : callable, :func:`elicit.utils.save_results`</span>
-<span class="sd">        Exclude or include sub-results in the final result file.</span>
-<span class="sd">        In the ``results`` object are all results that are saved for the last</span>
-<span class="sd">        epoch only. For usage information see</span>
-<span class="sd">        `How-To: Save and load the eliobj &lt;https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html&gt;`_</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -1151,9 +1139,7 @@ document.write(`
 <span class="sd">    &gt;&gt;&gt;     seed=0,</span>
 <span class="sd">    &gt;&gt;&gt;     epochs=400,</span>
 <span class="sd">    &gt;&gt;&gt;     B=128,</span>
-<span class="sd">    &gt;&gt;&gt;     num_samples=200,</span>
-<span class="sd">    &gt;&gt;&gt;     save_history=el.utils.save_history(loss_component=False),</span>
-<span class="sd">    &gt;&gt;&gt;     save_results=el.utils.save_results(model=False)</span>
+<span class="sd">    &gt;&gt;&gt;     num_samples=200</span>
 <span class="sd">    &gt;&gt;&gt; )</span>
 <span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
     <span class="c1"># check that method is implemented</span>
@@ -1168,9 +1154,7 @@ document.write(`
         <span class="n">seed</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">seed</span><span class="p">),</span>
         <span class="n">B</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">B</span><span class="p">),</span>
         <span class="n">num_samples</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">num_samples</span><span class="p">),</span>
-        <span class="n">epochs</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">epochs</span><span class="p">),</span>
-        <span class="n">save_history</span><span class="o">=</span><span class="n">save_history</span><span class="p">,</span>
-        <span class="n">save_results</span><span class="o">=</span><span class="n">save_results</span><span class="p">,</span>
+        <span class="n">epochs</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">train_dict</span></div>
@@ -1212,8 +1196,8 @@ document.write(`
 <span class="sd">        optimizer : callable</span>
 <span class="sd">            specification of SGD optimizer and its settings using</span>
 <span class="sd">            :func:`optimizer`.</span>
-<span class="sd">        normalizing_flow : callable or None</span>
-<span class="sd">            specification of normalizing flow using a method implemented in</span>
+<span class="sd">        network : callable or None</span>
+<span class="sd">            specification of neural network using a method implemented in</span>
 <span class="sd">            :mod:`elicit.networks`.</span>
 <span class="sd">            Only required for ``deep_prior`` method. For ``parametric_prior``</span>
 <span class="sd">            use ``None``. Default value is ``None``.</span>
@@ -1234,18 +1218,18 @@ document.write(`
 <span class="sd">        AssertionError</span>
 <span class="sd">            ``expert`` data are not in the required format. Correct specification of</span>
 <span class="sd">            keys can be checked using el.utils.get_expert_datformat</span>
-<span class="sd">    </span>
+
 <span class="sd">            Dimensionality of ``ground_truth`` for simulating expert data, must be</span>
 <span class="sd">            the same as the number of model parameters.</span>
-<span class="sd">    </span>
+
 <span class="sd">        ValueError</span>
 <span class="sd">            if ``method=&quot;deep_prior&quot;``, ``network`` can&#39;t be None and ``initialization``</span>
 <span class="sd">            should be None.</span>
-<span class="sd">    </span>
+
 <span class="sd">            if ``method=&quot;parametric_prior&quot;``, ``network`` should be None and</span>
 <span class="sd">            ``initialization`` can&#39;t be None.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
         <span class="c1"># check expert data</span>
         <span class="n">expected_dict</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_expert_datformat</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1317,7 +1301,11 @@ document.write(`
 
 <div class="viewcode-block" id="Elicit.fit">
 <a class="viewcode-back" href="../../api/elicit.elicit.html#elicit.elicit.Elicit.fit">[docs]</a>
-    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+            <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">save_history</span><span class="p">:</span> <span class="nb">callable</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">save_history</span><span class="p">(),</span>
+            <span class="n">save_results</span><span class="p">:</span> <span class="nb">callable</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">save_results</span><span class="p">()</span>
+            <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        method for fitting the eliobj and learn prior distributions.</span>
 
@@ -1328,14 +1316,28 @@ document.write(`
 <span class="sd">            the user is asked whether they want to overwrite the previous</span>
 <span class="sd">            fitting results. Setting ``overwrite=True`` allows the user to</span>
 <span class="sd">            force overfitting without being prompted. The default is ``False``.</span>
+<span class="sd">        save_history : callable, :func:`elicit.utils.save_history`</span>
+<span class="sd">            Exclude or include sub-results in the final result file.</span>
+<span class="sd">            In the ``history`` object are all results that are saved across epochs.</span>
+<span class="sd">            For usage information see</span>
+<span class="sd">            `How-To: Save and load the eliobj &lt;https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html&gt;`_</span>
+<span class="sd">        save_results : callable, :func:`elicit.utils.save_results`</span>
+<span class="sd">            Exclude or include sub-results in the final result file.</span>
+<span class="sd">            In the ``results`` object are all results that are saved for the last</span>
+<span class="sd">            epoch only. For usage information see</span>
+<span class="sd">            `How-To: Save and load the eliobj &lt;https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html&gt;`_</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
 <span class="sd">        &gt;&gt;&gt; eliobj.fit()</span>
 
-<span class="sd">        &gt;&gt;&gt; eliobj.fit(overwrite=True)</span>
+<span class="sd">        &gt;&gt;&gt; eliobj.fit(overwrite=True,</span>
+<span class="sd">        &gt;&gt;&gt;            save_history=el.utils.save_history(</span>
+<span class="sd">        &gt;&gt;&gt;                loss_component=False</span>
+<span class="sd">        &gt;&gt;&gt;                )</span>
+<span class="sd">        &gt;&gt;&gt;            )</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
         <span class="c1"># check whether elicit object is already fitted</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
             <span class="n">user_answ</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span>
@@ -1404,12 +1406,12 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;init_prior&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">init_prior</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;init_matrix&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">init_matrix</span>
 
-        <span class="k">for</span> <span class="n">key_hist</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;save_history&quot;</span><span class="p">]:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;save_history&quot;</span><span class="p">][</span><span class="n">key_hist</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">key_hist</span> <span class="ow">in</span> <span class="n">save_history</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">save_history</span><span class="p">[</span><span class="n">key_hist</span><span class="p">]:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key_hist</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">key_res</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;save_results&quot;</span><span class="p">]:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;save_results&quot;</span><span class="p">][</span><span class="n">key_res</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">key_res</span> <span class="ow">in</span> <span class="n">save_results</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">save_results</span><span class="p">[</span><span class="n">key_res</span><span class="p">]:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key_res</span><span class="p">)</span></div>
 
 

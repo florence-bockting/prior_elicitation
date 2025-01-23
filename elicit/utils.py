@@ -8,6 +8,7 @@ import elicit as el
 import pandas as pd
 import pickle
 import os
+import warnings
 
 from typing import Tuple
 
@@ -479,7 +480,7 @@ def save(eliobj: callable, name: str or None=None, file: str or None=None,
     print(f"saved in: {path}.pkl")
 
 
-def load(file: str) -> el.elicit.Elicit:
+def load(file: str) -> callable:
     """
     loads a saved ``eliobj`` from specified path.
 
@@ -550,28 +551,27 @@ def save_history(
         dictionary with inclusion/exclusion settings for each sub-result in
         history object.
 
-    Raises
-    ------
-    UserWarning
-        if ``loss_component`` or ``loss`` are excluded, :func:`el.plots.loss`
-        can't be used as it requires this information.
+    Warnings
+    --------
+    if ``loss_component`` or ``loss`` are excluded, :func:`elicit.plots.loss`
+    can't be used as it requires this information.
 
-        if ``hyperparameter`` is excluded, :func:`el.plots.hyperparameter`
-        can't be used as it requires this information.
-        Only parametric_prior method.
+    if ``hyperparameter`` is excluded, :func:`elicit.plots.hyperparameter`
+    can't be used as it requires this information.
+    Only parametric_prior method.
 
-        if ``hyperparameter`` is excluded, :func:`el.plots.marginals`
-        can't be used as it requires this information.
-        Only deep_prior method.
+    if ``hyperparameter`` is excluded, :func:`elicit.plots.marginals`
+    can't be used as it requires this information.
+    Only deep_prior method.
 
     """
     if not loss or not loss_component:
-        raise UserWarning(
+        warnings.warn(
             "el.plots.loss() requires information about "+
             "'loss' and 'loss_component'. If you don't save this information "+
             "el.plot.loss() can't be used.")
     if not hyperparameter:
-        raise UserWarning(
+        warnings.warn(
             "el.plots.hyperparameter() and el.plots.marginals() require"
             +" information about 'hyperparameter'. If you don't save this"
             +" information these plots can't be used.")
@@ -652,40 +652,39 @@ def save_results(
         dictionary with inclusion/exclusion settings for each sub-result
         in results object.
 
-    Raises
-    ------
-    UserWarning
-        if ``elicited_statistics`` is excluded :func:`el.plots.loss` can't be
-        used as it requires this information.
+    Warnings
+    --------
+    if ``elicited_statistics`` is excluded :func:`elicit.plots.loss` can't be
+    used as it requires this information.
 
-        if ``init_matrix`` is excluded :func:`el.plots.initialization` can't be
-        used as it requires this information.
+    if ``init_matrix`` is excluded :func:`elicit.plots.initialization` can't be
+    used as it requires this information.
 
-        if ``prior_samples`` is excluded :func:`el.plots.priors` can't be
-        used as it requires this information.
+    if ``prior_samples`` is excluded :func:`elicit.plots.priors` can't be
+    used as it requires this information.
 
-        if ``expert_elicited_statistics`` or ``elicited_statistics`` is
-        excluded :func:`el.plots.elicits` can't be used as it requires this
-        information.
+    if ``expert_elicited_statistics`` or ``elicited_statistics`` is
+    excluded :func:`elicit.plots.elicits` can't be used as it requires this
+    information.
 
         """
     if not elicited_statistics:
-        raise UserWarning(
+        warnings.warn(
             "el.plots.loss() requires information about "+
             "'elicited_statistics'. If you don't save this information "+
             "el.plot.loss() can't be used.")
     if not init_matrix:
-        raise UserWarning(
+        warnings.warn(
             "el.plots.initialization() requires information about "+
             "'init_matrix'. If you don't save this information "+
             "this plotting function can't be used.")
     if not prior_samples:
-        raise UserWarning(
+        warnings.warn(
             "el.plots.priors() requires information about "+
             "'prior_samples'. If you don't save this information "+
             "this plotting function can't be used.")
     if (not expert_elicited_statistics) or (not elicited_statistics):
-        raise UserWarning(
+        warnings.warn(
             "el.plots.elicits() requires information about "+
             "'expert_elicited_statistics' and 'elicited_statistics'. "+
             "If you don't save this information this plotting function"+

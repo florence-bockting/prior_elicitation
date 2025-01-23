@@ -310,11 +310,14 @@ document.write(`
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
 
 
 <div class="viewcode-block" id="save_as_pkl">
 <a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.save_as_pkl">[docs]</a>
-<span class="k">def</span> <span class="nf">save_as_pkl</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="nb">any</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">save_as_pkl</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="nb">any</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Helper functions to save a file as pickle.</span>
 
@@ -660,7 +663,9 @@ document.write(`
 
 <div class="viewcode-block" id="one_forward_simulation">
 <a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.one_forward_simulation">[docs]</a>
-<span class="k">def</span> <span class="nf">one_forward_simulation</span><span class="p">(</span><span class="n">prior_model</span><span class="p">,</span> <span class="n">trainer</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">one_forward_simulation</span><span class="p">(</span><span class="n">prior_model</span><span class="p">:</span> <span class="n">el</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">Priors</span><span class="p">,</span>
+                           <span class="n">trainer</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">targets</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span>
+                           <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    One forward simulation from prior samples to elicited statistics.</span>
 
@@ -668,17 +673,26 @@ document.write(`
 <span class="sd">    ----------</span>
 <span class="sd">    prior_model : instance of Priors class objects</span>
 <span class="sd">        initialized prior distributions which can be used for sampling.</span>
-<span class="sd">    global_dict : dict</span>
-<span class="sd">        global dictionary with all user input specifications.</span>
-<span class="sd">    ground_truth : bool, optional</span>
-<span class="sd">        Is true if model should be learned with simulated data that</span>
-<span class="sd">        represent a pre-defined ground truth. The default is False.</span>
+<span class="sd">    trainer : callable</span>
+<span class="sd">        specification of training settings and meta-information for</span>
+<span class="sd">        workflow using :func:`trainer`</span>
+<span class="sd">    model : callable</span>
+<span class="sd">        specification of generative model using :func:`model`.</span>
+<span class="sd">    targets : list</span>
+<span class="sd">        list of target quantities specified with :func:`target`.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    elicited_statistics : dict</span>
 <span class="sd">        dictionary containing the elicited statistics that can be used to</span>
 <span class="sd">        compute the loss components</span>
+<span class="sd">    prior_samples : tf.Tensor</span>
+<span class="sd">        samples from prior distributions</span>
+<span class="sd">    model_simulations : dict</span>
+<span class="sd">        samples from the generative model (likelihood) given the prior samples</span>
+<span class="sd">        for the model parameters</span>
+<span class="sd">    target_quantities : dict</span>
+<span class="sd">        target quantities as a function of the model simulations.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># set seed</span>
@@ -707,26 +721,45 @@ document.write(`
 <span class="c1">#%% simulate expert data or get input data</span>
 <div class="viewcode-block" id="get_expert_data">
 <a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.get_expert_data">[docs]</a>
-<span class="k">def</span> <span class="nf">get_expert_data</span><span class="p">(</span><span class="n">trainer</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">expert</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">network</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">get_expert_data</span><span class="p">(</span><span class="n">trainer</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">targets</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span>
+                    <span class="n">expert</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span> <span class="n">network</span><span class="p">:</span> <span class="nb">dict</span>
+                    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Wrapper for loading the training data which can be expert data or</span>
 <span class="sd">    data simulations using a pre-defined ground truth.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    global_dict : dict</span>
-<span class="sd">        global dictionary with all user input specifications.</span>
-<span class="sd">    path_to_expert_data : str, optional</span>
-<span class="sd">        path to file location where expert data has been saved</span>
+<span class="sd">    trainer : callable</span>
+<span class="sd">        specification of training settings and meta-information for</span>
+<span class="sd">        workflow using :func:`trainer`</span>
+<span class="sd">    model : callable</span>
+<span class="sd">        specification of generative model using :func:`model`.</span>
+<span class="sd">    targets : list</span>
+<span class="sd">        list of target quantities specified with :func:`target`.</span>
+<span class="sd">    expert : callable</span>
+<span class="sd">        provide input data from expert or simulate data from oracle with</span>
+<span class="sd">        either the ``data`` or ``simulator`` method of the</span>
+<span class="sd">        :mod:`elicit.elicit.Expert` module.</span>
+<span class="sd">    parameters : list</span>
+<span class="sd">        list of model parameters specified with :func:`parameter`.</span>
+<span class="sd">    network : callable or None</span>
+<span class="sd">        specification of neural network using a method implemented in</span>
+<span class="sd">        :mod:`elicit.networks`.</span>
+<span class="sd">        Only required for ``deep_prior`` method. For ``parametric_prior``</span>
+<span class="sd">        use ``None``. Default value is ``None``.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    expert_data : dict</span>
 <span class="sd">        dictionary containing the training data. Must have same form as the</span>
-<span class="sd">        model-simulated elicited statistics.</span>
+<span class="sd">        model-simulated elicited statistics. Correct specification of</span>
+<span class="sd">        keys can be checked using :func:`elicit.utils.get_expert_datformat`</span>
+<span class="sd">    expert_prior : tf.Tensor, shape: [B,num_samples,num_params]</span>
+<span class="sd">        samples from ground truth. Exists only if expert data are simulated</span>
+<span class="sd">        from an oracle. Otherwise this output is ``None``</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="k">try</span><span class="p">:</span>
         <span class="n">expert</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
@@ -749,7 +782,6 @@ document.write(`
             <span class="n">prior_model</span><span class="p">,</span> <span class="n">trainer</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">targets</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">expert_data</span><span class="p">,</span> <span class="n">expert_prior</span>
-
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># load expert data from file</span>
         <span class="c1"># TODO Expert data must have same name and structure as sim-based</span>
@@ -762,17 +794,22 @@ document.write(`
 <div class="viewcode-block" id="save">
 <a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.save">[docs]</a>
 <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="n">eliobj</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-         <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+         <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="c1"># either name or file must be specified</span>
     <span class="k">assert</span> <span class="p">(</span><span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;Name and file cannot be both &quot;</span><span class="o">+</span>
                         <span class="s2">&quot;None or both specified. Either one has to be None.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.pkl&quot;</span><span class="p">):</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="s2">&quot;.pkl&quot;</span><span class="p">)</span>
         <span class="c1"># create saving path</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;./res/</span><span class="si">{</span><span class="n">eliobj</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">eliobj</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s1">&#39;seed&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;./results/</span><span class="si">{</span><span class="n">eliobj</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">eliobj</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s1">&#39;seed&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>  <span class="c1"># noqa</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># postprocess file (or name) to avoid file.pkl.pkl</span>
+        <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.pkl&quot;</span><span class="p">):</span>
+                <span class="n">file</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="s2">&quot;.pkl&quot;</span><span class="p">)</span>
         <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;./&quot;</span><span class="o">+</span><span class="n">file</span>
     <span class="c1"># check whether saving path is already used</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s2">&quot;.pkl&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
         <span class="n">user_ans</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;In provided directory exists already a file with&quot;</span><span class="o">+</span>
                          <span class="s2">&quot; identical name. Do you want to overwrite it?&quot;</span><span class="o">+</span>
                          <span class="s2">&quot; Press &#39;y&#39; for overwriting and &#39;n&#39; for abording.&quot;</span><span class="p">)</span>
@@ -797,14 +834,28 @@ document.write(`
     <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">results</span>
     <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;history&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">history</span>
 
-    <span class="n">save_as_pkl</span><span class="p">(</span><span class="n">storage</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;saved in: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+    <span class="n">save_as_pkl</span><span class="p">(</span><span class="n">storage</span><span class="p">,</span> <span class="n">path</span><span class="o">+</span><span class="s2">&quot;.pkl&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;saved in: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">.pkl&quot;</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="load">
 <a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.load">[docs]</a>
-<span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">callable</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    loads a saved ``eliobj`` from specified path.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    file : str</span>
+<span class="sd">        path where ``eliobj`` object is saved.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    eliobj : el.elicit.Elicit obj</span>
+<span class="sd">        loaded ``eliobj`` object.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">obj</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
 
     <span class="n">eliobj</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">Elicit</span><span class="p">(</span>
@@ -834,7 +885,7 @@ document.write(`
     <span class="n">time</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">hyperparameter</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">hyperparameter_gradient</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-<span class="p">):</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Controls whether sub-results of the history object should be included</span>
 <span class="sd">    or excluded. Results are saved across epochs. By default all</span>
@@ -864,12 +915,30 @@ document.write(`
 <span class="sd">        dictionary with inclusion/exclusion settings for each sub-result in</span>
 <span class="sd">        history object.</span>
 
+<span class="sd">    Warnings</span>
+<span class="sd">    --------</span>
+<span class="sd">    if ``loss_component`` or ``loss`` are excluded, :func:`elicit.plots.loss`</span>
+<span class="sd">    can&#39;t be used as it requires this information.</span>
+
+<span class="sd">    if ``hyperparameter`` is excluded, :func:`elicit.plots.hyperparameter`</span>
+<span class="sd">    can&#39;t be used as it requires this information.</span>
+<span class="sd">    Only parametric_prior method.</span>
+
+<span class="sd">    if ``hyperparameter`` is excluded, :func:`elicit.plots.marginals`</span>
+<span class="sd">    can&#39;t be used as it requires this information.</span>
+<span class="sd">    Only deep_prior method.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">loss</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">loss_component</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">&quot;INFO: el.plots.loss() requires information about &quot;</span><span class="o">+</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;el.plots.loss() requires information about &quot;</span><span class="o">+</span>
             <span class="s2">&quot;&#39;loss&#39; and &#39;loss_component&#39;. If you don&#39;t save this information &quot;</span><span class="o">+</span>
             <span class="s2">&quot;el.plot.loss() can&#39;t be used.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">hyperparameter</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;el.plots.hyperparameter() and el.plots.marginals() require&quot;</span>
+            <span class="o">+</span><span class="s2">&quot; information about &#39;hyperparameter&#39;. If you don&#39;t save this&quot;</span>
+            <span class="o">+</span><span class="s2">&quot; information these plots can&#39;t be used.&quot;</span><span class="p">)</span>
 
     <span class="n">save_hist_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">loss</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span>
@@ -896,7 +965,7 @@ document.write(`
     <span class="n">init_matrix</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">loss_tensor_expert</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">loss_tensor_model</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-<span class="p">):</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Controls whether sub-results of the result object should be included</span>
 <span class="sd">    or excluded in the final result file. Results are based on the</span>
@@ -950,12 +1019,43 @@ document.write(`
 <span class="sd">        dictionary with inclusion/exclusion settings for each sub-result</span>
 <span class="sd">        in results object.</span>
 
+<span class="sd">    Warnings</span>
+<span class="sd">    --------</span>
+<span class="sd">    if ``elicited_statistics`` is excluded :func:`elicit.plots.loss` can&#39;t be</span>
+<span class="sd">    used as it requires this information.</span>
+
+<span class="sd">    if ``init_matrix`` is excluded :func:`elicit.plots.initialization` can&#39;t be</span>
+<span class="sd">    used as it requires this information.</span>
+
+<span class="sd">    if ``prior_samples`` is excluded :func:`elicit.plots.priors` can&#39;t be</span>
+<span class="sd">    used as it requires this information.</span>
+
+<span class="sd">    if ``expert_elicited_statistics`` or ``elicited_statistics`` is</span>
+<span class="sd">    excluded :func:`elicit.plots.elicits` can&#39;t be used as it requires this</span>
+<span class="sd">    information.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">elicited_statistics</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">&quot;INFO: el.plots.loss() requires information about &quot;</span><span class="o">+</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;el.plots.loss() requires information about &quot;</span><span class="o">+</span>
             <span class="s2">&quot;&#39;elicited_statistics&#39;. If you don&#39;t save this information &quot;</span><span class="o">+</span>
             <span class="s2">&quot;el.plot.loss() can&#39;t be used.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">init_matrix</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;el.plots.initialization() requires information about &quot;</span><span class="o">+</span>
+            <span class="s2">&quot;&#39;init_matrix&#39;. If you don&#39;t save this information &quot;</span><span class="o">+</span>
+            <span class="s2">&quot;this plotting function can&#39;t be used.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">prior_samples</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;el.plots.priors() requires information about &quot;</span><span class="o">+</span>
+            <span class="s2">&quot;&#39;prior_samples&#39;. If you don&#39;t save this information &quot;</span><span class="o">+</span>
+            <span class="s2">&quot;this plotting function can&#39;t be used.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">expert_elicited_statistics</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">elicited_statistics</span><span class="p">):</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;el.plots.elicits() requires information about &quot;</span><span class="o">+</span>
+            <span class="s2">&quot;&#39;expert_elicited_statistics&#39; and &#39;elicited_statistics&#39;. &quot;</span><span class="o">+</span>
+            <span class="s2">&quot;If you don&#39;t save this information this plotting function&quot;</span><span class="o">+</span>
+            <span class="s2">&quot; can&#39;t be used.&quot;</span><span class="p">)</span>
 
     <span class="n">save_res_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">target_quantities</span><span class="o">=</span><span class="n">target_quantities</span><span class="p">,</span>
@@ -974,9 +1074,25 @@ document.write(`
     <span class="k">return</span> <span class="n">save_res_dict</span></div>
 
 
+
 <div class="viewcode-block" id="get_expert_datformat">
 <a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.get_expert_datformat">[docs]</a>
-<span class="k">def</span> <span class="nf">get_expert_datformat</span><span class="p">(</span><span class="n">targets</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">get_expert_datformat</span><span class="p">(</span><span class="n">targets</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    helper function for the user to inspect which data format for the expert</span>
+<span class="sd">    data is expected by the method.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    targets : list</span>
+<span class="sd">        list of target quantities specified with :func:`target`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    elicit_dict : dict[str, list]</span>
+<span class="sd">        expected format of expert data.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">elicit_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">tar</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
         <span class="n">query</span> <span class="o">=</span> <span class="n">tar</span><span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>

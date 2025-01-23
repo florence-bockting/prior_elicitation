@@ -29,7 +29,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
-    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -170,6 +170,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.losses.html">elicit.losses module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.networks.html">elicit.networks module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.optimization.html">elicit.optimization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.plots.html">elicit.plots module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.simulations.html">elicit.simulations module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.targets.html">elicit.targets module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.utils.html">elicit.utils module</a></li>
@@ -311,8 +312,10 @@ document.write(`
 
 <div class="viewcode-block" id="NF">
 <a class="viewcode-back" href="../../api/elicit.networks.html#elicit.networks.NF">[docs]</a>
-<span class="k">def</span> <span class="nf">NF</span><span class="p">(</span><span class="n">inference_network</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span> <span class="n">network_specs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
-       <span class="n">base_distribution</span><span class="p">:</span> <span class="nb">callable</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">NF</span><span class="p">(</span>
+    <span class="n">inference_network</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span> <span class="n">network_specs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">base_distribution</span><span class="p">:</span> <span class="nb">callable</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    specification of the normalizing flow used from BayesFlow library</span>
 
@@ -338,7 +341,7 @@ document.write(`
     <span class="n">nf_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">inference_network</span><span class="o">=</span><span class="n">inference_network</span><span class="p">,</span>
         <span class="n">network_specs</span><span class="o">=</span><span class="n">network_specs</span><span class="p">,</span>
-        <span class="n">base_distribution</span><span class="o">=</span><span class="n">base_distribution</span>
+        <span class="n">base_distribution</span><span class="o">=</span><span class="n">base_distribution</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">nf_dict</span></div>
@@ -350,16 +353,33 @@ document.write(`
 <span class="k">class</span> <span class="nc">BaseNormal</span><span class="p">:</span>
 <div class="viewcode-block" id="BaseNormal.__call__">
 <a class="viewcode-back" href="../../api/elicit.networks.html#elicit.networks.BaseNormal.__call__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_params</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_params</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">callable</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Multivariate standard normal distribution with as many dimensions as</span>
+<span class="sd">        parameters in the generative model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        num_params : int</span>
+<span class="sd">            number of model parameters. Is internally specified in</span>
+<span class="sd">            :func:`elicit.simulations.sample_from_priors`</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        callable</span>
+<span class="sd">            tfp.distributions object.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">base_dist</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">MultivariateNormalDiag</span><span class="p">(</span>
-            <span class="n">loc</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_params</span><span class="p">),</span>
-            <span class="n">scale_diag</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">num_params</span><span class="p">)</span>
-            <span class="p">)</span>
+            <span class="n">loc</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_params</span><span class="p">),</span> <span class="n">scale_diag</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">num_params</span><span class="p">)</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="n">base_dist</span></div>
 </div>
 
 
+
+<span class="c1"># initialized instance of the BaseNormal class</span>
 <span class="n">base_normal</span> <span class="o">=</span> <span class="n">BaseNormal</span><span class="p">()</span>
 </pre></div>
 
@@ -399,7 +419,7 @@ By Florence Bockting
 
   <p class="copyright">
     
-      © Copyright 2024, Florence Bockting.
+      © Copyright 2025, Florence Bockting.
       <br/>
     
   </p>

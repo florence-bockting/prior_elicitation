@@ -29,7 +29,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
-    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -170,6 +170,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.losses.html">elicit.losses module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.networks.html">elicit.networks module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.optimization.html">elicit.optimization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.plots.html">elicit.plots module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.simulations.html">elicit.simulations module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.targets.html">elicit.targets module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.utils.html">elicit.utils module</a></li>
@@ -308,6 +309,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">elicit</span> <span class="k">as</span> <span class="nn">el</span>
 <span class="kn">import</span> <span class="nn">time</span>
 
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
 
 <span class="n">tfd</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">distributions</span>
@@ -316,13 +318,13 @@ document.write(`
 <div class="viewcode-block" id="sgd_training">
 <a class="viewcode-back" href="../../api/elicit.optimization.html#elicit.optimization.sgd_training">[docs]</a>
 <span class="k">def</span> <span class="nf">sgd_training</span><span class="p">(</span>
-    <span class="n">expert_elicited_statistics</span><span class="p">,</span>
-    <span class="n">prior_model_init</span><span class="p">,</span>
-    <span class="n">trainer</span><span class="p">,</span>
-    <span class="n">optimizer</span><span class="p">,</span>
-    <span class="n">model</span><span class="p">,</span>
-    <span class="n">targets</span>
-<span class="p">):</span>
+    <span class="n">expert_elicited_statistics</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>
+    <span class="n">prior_model_init</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span>
+    <span class="n">trainer</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">optimizer</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">targets</span><span class="p">:</span> <span class="nb">dict</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Wrapper that runs the optimization algorithms for E epochs.</span>
 
@@ -343,6 +345,11 @@ document.write(`
 <span class="sd">        compute total loss.</span>
 <span class="sd">    global_dict : dict</span>
 <span class="sd">        dictionary including all user-input settings.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        Training has been stopped because loss value is NAN.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># set seed</span>
@@ -398,7 +405,9 @@ document.write(`
 
         <span class="c1"># break for loop if loss is NAN and inform about cause</span>
         <span class="k">if</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">is_nan</span><span class="p">(</span><span class="n">loss</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Loss is NAN. The training process has been stopped.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Loss is NAN. The training process has been stopped.&quot;</span>
+                <span class="p">)</span>
             <span class="k">break</span>
 
         <span class="c1"># %% Saving of results</span>
@@ -406,9 +415,7 @@ document.write(`
             <span class="c1"># save gradients per epoch</span>
             <span class="n">gradients_ep</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gradients</span><span class="p">)</span>
 
-            <span class="c1"># save single learned hyperparameter values for each prior and</span>
-            <span class="c1"># epoch</span>
-
+            <span class="c1"># save learned hyperparameter values for each prior and epoch</span>
             <span class="c1"># extract learned hyperparameter values</span>
             <span class="n">hyperparams</span> <span class="o">=</span> <span class="n">prior_model</span><span class="o">.</span><span class="n">trainable_variables</span>
             <span class="k">if</span> <span class="n">epoch</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -431,14 +438,14 @@ document.write(`
                 <span class="n">res_dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;deep_prior&quot;</span><span class="p">:</span>
-            <span class="c1"># save mean and std for each sampled marginal prior</span>
-            <span class="c1"># for each epoch</span>
+            <span class="c1"># save mean and std for each sampled marginal prior for each epoch</span>
 
             <span class="k">if</span> <span class="n">epoch</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">res_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;means&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;stds&quot;</span><span class="p">:</span> <span class="p">[]}</span>
 
             <span class="n">means</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">model_sim</span><span class="p">[</span><span class="s2">&quot;prior_samples&quot;</span><span class="p">],</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-            <span class="n">sds</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_std</span><span class="p">(</span><span class="n">model_sim</span><span class="p">[</span><span class="s2">&quot;prior_samples&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">sds</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_std</span><span class="p">(</span><span class="n">model_sim</span><span class="p">[</span><span class="s2">&quot;prior_samples&quot;</span><span class="p">],</span>
+                                                    <span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
 
             <span class="k">for</span> <span class="n">val</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">means</span><span class="p">,</span> <span class="n">sds</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;means&quot;</span><span class="p">,</span> <span class="s2">&quot;stds&quot;</span><span class="p">]):</span>
                 <span class="n">res_dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
@@ -508,7 +515,7 @@ By Florence Bockting
 
   <p class="copyright">
     
-      © Copyright 2024, Florence Bockting.
+      © Copyright 2025, Florence Bockting.
       <br/>
     
   </p>

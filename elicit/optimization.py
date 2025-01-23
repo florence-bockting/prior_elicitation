@@ -20,7 +20,7 @@ def sgd_training(
     optimizer: dict,
     model: dict,
     targets: dict
-) -> Tuple(dict, dict):
+) -> Tuple[dict, dict]:
     """
     Wrapper that runs the optimization algorithms for E epochs.
 

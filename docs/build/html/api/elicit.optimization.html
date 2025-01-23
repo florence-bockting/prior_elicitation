@@ -362,7 +362,7 @@ document.write(`
 <span id="elicit-optimization-module"></span><h1>elicit.optimization module<a class="headerlink" href="#module-elicit.optimization" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.optimization.sgd_training">
-<span class="sig-prename descclassname"><span class="pre">elicit.optimization.</span></span><span class="sig-name descname"><span class="pre">sgd_training</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expert_elicited_statistics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_model_init</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trainer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/optimization.html#sgd_training"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.optimization.sgd_training" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.optimization.</span></span><span class="sig-name descname"><span class="pre">sgd_training</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expert_elicited_statistics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_model_init</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trainer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/elicit/optimization.html#sgd_training"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.optimization.sgd_training" title="Link to this definition">#</a></dt>
 <dd><p>Wrapper that runs the optimization algorithms for E epochs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -381,6 +381,12 @@ of model simulations and expert data, compute loss per component,
 compute total loss.</p>
 </dd>
 <dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all user-input settings.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ValueError</dt><dd><p>Training has been stopped because loss value is NAN.</p>
 </dd>
 </dl>
 </dd>

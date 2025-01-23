@@ -29,7 +29,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
-    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -170,6 +170,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.losses.html">elicit.losses module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.networks.html">elicit.networks module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.optimization.html">elicit.optimization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.plots.html">elicit.plots module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.simulations.html">elicit.simulations module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.targets.html">elicit.targets module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/elicit.utils.html">elicit.utils module</a></li>
@@ -379,25 +380,26 @@ document.write(`
 <div class="viewcode-block" id="computation_elicited_statistics">
 <a class="viewcode-back" href="../../api/elicit.targets.html#elicit.targets.computation_elicited_statistics">[docs]</a>
 <span class="k">def</span> <span class="nf">computation_elicited_statistics</span><span class="p">(</span>
-        <span class="n">target_quantities</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
+        <span class="n">target_quantities</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>  <span class="c1"># shape=[B, num_samples, num_obs]</span>
+        <span class="n">targets</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>  <span class="c1"># shape=[B, num_stats]</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the elicited statistics from the target quantities by applying a</span>
 <span class="sd">    prespecified elicitation technique.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    target_quantities : dict</span>
+<span class="sd">    target_quantities : dict[str, tf.Tensor], shape: [B,num_samples,num_obs]</span>
 <span class="sd">        simulated target quantities.</span>
-<span class="sd">    global_dict : dict</span>
-<span class="sd">        dictionary including all user-input settings.</span>
+<span class="sd">    targets : list[dict]</span>
+<span class="sd">        list of target quantities specified with :func:`target`.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    elicits_res : dict</span>
+<span class="sd">    elicits_res : dict[res, tf.Tensor], shape: [B, num_stats]</span>
 <span class="sd">        simulated elicited statistics.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="c1"># initialize dict for storing results</span>
     <span class="n">elicits_res</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="c1"># loop over elicitation techniques</span>
@@ -455,23 +457,23 @@ document.write(`
 
 <div class="viewcode-block" id="computation_target_quantities">
 <a class="viewcode-back" href="../../api/elicit.targets.html#elicit.targets.computation_target_quantities">[docs]</a>
-<span class="k">def</span> <span class="nf">computation_target_quantities</span><span class="p">(</span><span class="n">model_simulations</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">computation_target_quantities</span><span class="p">(</span><span class="n">model_simulations</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>
+                                  <span class="n">targets</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes target quantities from model simulations.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    model_simulations : dict</span>
+<span class="sd">    model_simulations : dict[str, tf.Tensor]</span>
 <span class="sd">        simulations from generative model.</span>
-<span class="sd">    global_dict : dict</span>
-<span class="sd">        dictionary including all user-input settings..</span>
+<span class="sd">    targets : list[dict]</span>
+<span class="sd">        list of target quantities specified with :func:`target`.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    targets_res : dict</span>
+<span class="sd">    targets_res : dict[str, tf.Tensor]</span>
 <span class="sd">        computed target quantities.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="c1"># initialize dict for storing results</span>
     <span class="n">targets_res</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="c1"># loop over target quantities</span>
@@ -533,7 +535,7 @@ By Florence Bockting
 
   <p class="copyright">
     
-      © Copyright 2024, Florence Bockting.
+      © Copyright 2025, Florence Bockting.
       <br/>
     
   </p>

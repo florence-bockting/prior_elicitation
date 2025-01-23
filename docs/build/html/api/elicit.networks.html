@@ -366,7 +366,7 @@ document.write(`
 <span id="elicit-networks-module"></span><h1>elicit.networks module<a class="headerlink" href="#module-elicit.networks" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.networks.NF">
-<span class="sig-prename descclassname"><span class="pre">elicit.networks.</span></span><span class="sig-name descname"><span class="pre">NF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inference_network</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network_specs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_distribution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/networks.html#NF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.networks.NF" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.networks.</span></span><span class="sig-name descname"><span class="pre">NF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inference_network</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network_specs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_distribution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../_modules/elicit/networks.html#NF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.networks.NF" title="Link to this definition">#</a></dt>
 <dd><p>specification of the normalizing flow used from BayesFlow library</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -398,8 +398,24 @@ Normally the base distribution is a multivariate normal.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.networks.BaseNormal.__call__">
-<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/networks.html#BaseNormal.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.networks.BaseNormal.__call__" title="Link to this definition">#</a></dt>
-<dd><p>Call self as a function.</p>
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">callable</span></span></span><a class="reference internal" href="../_modules/elicit/networks.html#BaseNormal.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.networks.BaseNormal.__call__" title="Link to this definition">#</a></dt>
+<dd><p>Multivariate standard normal distribution with as many dimensions as
+parameters in the generative model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>num_params</strong><span class="classifier">int</span></dt><dd><p>number of model parameters. Is internally specified in
+<a class="reference internal" href="elicit.simulations.html#elicit.simulations.sample_from_priors" title="elicit.simulations.sample_from_priors"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.simulations.sample_from_priors()</span></code></a></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>callable</dt><dd><p>tfp.distributions object.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

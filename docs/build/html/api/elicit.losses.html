@@ -373,7 +373,7 @@ document.write(`
 <span id="elicit-losses-module"></span><h1>elicit.losses module<a class="headerlink" href="#module-elicit.losses" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.losses.preprocess">
-<span class="sig-prename descclassname"><span class="pre">elicit.losses.</span></span><span class="sig-name descname"><span class="pre">preprocess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elicited_statistics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/elicit/losses.html#preprocess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.preprocess" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.losses.</span></span><span class="sig-name descname"><span class="pre">preprocess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elicited_statistics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/elicit/losses.html#preprocess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.preprocess" title="Link to this definition">#</a></dt>
 <dd><p>Preprocess elicited statistics such that they have the required format for
 computing the individual losses between expert- and simulated statistics.</p>
 <dl class="field-list simple">
@@ -392,7 +392,8 @@ enter the loss function to compute the individual loss components.</p>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt>AssertionError</dt><dd><p>elicited statistics can only have 2 dimensions (i.e., tensor of rank 2)</p>
+<dt>AssertionError</dt><dd><p><code class="docutils literal notranslate"><span class="pre">elicited_statistics</span></code> can only have 2 dimensions
+(i.e., tensor of rank 2)</p>
 </dd>
 </dl>
 </dd>
@@ -401,7 +402,7 @@ enter the loss function to compute the individual loss components.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.losses.indiv_loss">
-<span class="sig-prename descclassname"><span class="pre">elicit.losses.</span></span><span class="sig-name descname"><span class="pre">indiv_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elicit_expert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elicit_training</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#indiv_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.indiv_loss" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.losses.</span></span><span class="sig-name descname"><span class="pre">indiv_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elicit_expert</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elicit_training</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/elicit/losses.html#indiv_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.indiv_loss" title="Link to this definition">#</a></dt>
 <dd><p>Computes the individual loss between expert data and model-simulated data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -425,7 +426,7 @@ enter the loss function to compute the individual loss components.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.losses.total_loss">
-<span class="sig-prename descclassname"><span class="pre">elicit.losses.</span></span><span class="sig-name descname"><span class="pre">total_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elicit_training</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elicit_expert</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#total_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.total_loss" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.losses.</span></span><span class="sig-name descname"><span class="pre">total_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elicit_training</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elicit_expert</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/elicit/losses.html#total_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.total_loss" title="Link to this definition">#</a></dt>
 <dd><p>Computes the weighted average across all individual losses between expert
 data and model simulations.</p>
 <dl class="field-list simple">
@@ -460,7 +461,7 @@ statistics.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.losses.L2">
-<span class="sig-prename descclassname"><span class="pre">elicit.losses.</span></span><span class="sig-name descname"><span class="pre">L2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loss_component_expert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_component_training</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ord</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#L2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.L2" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.losses.</span></span><span class="sig-name descname"><span class="pre">L2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loss_component_expert</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_component_training</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ord</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'euclidean'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="reference internal" href="../_modules/elicit/losses.html#L2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.L2" title="Link to this definition">#</a></dt>
 <dd><p>Wrapper around tf.norm that computes the norm of the difference between
 two tensors along the specified axis.
 Used for the correlation loss when priors are assumed to be independent</p>
@@ -484,7 +485,7 @@ supported by tf.norm. Default is ‘euclidean’.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">elicit.losses.</span></span><span class="sig-name descname"><span class="pre">MMD2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kernel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'energy'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#MMD2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.MMD2" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Computes the biased, squared maximum mean discrepancy</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>kernel</strong><span class="classifier">str</span></dt><dd><p>kernel type used for computing the MMD.
@@ -493,8 +494,15 @@ When using a gaussian kernel an additional ‘sigma’ argument has to
 be passed.
 The default kernel is “energy”.</p>
 </dd>
-<dt><strong>**kwargs</strong><span class="classifier">any</span></dt><dd><p>additional keyword arguments that might be required by the 
+<dt><strong>**kwargs</strong><span class="classifier">any</span></dt><dd><p>additional keyword arguments that might be required by the
 different individual kernels</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt>ValueError</dt><dd><p><code class="docutils literal notranslate"><span class="pre">kernel</span></code> must be either ‘energy’ or ‘gaussian’ kernel.</p>
+<p><code class="docutils literal notranslate"><span class="pre">sigma</span></code> argument need to be passed if <code class="docutils literal notranslate"><span class="pre">kernel=&quot;gaussian&quot;</span></code></p>
 </dd>
 </dl>
 </dd>
@@ -510,7 +518,7 @@ different individual kernels</p>
 <dt class="sig sig-object py" id="elicit.losses.MMD2.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kernel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'energy'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#MMD2.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.MMD2.__init__" title="Link to this definition">#</a></dt>
 <dd><p>Computes the biased, squared maximum mean discrepancy</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>kernel</strong><span class="classifier">str</span></dt><dd><p>kernel type used for computing the MMD.
@@ -519,8 +527,15 @@ When using a gaussian kernel an additional ‘sigma’ argument has to
 be passed.
 The default kernel is “energy”.</p>
 </dd>
-<dt><strong>**kwargs</strong><span class="classifier">any</span></dt><dd><p>additional keyword arguments that might be required by the 
+<dt><strong>**kwargs</strong><span class="classifier">any</span></dt><dd><p>additional keyword arguments that might be required by the
 different individual kernels</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt>ValueError</dt><dd><p><code class="docutils literal notranslate"><span class="pre">kernel</span></code> must be either ‘energy’ or ‘gaussian’ kernel.</p>
+<p><code class="docutils literal notranslate"><span class="pre">sigma</span></code> argument need to be passed if <code class="docutils literal notranslate"><span class="pre">kernel=&quot;gaussian&quot;</span></code></p>
 </dd>
 </dl>
 </dd>
@@ -536,23 +551,23 @@ different individual kernels</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.losses.MMD2.__call__">
-<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#MMD2.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.MMD2.__call__" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="reference internal" href="../_modules/elicit/losses.html#MMD2.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.MMD2.__call__" title="Link to this definition">#</a></dt>
 <dd><p>Computes the biased, squared maximum mean discrepancy of two samples</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>x</strong><span class="classifier">tensor of shape (batch, num_samples)</span></dt><dd><p>preprocessed expert-elicited statistics.
+<dt><strong>x</strong><span class="classifier">tensor, shape=[B, num_stats]</span></dt><dd><p>preprocessed expert-elicited statistics.
 Preprocessing refers to broadcasting expert data to same shape as
 model-simulated data.</p>
 </dd>
-<dt><strong>y</strong><span class="classifier">tensor of shape (batch, num_samples)</span></dt><dd><p>model-simulated statistics corresponding to expert-elicited
+<dt><strong>y</strong><span class="classifier">tensor, shape=[B, num_stats]</span></dt><dd><p>model-simulated statistics corresponding to expert-elicited
 statistics</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>MMD2_mean</strong><span class="classifier">float</span></dt><dd><p>Average biased, squared maximum mean discrepancy between expert-
+<dt><strong>MMD2_mean</strong><span class="classifier">tensor, shape=[]</span></dt><dd><p>Average biased, squared maximum mean discrepancy between expert-
 elicited and model simulated data.</p>
 </dd>
 </dl>
@@ -562,18 +577,18 @@ elicited and model simulated data.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.losses.MMD2.clip">
-<span class="sig-name descname"><span class="pre">clip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#MMD2.clip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.MMD2.clip" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">clip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="reference internal" href="../_modules/elicit/losses.html#MMD2.clip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.MMD2.clip" title="Link to this definition">#</a></dt>
 <dd><p>upper and lower clipping of value <cite>u</cite> to improve numerical stability</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>u</strong><span class="classifier">float</span></dt><dd><p>result of prior computation.</p>
+<dt><strong>u</strong><span class="classifier">tf.Tensor, shape=[B, num_stats, num_stats]</span></dt><dd><p>result of prior computation.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>u_clipped</strong><span class="classifier">float</span></dt><dd><p>clipped u value with <code class="docutils literal notranslate"><span class="pre">min=1e-8</span></code> and <code class="docutils literal notranslate"><span class="pre">max=1e10</span></code>.</p>
+<dt><strong>u_clipped</strong><span class="classifier">tf.Tensor, shape=[B, num_stats, num_stats]</span></dt><dd><p>clipped u value with <code class="docutils literal notranslate"><span class="pre">min=1e-8</span></code> and <code class="docutils literal notranslate"><span class="pre">max=1e10</span></code>.</p>
 </dd>
 </dl>
 </dd>
@@ -582,19 +597,19 @@ elicited and model simulated data.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.losses.MMD2.diag">
-<span class="sig-name descname"><span class="pre">diag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#MMD2.diag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.MMD2.diag" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">diag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="reference internal" href="../_modules/elicit/losses.html#MMD2.diag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.MMD2.diag" title="Link to this definition">#</a></dt>
 <dd><p>get diagonale elements of a matrix, whereby the first tensor dimension
 are batches and should not be considered to get diagonale elements.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>xx</strong><span class="classifier">tensor</span></dt><dd><p>Similarity matrices with batch dimension in axis=0.</p>
+<dt><strong>xx</strong><span class="classifier">tensor, shape=[B,num_stats,num_stats]</span></dt><dd><p>Similarity matrices with batch dimension in axis=0.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>diag</strong><span class="classifier">tensor</span></dt><dd><p>diagonale elements of matrices per batch.</p>
+<dt><strong>diag</strong><span class="classifier">tensor, shape=[B,num_stats]</span></dt><dd><p>diagonale elements of matrices per batch.</p>
 </dd>
 </dl>
 </dd>
@@ -603,12 +618,12 @@ are batches and should not be considered to get diagonale elements.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.losses.MMD2.kernel">
-<span class="sig-name descname"><span class="pre">kernel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#MMD2.kernel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.MMD2.kernel" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">kernel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="reference internal" href="../_modules/elicit/losses.html#MMD2.kernel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.MMD2.kernel" title="Link to this definition">#</a></dt>
 <dd><p>Kernel used in MMD to compute discrepancy between samples.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>u</strong><span class="classifier">float</span></dt><dd><p>squared distance between samples.</p>
+<dt><strong>u</strong><span class="classifier">tensor, shape=[B,num_stats,num_stats]</span></dt><dd><p>squared distance between samples.</p>
 </dd>
 <dt><strong>kernel</strong><span class="classifier">str</span></dt><dd><p>name of kernel used for computing discrepancy.</p>
 </dd>
@@ -616,7 +631,7 @@ are batches and should not be considered to get diagonale elements.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>d</strong><span class="classifier">float</span></dt><dd><p>discrepancy between samples.</p>
+<dt><strong>d</strong><span class="classifier">tensor, shape=[B,num_stats,num_stats]</span></dt><dd><p>discrepancy between samples.</p>
 </dd>
 </dl>
 </dd>

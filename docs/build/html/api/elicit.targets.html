@@ -389,21 +389,21 @@ all inputs and extracting the argument from different sources.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.targets.computation_elicited_statistics">
-<span class="sig-prename descclassname"><span class="pre">elicit.targets.</span></span><span class="sig-name descname"><span class="pre">computation_elicited_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_quantities</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/targets.html#computation_elicited_statistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.targets.computation_elicited_statistics" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.targets.</span></span><span class="sig-name descname"><span class="pre">computation_elicited_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_quantities</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/elicit/targets.html#computation_elicited_statistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.targets.computation_elicited_statistics" title="Link to this definition">#</a></dt>
 <dd><p>Computes the elicited statistics from the target quantities by applying a
 prespecified elicitation technique.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>target_quantities</strong><span class="classifier">dict</span></dt><dd><p>simulated target quantities.</p>
+<dt><strong>target_quantities</strong><span class="classifier">dict[str, tf.Tensor], shape: [B,num_samples,num_obs]</span></dt><dd><p>simulated target quantities.</p>
 </dd>
-<dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all user-input settings.</p>
+<dt><strong>targets</strong><span class="classifier">list[dict]</span></dt><dd><p>list of target quantities specified with <code class="xref py py-func docutils literal notranslate"><span class="pre">target()</span></code>.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>elicits_res</strong><span class="classifier">dict</span></dt><dd><p>simulated elicited statistics.</p>
+<dt><strong>elicits_res</strong><span class="classifier">dict[res, tf.Tensor], shape: [B, num_stats]</span></dt><dd><p>simulated elicited statistics.</p>
 </dd>
 </dl>
 </dd>
@@ -412,20 +412,20 @@ prespecified elicitation technique.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.targets.computation_target_quantities">
-<span class="sig-prename descclassname"><span class="pre">elicit.targets.</span></span><span class="sig-name descname"><span class="pre">computation_target_quantities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_simulations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/targets.html#computation_target_quantities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.targets.computation_target_quantities" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.targets.</span></span><span class="sig-name descname"><span class="pre">computation_target_quantities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_simulations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/elicit/targets.html#computation_target_quantities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.targets.computation_target_quantities" title="Link to this definition">#</a></dt>
 <dd><p>Computes target quantities from model simulations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>model_simulations</strong><span class="classifier">dict</span></dt><dd><p>simulations from generative model.</p>
+<dt><strong>model_simulations</strong><span class="classifier">dict[str, tf.Tensor]</span></dt><dd><p>simulations from generative model.</p>
 </dd>
-<dt><strong>global_dict</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all user-input settings..</p>
+<dt><strong>targets</strong><span class="classifier">list[dict]</span></dt><dd><p>list of target quantities specified with <code class="xref py py-func docutils literal notranslate"><span class="pre">target()</span></code>.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>targets_res</strong><span class="classifier">dict</span></dt><dd><p>computed target quantities.</p>
+<dt><strong>targets_res</strong><span class="classifier">dict[str, tf.Tensor]</span></dt><dd><p>computed target quantities.</p>
 </dd>
 </dl>
 </dd>

@@ -332,19 +332,38 @@ document.write(`
 
 <div class="viewcode-block" id="Priors.__init__">
 <a class="viewcode-back" href="../../api/elicit.simulations.html#elicit.simulations.Priors.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">init_matrix_slice</span><span class="p">,</span> <span class="n">trainer</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span>
-                 <span class="n">network</span><span class="p">,</span> <span class="n">expert</span><span class="p">,</span> <span class="n">seed</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+                 <span class="n">init_matrix_slice</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">trainer</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">network</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">expert</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+                 <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initializes the hyperparameters (i.e., trainable variables)</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        ground_truth : bool</span>
-<span class="sd">            whether samples are drawn from a true prior (&#39;oracle&#39;)</span>
-<span class="sd">        global_dict : dict</span>
-<span class="sd">            dictionary containing all user and default input settings.</span>
+<span class="sd">            True if expert data are simulated from a given ground truth (oracle)</span>
+<span class="sd">        init_matrix_slice : tf.Tensor or None</span>
+<span class="sd">            samples drawn from the initialization distribution to initialize</span>
+<span class="sd">            the hyperparameter of the parametric prior distributions</span>
+<span class="sd">            Only required for method=&quot;parametric_prior&quot; otherwise None.</span>
+<span class="sd">        trainer : callable</span>
+<span class="sd">            specification of training settings and meta-information for</span>
+<span class="sd">            workflow using :func:`trainer`</span>
+<span class="sd">        parameters : list</span>
+<span class="sd">            list of model parameters specified with :func:`parameter`.</span>
+<span class="sd">        network : callable or None</span>
+<span class="sd">            specification of neural network using a method implemented in</span>
+<span class="sd">            :mod:`elicit.networks`.</span>
+<span class="sd">            Only required for ``deep_prior`` method. For ``parametric_prior``</span>
+<span class="sd">            use ``None``. Default value is ``None``.</span>
+<span class="sd">        expert : callable</span>
+<span class="sd">            provide input data from expert or simulate data from oracle with</span>
+<span class="sd">            either the ``data`` or ``simulator`` method of the</span>
+<span class="sd">            :mod:`elicit.elicit.Expert` module.</span>
+<span class="sd">        seed : int</span>
+<span class="sd">            seed used for learning.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">ground_truth</span> <span class="o">=</span> <span class="n">ground_truth</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_matrix_slice</span> <span class="o">=</span> <span class="n">init_matrix_slice</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="o">=</span><span class="n">trainer</span>
@@ -366,22 +385,22 @@ document.write(`
 
 <div class="viewcode-block" id="Priors.__call__">
 <a class="viewcode-back" href="../../api/elicit.simulations.html#elicit.simulations.Priors.__call__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>  <span class="c1"># shape=[B,num_samples,num_params]</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Samples from the initialized prior distribution(s).</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        prior_samples : dict</span>
+<span class="sd">        prior_samples : tf.Tensor, shape: [B,num_samples,num_params]</span>
 <span class="sd">            Samples from prior distribution(s).</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">sample_from_priors</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">init_priors</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ground_truth</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;num_samples&quot;</span><span class="p">],</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;B&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">],</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">expert</span>
             <span class="p">)</span>
+
         <span class="k">return</span> <span class="n">prior_samples</span></div>
 </div>
 
@@ -389,19 +408,37 @@ document.write(`
 
 <div class="viewcode-block" id="intialize_priors">
 <a class="viewcode-back" href="../../api/elicit.simulations.html#elicit.simulations.intialize_priors">[docs]</a>
-<span class="k">def</span> <span class="nf">intialize_priors</span><span class="p">(</span><span class="n">init_matrix_slice</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">network</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">intialize_priors</span><span class="p">(</span><span class="n">init_matrix_slice</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">]</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span>
+                     <span class="n">network</span><span class="p">:</span> <span class="nb">dict</span>
+                     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Initialize prior distributions.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    global_dict : dict</span>
-<span class="sd">        dictionary including all user-and default input settings.</span>
+<span class="sd">    init_matrix_slice : tf.Tensor or None</span>
+<span class="sd">        samples drawn from the initialization distribution to initialize</span>
+<span class="sd">        the hyperparameter of the parametric prior distributions</span>
+<span class="sd">        Only for method=&quot;parametric_prior&quot;, otherwise None.</span>
+<span class="sd">    method : str</span>
+<span class="sd">        parametric_prior or deep_prior method as specified in</span>
+<span class="sd">        :func:`elicit.elicit.trainer`</span>
+<span class="sd">    seed : int</span>
+<span class="sd">        seed of current workflow run as specified in</span>
+<span class="sd">        :func:`elicit.elicit.trainer`</span>
+<span class="sd">    parameters : list[dict]</span>
+<span class="sd">        list of model parameter specifications using :func:`parameter`.</span>
+<span class="sd">    network : dict</span>
+<span class="sd">        specification of neural network using a method implemented in</span>
+<span class="sd">        :mod:`elicit.networks`.</span>
+<span class="sd">        Only required for ``deep_prior`` method. For ``parametric_prior``</span>
+<span class="sd">        use ``None``. Default value is ``None``.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    init_prior : dict</span>
-<span class="sd">        returns initialized prior distributions ready for sampling.</span>
+<span class="sd">    init_prior : dict[str, tf.Tensor]</span>
+<span class="sd">        returns initialized prior distributions ready for prior sampling.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># set seed</span>
@@ -414,23 +451,26 @@ document.write(`
         <span class="n">param_names</span><span class="o">=</span><span class="nb">list</span><span class="p">()</span>
         <span class="n">hp_names</span><span class="o">=</span><span class="nb">list</span><span class="p">()</span>
         <span class="n">initialized_hyperparam</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parameters</span><span class="p">)):</span>
-            <span class="n">hyp_dict</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;param</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;hyperparams&quot;</span><span class="p">]</span>
-            <span class="n">param_names</span> <span class="o">+=</span> <span class="p">[</span><span class="n">parameters</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;hyperparams&quot;</span><span class="p">])</span>
-            <span class="n">hp_keys</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;hyperparams&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;hyperparams&quot;</span><span class="p">])):</span>
-                <span class="n">current_key</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;hyperparams&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="n">j</span><span class="p">]</span>
-                <span class="n">hp_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;hyperparams&quot;</span><span class="p">][</span><span class="n">current_key</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
+            <span class="n">hyperparameter</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;hyperparams&quot;</span><span class="p">]</span>
+            <span class="n">num_hyperpar</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">hyperparameter</span><span class="p">)</span>
+
+            <span class="n">hyp_dict</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;param</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hyperparameter</span>
+            <span class="n">param_names</span> <span class="o">+=</span> <span class="p">[</span><span class="n">parameters</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span><span class="o">*</span><span class="n">num_hyperpar</span>
+            <span class="n">hp_keys</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="n">hyperparameter</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_hyperpar</span><span class="p">):</span>
+                <span class="n">current_key</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">hyperparameter</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="n">j</span><span class="p">]</span>
+                <span class="n">hp_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hyperparameter</span><span class="p">[</span><span class="n">current_key</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
 
         <span class="n">checked_params</span><span class="o">=</span><span class="nb">list</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">hp_n</span><span class="p">,</span> <span class="n">hp_k</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">param_names</span><span class="p">)</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span>
                                  <span class="n">hp_names</span><span class="p">,</span> <span class="n">hp_keys</span><span class="p">)):</span>
 
             <span class="n">hp_dict</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;hyperparams&quot;</span><span class="p">][</span><span class="n">hp_k</span><span class="p">]</span>
-            
+
             <span class="k">if</span> <span class="n">hp_dict</span><span class="p">[</span><span class="s2">&quot;shared&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">hp_dict</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">checked_params</span><span class="p">:</span>
                 <span class="k">pass</span>
-                <span class="c1">#initialized_hyperparam[f&quot;{hp_k}&quot;] = initialized_hyperparam[f&quot;{hp_k}&quot;]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># get initial value</span>
                 <span class="n">initial_value</span> <span class="o">=</span> <span class="n">init_matrix_slice</span><span class="p">[</span><span class="n">hp_n</span><span class="p">]</span>
@@ -443,7 +483,7 @@ document.write(`
 
                 <span class="c1"># save initialized priors</span>
                 <span class="n">init_prior</span> <span class="o">=</span> <span class="n">initialized_hyperparam</span>
-                
+
             <span class="k">if</span> <span class="n">hp_dict</span><span class="p">[</span><span class="s2">&quot;shared&quot;</span><span class="p">]:</span>
                 <span class="n">checked_params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hp_n</span><span class="p">)</span>
 
@@ -463,30 +503,49 @@ document.write(`
 
 <div class="viewcode-block" id="sample_from_priors">
 <a class="viewcode-back" href="../../api/elicit.simulations.html#elicit.simulations.sample_from_priors">[docs]</a>
-<span class="k">def</span> <span class="nf">sample_from_priors</span><span class="p">(</span><span class="n">initialized_priors</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span>
-                       <span class="n">method</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">network</span><span class="p">,</span> <span class="n">expert</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">sample_from_priors</span><span class="p">(</span><span class="n">initialized_priors</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">],</span>
+                       <span class="n">ground_truth</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">B</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                       <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">network</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+                       <span class="n">expert</span><span class="p">:</span> <span class="nb">dict</span>
+                       <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>  <span class="c1"># shape=[B,num_samples,num_params]</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Samples from initialized prior distributions.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    initialized_priors : dict</span>
-<span class="sd">        initialized prior distributions ready for sampling.</span>
+<span class="sd">    initialized_priors : dict[str, tf.Variable]</span>
+<span class="sd">        initialized prior distributions ready for prior sampling.</span>
 <span class="sd">    ground_truth : bool</span>
-<span class="sd">        whether simulations are based on ground truth</span>
-<span class="sd">        (then sampling is performed from true distribution).</span>
-<span class="sd">    global_dict : dict</span>
-<span class="sd">        dictionary including all user-input settings..</span>
+<span class="sd">        True if expert data is simulated from ground truth.</span>
+<span class="sd">    num_samples : int, optional</span>
+<span class="sd">        number of samples from the prior(s). The default is 200.</span>
+<span class="sd">    B : int, optional</span>
+<span class="sd">        batch size. The default is 128.</span>
+<span class="sd">    seed : int</span>
+<span class="sd">        seed used for learning.</span>
+<span class="sd">    method : str</span>
+<span class="sd">        parametric_prior or deep_prior method as specified in</span>
+<span class="sd">        :func:`elicit.elicit.trainer`</span>
+<span class="sd">    parameters : list</span>
+<span class="sd">        list of model parameters specified with :func:`parameter`.</span>
+<span class="sd">    network : dict</span>
+<span class="sd">        specification of neural network using a method implemented in</span>
+<span class="sd">        :mod:`elicit.networks`.</span>
+<span class="sd">        Only required for ``deep_prior`` method. For ``parametric_prior``</span>
+<span class="sd">        use ``None``. Default value is ``None``.</span>
+<span class="sd">    expert : callable</span>
+<span class="sd">        provide input data from expert or simulate data from oracle with</span>
+<span class="sd">        either the ``data`` or ``simulator`` method of the</span>
+<span class="sd">        :mod:`elicit.elicit.Expert` module.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    prior_samples : dict</span>
+<span class="sd">    prior_samples : tf.Tensor, shape: [B, num_samples, num_params]</span>
 <span class="sd">        Samples from prior distributions.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># set seed</span>
     <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
-
     <span class="k">if</span> <span class="n">ground_truth</span><span class="p">:</span>
         <span class="c1"># number of samples for ground truth</span>
         <span class="n">rep_true</span> <span class="o">=</span> <span class="n">expert</span><span class="p">[</span><span class="s2">&quot;num_samples&quot;</span><span class="p">]</span>
@@ -614,24 +673,27 @@ document.write(`
 
 <div class="viewcode-block" id="simulate_from_generator">
 <a class="viewcode-back" href="../../api/elicit.simulations.html#elicit.simulations.simulate_from_generator">[docs]</a>
-<span class="k">def</span> <span class="nf">simulate_from_generator</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">simulate_from_generator</span><span class="p">(</span>
+        <span class="n">prior_samples</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>  <span class="c1"># shape=[B,num_samples,num_params]</span>
+        <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Simulates data from the specified generative model.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    prior_samples : dict</span>
+<span class="sd">    prior_samples : tf.Tensor, shape: [B, num_samples, num_params]</span>
 <span class="sd">        samples from prior distributions.</span>
-<span class="sd">    global_dict : dict</span>
-<span class="sd">        dictionary including all user-input settings.</span>
+<span class="sd">    seed : int</span>
+<span class="sd">        seed used for learning.</span>
+<span class="sd">    model : callable</span>
+<span class="sd">        specification of generative model using :func:`model`.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    model_simulations : dict</span>
+<span class="sd">    model_simulations : dict[str, tf.Tensor]</span>
 <span class="sd">        simulated data from generative model.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="c1"># set seed</span>
     <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
     <span class="c1"># get model and initialize generative model</span>

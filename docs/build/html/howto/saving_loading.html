@@ -489,7 +489,7 @@ document.write(`
 <span class="n">targets</span><span class="o">=</span><span class="p">[</span>
         <span class="n">el</span><span class="o">.</span><span class="n">target</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;y_X</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="n">query</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">queries</span><span class="o">.</span><span class="n">quantiles</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">95</span><span class="p">)),</span>
+            <span class="n">query</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">queries</span><span class="o">.</span><span class="n">quantiles</span><span class="p">((</span><span class="mf">.05</span><span class="p">,</span> <span class="mf">.25</span><span class="p">,</span> <span class="mf">.50</span><span class="p">,</span> <span class="mf">.75</span><span class="p">,</span> <span class="mf">.95</span><span class="p">)),</span>
             <span class="n">loss</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">MMD2</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;energy&quot;</span><span class="p">),</span>
             <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span>
         <span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
@@ -565,7 +565,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>saved in: ./res/parametric_prior/m1_0
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>saved in: ./results/parametric_prior/m1_0.pkl
 </pre></div>
 </div>
 </div>
@@ -578,7 +578,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>saved in: ./res/m1
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>saved in: ./res/m1.pkl
 </pre></div>
 </div>
 </div>
@@ -609,14 +609,14 @@ document.write(`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initialization
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 8/8 [00:00&lt;00:00, 13.11it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 8/8 [00:01&lt;00:00,  7.69it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 
 Training
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 4/4 [00:00&lt;00:00,  6.25it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 4/4 [00:01&lt;00:00,  3.47it/s]
 </pre></div>
 </div>
 </div>
@@ -668,20 +668,19 @@ This can be done as follows:</p>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">copy</span>
 
-<span class="c1"># copy eliobj_m1</span>
+<span class="c1"># copy eliobj_m1 (to keep the new and orig. object in environment)</span>
 <span class="n">eliobj_m2</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">eliobj_m1</span><span class="p">)</span>
 
 <span class="c1"># update eliobj_m1 by changing the saving settings</span>
 <span class="n">trainer_new</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">trainer</span><span class="p">(</span>
         <span class="n">method</span><span class="o">=</span><span class="s2">&quot;parametric_prior&quot;</span><span class="p">,</span>
         <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-        <span class="n">epochs</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-        <span class="n">save_history</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">save_history</span><span class="p">(</span><span class="n">hyperparameter_gradient</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">loss_component</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">epochs</span><span class="o">=</span><span class="mi">4</span>
     <span class="p">)</span>
 <span class="n">eliobj_m2</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">trainer</span><span class="o">=</span><span class="n">trainer_new</span><span class="p">)</span>
 
 <span class="c1"># fit updated eliobj</span>
-<span class="n">eliobj_m2</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="n">eliobj_m2</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">save_history</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">save_history</span><span class="p">(</span><span class="n">hyperparameter_gradient</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">loss_component</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
 
 <span class="c1"># inspect saved results</span>
 <span class="c1"># note that loss_component and hyperparameter_gradient are not saved</span>
@@ -690,19 +689,22 @@ This can be done as follows:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO: el.plots.loss() requires information about &#39;loss&#39; and &#39;loss_component&#39;. If you don&#39;t save this information el.plot.loss() can&#39;t be used.
-INFO: Results have been reset.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bockting\Documents\GitHub\prior_elicitation\elicit\utils.py:569: UserWarning: el.plots.loss() requires information about &#39;loss&#39; and &#39;loss_component&#39;. If you don&#39;t save this information el.plot.loss() can&#39;t be used.
+  warnings.warn(
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO: Results have been reset.
 Initialization
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 8/8 [00:00&lt;00:00, 12.30it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 8/8 [00:01&lt;00:00,  7.44it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 
 Training
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 4/4 [00:00&lt;00:00,  6.85it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 4/4 [00:00&lt;00:00,  4.18it/s]
 </pre></div>
 </div>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dict_keys([&#39;loss&#39;, &#39;time&#39;, &#39;hyperparameter&#39;])
@@ -723,7 +725,7 @@ Training
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>saved in: ./res/parametric_prior/m2_0
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>saved in: ./results/parametric_prior/m2_0.pkl
 </pre></div>
 </div>
 </div>
@@ -785,14 +787,14 @@ Training
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initialization
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 8/8 [00:00&lt;00:00, 13.81it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 8/8 [00:01&lt;00:00,  7.43it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 
 Training
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 4/4 [00:00&lt;00:00,  6.57it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 4/4 [00:01&lt;00:00,  2.90it/s]
 </pre></div>
 </div>
 </div>
@@ -829,7 +831,7 @@ Training
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>saved in: ./res/parametric_prior/m2_0
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>saved in: ./results/parametric_prior/m2_0.pkl
 </pre></div>
 </div>
 </div>
