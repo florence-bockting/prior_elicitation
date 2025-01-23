@@ -323,11 +323,11 @@ def one_forward_simulation(prior_model: el.simulations.Priors,
         initialized prior distributions which can be used for sampling.
     trainer : callable
         specification of training settings and meta-information for
-        workflow using :func:`trainer`
+        workflow using :func:`elicit.elicit.trainer`
     model : callable
-        specification of generative model using :func:`model`.
+        specification of generative model using :func:`elicit.elicit.model`.
     targets : list
-        list of target quantities specified with :func:`target`.
+        list of target quantities specified with :func:`elicit.elicit.target`.
 
     Returns
     -------
@@ -379,15 +379,15 @@ def get_expert_data(trainer: dict, model: dict, targets: list[dict],
         specification of training settings and meta-information for
         workflow using :func:`trainer`
     model : callable
-        specification of generative model using :func:`model`.
+        specification of generative model using :func:`elicit.elicit.model`.
     targets : list
-        list of target quantities specified with :func:`target`.
+        list of target quantities specified with :func:`elicit.elicit.target`.
     expert : callable
         provide input data from expert or simulate data from oracle with
         either the ``data`` or ``simulator`` method of the
         :mod:`elicit.elicit.Expert` module.
     parameters : list
-        list of model parameters specified with :func:`parameter`.
+        list of model parameters specified with :func:`elicit.elicit.parameter`.
     network : callable or None
         specification of neural network using a method implemented in
         :mod:`elicit.networks`.
@@ -715,7 +715,7 @@ def get_expert_datformat(targets: list[dict]) -> dict[str, list]:
     Parameters
     ----------
     targets : list
-        list of target quantities specified with :func:`target`.
+        list of target quantities specified with :func:`elicit.elicit.target`.
 
     Returns
     -------

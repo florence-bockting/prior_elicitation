@@ -382,6 +382,13 @@ The default is <code class="docutils literal notranslate"><span class="pre">4</s
 </dd>
 </dl>
 </dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>KeyError</dt><dd><p>Can’t find ‘init_matrix’ in eliobj.results. Have you excluded it from
+saving?</p>
+</dd>
+</dl>
+</dd>
 </dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">initialization</span><span class="p">(</span><span class="n">eliobj</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
@@ -403,6 +410,17 @@ The default is <code class="docutils literal notranslate"><span class="pre">4</s
 </dd>
 <dt><strong>**kwargs</strong><span class="classifier">any, optional</span></dt><dd><p>additional keyword arguments that can be passed to specify
 <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html">plt.subplots()</a></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt>KeyError</dt><dd><p>Can’t find ‘loss_component’ in ‘eliobj.history’. Have you excluded
+‘loss_components’ from history savings?</p>
+<p>Can’t find ‘loss’ in ‘eliobj.history’. Have you excluded ‘loss’ from
+history savings?</p>
+<p>Can’t find ‘elicited_statistics’ in ‘eliobj.results’. Have you
+excluded ‘elicited_statistics’ from results savings?</p>
 </dd>
 </dl>
 </dd>
@@ -430,6 +448,13 @@ value. The default is <code class="docutils literal notranslate"><span class="pr
 </dd>
 <dt><strong>**kwargs</strong><span class="classifier">any, optional</span></dt><dd><p>additional keyword arguments that can be passed to specify
 <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html">plt.subplots()</a></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>KeyError</dt><dd><p>Can’t find ‘hyperparameter’ in ‘eliobj.history’. Have you excluded
+‘hyperparameter’ from history savings?</p>
 </dd>
 </dl>
 </dd>
@@ -466,6 +491,9 @@ The default value is <code class="docutils literal notranslate"><span class="pre
 <dt>ValueError</dt><dd><p>Currently only ‘positive’ can be used as constraint. Found unsupported
 constraint type.</p>
 </dd>
+<dt>KeyError</dt><dd><p>Can’t find ‘prior_samples’ in ‘eliobj.results’. Have you excluded
+‘prior_samples’ from results savings?</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -493,6 +521,15 @@ The default is <code class="docutils literal notranslate"><span class="pre">4</s
 </dd>
 </dl>
 </dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt>KeyError</dt><dd><p>Can’t find ‘expert_elicited_statistics’ in ‘eliobj.results’. Have you
+excluded ‘expert_elicited_statistics’ from results savings?</p>
+<p>Can’t find ‘elicited_statistics’ in ‘eliobj.results’. Have you
+excluded ‘elicited_statistics’ from results savings?</p>
+</dd>
+</dl>
+</dd>
 </dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">elicits</span><span class="p">(</span><span class="n">eliobj</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
@@ -515,6 +552,15 @@ sd of the prior marginal. The default is <code class="docutils literal notransla
 </dd>
 <dt><a href="#id5"><span class="problematic" id="id6">**</span></a>kwargs<span class="classifier">any, optional</span></dt><dd><p>additional keyword arguments that can be passed to specify
 <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html">plt.subplots()</a></p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>KeyError</dt><dd><p>Can’t find ‘hyperparameter’ in ‘eliobj.history’. Have you excluded 
+‘hyperparameter’ from history savings?</p>
+</dd>
+</dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>

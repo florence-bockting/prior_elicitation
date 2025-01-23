@@ -85,7 +85,7 @@ def computation_elicited_statistics(
     target_quantities : dict[str, tf.Tensor], shape: [B,num_samples,num_obs]
         simulated target quantities.
     targets : list[dict]
-        list of target quantities specified with :func:`target`.
+        list of target quantities specified with :func:`elicit.elicit.target`.
 
     Returns
     -------
@@ -157,7 +157,7 @@ def computation_target_quantities(model_simulations: dict[str,tf.Tensor],
     model_simulations : dict[str, tf.Tensor]
         simulations from generative model.
     targets : list[dict]
-        list of target quantities specified with :func:`target`.
+        list of target quantities specified with :func:`elicit.elicit.target`.
 
     Returns
     -------

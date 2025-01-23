@@ -336,7 +336,20 @@ document.write(`
 
 <span class="sd">    &gt;&gt;&gt; el.plots.initialization(eliobj, cols=4, figsize=(8,3))</span>
 
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    KeyError</span>
+<span class="sd">        Can&#39;t find &#39;init_matrix&#39; in eliobj.results. Have you excluded it from</span>
+<span class="sd">        saving?</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
+    <span class="c1"># check that all information can be assessed</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">eliobj</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;init_matrix&quot;</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Can&#39;t find &#39;init_matrix&#39; in eliobj.results.&quot;</span>
+              <span class="o">+</span><span class="s2">&quot; Have you excluded it from saving?&quot;</span><span class="p">)</span>
+
     <span class="c1"># get number of hyperparameter</span>
     <span class="n">n_par</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">eliobj</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;init_matrix&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
     <span class="c1"># make sure that user uses only as many columns as hyperparameter</span>
@@ -435,13 +448,33 @@ document.write(`
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; el.plots.loss(eliobj, figsize=(8,3))</span>
 
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    KeyError</span>
+<span class="sd">        Can&#39;t find &#39;loss_component&#39; in &#39;eliobj.history&#39;. Have you excluded</span>
+<span class="sd">        &#39;loss_components&#39; from history savings?</span>
+
+<span class="sd">        Can&#39;t find &#39;loss&#39; in &#39;eliobj.history&#39;. Have you excluded &#39;loss&#39; from</span>
+<span class="sd">        history savings?</span>
+
+<span class="sd">        Can&#39;t find &#39;elicited_statistics&#39; in &#39;eliobj.results&#39;. Have you</span>
+<span class="sd">        excluded &#39;elicited_statistics&#39; from results savings?</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
+    <span class="c1"># check that all information can be assessed</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">eliobj</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s2">&quot;loss_component&quot;</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span>
             <span class="s2">&quot;No information about &#39;loss_component&#39; found in &#39;eliobj.history&#39;.&quot;</span>
             <span class="o">+</span> <span class="s2">&quot;Have you excluded &#39;loss_components&#39; from history savings?&quot;</span>
+        <span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">eliobj</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s2">&quot;loss&quot;</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">&quot;No information about &#39;loss&#39; found in &#39;eliobj.history&#39;.&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;Have you excluded &#39;loss&#39; from history savings?&quot;</span>
         <span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">eliobj</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;elicited_statistics&quot;</span><span class="p">]</span>
@@ -500,7 +533,23 @@ document.write(`
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; el.plots.hyperparameter(eliobj, figuresize=(8,3))</span>
 
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    KeyError</span>
+<span class="sd">        Can&#39;t find &#39;hyperparameter&#39; in &#39;eliobj.history&#39;. Have you excluded</span>
+<span class="sd">        &#39;hyperparameter&#39; from history savings?</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
+    <span class="c1"># check that all information can be assessed</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">eliobj</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s2">&quot;hyperparameter&quot;</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">&quot;No information about &#39;hyperparameter&#39; found in &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;&#39;eliobj.history&#39;. Have you excluded &#39;hyperparameter&#39; from&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;history savings?&quot;</span>
+        <span class="p">)</span>
+
     <span class="c1"># get number of hyperparameter</span>
     <span class="n">n_par</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">eliobj</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s2">&quot;hyperparameter&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
     <span class="c1"># make sure that user uses only as many columns as hyperparameter</span>
@@ -594,7 +643,20 @@ document.write(`
 <span class="sd">        Currently only &#39;positive&#39; can be used as constraint. Found unsupported</span>
 <span class="sd">        constraint type.</span>
 
+<span class="sd">    KeyError</span>
+<span class="sd">        Can&#39;t find &#39;prior_samples&#39; in &#39;eliobj.results&#39;. Have you excluded</span>
+<span class="sd">        &#39;prior_samples&#39; from results savings?</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
+    <span class="c1"># check that all information can be assessed</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">eliobj</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;prior_samples&quot;</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">&quot;No information about &#39;prior_samples&#39; found in &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;&#39;eliobj.results&#39;. Have you excluded &#39;prior_samples&#39; from&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;results savings?&quot;</span>
+        <span class="p">)</span>
     <span class="c1"># check whether constraint specifications are valid</span>
     <span class="k">if</span> <span class="n">constraints</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">constraints</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
@@ -677,7 +739,34 @@ document.write(`
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; el.plots.elicits(eliobj, cols=4, figsize=(7,3))</span>
 
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    KeyError</span>
+<span class="sd">        Can&#39;t find &#39;expert_elicited_statistics&#39; in &#39;eliobj.results&#39;. Have you</span>
+<span class="sd">        excluded &#39;expert_elicited_statistics&#39; from results savings?</span>
+
+<span class="sd">        Can&#39;t find &#39;elicited_statistics&#39; in &#39;eliobj.results&#39;. Have you</span>
+<span class="sd">        excluded &#39;elicited_statistics&#39; from results savings?</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
+    <span class="c1"># check that all information can be assessed</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">eliobj</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;expert_elicited_statistics&quot;</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">&quot;No information about &#39;expert_elicited_statistics&#39; found in &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;&#39;eliobj.results&#39;. Have you excluded &#39;expert_elicited_statistics&#39;&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; from results savings?&quot;</span>
+        <span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">eliobj</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;elicited_statistics&quot;</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">&quot;No information about &#39;elicited_statistics&#39; found in &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;&#39;eliobj.results&#39;. Have you excluded &#39;elicited_statistics&#39;&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; from results savings?&quot;</span>
+        <span class="p">)</span>
+
     <span class="k">def</span> <span class="nf">quantiles</span><span class="p">(</span>
         <span class="n">axs</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">Axes</span><span class="p">,</span> <span class="n">expert</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">training</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">Axes</span><span class="p">]:</span>
@@ -805,7 +894,22 @@ document.write(`
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; el.plots.marginals(eliobj, figuresize=(8,3))</span>
 
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    KeyError</span>
+<span class="sd">        Can&#39;t find &#39;hyperparameter&#39; in &#39;eliobj.history&#39;. Have you excluded </span>
+<span class="sd">        &#39;hyperparameter&#39; from history savings?</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
+    <span class="c1"># check that all information can be assessed</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">eliobj</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s2">&quot;hyperparameter&quot;</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">&quot;No information about &#39;hyperparameter&#39; found in &#39;eliobj.history&#39;&quot;</span>
+            <span class="o">+</span><span class="s2">&quot; Have you excluded &#39;hyperparameter&#39; from history savings?&quot;</span>
+        <span class="p">)</span>
+
     <span class="k">def</span> <span class="nf">convergence_plot</span><span class="p">(</span>
         <span class="n">subfigs</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Figure</span><span class="o">.</span><span class="n">subfigures</span><span class="p">,</span>
         <span class="n">elicits</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>

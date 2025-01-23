@@ -1062,10 +1062,10 @@ class Elicit:
 
         Parameters
         ----------
-        name.: str or None
-            file name used to store the eliobj, whereby saving is done
+        name: str or None
+            file name used to store the eliobj. Saving is done
             according to the following rule: ``./{method}/{name}_{seed}.pkl``
-            whereby 'method' and 'seed' are arguments of
+            with 'method' and 'seed' being arguments of
             :func:`elicit.elicit.trainer`.
         file : str or None
             user-specific path for saving the eliobj. If file is specified

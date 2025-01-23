@@ -43,9 +43,10 @@ class Priors(tf.Module):
             Only required for method="parametric_prior" otherwise None.
         trainer : callable
             specification of training settings and meta-information for
-            workflow using :func:`trainer`
+            workflow using :func:`elicit.elicit.trainer`
         parameters : list
-            list of model parameters specified with :func:`parameter`.
+            list of model parameters specified with
+            :func:`elicit.elicit.parameter`.
         network : callable or None
             specification of neural network using a method implemented in
             :mod:`elicit.networks`.
@@ -115,7 +116,8 @@ def intialize_priors(init_matrix_slice: dict[str, tf.Variable] or None,
         seed of current workflow run as specified in
         :func:`elicit.elicit.trainer`
     parameters : list[dict]
-        list of model parameter specifications using :func:`parameter`.
+        list of model parameter specifications using
+        :func:`elicit.elicit.parameter`.
     network : dict
         specification of neural network using a method implemented in
         :mod:`elicit.networks`.
@@ -211,7 +213,8 @@ def sample_from_priors(initialized_priors: dict[str, tf.Variable],
         parametric_prior or deep_prior method as specified in
         :func:`elicit.elicit.trainer`
     parameters : list
-        list of model parameters specified with :func:`parameter`.
+        list of model parameters specified with
+        :func:`elicit.elicit.parameter`.
     network : dict
         specification of neural network using a method implemented in
         :mod:`elicit.networks`.
@@ -362,9 +365,9 @@ def simulate_from_generator(
     prior_samples : tf.Tensor, shape: [B, num_samples, num_params]
         samples from prior distributions.
     seed : int
-        seed used for learning.
+        seed used for learning. Specification in :func:`elicit.elicit.trainer`.
     model : callable
-        specification of generative model using :func:`model`.
+        specification of generative model using :func:`elicit.elicit.model`.
 
     Returns
     -------

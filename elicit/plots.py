@@ -32,7 +32,20 @@ def initialization(eliobj, cols: int = 4, **kwargs) -> None:
 
     >>> el.plots.initialization(eliobj, cols=4, figsize=(8,3))
 
+    Raises
+    ------
+    KeyError
+        Can't find 'init_matrix' in eliobj.results. Have you excluded it from
+        saving?
+
     """  # noqa: E501
+    # check that all information can be assessed
+    try:
+        eliobj.results["init_matrix"]
+    except KeyError:
+        print("Can't find 'init_matrix' in eliobj.results."
+              +" Have you excluded it from saving?")
+
     # get number of hyperparameter
     n_par = len(eliobj.results["init_matrix"].keys())
     # make sure that user uses only as many columns as hyperparameter
@@ -128,13 +141,33 @@ def loss(eliobj, **kwargs) -> None:
     --------
     >>> el.plots.loss(eliobj, figsize=(8,3))
 
+    Raises
+    ------
+    KeyError
+        Can't find 'loss_component' in 'eliobj.history'. Have you excluded
+        'loss_components' from history savings?
+
+        Can't find 'loss' in 'eliobj.history'. Have you excluded 'loss' from
+        history savings?
+
+        Can't find 'elicited_statistics' in 'eliobj.results'. Have you
+        excluded 'elicited_statistics' from results savings?
+
     """  # noqa: E501
+    # check that all information can be assessed
     try:
         eliobj.history["loss_component"]
     except KeyError:
         print(
             "No information about 'loss_component' found in 'eliobj.history'."
             + "Have you excluded 'loss_components' from history savings?"
+        )
+    try:
+        eliobj.history["loss"]
+    except KeyError:
+        print(
+            "No information about 'loss' found in 'eliobj.history'."
+            + "Have you excluded 'loss' from history savings?"
         )
     try:
         eliobj.results["elicited_statistics"]
@@ -190,7 +223,23 @@ def hyperparameter(eliobj, cols: int = 4, span: int = 30, **kwargs) -> None:
     --------
     >>> el.plots.hyperparameter(eliobj, figuresize=(8,3))
 
+    Raises
+    ------
+    KeyError
+        Can't find 'hyperparameter' in 'eliobj.history'. Have you excluded
+        'hyperparameter' from history savings?
+
     """  # noqa: E501
+    # check that all information can be assessed
+    try:
+        eliobj.history["hyperparameter"]
+    except KeyError:
+        print(
+            "No information about 'hyperparameter' found in "
+            + "'eliobj.history'. Have you excluded 'hyperparameter' from"
+            + "history savings?"
+        )
+
     # get number of hyperparameter
     n_par = len(eliobj.history["hyperparameter"].keys())
     # make sure that user uses only as many columns as hyperparameter
@@ -281,7 +330,20 @@ def priors(eliobj, constraints: dict or None = None, **kwargs) -> None:
         Currently only 'positive' can be used as constraint. Found unsupported
         constraint type.
 
+    KeyError
+        Can't find 'prior_samples' in 'eliobj.results'. Have you excluded
+        'prior_samples' from results savings?
+
     """  # noqa: E501
+    # check that all information can be assessed
+    try:
+        eliobj.results["prior_samples"]
+    except KeyError:
+        print(
+            "No information about 'prior_samples' found in "
+            + "'eliobj.results'. Have you excluded 'prior_samples' from"
+            + "results savings?"
+        )
     # check whether constraint specifications are valid
     if constraints is not None:
         for v in list(constraints.values()):
@@ -361,7 +423,34 @@ def elicits(eliobj, cols: int = 4, **kwargs) -> None:
     --------
     >>> el.plots.elicits(eliobj, cols=4, figsize=(7,3))
 
+    Raises
+    ------
+    KeyError
+        Can't find 'expert_elicited_statistics' in 'eliobj.results'. Have you
+        excluded 'expert_elicited_statistics' from results savings?
+
+        Can't find 'elicited_statistics' in 'eliobj.results'. Have you
+        excluded 'elicited_statistics' from results savings?
+
     """  # noqa: E501
+    # check that all information can be assessed
+    try:
+        eliobj.results["expert_elicited_statistics"]
+    except KeyError:
+        print(
+            "No information about 'expert_elicited_statistics' found in "
+            + "'eliobj.results'. Have you excluded 'expert_elicited_statistics'"
+            + " from results savings?"
+        )
+    try:
+        eliobj.results["elicited_statistics"]
+    except KeyError:
+        print(
+            "No information about 'elicited_statistics' found in "
+            + "'eliobj.results'. Have you excluded 'elicited_statistics'"
+            + " from results savings?"
+        )
+
     def quantiles(
         axs: plt.axes.Axes, expert: tf.Tensor, training: tf.Tensor
     ) -> Tuple[plt.axes.Axes]:
@@ -478,7 +567,7 @@ def marginals(eliobj, cols: int = 4, span: int = 30, **kwargs) -> None:
     span : int, optional
         number of last epochs used to get a final averaged value for mean and
         sd of the prior marginal. The default is ``30``.
-    **kwargs : any, optional
+    kwargs : any, optional
         additional keyword arguments that can be passed to specify
         `plt.subplots() <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html>`_
 
@@ -486,7 +575,22 @@ def marginals(eliobj, cols: int = 4, span: int = 30, **kwargs) -> None:
     --------
     >>> el.plots.marginals(eliobj, figuresize=(8,3))
 
+    Raises
+    ------
+    KeyError
+        Can't find 'hyperparameter' in 'eliobj.history'. Have you excluded 
+        'hyperparameter' from history savings?
+
     """  # noqa: E501
+    # check that all information can be assessed
+    try:
+        eliobj.history["hyperparameter"]
+    except KeyError:
+        print(
+            "No information about 'hyperparameter' found in 'eliobj.history'"
+            +" Have you excluded 'hyperparameter' from history savings?"
+        )
+
     def convergence_plot(
         subfigs: plt.Figure.subfigures,
         elicits: tf.Tensor,
