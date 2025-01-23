@@ -376,13 +376,13 @@ document.write(`
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
 <span class="sd">    ValueError</span>
-<span class="sd">        &#39;lower&#39;, &#39;upper&#39; take only values that are float or &quot;-inf&quot;/&quot;inf&quot;.</span>
+<span class="sd">        ``lower``, ``upper`` take only values that are float or &quot;-inf&quot;/&quot;inf&quot;.</span>
 
-<span class="sd">        &#39;lower&#39; value should not be higher than &#39;upper&#39; value.</span>
+<span class="sd">        ``lower`` value should not be higher than ``upper`` value.</span>
 
-<span class="sd">        &#39;vtype&#39; value can only be either &#39;real&#39; or &#39;array&#39;.</span>
+<span class="sd">        ``vtype`` value can only be either &#39;real&#39; or &#39;array&#39;.</span>
 
-<span class="sd">        &#39;dim&#39; value can&#39;t be &#39;1&#39; if &#39;vtype=&quot;array&quot;&#39;</span>
+<span class="sd">        ``dim`` value can&#39;t be &#39;1&#39; if &#39;vtype=&quot;array&quot;&#39;</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -495,9 +495,9 @@ document.write(`
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
 <span class="sd">    ValueError</span>
-<span class="sd">        &#39;family&#39; has to be a tfp.distributions object.</span>
+<span class="sd">        ``family`` has to be a tfp.distributions object.</span>
 
-<span class="sd">        &#39;hyperparams&#39; value is a dict with keys corresponding to arguments of</span>
+<span class="sd">        ``hyperparams`` value is a dict with keys corresponding to arguments of</span>
 <span class="sd">        tfp.distributions object in &#39;family&#39;. Raises error if key does not</span>
 <span class="sd">        correspond to any argument of distribution.</span>
 
@@ -557,11 +557,11 @@ document.write(`
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
 <span class="sd">    ValueError</span>
-<span class="sd">        generative model requires the input argument &#39;prior_samples&#39;, but</span>
-<span class="sd">        argument has not been found in &#39;obj&#39; value</span>
+<span class="sd">        generative model in ``obj`` requires the input argument</span>
+<span class="sd">        &#39;prior_samples&#39;, but argument has not been found.</span>
 
-<span class="sd">        optional argument(s) of the generative model specified in &#39;obj&#39; are not</span>
-<span class="sd">        specified</span>
+<span class="sd">        optional argument(s) of the generative model specified in ``obj`` are</span>
+<span class="sd">        not specified</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -645,14 +645,15 @@ document.write(`
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
 <span class="sd">        ValueError</span>
-<span class="sd">            quantiles have to be specified as probability ranging between 0-1</span>
+<span class="sd">            ``quantiles`` have to be specified as probability ranging between</span>
+<span class="sd">            0 and 1.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># compute percentage from probability</span>
         <span class="n">quantiles_perc</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">q</span> <span class="o">*</span> <span class="mi">100</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">quantiles</span><span class="p">])</span>
 
         <span class="c1"># check that quantiles are provided as percentage</span>
-        <span class="k">for</span> <span class="n">quantile</span> <span class="ow">in</span> <span class="n">quantiles_perc</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">quantile</span> <span class="ow">in</span> <span class="n">quantiles</span><span class="p">:</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">quantile</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">quantile</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="s2">&quot;[section: targets] Quantiles have to be expressed as&quot;</span>
@@ -721,7 +722,8 @@ document.write(`
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
 <span class="sd">        NotImplementedError</span>
-<span class="sd">            The option for custom elicitation methods is not implemented yet.</span>
+<span class="sd">            This option for implementing a custom elicitation method is not</span>
+<span class="sd">            implemented yet.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
@@ -789,7 +791,8 @@ document.write(`
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
 <span class="sd">    NotImplementedError</span>
-<span class="sd">        The option for custom target quantity is not implemented yet.</span>
+<span class="sd">        ``target_method`` for implementing a custom target quantity is not</span>
+<span class="sd">        implemented yet.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -900,7 +903,7 @@ document.write(`
 <span class="sd">        -------</span>
 <span class="sd">        expert_data : dict</span>
 <span class="sd">            Settings of oracle for simulating from ground truth. True elicited</span>
-<span class="sd">            statistics are used as &#39;expert-data&#39; in loss function.</span>
+<span class="sd">            statistics are used as `expert-data` in loss function.</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
@@ -967,9 +970,9 @@ document.write(`
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
 <span class="sd">    TypeError</span>
-<span class="sd">        &#39;optimizer&#39; is not a tf.keras.optimizers object</span>
+<span class="sd">        ``optimizer`` is not a tf.keras.optimizers object</span>
 <span class="sd">    ValueError</span>
-<span class="sd">        &#39;optimizer&#39; could not be found in tf.keras.optimizers</span>
+<span class="sd">        ``optimizer`` could not be found in tf.keras.optimizers</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -1046,9 +1049,9 @@ document.write(`
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
 <span class="sd">    ValueError</span>
-<span class="sd">        &#39;method&#39; can only take the values &quot;random&quot;, &quot;sobol&quot;, or &quot;lhs&quot;</span>
+<span class="sd">        ``method`` can only take the values &quot;random&quot;, &quot;sobol&quot;, or &quot;lhs&quot;</span>
 
-<span class="sd">        &#39;loss_quantile&#39; must be a probability ranging between 0 and 1.</span>
+<span class="sd">        ``loss_quantile`` must be a probability ranging between 0 and 1.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -1139,7 +1142,7 @@ document.write(`
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
 <span class="sd">    ValueError</span>
-<span class="sd">        &#39;method&#39; can only take the value &quot;parametric_prior&quot; or &quot;deep_prior&quot;</span>
+<span class="sd">        ``method`` can only take the value &quot;parametric_prior&quot; or &quot;deep_prior&quot;</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -1226,21 +1229,21 @@ document.write(`
 <span class="sd">            specification of all settings to run the elicitation workflow and</span>
 <span class="sd">            fit the eliobj.</span>
 
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    AssertionError</span>
-<span class="sd">        &#39;expert&#39; data are not in the required format. Correct specification of</span>
-<span class="sd">        keys can be checked using el.utils.get_expert_datformat</span>
-
-<span class="sd">        Dimensionality of &#39;ground_truth&#39; for simulating expert data, must be</span>
-<span class="sd">        the same as the number of model parameters.</span>
-
-<span class="sd">    ValueError</span>
-<span class="sd">        if method=&quot;deep_prior&quot;, &#39;network&#39; can&#39;t be None and &#39;initialization&#39;</span>
-<span class="sd">        should be None.</span>
-
-<span class="sd">        if &#39;method=&quot;parametric_prior&quot;&#39;, &#39;network&#39; should be None and</span>
-<span class="sd">        &#39;initialization&#39; can&#39;t be None.</span>
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        AssertionError</span>
+<span class="sd">            ``expert`` data are not in the required format. Correct specification of</span>
+<span class="sd">            keys can be checked using el.utils.get_expert_datformat</span>
+<span class="sd">    </span>
+<span class="sd">            Dimensionality of ``ground_truth`` for simulating expert data, must be</span>
+<span class="sd">            the same as the number of model parameters.</span>
+<span class="sd">    </span>
+<span class="sd">        ValueError</span>
+<span class="sd">            if ``method=&quot;deep_prior&quot;``, ``network`` can&#39;t be None and ``initialization``</span>
+<span class="sd">            should be None.</span>
+<span class="sd">    </span>
+<span class="sd">            if ``method=&quot;parametric_prior&quot;``, ``network`` should be None and</span>
+<span class="sd">            ``initialization`` can&#39;t be None.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># check expert data</span>
@@ -1290,7 +1293,7 @@ document.write(`
                     <span class="s2">&quot;[section initializer] If method is &#39;parametric_prior&#39;,&quot;</span>
                     <span class="o">+</span> <span class="s2">&quot; the section &#39;initializer&#39; can&#39;t be None.&quot;</span>
                 <span class="p">)</span>
-            <span class="k">if</span> <span class="n">network</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">network</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="s2">&quot;[section network] If method is &#39;parametric prior&#39;&quot;</span>
                     <span class="o">+</span> <span class="s2">&quot; the &#39;network&#39; is not used and should be set to None.&quot;</span>
@@ -1441,7 +1444,7 @@ document.write(`
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
 <span class="sd">    AssertionError</span>
-<span class="sd">        &#39;name&#39; and &#39;file&#39; can&#39;t be specified simultaneously.</span>
+<span class="sd">        ``name`` and ``file`` can&#39;t be specified simultaneously.</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
@@ -1475,11 +1478,11 @@ document.write(`
 <span class="sd">            Key must correspond to one attribute of the class and value refers</span>
 <span class="sd">            to the updated value.</span>
 
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    ValueError</span>
-<span class="sd">        key of provided keyword argument is not an eliobj attribute. Please</span>
-<span class="sd">        check dir(eliobj).</span>
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            key of provided keyword argument is not an eliobj attribute. Please</span>
+<span class="sd">            check dir(eliobj).</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>

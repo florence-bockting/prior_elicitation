@@ -55,7 +55,7 @@ global_dict = pe.prior_elicitation(
         method="deep_prior",
         sim_id="toy_example",
         seed=2,
-        epochs=400
+        epochs=1
     ),
     normalizing_flow=pe.nf(
         inference_network=InvertibleNetwork,

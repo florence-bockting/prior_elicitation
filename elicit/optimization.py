@@ -7,19 +7,20 @@ import tensorflow_probability as tfp
 import elicit as el
 import time
 
+from typing import Tuple
 from tqdm import tqdm
 
 tfd = tfp.distributions
 
 
 def sgd_training(
-    expert_elicited_statistics,
-    prior_model_init,
-    trainer,
-    optimizer,
-    model,
-    targets
-):
+    expert_elicited_statistics: dict[str,tf.Tensor],
+    prior_model_init: callable,
+    trainer: dict,
+    optimizer: dict,
+    model: dict,
+    targets: dict
+) -> Tuple(dict, dict):
     """
     Wrapper that runs the optimization algorithms for E epochs.
 
@@ -40,6 +41,11 @@ def sgd_training(
         compute total loss.
     global_dict : dict
         dictionary including all user-input settings.
+
+    Raises
+    ------
+    ValueError
+        Training has been stopped because loss value is NAN.
 
     """
     # set seed
@@ -95,7 +101,9 @@ def sgd_training(
 
         # break for loop if loss is NAN and inform about cause
         if tf.math.is_nan(loss):
-            print("Loss is NAN. The training process has been stopped.")
+            raise ValueError(
+                "Loss is NAN. The training process has been stopped."
+                )
             break
 
         # %% Saving of results
@@ -103,9 +111,7 @@ def sgd_training(
             # save gradients per epoch
             gradients_ep.append(gradients)
 
-            # save single learned hyperparameter values for each prior and
-            # epoch
-
+            # save learned hyperparameter values for each prior and epoch
             # extract learned hyperparameter values
             hyperparams = prior_model.trainable_variables
             if epoch == 0:
@@ -128,14 +134,14 @@ def sgd_training(
                 res_dict[name].append(val)
 
         if trainer["method"] == "deep_prior":
-            # save mean and std for each sampled marginal prior
-            # for each epoch
+            # save mean and std for each sampled marginal prior for each epoch
 
             if epoch == 0:
                 res_dict = {"means": [], "stds": []}
 
             means = tf.reduce_mean(model_sim["prior_samples"], (0, 1))
-            sds = tf.reduce_mean(tf.math.reduce_std(model_sim["prior_samples"], 1), 0)
+            sds = tf.reduce_mean(tf.math.reduce_std(model_sim["prior_samples"],
+                                                    1), 0)
 
             for val, name in zip([means, sds], ["means", "stds"]):
                 res_dict[name].append(val)

@@ -365,12 +365,12 @@ document.write(`
 <span id="elicit-initialization-module"></span><h1>elicit.initialization module<a class="headerlink" href="#module-elicit.initialization" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.initialization.uniform_samples">
-<span class="sig-prename descclassname"><span class="pre">elicit.initialization.</span></span><span class="sig-name descname"><span class="pre">uniform_samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyppar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/initialization.html#uniform_samples"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.initialization.uniform_samples" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.initialization.</span></span><span class="sig-name descname"><span class="pre">uniform_samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyppar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/initialization.html#uniform_samples"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.initialization.uniform_samples" title="Link to this definition">#</a></dt>
 <dd><p>Sample from uniform distribution for each hyperparameter.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>seed</strong><span class="classifier">int</span></dt><dd><p>user-specified seed defined in <code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.trainer()</span></code>.</p>
+<dt><strong>seed</strong><span class="classifier">int</span></dt><dd><p>user-specified seed defined in <a class="reference internal" href="elicit.elicit.html#elicit.elicit.trainer" title="elicit.elicit.trainer"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.trainer()</span></code></a>.</p>
 </dd>
 <dt><strong>hyppar</strong><span class="classifier">list or None</span></dt><dd><p>list of hyperparameter names (strings) declaring the order for the
 list of <strong>means</strong> and <strong>radius</strong>.
@@ -392,7 +392,7 @@ ranges from (<strong>mean-radius</strong>) to (<strong>mean+radius</strong>).</p
 </dd>
 <dt><strong>parameters</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all information about the (hyper-)parameters.
 Can be retrieved as attribute from the initialized
-<code class="xref py py-mod docutils literal notranslate"><span class="pre">elicit.elicit.Elicit</span></code> obj (i.e., <code class="docutils literal notranslate"><span class="pre">eliobj.parameters</span></code>)</p>
+<a class="reference internal" href="elicit.elicit.html#elicit.elicit.Elicit" title="elicit.elicit.Elicit"><code class="xref py py-mod docutils literal notranslate"><span class="pre">elicit.elicit.Elicit</span></code></a> obj (i.e., <code class="docutils literal notranslate"><span class="pre">eliobj.parameters</span></code>)</p>
 </dd>
 </dl>
 </dd>
@@ -423,22 +423,22 @@ multiple hyperparameter initialization values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>expert_elicited_statistics</strong><span class="classifier">dict</span></dt><dd><p>user-specified expert data as provided by <code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.Expert()</span></code>.</p>
+<dt><strong>expert_elicited_statistics</strong><span class="classifier">dict</span></dt><dd><p>user-specified expert data as provided by <a class="reference internal" href="elicit.elicit.html#elicit.elicit.Expert" title="elicit.elicit.Expert"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.Expert()</span></code></a>.</p>
 </dd>
-<dt><strong>initializer</strong><span class="classifier">dict</span></dt><dd><p>user-input from <code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.initializer()</span></code>.</p>
+<dt><strong>initializer</strong><span class="classifier">dict</span></dt><dd><p>user-input from <a class="reference internal" href="elicit.elicit.html#elicit.elicit.initializer" title="elicit.elicit.initializer"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.initializer()</span></code></a>.</p>
 </dd>
-<dt><strong>parameters</strong><span class="classifier">dict</span></dt><dd><p>user-input from <code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.parameter()</span></code>.</p>
+<dt><strong>parameters</strong><span class="classifier">dict</span></dt><dd><p>user-input from <a class="reference internal" href="elicit.elicit.html#elicit.elicit.parameter" title="elicit.elicit.parameter"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.parameter()</span></code></a>.</p>
 </dd>
-<dt><strong>trainer</strong><span class="classifier">dict</span></dt><dd><p>user-input from <code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.trainer()</span></code>.</p>
+<dt><strong>trainer</strong><span class="classifier">dict</span></dt><dd><p>user-input from <a class="reference internal" href="elicit.elicit.html#elicit.elicit.trainer" title="elicit.elicit.trainer"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.trainer()</span></code></a>.</p>
 </dd>
-<dt><strong>model</strong><span class="classifier">dict</span></dt><dd><p>user-input from <code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.model()</span></code>.</p>
+<dt><strong>model</strong><span class="classifier">dict</span></dt><dd><p>user-input from <a class="reference internal" href="elicit.elicit.html#elicit.elicit.model" title="elicit.elicit.model"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.model()</span></code></a>.</p>
 </dd>
-<dt><strong>targets</strong><span class="classifier">dict</span></dt><dd><p>user-input from <code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.target()</span></code>.</p>
+<dt><strong>targets</strong><span class="classifier">dict</span></dt><dd><p>user-input from <a class="reference internal" href="elicit.elicit.html#elicit.elicit.target" title="elicit.elicit.target"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.target()</span></code></a>.</p>
 </dd>
 <dt><strong>network</strong><span class="classifier">dict</span></dt><dd><p>user-input from one of the methods implemented in the
 <a class="reference internal" href="elicit.networks.html#module-elicit.networks" title="elicit.networks"><code class="xref py py-mod docutils literal notranslate"><span class="pre">elicit.networks</span></code></a> module.</p>
 </dd>
-<dt><strong>expert</strong><span class="classifier">dict</span></dt><dd><p>user-input from <code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.Expert()</span></code>.</p>
+<dt><strong>expert</strong><span class="classifier">dict</span></dt><dd><p>user-input from <a class="reference internal" href="elicit.elicit.html#elicit.elicit.Expert" title="elicit.elicit.Expert"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.Expert()</span></code></a>.</p>
 </dd>
 </dl>
 </dd>
@@ -464,22 +464,22 @@ initialized prior model from <a class="reference internal" href="#elicit.initial
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>expert_elicited_statistics</strong><span class="classifier">dict</span></dt><dd><p>user-specified expert data as provided by <code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.Expert()</span></code>.</p>
+<dt><strong>expert_elicited_statistics</strong><span class="classifier">dict</span></dt><dd><p>user-specified expert data as provided by <a class="reference internal" href="elicit.elicit.html#elicit.elicit.Expert" title="elicit.elicit.Expert"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.Expert()</span></code></a>.</p>
 </dd>
-<dt><strong>initializer</strong><span class="classifier">dict</span></dt><dd><p>user-input from <code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.initializer()</span></code>.</p>
+<dt><strong>initializer</strong><span class="classifier">dict</span></dt><dd><p>user-input from <a class="reference internal" href="elicit.elicit.html#elicit.elicit.initializer" title="elicit.elicit.initializer"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.initializer()</span></code></a>.</p>
 </dd>
-<dt><strong>parameters</strong><span class="classifier">dict</span></dt><dd><p>user-input from <code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.parameter()</span></code>.</p>
+<dt><strong>parameters</strong><span class="classifier">dict</span></dt><dd><p>user-input from <a class="reference internal" href="elicit.elicit.html#elicit.elicit.parameter" title="elicit.elicit.parameter"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.parameter()</span></code></a>.</p>
 </dd>
-<dt><strong>trainer</strong><span class="classifier">dict</span></dt><dd><p>user-input from <code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.trainer()</span></code>.</p>
+<dt><strong>trainer</strong><span class="classifier">dict</span></dt><dd><p>user-input from <a class="reference internal" href="elicit.elicit.html#elicit.elicit.trainer" title="elicit.elicit.trainer"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.trainer()</span></code></a>.</p>
 </dd>
-<dt><strong>model</strong><span class="classifier">dict</span></dt><dd><p>user-input from <code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.model()</span></code>.</p>
+<dt><strong>model</strong><span class="classifier">dict</span></dt><dd><p>user-input from <a class="reference internal" href="elicit.elicit.html#elicit.elicit.model" title="elicit.elicit.model"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.model()</span></code></a>.</p>
 </dd>
-<dt><strong>targets</strong><span class="classifier">dict</span></dt><dd><p>user-input from <code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.target()</span></code>.</p>
+<dt><strong>targets</strong><span class="classifier">dict</span></dt><dd><p>user-input from <a class="reference internal" href="elicit.elicit.html#elicit.elicit.target" title="elicit.elicit.target"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.target()</span></code></a>.</p>
 </dd>
 <dt><strong>network</strong><span class="classifier">dict</span></dt><dd><p>user-input from one of the methods implemented in the
 <a class="reference internal" href="elicit.networks.html#module-elicit.networks" title="elicit.networks"><code class="xref py py-mod docutils literal notranslate"><span class="pre">elicit.networks</span></code></a> module.</p>
 </dd>
-<dt><strong>expert</strong><span class="classifier">dict</span></dt><dd><p>user-input from <code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.Expert()</span></code>.</p>
+<dt><strong>expert</strong><span class="classifier">dict</span></dt><dd><p>user-input from <a class="reference internal" href="elicit.elicit.html#elicit.elicit.Expert" title="elicit.elicit.Expert"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.Expert()</span></code></a>.</p>
 </dd>
 </dl>
 </dd>
@@ -501,14 +501,14 @@ being the drawn initial values per run.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.initialization.uniform">
-<span class="sig-prename descclassname"><span class="pre">elicit.initialization.</span></span><span class="sig-name descname"><span class="pre">uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyper</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/initialization.html#uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.initialization.uniform" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.initialization.</span></span><span class="sig-name descname"><span class="pre">uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyper</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/initialization.html#uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.initialization.uniform" title="Link to this definition">#</a></dt>
 <dd><p>Specification of uniform distribution used for drawing initial values for
 each hyperparameter. Initial values are drawn from a uniform distribution
 ranging from <code class="docutils literal notranslate"><span class="pre">mean-radius</span></code> to <code class="docutils literal notranslate"><span class="pre">mean+radius</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>radius</strong><span class="classifier">float or list</span></dt><dd><p>Initial values are drawn from a uniform distribution ranging from
+<dt><strong>radius</strong><span class="classifier">float or list[float]</span></dt><dd><p>Initial values are drawn from a uniform distribution ranging from
 <code class="docutils literal notranslate"><span class="pre">mean-radius</span></code> to <code class="docutils literal notranslate"><span class="pre">mean+radius</span></code>.
 If a <code class="docutils literal notranslate"><span class="pre">float</span></code> is provided the same setting will be used for all
 hyperparameters.
@@ -518,7 +518,7 @@ The order of values should be equivalent to the order of hyperparameter
 names provided in <strong>hyper</strong>.
 The default is <code class="docutils literal notranslate"><span class="pre">1.</span></code>.</p>
 </dd>
-<dt><strong>mean</strong><span class="classifier">float or list</span></dt><dd><p>Initial values are drawn from a uniform distribution ranging from
+<dt><strong>mean</strong><span class="classifier">float or list[float]</span></dt><dd><p>Initial values are drawn from a uniform distribution ranging from
 <code class="docutils literal notranslate"><span class="pre">mean-radius</span></code> to <code class="docutils literal notranslate"><span class="pre">mean+radius</span></code>.
 If a <code class="docutils literal notranslate"><span class="pre">float</span></code> is provided the same setting will be used for all
 hyperparameters.
@@ -528,7 +528,7 @@ The order of values should be equivalent to the order of hyperparameter
 names provided in <strong>hyper</strong>.
 The default is <code class="docutils literal notranslate"><span class="pre">0.</span></code>.</p>
 </dd>
-<dt><strong>hyper</strong><span class="classifier">None or list, optional</span></dt><dd><p>List of hyperparameter names as specified in <code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.hyper()</span></code>.
+<dt><strong>hyper</strong><span class="classifier">None or list[str], optional</span></dt><dd><p>List of hyperparameter names as specified in <a class="reference internal" href="elicit.elicit.html#elicit.elicit.hyper" title="elicit.elicit.hyper"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.hyper()</span></code></a>.
 The values provided in <strong>radius</strong> and <strong>mean</strong> should follow the order
 of hyperparameters indicated in this list.
 If a float is passed to <strong>radius</strong> and <strong>mean</strong> this argument is not
@@ -541,6 +541,12 @@ The default is <code class="docutils literal notranslate"><span class="pre">None
 <dd class="field-even"><dl class="simple">
 <dt><strong>init_dict</strong><span class="classifier">dict</span></dt><dd><p>Dictionary with all seetings of the uniform distribution used for
 initializing the hyperparameter values.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>AssertionError</dt><dd><p><code class="docutils literal notranslate"><span class="pre">hyper</span></code>, <code class="docutils literal notranslate"><span class="pre">mean</span></code>, and <code class="docutils literal notranslate"><span class="pre">radius</span></code> must have the same length.</p>
 </dd>
 </dl>
 </dd>

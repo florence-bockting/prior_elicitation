@@ -441,10 +441,10 @@ The default is <code class="docutils literal notranslate"><span class="pre">Fals
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
-<dt>ValueError</dt><dd><p>‘lower’, ‘upper’ take only values that are float or “-inf”/”inf”.</p>
-<p>‘lower’ value should not be higher than ‘upper’ value.</p>
-<p>‘vtype’ value can only be either ‘real’ or ‘array’.</p>
-<p>‘dim’ value can’t be ‘1’ if ‘vtype=”array”’</p>
+<dt>ValueError</dt><dd><p><code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code> take only values that are float or “-inf”/”inf”.</p>
+<p><code class="docutils literal notranslate"><span class="pre">lower</span></code> value should not be higher than <code class="docutils literal notranslate"><span class="pre">upper</span></code> value.</p>
+<p><code class="docutils literal notranslate"><span class="pre">vtype</span></code> value can only be either ‘real’ or ‘array’.</p>
+<p><code class="docutils literal notranslate"><span class="pre">dim</span></code> value can’t be ‘1’ if ‘vtype=”array”’</p>
 </dd>
 </dl>
 </dd>
@@ -493,8 +493,8 @@ Default value is <code class="docutils literal notranslate"><span class="pre">No
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
-<dt>ValueError</dt><dd><p>‘family’ has to be a tfp.distributions object.</p>
-<p>‘hyperparams’ value is a dict with keys corresponding to arguments of
+<dt>ValueError</dt><dd><p><code class="docutils literal notranslate"><span class="pre">family</span></code> has to be a tfp.distributions object.</p>
+<p><code class="docutils literal notranslate"><span class="pre">hyperparams</span></code> value is a dict with keys corresponding to arguments of
 tfp.distributions object in ‘family’. Raises error if key does not
 correspond to any argument of distribution.</p>
 </dd>
@@ -534,10 +534,10 @@ See <a class="reference external" href="url">How-To specify the generative_model
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
-<dt>ValueError</dt><dd><p>generative model requires the input argument ‘prior_samples’, but
-argument has not been found in ‘obj’ value</p>
-<p>optional argument(s) of the generative model specified in ‘obj’ are not
-specified</p>
+<dt>ValueError</dt><dd><p>generative model in <code class="docutils literal notranslate"><span class="pre">obj</span></code> requires the input argument
+‘prior_samples’, but argument has not been found.</p>
+<p>optional argument(s) of the generative model specified in <code class="docutils literal notranslate"><span class="pre">obj</span></code> are
+not specified</p>
 </dd>
 </dl>
 </dd>
@@ -600,7 +600,8 @@ specified</p>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt>ValueError</dt><dd><p>quantiles have to be specified as probability ranging between 0-1</p>
+<dt>ValueError</dt><dd><p><code class="docutils literal notranslate"><span class="pre">quantiles</span></code> have to be specified as probability ranging between
+0 and 1.</p>
 </dd>
 </dl>
 </dd>
@@ -660,7 +661,8 @@ corresponding <a class="reference external" href="https://github.com/florence-bo
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt>NotImplementedError</dt><dd><p>The option for custom elicitation methods is not implemented yet.</p>
+<dt>NotImplementedError</dt><dd><p>This option for implementing a custom elicitation method is not
+implemented yet.</p>
 </dd>
 </dl>
 </dd>
@@ -711,7 +713,8 @@ corresponding elicitation technique.</p>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt>NotImplementedError</dt><dd><p>The option for custom target quantity is not implemented yet.</p>
+<dt>NotImplementedError</dt><dd><p><code class="docutils literal notranslate"><span class="pre">target_method</span></code> for implementing a custom target quantity is not
+implemented yet.</p>
 </dd>
 </dl>
 </dd>
@@ -798,7 +801,7 @@ The default is <code class="docutils literal notranslate"><span class="pre">10_0
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>expert_data</strong><span class="classifier">dict</span></dt><dd><p>Settings of oracle for simulating from ground truth. True elicited
-statistics are used as ‘expert-data’ in loss function.</p>
+statistics are used as <cite>expert-data</cite> in loss function.</p>
 </dd>
 </dl>
 </dd>
@@ -859,9 +862,9 @@ The default is <code class="docutils literal notranslate"><span class="pre">tf.k
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt>TypeError</dt><dd><p>‘optimizer’ is not a tf.keras.optimizers object</p>
+<dt>TypeError</dt><dd><p><code class="docutils literal notranslate"><span class="pre">optimizer</span></code> is not a tf.keras.optimizers object</p>
 </dd>
-<dt>ValueError</dt><dd><p>‘optimizer’ could not be found in tf.keras.optimizers</p>
+<dt>ValueError</dt><dd><p><code class="docutils literal notranslate"><span class="pre">optimizer</span></code> could not be found in tf.keras.optimizers</p>
 </dd>
 </dl>
 </dd>
@@ -912,8 +915,8 @@ The default is <code class="docutils literal notranslate"><span class="pre">100<
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
-<dt>ValueError</dt><dd><p>‘method’ can only take the values “random”, “sobol”, or “lhs”</p>
-<p>‘loss_quantile’ must be a probability ranging between 0 and 1.</p>
+<dt>ValueError</dt><dd><p><code class="docutils literal notranslate"><span class="pre">method</span></code> can only take the values “random”, “sobol”, or “lhs”</p>
+<p><code class="docutils literal notranslate"><span class="pre">loss_quantile</span></code> must be a probability ranging between 0 and 1.</p>
 </dd>
 </dl>
 </dd>
@@ -972,7 +975,7 @@ distribution(s).</p>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt>ValueError</dt><dd><p>‘method’ can only take the value “parametric_prior” or “deep_prior”</p>
+<dt>ValueError</dt><dd><p><code class="docutils literal notranslate"><span class="pre">method</span></code> can only take the value “parametric_prior” or “deep_prior”</p>
 </dd>
 </dl>
 </dd>
@@ -1035,15 +1038,15 @@ fit the eliobj.</p>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
-<dt>AssertionError</dt><dd><p>‘expert’ data are not in the required format. Correct specification of
+<dt>AssertionError</dt><dd><p><code class="docutils literal notranslate"><span class="pre">expert</span></code> data are not in the required format. Correct specification of
 keys can be checked using el.utils.get_expert_datformat</p>
-<p>Dimensionality of ‘ground_truth’ for simulating expert data, must be
+<p>Dimensionality of <code class="docutils literal notranslate"><span class="pre">ground_truth</span></code> for simulating expert data, must be
 the same as the number of model parameters.</p>
 </dd>
-<dt>ValueError</dt><dd><p>if method=”deep_prior”, ‘network’ can’t be None and ‘initialization’
+<dt>ValueError</dt><dd><p>if <code class="docutils literal notranslate"><span class="pre">method=&quot;deep_prior&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">network</span></code> can’t be None and <code class="docutils literal notranslate"><span class="pre">initialization</span></code>
 should be None.</p>
-<p>if ‘method=”parametric_prior”’, ‘network’ should be None and
-‘initialization’ can’t be None.</p>
+<p>if <code class="docutils literal notranslate"><span class="pre">method=&quot;parametric_prior&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">network</span></code> should be None and
+<code class="docutils literal notranslate"><span class="pre">initialization</span></code> can’t be None.</p>
 </dd>
 </dl>
 </dd>
@@ -1091,15 +1094,15 @@ fit the eliobj.</p>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
-<dt>AssertionError</dt><dd><p>‘expert’ data are not in the required format. Correct specification of
+<dt>AssertionError</dt><dd><p><code class="docutils literal notranslate"><span class="pre">expert</span></code> data are not in the required format. Correct specification of
 keys can be checked using el.utils.get_expert_datformat</p>
-<p>Dimensionality of ‘ground_truth’ for simulating expert data, must be
+<p>Dimensionality of <code class="docutils literal notranslate"><span class="pre">ground_truth</span></code> for simulating expert data, must be
 the same as the number of model parameters.</p>
 </dd>
-<dt>ValueError</dt><dd><p>if method=”deep_prior”, ‘network’ can’t be None and ‘initialization’
+<dt>ValueError</dt><dd><p>if <code class="docutils literal notranslate"><span class="pre">method=&quot;deep_prior&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">network</span></code> can’t be None and <code class="docutils literal notranslate"><span class="pre">initialization</span></code>
 should be None.</p>
-<p>if ‘method=”parametric_prior”’, ‘network’ should be None and
-‘initialization’ can’t be None.</p>
+<p>if <code class="docutils literal notranslate"><span class="pre">method=&quot;parametric_prior&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">network</span></code> should be None and
+<code class="docutils literal notranslate"><span class="pre">initialization</span></code> can’t be None.</p>
 </dd>
 </dl>
 </dd>
@@ -1157,7 +1160,7 @@ without prompting the user. The default is <code class="docutils literal notrans
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>AssertionError</dt><dd><p>‘name’ and ‘file’ can’t be specified simultaneously.</p>
+<dt>AssertionError</dt><dd><p><code class="docutils literal notranslate"><span class="pre">name</span></code> and <code class="docutils literal notranslate"><span class="pre">file</span></code> can’t be specified simultaneously.</p>
 </dd>
 </dl>
 </dd>
@@ -1174,10 +1177,8 @@ without prompting the user. The default is <code class="docutils literal notrans
 <dl class="py method">
 <dt class="sig sig-object py" id="elicit.elicit.Elicit.update">
 <span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/elicit.html#Elicit.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.elicit.Elicit.update" title="Link to this definition">#</a></dt>
-<dd><blockquote>
-<div><p>method for updating the attributes of the Elicit class. Updating
+<dd><p>method for updating the attributes of the Elicit class. Updating
 an eliobj leads to an automatic reset of results.</p>
-</div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">

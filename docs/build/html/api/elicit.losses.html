@@ -373,7 +373,7 @@ document.write(`
 <span id="elicit-losses-module"></span><h1>elicit.losses module<a class="headerlink" href="#module-elicit.losses" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.losses.preprocess">
-<span class="sig-prename descclassname"><span class="pre">elicit.losses.</span></span><span class="sig-name descname"><span class="pre">preprocess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elicited_statistics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/losses.html#preprocess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.preprocess" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">elicit.losses.</span></span><span class="sig-name descname"><span class="pre">preprocess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elicited_statistics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/elicit/losses.html#preprocess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.losses.preprocess" title="Link to this definition">#</a></dt>
 <dd><p>Preprocess elicited statistics such that they have the required format for
 computing the individual losses between expert- and simulated statistics.</p>
 <dl class="field-list simple">
@@ -387,6 +387,12 @@ computing the individual losses between expert- and simulated statistics.</p>
 <dd class="field-even"><dl class="simple">
 <dt><strong>preprocessed_elicits</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all preprocessed elicited statistics which will
 enter the loss function to compute the individual loss components.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>AssertionError</dt><dd><p>elicited statistics can only have 2 dimensions (i.e., tensor of rank 2)</p>
 </dd>
 </dl>
 </dd>
@@ -404,7 +410,7 @@ enter the loss function to compute the individual loss components.</p>
 </dd>
 <dt><strong>elicit_training</strong><span class="classifier">dict</span></dt><dd><p>dictionary including all preprocessed model statistics</p>
 </dd>
-<dt><strong>targets</strong><span class="classifier">dict</span></dt><dd><p>user-input from <code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.target()</span></code></p>
+<dt><strong>targets</strong><span class="classifier">dict</span></dt><dd><p>user-input from <a class="reference internal" href="elicit.elicit.html#elicit.elicit.target" title="elicit.elicit.target"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.target()</span></code></a></p>
 </dd>
 </dl>
 </dd>
@@ -431,7 +437,7 @@ data and model simulations.</p>
 </dd>
 <dt><strong>epoch</strong><span class="classifier">int</span></dt><dd><p>epoch (iteration within optimization process).</p>
 </dd>
-<dt><strong>targets</strong><span class="classifier">dict</span></dt><dd><p>user-input from <code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.target()</span></code></p>
+<dt><strong>targets</strong><span class="classifier">dict</span></dt><dd><p>user-input from <a class="reference internal" href="elicit.elicit.html#elicit.elicit.target" title="elicit.elicit.target"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.target()</span></code></a></p>
 </dd>
 </dl>
 </dd>

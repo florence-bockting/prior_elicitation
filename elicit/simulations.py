@@ -26,19 +26,38 @@ class Priors(tf.Module):
         None if ground_truth = True
     """
 
-    def __init__(self, ground_truth, init_matrix_slice, trainer, parameters,
-                 network, expert, seed):
+    def __init__(self, ground_truth: bool,
+                 init_matrix_slice: tf.Tensor or None,
+                 trainer: dict, parameters: dict, network: dict, expert: dict,
+                 seed: int):
         """
         Initializes the hyperparameters (i.e., trainable variables)
 
         Parameters
         ----------
         ground_truth : bool
-            whether samples are drawn from a true prior ('oracle')
-        global_dict : dict
-            dictionary containing all user and default input settings.
+            True if expert data are simulated from a given ground truth (oracle)
+        init_matrix_slice : tf.Tensor or None
+            samples drawn from the initialization distribution to initialize
+            the hyperparameter of the parametric prior distributions
+            Only required for method="parametric_prior" otherwise None.
+        trainer : callable
+            specification of training settings and meta-information for
+            workflow using :func:`trainer`
+        parameters : list
+            list of model parameters specified with :func:`parameter`.
+        network : callable or None
+            specification of neural network using a method implemented in
+            :mod:`elicit.networks`.
+            Only required for ``deep_prior`` method. For ``parametric_prior``
+            use ``None``. Default value is ``None``.
+        expert : callable
+            provide input data from expert or simulate data from oracle with
+            either the ``data`` or ``simulator`` method of the
+            :mod:`elicit.elicit.Expert` module.
+        seed : int
+            seed used for learning.
         """
-
         self.ground_truth = ground_truth
         self.init_matrix_slice = init_matrix_slice
         self.trainer=trainer
@@ -57,38 +76,56 @@ class Priors(tf.Module):
         else:
             self.init_priors = None
 
-    def __call__(self):
+    def __call__(self) -> tf.Tensor:  # shape=[B,num_samples,num_params]
         """
         Samples from the initialized prior distribution(s).
 
         Returns
         -------
-        prior_samples : dict
+        prior_samples : tf.Tensor, shape: [B,num_samples,num_params]
             Samples from prior distribution(s).
 
         """
-
         prior_samples = sample_from_priors(
             self.init_priors, self.ground_truth, self.trainer["num_samples"],
             self.trainer["B"], self.trainer["seed"], self.trainer["method"],
             self.parameters, self.network, self.expert
             )
+
         return prior_samples
 
 
-def intialize_priors(init_matrix_slice, method, seed, parameters, network):
+def intialize_priors(init_matrix_slice: dict[str, tf.Variable] or None,
+                     method: str, seed: int, parameters: list[dict],
+                     network: dict
+                     ) -> dict[str, tf.Tensor]:
     """
     Initialize prior distributions.
 
     Parameters
     ----------
-    global_dict : dict
-        dictionary including all user-and default input settings.
+    init_matrix_slice : tf.Tensor or None
+        samples drawn from the initialization distribution to initialize
+        the hyperparameter of the parametric prior distributions
+        Only for method="parametric_prior", otherwise None.
+    method : str
+        parametric_prior or deep_prior method as specified in
+        :func:`elicit.elicit.trainer`
+    seed : int
+        seed of current workflow run as specified in
+        :func:`elicit.elicit.trainer`
+    parameters : list[dict]
+        list of model parameter specifications using :func:`parameter`.
+    network : dict
+        specification of neural network using a method implemented in
+        :mod:`elicit.networks`.
+        Only required for ``deep_prior`` method. For ``parametric_prior``
+        use ``None``. Default value is ``None``.
 
     Returns
     -------
-    init_prior : dict
-        returns initialized prior distributions ready for sampling.
+    init_prior : dict[str, tf.Tensor]
+        returns initialized prior distributions ready for prior sampling.
 
     """
     # set seed
@@ -101,23 +138,26 @@ def intialize_priors(init_matrix_slice, method, seed, parameters, network):
         param_names=list()
         hp_names=list()
         initialized_hyperparam = dict()
+
         for i in range(len(parameters)):
-            hyp_dict[f"param{i}"] = parameters[i]["hyperparams"]
-            param_names += [parameters[i]["name"]]*len(parameters[i]["hyperparams"])
-            hp_keys += list(parameters[i]["hyperparams"].keys())
-            for j in range(len(parameters[i]["hyperparams"])):
-                current_key = list(parameters[i]["hyperparams"].keys())[j]
-                hp_names.append(parameters[i]["hyperparams"][current_key]["name"])
+            hyperparameter = parameters[i]["hyperparams"]
+            num_hyperpar = len(hyperparameter)
+
+            hyp_dict[f"param{i}"] = hyperparameter
+            param_names += [parameters[i]["name"]]*num_hyperpar
+            hp_keys += list(hyperparameter.keys())
+            for j in range(num_hyperpar):
+                current_key = list(hyperparameter.keys())[j]
+                hp_names.append(hyperparameter[current_key]["name"])
 
         checked_params=list()
         for j, (i, hp_n, hp_k) in enumerate(zip(tf.unique(param_names).idx,
                                  hp_names, hp_keys)):
 
             hp_dict = parameters[i]["hyperparams"][hp_k]
-            
+
             if hp_dict["shared"] and hp_dict["name"] in checked_params:
                 pass
-                #initialized_hyperparam[f"{hp_k}"] = initialized_hyperparam[f"{hp_k}"]
             else:
                 # get initial value
                 initial_value = init_matrix_slice[hp_n]
@@ -130,7 +170,7 @@ def intialize_priors(init_matrix_slice, method, seed, parameters, network):
 
                 # save initialized priors
                 init_prior = initialized_hyperparam
-                
+
             if hp_dict["shared"]:
                 checked_params.append(hp_n)
 
@@ -147,30 +187,49 @@ def intialize_priors(init_matrix_slice, method, seed, parameters, network):
     return init_prior
 
 
-def sample_from_priors(initialized_priors, ground_truth, num_samples, B, seed,
-                       method, parameters, network, expert):
+def sample_from_priors(initialized_priors: dict[str, tf.Variable],
+                       ground_truth: bool, num_samples: int, B: int, seed: int,
+                       method: str, parameters: dict, network: dict,
+                       expert: dict
+                       ) -> tf.Tensor:  # shape=[B,num_samples,num_params]
     """
     Samples from initialized prior distributions.
 
     Parameters
     ----------
-    initialized_priors : dict
-        initialized prior distributions ready for sampling.
+    initialized_priors : dict[str, tf.Variable]
+        initialized prior distributions ready for prior sampling.
     ground_truth : bool
-        whether simulations are based on ground truth
-        (then sampling is performed from true distribution).
-    global_dict : dict
-        dictionary including all user-input settings..
+        True if expert data is simulated from ground truth.
+    num_samples : int, optional
+        number of samples from the prior(s). The default is 200.
+    B : int, optional
+        batch size. The default is 128.
+    seed : int
+        seed used for learning.
+    method : str
+        parametric_prior or deep_prior method as specified in
+        :func:`elicit.elicit.trainer`
+    parameters : list
+        list of model parameters specified with :func:`parameter`.
+    network : dict
+        specification of neural network using a method implemented in
+        :mod:`elicit.networks`.
+        Only required for ``deep_prior`` method. For ``parametric_prior``
+        use ``None``. Default value is ``None``.
+    expert : callable
+        provide input data from expert or simulate data from oracle with
+        either the ``data`` or ``simulator`` method of the
+        :mod:`elicit.elicit.Expert` module.
 
     Returns
     -------
-    prior_samples : dict
+    prior_samples : tf.Tensor, shape: [B, num_samples, num_params]
         Samples from prior distributions.
 
     """
     # set seed
     tf.random.set_seed(seed)
-
     if ground_truth:
         # number of samples for ground truth
         rep_true = expert["num_samples"]
@@ -292,24 +351,27 @@ def softmax_gumbel_trick(epred: float, likelihood: callable,
     return ypred
 
 
-def simulate_from_generator(prior_samples, seed, model):
+def simulate_from_generator(
+        prior_samples: tf.Tensor,  # shape=[B,num_samples,num_params]
+        seed: int, model: dict) -> dict[str, tf.Tensor]:
     """
     Simulates data from the specified generative model.
 
     Parameters
     ----------
-    prior_samples : dict
+    prior_samples : tf.Tensor, shape: [B, num_samples, num_params]
         samples from prior distributions.
-    global_dict : dict
-        dictionary including all user-input settings.
+    seed : int
+        seed used for learning.
+    model : callable
+        specification of generative model using :func:`model`.
 
     Returns
     -------
-    model_simulations : dict
+    model_simulations : dict[str, tf.Tensor]
         simulated data from generative model.
 
     """
-
     # set seed
     tf.random.set_seed(seed)
     # get model and initialize generative model

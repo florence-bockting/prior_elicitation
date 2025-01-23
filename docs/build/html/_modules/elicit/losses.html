@@ -314,7 +314,7 @@ document.write(`
 
 <div class="viewcode-block" id="preprocess">
 <a class="viewcode-back" href="../../api/elicit.losses.html#elicit.losses.preprocess">[docs]</a>
-<span class="k">def</span> <span class="nf">preprocess</span><span class="p">(</span><span class="n">elicited_statistics</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">preprocess</span><span class="p">(</span><span class="n">elicited_statistics</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Preprocess elicited statistics such that they have the required format for</span>
 <span class="sd">    computing the individual losses between expert- and simulated statistics.</span>
@@ -329,6 +329,11 @@ document.write(`
 <span class="sd">    preprocessed_elicits : dict</span>
 <span class="sd">        dictionary including all preprocessed elicited statistics which will</span>
 <span class="sd">        enter the loss function to compute the individual loss components.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    AssertionError</span>
+<span class="sd">        elicited statistics can only have 2 dimensions (i.e., tensor of rank 2)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -357,7 +362,10 @@ document.write(`
         <span class="c1"># extract data</span>
         <span class="n">tensor_elicit</span> <span class="o">=</span> <span class="n">elicited_statistics</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
 
-        <span class="k">assert</span> <span class="n">tf</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">tensor_elicit</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;elicited statistics can only have 2 dimensions.&quot;</span>  <span class="c1"># noqa</span>
+        <span class="k">if</span> <span class="n">tf</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">tensor_elicit</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span>
+                <span class="s2">&quot;elicited statistics can only have 2 dimensions.&quot;</span>
+                <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">tf</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">tensor_elicit</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="c1"># add a last axis for loss computation</span>
@@ -690,7 +698,7 @@ By Florence Bockting
 
   <p class="copyright">
     
-      © Copyright 2024, Florence Bockting.
+      © Copyright 2025, Florence Bockting.
       <br/>
     
   </p>

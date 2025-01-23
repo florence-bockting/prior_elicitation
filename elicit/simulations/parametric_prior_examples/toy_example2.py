@@ -110,25 +110,25 @@ eliobj = el.Elicit(
     targets=[
         el.target(
             name="y_X0",
-            query=el.queries.quantiles((5, 25, 50, 75, 95)),
+            query=el.queries.quantiles((.05, .25, .50, .75, .95)),
             loss=el.losses.MMD2(kernel="energy"),
             weight=1.0
         ),
         el.target(
             name="y_X1",
-            query=el.queries.quantiles((5, 25, 50, 75, 95)),
+            query=el.queries.quantiles((.05, .25, .50, .75, .95)),
             loss=el.losses.MMD2(kernel="energy"),
             weight=1.0
         ),
         el.target(
             name="y_X2",
-            query=el.queries.quantiles((5, 25, 50, 75, 95)),
+            query=el.queries.quantiles((.05, .25, .50, .75, .95)),
             loss=el.losses.MMD2(kernel="energy"),
             weight=1.0
         ),
         # el.target(
         #     name="log_R2",
-        #     query=el.queries.quantiles((5, 25, 50, 75, 95)),
+        #     query=el.queries.quantiles((.05, .25, .50, .75, .95)),
         #     loss=el.losses.MMD2(kernel="energy"),
         #     weight=1.0
         # )
@@ -146,12 +146,12 @@ eliobj = el.Elicit(
     trainer=el.trainer(
         method="parametric_prior",
         seed=0,
-        epochs=4#0
+        epochs=100
     ),
     initializer=el.initializer(
         method="random",
-        loss_quantile=0,
-        iterations=32,
+        loss_quantile=.0,
+        iterations=1,
         distribution=el.initialization.uniform(
             radius=1,
             mean=0
@@ -160,9 +160,10 @@ eliobj = el.Elicit(
     #network = el.networks.NF(...) # TODO vs. el.normalizing_flow(...)
 )
 
+eliobj.fit()
 #el.utils.get_expert_datformat(targets)
 
-eliobj.fit()
+eliobj.save(file="test2")
 
 elicit.update(overwrite=True, expert=el.expert.data(dat = expert_dat),
               name="update_eliobj")
@@ -183,7 +184,7 @@ elicit.fit()
 elicit.save("res")
 
 el.plots.initialization(elicit, cols=5, figsize=(7,3))
-el.plots.loss(elicit, figsize=(7,3))
+el.plots.priors(elicit, constraints=None, figsize=(4,4))
 
 el.utils.save(elicit, "res")
 

@@ -63,13 +63,13 @@ def hyper(
     Raises
     ------
     ValueError
-        'lower', 'upper' take only values that are float or "-inf"/"inf".
+        ``lower``, ``upper`` take only values that are float or "-inf"/"inf".
 
-        'lower' value should not be higher than 'upper' value.
+        ``lower`` value should not be higher than ``upper`` value.
 
-        'vtype' value can only be either 'real' or 'array'.
+        ``vtype`` value can only be either 'real' or 'array'.
 
-        'dim' value can't be '1' if 'vtype="array"'
+        ``dim`` value can't be '1' if 'vtype="array"'
 
     Examples
     --------
@@ -179,9 +179,9 @@ def parameter(
     Raises
     ------
     ValueError
-        'family' has to be a tfp.distributions object.
+        ``family`` has to be a tfp.distributions object.
 
-        'hyperparams' value is a dict with keys corresponding to arguments of
+        ``hyperparams`` value is a dict with keys corresponding to arguments of
         tfp.distributions object in 'family'. Raises error if key does not
         correspond to any argument of distribution.
 
@@ -238,11 +238,11 @@ def model(obj: callable, **kwargs) -> dict:
     Raises
     ------
     ValueError
-        generative model requires the input argument 'prior_samples', but
-        argument has not been found in 'obj' value
+        generative model in ``obj`` requires the input argument
+        'prior_samples', but argument has not been found.
 
-        optional argument(s) of the generative model specified in 'obj' are not
-        specified
+        optional argument(s) of the generative model specified in ``obj`` are
+        not specified
 
     Examples
     --------
@@ -321,14 +321,15 @@ class Queries:
         Raises
         ------
         ValueError
-            quantiles have to be specified as probability ranging between 0-1
+            ``quantiles`` have to be specified as probability ranging between
+            0 and 1.
 
         """
         # compute percentage from probability
         quantiles_perc = tuple([q * 100 for q in quantiles])
 
         # check that quantiles are provided as percentage
-        for quantile in quantiles_perc:
+        for quantile in quantiles:
             if (quantile < 0) or (quantile > 1):
                 raise ValueError(
                     "[section: targets] Quantiles have to be expressed as"
@@ -388,7 +389,8 @@ class Queries:
         Raises
         ------
         NotImplementedError
-            The option for custom elicitation methods is not implemented yet.
+            This option for implementing a custom elicitation method is not
+            implemented yet.
 
         """  # noqa: E501
         raise NotImplementedError(
@@ -452,7 +454,8 @@ def target(
     Raises
     ------
     NotImplementedError
-        The option for custom target quantity is not implemented yet.
+        ``target_method`` for implementing a custom target quantity is not
+        implemented yet.
 
     Examples
     --------
@@ -555,7 +558,7 @@ class Expert:
         -------
         expert_data : dict
             Settings of oracle for simulating from ground truth. True elicited
-            statistics are used as 'expert-data' in loss function.
+            statistics are used as `expert-data` in loss function.
 
         Examples
         --------
@@ -618,9 +621,9 @@ def optimizer(optimizer: callable = tf.keras.optimizers.Adam(),
     Raises
     ------
     TypeError
-        'optimizer' is not a tf.keras.optimizers object
+        ``optimizer`` is not a tf.keras.optimizers object
     ValueError
-        'optimizer' could not be found in tf.keras.optimizers
+        ``optimizer`` could not be found in tf.keras.optimizers
 
     Examples
     --------
@@ -694,9 +697,9 @@ def initializer(
     Raises
     ------
     ValueError
-        'method' can only take the values "random", "sobol", or "lhs"
+        ``method`` can only take the values "random", "sobol", or "lhs"
 
-        'loss_quantile' must be a probability ranging between 0 and 1.
+        ``loss_quantile`` must be a probability ranging between 0 and 1.
 
     Examples
     --------
@@ -743,9 +746,7 @@ def trainer(
     seed: int,
     epochs: int,
     B: int = 128,
-    num_samples: int = 200,
-    save_history: callable = el.utils.save_history(),
-    save_results: callable = el.utils.save_results(),
+    num_samples: int = 200
 ):
     """
     Specification of training settings for learning the prior distribution(s).
@@ -764,16 +765,6 @@ def trainer(
         batch size. The default is 128.
     num_samples : int, optional
         number of samples from the prior(s). The default is 200.
-    save_history : callable, :func:`elicit.utils.save_history`
-        Exclude or include sub-results in the final result file.
-        In the ``history`` object are all results that are saved across epochs.
-        For usage information see
-        `How-To: Save and load the eliobj <https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html>`_
-    save_results : callable, :func:`elicit.utils.save_results`
-        Exclude or include sub-results in the final result file.
-        In the ``results`` object are all results that are saved for the last
-        epoch only. For usage information see
-        `How-To: Save and load the eliobj <https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html>`_
 
     Returns
     -------
@@ -784,7 +775,7 @@ def trainer(
     Raises
     ------
     ValueError
-        'method' can only take the value "parametric_prior" or "deep_prior"
+        ``method`` can only take the value "parametric_prior" or "deep_prior"
 
     Examples
     --------
@@ -793,9 +784,7 @@ def trainer(
     >>>     seed=0,
     >>>     epochs=400,
     >>>     B=128,
-    >>>     num_samples=200,
-    >>>     save_history=el.utils.save_history(loss_component=False),
-    >>>     save_results=el.utils.save_results(model=False)
+    >>>     num_samples=200
     >>> )
     """  # noqa: E501
     # check that method is implemented
@@ -810,9 +799,7 @@ def trainer(
         seed=int(seed),
         B=int(B),
         num_samples=int(num_samples),
-        epochs=int(epochs),
-        save_history=save_history,
-        save_results=save_results,
+        epochs=int(epochs)
     )
 
     return train_dict
@@ -849,8 +836,8 @@ class Elicit:
         optimizer : callable
             specification of SGD optimizer and its settings using
             :func:`optimizer`.
-        normalizing_flow : callable or None
-            specification of normalizing flow using a method implemented in
+        network : callable or None
+            specification of neural network using a method implemented in
             :mod:`elicit.networks`.
             Only required for ``deep_prior`` method. For ``parametric_prior``
             use ``None``. Default value is ``None``.
@@ -866,23 +853,23 @@ class Elicit:
             specification of all settings to run the elicitation workflow and
             fit the eliobj.
 
-    Raises
-    ------
-    AssertionError
-        'expert' data are not in the required format. Correct specification of
-        keys can be checked using el.utils.get_expert_datformat
+        Raises
+        ------
+        AssertionError
+            ``expert`` data are not in the required format. Correct specification of
+            keys can be checked using el.utils.get_expert_datformat
 
-        Dimensionality of 'ground_truth' for simulating expert data, must be
-        the same as the number of model parameters.
+            Dimensionality of ``ground_truth`` for simulating expert data, must be
+            the same as the number of model parameters.
 
-    ValueError
-        if method="deep_prior", 'network' can't be None and 'initialization'
-        should be None.
+        ValueError
+            if ``method="deep_prior"``, ``network`` can't be None and ``initialization``
+            should be None.
 
-        if 'method="parametric_prior"', 'network' should be None and
-        'initialization' can't be None.
+            if ``method="parametric_prior"``, ``network`` should be None and
+            ``initialization`` can't be None.
 
-        """
+        """  # noqa: E501
         # check expert data
         expected_dict = el.utils.get_expert_datformat(targets)
         try:
@@ -930,7 +917,7 @@ class Elicit:
                     "[section initializer] If method is 'parametric_prior',"
                     + " the section 'initializer' can't be None."
                 )
-            if network is None:
+            if network is not None:
                 raise ValueError(
                     "[section network] If method is 'parametric prior'"
                     + " the 'network' is not used and should be set to None."
@@ -951,7 +938,11 @@ class Elicit:
         # set seed
         tf.random.set_seed(self.trainer["seed"])
 
-    def fit(self, overwrite=False):
+    def fit(self,
+            overwrite=False,
+            save_history: callable = el.utils.save_history(),
+            save_results: callable = el.utils.save_results()
+            ) -> None:
         """
         method for fitting the eliobj and learn prior distributions.
 
@@ -962,14 +953,28 @@ class Elicit:
             the user is asked whether they want to overwrite the previous
             fitting results. Setting ``overwrite=True`` allows the user to
             force overfitting without being prompted. The default is ``False``.
+        save_history : callable, :func:`elicit.utils.save_history`
+            Exclude or include sub-results in the final result file.
+            In the ``history`` object are all results that are saved across epochs.
+            For usage information see
+            `How-To: Save and load the eliobj <https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html>`_
+        save_results : callable, :func:`elicit.utils.save_results`
+            Exclude or include sub-results in the final result file.
+            In the ``results`` object are all results that are saved for the last
+            epoch only. For usage information see
+            `How-To: Save and load the eliobj <https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html>`_
 
         Examples
         --------
         >>> eliobj.fit()
 
-        >>> eliobj.fit(overwrite=True)
+        >>> eliobj.fit(overwrite=True,
+        >>>            save_history=el.utils.save_history(
+        >>>                loss_component=False
+        >>>                )
+        >>>            )
 
-        """
+        """  # noqa: E501
         # check whether elicit object is already fitted
         if len(self.history.keys()) != 0 and not overwrite:
             user_answ = input(
@@ -1038,12 +1043,12 @@ class Elicit:
             self.results["init_prior"] = init_prior
             self.results["init_matrix"] = init_matrix
 
-        for key_hist in self.trainer["save_history"]:
-            if not self.trainer["save_history"][key_hist]:
+        for key_hist in save_history:
+            if not save_history[key_hist]:
                 self.history.pop(key_hist)
 
-        for key_res in self.trainer["save_results"]:
-            if not self.trainer["save_results"][key_res]:
+        for key_res in save_results:
+            if not save_results[key_res]:
                 self.results.pop(key_res)
 
     def save(
@@ -1075,7 +1080,7 @@ class Elicit:
     Raises
     ------
     AssertionError
-        'name' and 'file' can't be specified simultaneously.
+        ``name`` and ``file`` can't be specified simultaneously.
 
         Examples
         --------

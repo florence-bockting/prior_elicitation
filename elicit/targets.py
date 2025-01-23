@@ -73,25 +73,26 @@ def use_custom_functions(custom_function, model_simulations):
 
 
 def computation_elicited_statistics(
-        target_quantities: dict, targets):
+        target_quantities: dict[str, tf.Tensor],  # shape=[B, num_samples, num_obs]
+        targets: list[dict]
+        ) -> dict[str, tf.Tensor]:  # shape=[B, num_stats]
     """
     Computes the elicited statistics from the target quantities by applying a
     prespecified elicitation technique.
 
     Parameters
     ----------
-    target_quantities : dict
+    target_quantities : dict[str, tf.Tensor], shape: [B,num_samples,num_obs]
         simulated target quantities.
-    global_dict : dict
-        dictionary including all user-input settings.
+    targets : list[dict]
+        list of target quantities specified with :func:`target`.
 
     Returns
     -------
-    elicits_res : dict
+    elicits_res : dict[res, tf.Tensor], shape: [B, num_stats]
         simulated elicited statistics.
 
     """
-
     # initialize dict for storing results
     elicits_res = dict()
     # loop over elicitation techniques
@@ -146,23 +147,23 @@ def computation_elicited_statistics(
     return elicits_res
 
 
-def computation_target_quantities(model_simulations, targets):
+def computation_target_quantities(model_simulations: dict[str,tf.Tensor],
+                                  targets: dict) -> dict[str, tf.Tensor]:
     """
     Computes target quantities from model simulations.
 
     Parameters
     ----------
-    model_simulations : dict
+    model_simulations : dict[str, tf.Tensor]
         simulations from generative model.
-    global_dict : dict
-        dictionary including all user-input settings..
+    targets : list[dict]
+        list of target quantities specified with :func:`target`.
 
     Returns
     -------
-    targets_res : dict
+    targets_res : dict[str, tf.Tensor]
         computed target quantities.
     """
-
     # initialize dict for storing results
     targets_res = dict()
     # loop over target quantities
