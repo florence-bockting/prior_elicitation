@@ -40,7 +40,21 @@ def save_as_pkl(obj: any, save_dir: str) -> None:
         pickle.dump(obj, file=file)
 
 
-def identity(x):
+def identity(x: any) -> any:
+    """
+    identity function. Returns the input
+
+    Parameters
+    ----------
+    x : any
+        arbitrary input object.
+
+    Returns
+    -------
+    x : any
+        returns the input object without any transformation.
+
+    """
     return x
 
 
