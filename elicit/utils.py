@@ -51,7 +51,7 @@ class DoubleBound:
         (``lower``, ``upper``) is transformed to an unconstrained variable Y
         via a scaled and translated log-odds transform.
 
-        Basis for the here used constraints, is the 
+        Basis for the here used constraints, is the
         `constraint transforms implementation in Stan <https://mc-stan.org/docs/reference-manual/transforms.html>`_.
 
         Parameters
@@ -177,7 +177,7 @@ class LowerBound:
         A variable with a ``lower`` bound is transformed to an
         unconstrained variable Y via an inverse-softplus transform.
 
-        Basis for the here used constraints, is the 
+        Basis for the here used constraints, is the
         `constraint transforms implementation in Stan <https://mc-stan.org/docs/reference-manual/transforms.html>`_.
 
         Parameters
@@ -247,7 +247,7 @@ class UpperBound:
         A variable with an ``upper`` bound is transformed into an
         unconstrained variable Y via an inverse-softplus transform.
 
-        Basis for the here used constraints, is the 
+        Basis for the here used constraints, is the
         `constraint transforms implementation in Stan <https://mc-stan.org/docs/reference-manual/transforms.html>`_.
 
         Parameters
@@ -311,9 +311,10 @@ class UpperBound:
         return x
 
 
-def one_forward_simulation(prior_model: el.simulations.Priors,
-                           trainer: dict, model: dict, targets: list[dict]
-                           ) -> Tuple[dict, tf.Tensor, dict, dict]:
+def one_forward_simulation(
+    prior_model: el.simulations.Priors, trainer: dict, model: dict,
+    targets: list[dict]
+    ) -> Tuple[dict, tf.Tensor, dict, dict]:  # noqa: E125
     """
     One forward simulation from prior samples to elicited statistics.
 
@@ -365,10 +366,14 @@ def one_forward_simulation(prior_model: el.simulations.Priors,
             target_quantities)
 
 
-#%% simulate expert data or get input data
-def get_expert_data(trainer: dict, model: dict, targets: list[dict],
-                    expert: dict, parameters: list[dict], network: dict
-                    ) -> Tuple[dict[str,tf.Tensor], tf.Tensor]:
+def get_expert_data(
+    trainer: dict,
+    model: dict,
+    targets: list[dict],
+    expert: dict,
+    parameters: list[dict],
+    network: dict,
+) -> Tuple[dict[str, tf.Tensor], tf.Tensor]:
     """
     Wrapper for loading the training data which can be expert data or
     data simulations using a pre-defined ground truth.
@@ -404,24 +409,27 @@ def get_expert_data(trainer: dict, model: dict, targets: list[dict],
         samples from ground truth. Exists only if expert data are simulated
         from an oracle. Otherwise this output is ``None``
 
-    """
+    """  # noqa: E501
     try:
         expert["data"]
     except KeyError:
-        oracle=True
+        oracle = True
     else:
-        oracle=False
+        oracle = False
 
     if oracle:
         # set seed
         tf.random.set_seed(trainer["seed"])
         # sample from true priors
         prior_model = el.simulations.Priors(
-            ground_truth=True, 
+            ground_truth=True,
             init_matrix_slice=None,
-            trainer=trainer, parameters=parameters, network=network,
+            trainer=trainer,
+            parameters=parameters,
+            network=network,
             expert=expert,
-            seed=trainer["seed"])
+            seed=trainer["seed"],
+        )
         # compute elicited statistics and target quantities
         expert_data, expert_prior, *_ = one_forward_simulation(
             prior_model, trainer, model, targets
@@ -429,38 +437,46 @@ def get_expert_data(trainer: dict, model: dict, targets: list[dict],
         return expert_data, expert_prior
     else:
         # load expert data from file
-        # TODO Expert data must have same name and structure as sim-based
-        # elicited statistics
         expert_data = expert["data"]
         return expert_data, None
 
 
-def save(eliobj: callable, name: str or None=None, file: str or None=None,
-         overwrite: bool = False) -> None:
+def save(
+    eliobj: callable,
+    name: str or None = None,
+    file: str or None = None,
+    overwrite: bool = False,
+) -> None:
     # either name or file must be specified
-    assert (name is None) ^ (file is None), ("Name and file cannot be both "+
-                        "None or both specified. Either one has to be None.")
+    assert (name is None) ^ (file is None), (
+        "Name and file cannot be both "
+        + "None or both specified. Either one has to be None."
+    )
     if (name is not None) and (file is None):
         if name.endswith(".pkl"):
-                name = name.removesuffix(".pkl")
+            name = name.removesuffix(".pkl")
         # create saving path
         path = f"./results/{eliobj.trainer['method']}/{name}_{eliobj.trainer['seed']}"  # noqa
     if (name is None) and (file is not None):
         # postprocess file (or name) to avoid file.pkl.pkl
         if file.endswith(".pkl"):
-                file = file.removesuffix(".pkl")
-        path = "./"+file
+            file = file.removesuffix(".pkl")
+        path = "./" + file
     # check whether saving path is already used
-    if os.path.isfile(path+".pkl") and not overwrite:
-        user_ans = input("In provided directory exists already a file with"+
-                         " identical name. Do you want to overwrite it?"+
-                         " Press 'y' for overwriting and 'n' for abording.")
+    if os.path.isfile(path + ".pkl") and not overwrite:
+        user_ans = input(
+            "In provided directory exists already a file with"
+            + " identical name. Do you want to overwrite it?"
+            + " Press 'y' for overwriting and 'n' for abording."
+        )
         while user_ans not in ["n", "y"]:
-            user_ans = input("Please press either 'y' for overwriting or 'n'"+
-                             "for abording the process.")
+            user_ans = input(
+                "Please press either 'y' for overwriting or 'n'"
+                + "for abording the process."
+            )
 
         if user_ans == "n":
-            return("Process aborded. File is not overwritten.")
+            return "Process aborded. File is not overwritten."
 
     storage = dict()
     # user inputs
@@ -476,7 +492,7 @@ def save(eliobj: callable, name: str or None=None, file: str or None=None,
     storage["results"] = eliobj.results
     storage["history"] = eliobj.history
 
-    save_as_pkl(storage, path+".pkl")
+    save_as_pkl(storage, path + ".pkl")
     print(f"saved in: {path}.pkl")
 
 
@@ -498,15 +514,15 @@ def load(file: str) -> callable:
     obj = pd.read_pickle(file)
 
     eliobj = el.Elicit(
-        model = obj["model"],
-        parameters = obj["parameters"],
-        targets = obj["targets"],
-        expert = obj["expert"],
-        optimizer = obj["optimizer"],
-        trainer = obj["trainer"],
-        initializer = obj["initializer"],
-        network = obj["network"]
-        )
+        model=obj["model"],
+        parameters=obj["parameters"],
+        targets=obj["targets"],
+        expert=obj["expert"],
+        optimizer=obj["optimizer"],
+        trainer=obj["trainer"],
+        initializer=obj["initializer"],
+        network=obj["network"],
+    )
 
     # add results if already fitted
     eliobj.history = obj["history"]
@@ -567,14 +583,16 @@ def save_history(
     """
     if not loss or not loss_component:
         warnings.warn(
-            "el.plots.loss() requires information about "+
-            "'loss' and 'loss_component'. If you don't save this information "+
-            "el.plot.loss() can't be used.")
+            "el.plots.loss() requires information about "
+            + "'loss' and 'loss_component'. If you don't save this information "  # noqa
+            + "el.plot.loss() can't be used."
+        )
     if not hyperparameter:
         warnings.warn(
             "el.plots.hyperparameter() and el.plots.marginals() require"
-            +" information about 'hyperparameter'. If you don't save this"
-            +" information these plots can't be used.")
+            + " information about 'hyperparameter'. If you don't save this"
+            + " information these plots can't be used."
+        )
 
     save_hist_dict = dict(
         loss=loss,
@@ -667,28 +685,32 @@ def save_results(
     excluded :func:`elicit.plots.elicits` can't be used as it requires this
     information.
 
-        """
+    """
     if not elicited_statistics:
         warnings.warn(
-            "el.plots.loss() requires information about "+
-            "'elicited_statistics'. If you don't save this information "+
-            "el.plot.loss() can't be used.")
+            "el.plots.loss() requires information about "
+            + "'elicited_statistics'. If you don't save this information "
+            + "el.plot.loss() can't be used."
+        )
     if not init_matrix:
         warnings.warn(
-            "el.plots.initialization() requires information about "+
-            "'init_matrix'. If you don't save this information "+
-            "this plotting function can't be used.")
+            "el.plots.initialization() requires information about "
+            + "'init_matrix'. If you don't save this information "
+            + "this plotting function can't be used."
+        )
     if not prior_samples:
         warnings.warn(
-            "el.plots.priors() requires information about "+
-            "'prior_samples'. If you don't save this information "+
-            "this plotting function can't be used.")
+            "el.plots.priors() requires information about "
+            + "'prior_samples'. If you don't save this information "
+            + "this plotting function can't be used."
+        )
     if (not expert_elicited_statistics) or (not elicited_statistics):
         warnings.warn(
-            "el.plots.elicits() requires information about "+
-            "'expert_elicited_statistics' and 'elicited_statistics'. "+
-            "If you don't save this information this plotting function"+
-            " can't be used.")
+            "el.plots.elicits() requires information about "
+            + "'expert_elicited_statistics' and 'elicited_statistics'. "
+            + "If you don't save this information this plotting function"
+            + " can't be used."
+        )
 
     save_res_dict = dict(
         target_quantities=target_quantities,
@@ -727,7 +749,7 @@ def get_expert_datformat(targets: list[dict]) -> dict[str, list]:
     for tar in targets:
         query = tar["query"]["name"]
         target = tar["name"]
-        key = query+"_"+target
+        key = query + "_" + target
         elicit_dict[key] = list()
-    
+
     return elicit_dict
