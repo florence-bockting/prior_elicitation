@@ -869,6 +869,9 @@ class Elicit:
             if ``method="parametric_prior"``, ``network`` should be None and
             ``initialization`` can't be None.
 
+            if ``method ="parametric_prior" and multiple hyperparameter have
+            the same name but are not shared by setting ``shared=True``."
+
         """  # noqa: E501
         # check expert data
         expected_dict = el.utils.get_expert_datformat(targets)
@@ -922,6 +925,38 @@ class Elicit:
                     "[section network] If method is 'parametric prior'"
                     + " the 'network' is not used and should be set to None."
                 )
+        # check that hyperparameter names are not redundant
+        if trainer["method"] == "parametric_prior":
+            hyp_names = []
+            hyp_shared = []
+            for i in range(len(parameters)):
+                hyp_names.append(
+                    [parameters[i]["hyperparams"][key]["name"] for
+                     key in parameters[i]["hyperparams"].keys()])
+                hyp_shared.append(
+                    [parameters[i]["hyperparams"][key]["shared"] for
+                     key in parameters[i]["hyperparams"].keys()])
+            # flatten nested list
+            hyp_names_flat = sum(hyp_names, [])
+            hyp_shared_flat = sum(hyp_shared, [])
+
+            seen = []
+            duplicate = []
+            share = []
+            for n, s in zip(hyp_names_flat, hyp_shared_flat):
+                if n not in seen:
+                    seen.append(n)
+                else:
+                    if s:
+                        share.append(n)
+                    else:
+                        duplicate.append(n)
+
+            if len(duplicate) != 0:
+                raise ValueError(
+                    "[parameters] The following hyperparameter have the same"
+                    +f" name but are not shared: {duplicate}."
+                    +" Have you forgot to set shared=True?")
 
         self.model = model
         self.parameters = parameters

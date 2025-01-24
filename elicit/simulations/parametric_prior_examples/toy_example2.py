@@ -1,7 +1,6 @@
 # noqa SPDX-FileCopyrightText: 2024 Florence Bockting <florence.bockting@tu-dortmund.de>
 #
 # noqa SPDX-License-Identifier: Apache-2.0
-
 import tensorflow_probability as tfp
 import matplotlib.pyplot as plt
 import tensorflow as tf
@@ -96,7 +95,7 @@ eliobj = el.Elicit(
             family=tfd.Normal,
             hyperparams=dict(
                 loc=el.hyper("mu1"),
-                scale=el.hyper("sigma1", lower=0) # TODO specify error message
+                scale=el.hyper("sigma1", lower=0)
                 )
         ),
         el.parameter(
