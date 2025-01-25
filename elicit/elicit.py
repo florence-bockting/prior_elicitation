@@ -205,13 +205,14 @@ def parameter(
             )
 
     # check whether keys of hyperparams dict correspond to arguments of family
-    for key in hyperparams:
-        if key not in inspect.getfullargspec(family)[0]:
-            raise ValueError(
-                f"[section: parameters] '{family.__module__.split('.')[-1]}'"
-                + f" family has no argument '{key}'. Check keys of "
-                + "'hyperparams' dict."
-            )
+    if hyperparams is not None:
+        for key in hyperparams:
+            if key not in inspect.getfullargspec(family)[0]:
+                raise ValueError(
+                    f"[section: parameters] '{family.__module__.split('.')[-1]}'"
+                    + f" family has no argument '{key}'. Check keys of "
+                    + "'hyperparams' dict."
+                )
 
     param_dict = dict(name=name, family=family, hyperparams=hyperparams)
 
@@ -659,35 +660,51 @@ def optimizer(optimizer: callable = tf.keras.optimizers.Adam(),
 
 
 def initializer(
-    method: str,
-    distribution: callable = el.initialization.uniform(),
-    loss_quantile: float = .0,
-    iterations: int = 100,
+    method: str or None = None,
+    distribution: callable or None = None,
+    loss_quantile: float or None = None,
+    iterations: int or None = None,
+    hyperparams: dict or None=None
 ) -> dict:
     """
-    Initialization method for finding initial values of model hyperparameters
-    required for instantiating training with SGD. Initial values for each
-    hyperparameter are drawn from a uniform distribution ranging from
-    ``mean-radius`` to ``mean+radius``.
+    Initialization of hyperparameter values. Two approaches are currently
+    possible:
+
+        (1) Specify specific initial values for each hyperparameter.
+        (2) Use one of the implemented sampling approaches to draw initial
+        values from one of the provided initialization distributions
+
+    In (2) initial values for each hyperparameter are drawn from a uniform
+    distribution ranging from ``mean-radius`` to ``mean+radius``.
     Further details on the implemented initialization method can be found in
     `Explanation: Initialization method <url>`_.
     Only necessary for method ``parametric_prior``.
 
     Parameters
     ----------
-    method : string
+    method : string or None
         Name of initialization method. Currently supported are "random", "lhs",
-        and "sobol".
-    distribution : callable, :func:`elicit.initialization.uniform`
+        and "sobol". The default value is ``None``.
+    distribution : callable or None
         Specification of initialization distribution.
         Currently implemented methods: :func:`elicit.initialization.uniform`
-    loss_quantile : float,
+        The default value is ``None``.
+    loss_quantile : float or None,
         Quantile indicating which loss value should be used for selecting the
         initial hyperparameters.Specified as probability value between 0-1.
-        The default is ``0`` i.e., the minimum loss.
-    iterations : int
+        The default value is ``None``.
+    iterations : int or None
         Number of samples drawn from the initialization distribution.
-        The default is ``100``.
+        The default value is ``None``.
+    hyperparams : dict or None
+        Dictionary with specific initial values per hyperparameter. 
+        **Note:** Initial values are considered to be on the unconstrained
+        scale. Use  the `forward` method of :func:`elicit.utils.LowerBound`,
+        :func:`elicit.utils.UpperBound` and :func:`elicit.utils.DoubleBound`
+        for transforming a constrained hyerparameter into an unconstrained one.
+        In hyperparams dictionary, *keys* refer to hyperparameter names,
+        as specified in :func:`hyper` and *values* to the respective initial
+        values. The default value is ``None``.
 
     Returns
     -------
@@ -701,6 +718,8 @@ def initializer(
 
         ``loss_quantile`` must be a probability ranging between 0 and 1.
 
+        Either ``method`` or ``hyperparams`` has to be specified.
+
     Examples
     --------
     >>> el.initializer(
@@ -712,30 +731,50 @@ def initializer(
     >>>         mean=0
     >>>         )
     >>>     )
+
+    >>> el.initializer(
+    >>>     hyperparams = dict(
+    >>>         mu0=0., sigma0=el.utils.LowerBound(lower=0.).forward(0.3),
+    >>>         mu1=1., sigma1=el.utils.LowerBound(lower=0.).forward(0.5),
+    >>>         sigma2=el.utils.LowerBound(lower=0.).forward(0.4)
+    >>>         )
+    >>>     )
     """
-    # compute percentage from probability
-    quantile_perc = loss_quantile * 100
-
     # check that method is implemented
-    if method not in ["random", "lhs", "sobol"]:
-        raise ValueError(
-            "[section: initializer] Currently implemented initialization"
-            + f" methods are 'random', 'sobol', and 'lhs', but got '{method}'"
-            + " as input."
-        )
+    if method is not None:
+        # compute percentage from probability
+        quantile_perc = loss_quantile * 100
+        # ensure that iterations is an integer
+        iterations=int(iterations)
 
-    # check that quantile is provided as probability
-    if (quantile_perc < 0) or (quantile_perc > 1):
-        raise ValueError(
-            "[section: initializer] 'loss_quantile' must be a value between 0"
-            + f" and 1. Found 'loss_quantile={loss_quantile}'."
-        )
+        if method not in ["random", "lhs", "sobol"]:
+            raise ValueError(
+                "[section: initializer] Currently implemented initialization"
+                + f" methods are 'random', 'sobol', and 'lhs', but got '{method}'"
+                + " as input."
+            )
+
+        # check that quantile is provided as probability
+        if (quantile_perc < 0) or (quantile_perc > 1):
+            raise ValueError(
+                "[section: initializer] 'loss_quantile' must be a value between 0"
+                + f" and 1. Found 'loss_quantile={loss_quantile}'."
+            )
+
+    if method is None:
+        if hyperparams is None:
+            raise ValueError(
+                "[section: initializer] Either 'method' or 'hyperparams' has"
+                + " to be specified. Use method for sampling from an"
+                + " initialization distribution and 'hyperparams' for"
+                + " specifying exact initial values per hyperparameter.")
 
     init_dict = dict(
         method=method,
         distribution=distribution,
         loss_quantile=loss_quantile,
-        iterations=int(iterations),
+        iterations=iterations,
+        hyperparams=hyperparams
     )
 
     return init_dict
@@ -872,6 +911,14 @@ class Elicit:
             if ``method ="parametric_prior" and multiple hyperparameter have
             the same name but are not shared by setting ``shared=True``."
 
+            if ``hyperparams`` is specified in section ``initializer`` and a
+            hyperparameter name (key in hyperparams dict) does not match any
+            hyperparameter name specified in :func:`hyper`.
+
+        NotImplementedError
+            [network] Currently only the standard normal distribution is
+            implemented as base distribution. See `GitHub issue #35 <https://github.com/florence-bockting/prior_elicitation/issues/35>`_.
+
         """  # noqa: E501
         # check expert data
         expected_dict = el.utils.get_expert_datformat(targets)
@@ -940,6 +987,14 @@ class Elicit:
             hyp_names_flat = sum(hyp_names, [])
             hyp_shared_flat = sum(hyp_shared, [])
 
+            if initializer["method"] is None:
+                for k in initializer["hyperparams"]:
+                    if k not in hyp_names_flat:
+                        raise ValueError(
+                            f"[initializer] Hyperparameter name '{k}' doesn't"+
+                            " match any name specified in the parameters "+
+                            "section. Have you misspelled the name?")
+
             seen = []
             duplicate = []
             share = []
@@ -957,6 +1012,13 @@ class Elicit:
                     "[parameters] The following hyperparameter have the same"
                     +f" name but are not shared: {duplicate}."
                     +" Have you forgot to set shared=True?")
+
+        if network is not None:
+            if network["base_distribution"].__class__ != el.networks.BaseNormal:
+                raise NotImplementedError(
+                    "[network] Currently only the standard normal distribution"
+                    + " is implemented as base distribution."
+                    +" See GitHub issue #35.")
 
         self.model = model
         self.parameters = parameters

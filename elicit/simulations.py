@@ -27,7 +27,7 @@ class Priors(tf.Module):
     """
 
     def __init__(self, ground_truth: bool,
-                 init_matrix_slice: tf.Tensor or None,
+                 init_matrix_slice: dict[str, tf.Tensor] or None,
                  trainer: dict, parameters: dict, network: dict, expert: dict,
                  seed: int):
         """
@@ -37,7 +37,7 @@ class Priors(tf.Module):
         ----------
         ground_truth : bool
             True if expert data are simulated from a given ground truth (oracle)
-        init_matrix_slice : tf.Tensor or None
+        init_matrix_slice : dict[str, tf.Tensor] or None
             samples drawn from the initialization distribution to initialize
             the hyperparameter of the parametric prior distributions
             Only required for method="parametric_prior" otherwise None.
@@ -96,7 +96,7 @@ class Priors(tf.Module):
         return prior_samples
 
 
-def intialize_priors(init_matrix_slice: dict[str, tf.Variable] or None,
+def intialize_priors(init_matrix_slice: dict[str, tf.Tensor] or None,
                      method: str, seed: int, parameters: list[dict],
                      network: dict
                      ) -> dict[str, tf.Tensor]:
@@ -162,7 +162,7 @@ def intialize_priors(init_matrix_slice: dict[str, tf.Variable] or None,
                 pass
             else:
                 # get initial value
-                initial_value = init_matrix_slice[hp_n]
+                initial_value = float(init_matrix_slice[hp_n])
                 # initialize hyperparameter
                 initialized_hyperparam[f"{hp_k}_{hp_n}"] = tf.Variable(
                     initial_value=hp_dict["constraint"](initial_value),
@@ -251,8 +251,8 @@ def sample_from_priors(initialized_priors: dict[str, tf.Variable],
         prior_samples = tf.concat(priors, axis=-1)
 
     if (method == "parametric_prior") and (not ground_truth):
-
         priors = []
+
         for i in range(len(parameters)):
             # get the prior distribution family as specified by the user
             prior_family = parameters[i]["family"]
@@ -270,17 +270,19 @@ def sample_from_priors(initialized_priors: dict[str, tf.Variable],
                 )
         # stack all prior distributions into one tf.Tensor of
         # shape (B, S, num_parameters)
-        prior_samples = tf.concat(priors, axis=-1)
+        if len(priors[0].shape) < 3:
+            prior_samples = tf.stack(priors, axis=-1)
+        else:
+            prior_samples = tf.concat(priors, axis=-1)
 
     if (method == "deep_prior") and (not ground_truth):
-
         # initialize base distribution
         base_dist = network["base_distribution"](num_params=len(parameters))
         # sample from base distribution
         u = base_dist.sample((B, num_samples))
         # apply transformation function to samples from base distr.
         prior_samples, _ = initialized_priors(u, condition=None, inverse=False)
-
+    
     return prior_samples
 
 

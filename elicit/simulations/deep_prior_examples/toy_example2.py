@@ -88,14 +88,14 @@ eliobj = el.Elicit(
     targets=[
         el.target(
             name=f"y_X{i}",
-            query=el.queries.quantiles((5, 25, 50, 75, 95)),
+            query=el.queries.quantiles((.05, .25, .50, .75, .95)),
             loss=el.losses.MMD2(kernel="energy"),
             weight=1.0
         ) for i in range(5)
         ]+[
         el.target(
             name="log_R2",
-            query=el.queries.quantiles((5, 25, 50, 75, 95)),
+            query=el.queries.quantiles((.05, .25, .50, .75, .95)),
             loss=el.losses.MMD2(kernel="energy"),
             weight=1.0
         ),
@@ -118,9 +118,8 @@ eliobj = el.Elicit(
         ),
     trainer=el.trainer(
         method="deep_prior",
-        name="toy2",
         seed=3,
-        epochs=200
+        epochs=2
     ),
     network=el.networks.NF(
         inference_network=InvertibleNetwork,

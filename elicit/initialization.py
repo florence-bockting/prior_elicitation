@@ -307,27 +307,42 @@ def init_prior(
     """
 
     if trainer["method"] == "parametric_prior":
+        
+        if initializer["hyperparams"] is None:
 
-        loss_list, init_prior, init_matrix = init_runs(
-            expert_elicited_statistics,
-            initializer,
-            parameters,
-            trainer,
-            model,
-            targets,
-            network,
-            expert,
-        )
+            loss_list, init_prior, init_matrix = init_runs(
+                expert_elicited_statistics,
+                initializer,
+                parameters,
+                trainer,
+                model,
+                targets,
+                network,
+                expert,
+            )
+    
+            # extract pre-specified quantile loss out of all runs
+            # get corresponding set of initial values
+            loss_quantile = initializer["loss_quantile"]
+            index = tf.squeeze(
+                tf.where(loss_list == tfp.stats.percentile(loss_list,
+                                                           [loss_quantile]))
+            )
 
-        # extract pre-specified quantile loss out of all runs
-        # get corresponding set of initial values
-        loss_quantile = initializer["loss_quantile"]
-        index = tf.squeeze(
-            tf.where(loss_list == tfp.stats.percentile(loss_list,
-                                                       [loss_quantile]))
-        )
-
-        init_prior_model = init_prior[int(index)]
+            init_prior_model = init_prior[int(index)]
+        else:
+            # prepare generative model
+            init_prior_model = el.simulations.Priors(
+                ground_truth=False,
+                init_matrix_slice=initializer["hyperparams"],
+                trainer=trainer,
+                parameters=parameters,
+                network=network,
+                expert=expert,
+                seed=trainer["seed"],
+            )
+            # initialize empty variables for avoiding return conflicts
+            loss_list, init_prior, init_matrix = (None, None, None)
     else:
         # prepare generative model
         init_prior_model = el.simulations.Priors(

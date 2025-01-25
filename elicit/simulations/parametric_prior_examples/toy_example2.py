@@ -145,22 +145,22 @@ eliobj = el.Elicit(
     trainer=el.trainer(
         method="parametric_prior",
         seed=0,
-        epochs=100
+        epochs=600
     ),
     initializer=el.initializer(
-        method="random",
-        loss_quantile=.0,
-        iterations=1,
-        distribution=el.initialization.uniform(
-            radius=1,
-            mean=0
-            )
-        ),
+        hyperparams = dict(
+            mu0=0., sigma0=el.utils.LowerBound(lower=0.).forward(0.3),
+            mu1=1., sigma1=el.utils.LowerBound(lower=0.).forward(0.5),
+            sigma2=el.utils.LowerBound(lower=0.).forward(0.4)
+        )
+    )
     #network = el.networks.NF(...) # TODO vs. el.normalizing_flow(...)
 )
 
 eliobj.fit()
 #el.utils.get_expert_datformat(targets)
+
+el.plots.hyperparameter(eliobj)
 
 eliobj.save(file="test2")
 
