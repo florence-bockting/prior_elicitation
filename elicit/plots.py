@@ -479,13 +479,13 @@ def elicits(eliobj, cols: int = 4, **kwargs) -> None:
                          color="lightgrey")
                 for i in range(1, training.shape[-1])
             ],
-            [axs.set_ylim(-1, 1) for i in range(1, training.shape[-1])],
+            axs.set_ylim(-1, 1),
             axs.set_xlim(-0.5, training.shape[-1]),
             axs.set_xticks(
                 [i for i in range(training.shape[-1])],
                 [f"cor{i}" for i in range(training.shape[-1])],
             ),
-            axs.legend(fontsize="x-small", markerscale=0.5),
+            axs.legend(fontsize="x-small", markerscale=0.5, frameon=False),
         )
 
     # get number of hyperparameter

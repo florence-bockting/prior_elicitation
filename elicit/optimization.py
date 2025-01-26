@@ -58,6 +58,16 @@ def sgd_training(
     gradients_ep = []
     time_per_epoch = []
 
+    # save initialized trainable variables of epoch=0 (before first update)
+    init_vars_values = [
+        prior_model.trainable_variables[i].numpy().copy() for i in range(
+            len(prior_model.trainable_variables))
+        ]
+    init_vars_names = [
+        prior_model.trainable_variables[i].name[:-2] for i in range(
+            len(prior_model.trainable_variables))
+        ]
+
     # initialize the adam optimizer
     optimizer_copy = optimizer.copy()
     init_sgd_optimizer = optimizer["optimizer"]
@@ -121,6 +131,9 @@ def sgd_training(
                     hyp_list.append(hyperparams[i].name[:-2])
                 # create a dict with empty list for each hyperparameter
                 res_dict = {f"{k}": [] for k in hyp_list}
+                # create final dict with initial train. variables
+                for val, name in zip(init_vars_values, init_vars_names):
+                    res_dict[name].append(val)
 
             # save names and values of hyperparameters
             vars_values = [

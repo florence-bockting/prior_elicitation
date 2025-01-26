@@ -85,19 +85,20 @@ def uniform_samples(
     n_hypparam = 0
     name_hyper = list()
     res_dict = dict()
-    for i in range(len(parameters)):
-        for hyperparam in parameters[i]["hyperparams"]:
-            dim = parameters[i]["hyperparams"][hyperparam]["dim"]
-            name = parameters[i]["hyperparams"][hyperparam]["name"]
-            n_hypparam += dim
-            for j in range(dim):
-                name_hyper.append(name)
-
-            if hyppar is None:
+    if hyppar is None:
+        for i in range(len(parameters)):
+            for hyperparam in parameters[i]["hyperparams"]:
+                dim = parameters[i]["hyperparams"][hyperparam]["dim"]
+                name = parameters[i]["hyperparams"][hyperparam]["name"]
+                n_hypparam += dim
+                for j in range(dim):
+                    name_hyper.append(name)
+    
+    
                 # make sure type is correct
                 mean = tf.cast(mean, tf.float32)
                 radius = tf.cast(radius, tf.float32)
-
+    
                 # Generate samples based on the chosen method
                 if method == "sobol":
                     sampler = qmc.Sobol(d=dim, seed=seed.numpy())
@@ -117,35 +118,33 @@ def uniform_samples(
                         tf.subtract(mean, radius), tf.add(mean, radius)
                     ).quantile(sample_dat)
                 res_dict[name] = uniform_samples
-            else:
-                uniform_samples = []
-                for i, j, n in zip(mean, radius, hyppar):
-                    # make sure type is correct
-                    i = tf.cast(i, tf.float32)
-                    j = tf.cast(j, tf.float32)
+    else:
+        uniform_samples = []
+        for i, j, n in zip(mean, radius, hyppar):
+            # make sure type is correct
+            i = tf.cast(i, tf.float32)
+            j = tf.cast(j, tf.float32)
 
-                    if method == "random":
-                        uniform_samples = tfd.Uniform(
-                            tf.subtract(i, j), tf.add(i, j)
-                        ).sample((n_samples, 1))
-                    elif method == "sobol":
-                        sampler = qmc.Sobol(d=1)
-                        sample_data = sampler.random(n=n_samples)
-                    elif method == "lhs":
-                        sampler = qmc.LatinHypercube(d=1)
-                        sample_data = sampler.random(n=n_samples)
+            if method == "random":
+                uniform_samples = tfd.Uniform(
+                    tf.subtract(i, j), tf.add(i, j)
+                ).sample((n_samples, 1))
+            elif method == "sobol":
+                sampler = qmc.Sobol(d=1)
+                sample_data = sampler.random(n=n_samples)
+            elif method == "lhs":
+                sampler = qmc.LatinHypercube(d=1)
+                sample_data = sampler.random(n=n_samples)
 
-                    # Inverse transform
-                    if method == "sobol" or method == "lhs":
-                        sample_dat = tf.cast(
-                            tf.convert_to_tensor(sample_data), tf.float32
-                        )
-                        uniform_samples = tfd.Uniform(
-                            tf.subtract(i, j), tf.add(i, j)
-                        ).quantile(tf.squeeze(sample_dat, -1))
-
-                    res_dict[n] = tf.stack(uniform_samples, axis=-1)
-
+            # Inverse transform
+            if method == "sobol" or method == "lhs":
+                sample_dat = tf.cast(
+                    tf.convert_to_tensor(sample_data), tf.float32
+                )
+                uniform_samples = tfd.Uniform(
+                    tf.subtract(i, j), tf.add(i, j)
+                ).quantile(tf.squeeze(sample_dat, -1))
+            res_dict[n] = tf.stack(uniform_samples, axis=-1)[:,None]
     return res_dict
 
 
