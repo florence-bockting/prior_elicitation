@@ -451,9 +451,8 @@ def elicits(eliobj, cols: int = 4, **kwargs) -> None:
             + " from results savings?"
         )
 
-    def quantiles(
-        axs: plt.axes.Axes, expert: tf.Tensor, training: tf.Tensor
-    ) -> Tuple[plt.axes.Axes]:
+    def quantiles(axs: any, expert: tf.Tensor, training: tf.Tensor
+                  ) -> Tuple[any]:
         return (
             axs.axline((0, 0), slope=1, color="darkgrey", linestyle="dashed",
                        lw=1),
@@ -463,9 +462,8 @@ def elicits(eliobj, cols: int = 4, **kwargs) -> None:
             ),
         )
 
-    def correlation(
-        axs: plt.axes.Axes, expert: tf.Tensor, training: tf.Tensor
-    ) -> Tuple[plt.axes.Axes]:
+    def correlation(axs: any, expert: tf.Tensor, training: tf.Tensor
+                    ) -> Tuple[any]:
         return (
             axs.plot(0, expert[:, 0], "s", color="black", label="expert"),
             axs.plot(
@@ -666,4 +664,64 @@ def marginals(eliobj, cols: int = 4, span: int = 30, **kwargs) -> None:
 
     fig.suptitle("Convergence of prior marginals mean and sd",
                  fontsize="medium")
+    plt.show()
+
+
+def priorpredictive(eliobj, **kwargs) -> None:
+    """
+    plots prior predictive distribution of samples from the generative model
+    in the last epoch
+
+    Parameters
+    ----------
+    eliobj : instance of :func:`elicit.elicit.Elicit`
+        fitted ``eliobj`` object.
+    kwargs : any, optional
+        additional keyword arguments that can be passed to specify
+        `plt.subplots() <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html>`_
+
+
+    Examples
+    --------
+    >>> el.plots.priorpredictive(eliobj, figuresize=(6,2))
+
+    Raises
+    ------
+    KeyError
+        Can't find 'model_samples' in 'eliobj.results'. Have you excluded 
+        'model_samples' from results savings?
+
+    """
+    # check that all information can be assessed
+    try:
+        eliobj.results["model_samples"]
+    except KeyError:
+        print(
+            "No information about 'model_samples' found in 'eliobj.results'"
+            +" Have you excluded 'model_samples' from results savings?"
+        )
+
+    B=eliobj.trainer["B"]
+    num_samples=eliobj.trainer["num_samples"]
+    n_obs = eliobj.results["model_samples"]["ypred"].shape[-1]
+
+    pp_samples = tf.reshape(eliobj.results["model_samples"]["ypred"],
+                            (B*num_samples,n_obs))
+
+
+    fig, axs = plt.subplots(1, 1, constrained_layout=True, **kwargs)
+    axs.grid(color="lightgrey", linestyle="dotted", linewidth=1)
+    for i in range(n_obs):
+        shade = i / (n_obs - 1)
+        color = plt.cm.gray(shade)
+        sns.histplot(pp_samples[:,i], stat="probability", bins=40,
+                     label=eliobj.targets[i]["name"], ax=axs,
+                     color=color
+                     )
+    plt.legend(fontsize="small", handlelength=0.9, frameon=False)
+    axs.set_title("prior predictive distribution", fontsize="small")
+    axs.spines[["right", "top"]].set_visible(False)
+    axs.tick_params(axis="y", labelsize="x-small")
+    axs.tick_params(axis="x", labelsize="x-small")
+    axs.set_xlabel(r"$y_{pred}$", fontsize="small")
     plt.show()

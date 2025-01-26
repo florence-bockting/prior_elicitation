@@ -12,6 +12,8 @@ import warnings
 
 from typing import Tuple
 
+tfd = tfp.distributions
+
 
 def save_as_pkl(obj: any, save_dir: str) -> None:
     """
@@ -695,6 +697,9 @@ def save_results(
     if ``prior_samples`` is excluded :func:`elicit.plots.priors` can't be
     used as it requires this information.
 
+    if ``model_samples`` is excluded :func:`elicit.plots.priorpredictive`
+    can't be used as it requires this information.
+
     if ``expert_elicited_statistics`` or ``elicited_statistics`` is
     excluded :func:`elicit.plots.elicits` can't be used as it requires this
     information.
@@ -716,6 +721,12 @@ def save_results(
         warnings.warn(
             "el.plots.priors() requires information about "
             + "'prior_samples'. If you don't save this information "
+            + "this plotting function can't be used."
+        )
+    if not model_samples:
+        warnings.warn(
+            "el.plots.priorpredictive() requires information about "
+            + "'model_samples'. If you don't save this information "
             + "this plotting function can't be used."
         )
     if (not expert_elicited_statistics) or (not elicited_statistics):
@@ -767,3 +778,125 @@ def get_expert_datformat(targets: list[dict]) -> dict[str, list]:
         elicit_dict[key] = list()
 
     return elicit_dict
+
+
+def softmax_gumbel_trick(epred: tf.Tensor, likelihood: callable,
+                         upper_thres: float, temp: float=1.6, **kwargs):
+    """
+    The softmax-gumbel trick computes a continuous approximation of ypred from
+    a discrete likelihood and thus allows for the computation of gradients for
+    discrete random variables.
+
+    Currently this approach is only implemented for models without upper
+    boundary (e.g., Poisson model).
+
+    Corresponding literature:
+
+        - Maddison, C. J., Mnih, A. & Teh, Y. W. The concrete distribution:
+          A continuous relaxation of discrete random variables in International
+          Conference on Learning Representations (2017).
+          https://doi.org/10.48550/arXiv.1611.00712
+        - Jang, E., Gu, S. & Poole, B. Categorical reparameterization with
+          gumbel-softmax in International Conference on Learning Representations
+          (2017). https://openreview.net/forum?id=rkE3y85ee.
+        - Joo, W., Kim, D., Shin, S. & Moon, I.-C. Generalized gumbel-softmax
+          gradient estimator for generic discrete random variables. Preprint
+          at https://doi.org/10.48550/arXiv.2003.01847 (2020).
+
+    Parameters
+    ----------
+    epred : tf.Tensor, shape = [B, num_samples, num_obs]
+        simulated linear predictor from the model simulations 
+    likelihood : tfp.distributions object, shape = [B, num_samples, num_obs, 1]
+        likelihood function used in the generative model.
+        Must be a tfp.distributions object.
+    upper_thres : float
+        upper threshold at which the distribution of the outcome variable is
+        truncated. For double-bounded distribution (e.g. Binomial) this is
+        simply the "total count" information. Lower-bounded distribution
+        (e.g. Poisson) must be truncated to create an artificial
+        double-boundedness.
+    temp : float, temp > 0
+        temperature hyperparameter of softmax function. A temperature going
+        towards zero yields approximates a categorical distribution, while
+        a temperature >> 0 approximates a continuous distribution.
+        The default value is ``1.6``.
+    kwargs : any
+        additional keyword arguments including the seed information. **Note**:
+        the ``**kwargs`` argument is required in this function (!) as it
+        extracts internally the seed information.
+
+    Returns
+    -------
+    ypred : tf.Tensor
+        continuously approximated ypred from the discrete likelihood.
+
+    Raise
+    -----
+    ValueError
+        if rank of ``likelihood`` is not 4. The shape of the likelihood obj
+        must have an extra final dimension, i.e., (B, num_samples, num_obs, 1),
+        for the softmax-gumbel computation. Use for example
+        ``tf.expand_dims(mu,-1)`` for expanding the batch-shape of the
+        likelihood.
+
+        if likelihood is not in tfp.distributions module. The likelihood
+        must be a tfp.distributions object.
+
+    KeyError
+        if ``**kwargs`` is not in function arguments. It is required to pass
+        the **kwargs argument as it is used for extracting internally 
+        information about the seed.
+
+    """
+    # check rank of likelihood object
+    if len(likelihood.batch_shape) != 4:
+        raise ValueError(
+            "The 'likelihood' in the generative model must have"
+            +" batch_shape = (B, num_samples, num_obs, 1)."
+            +" The additional final axis is required by the softmax-gumbel"
+            +" computation. Use for example `tf.expand_dims(mu,-1)` for"
+            +" expanding the batch-shape of the likelihood."
+            )
+    # check value/type of likelihood object
+    if likelihood.name.lower() not in dir(tfd):
+        raise ValueError(
+            "Likelihood in generative model must be a tfp.distribution object."
+            )
+    if "seed" not in list(kwargs.keys()):
+        raise KeyError(
+            "Please provide the **kwargs argument in the el.utils.softmax-"
+              +"gumble function. This is required for extracting internally"
+              +" information about the seed.")
+
+    # set seed
+    tf.random.set_seed(kwargs["seed"])
+    # get batch size
+    B = epred.shape[0]
+    # get number of simulations from priors
+    S = epred.shape[1]
+    # get number of observations
+    number_obs = epred.shape[2]
+    # constant outcome vector (including zero outcome)
+    thres = upper_thres
+    c = tf.range(thres + 1, delta=1, dtype=tf.float32)
+    # broadcast to shape (B, rep, outcome-length)
+    c_brct = tf.broadcast_to(c[None, None, None, :], shape=(B, S, number_obs,
+                                                            len(c)))
+    # compute pmf value
+    pi = likelihood.prob(c_brct)
+    # prevent underflow
+    pi = tf.where(pi < 1.8 * 10 ** (-30), 1.8 * 10 ** (-30), pi)
+    # sample from uniform
+    u = tfd.Uniform(0, 1).sample((B, S, number_obs, len(c)))
+    # generate a gumbel sample from uniform sample
+    g = -tf.math.log(-tf.math.log(u))
+    # softmax gumbel trick
+    w = tf.nn.softmax(
+        tf.math.divide(
+            tf.math.add(tf.math.log(pi), g), temp,
+        )
+    )
+    # reparameterization/linear transformation
+    ypred = tf.reduce_sum(tf.multiply(w, c), axis=-1)
+    return ypred

@@ -377,6 +377,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.save_history"><code class="docutils literal notranslate"><span class="pre">save_history()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.save_results"><code class="docutils literal notranslate"><span class="pre">save_results()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.get_expert_datformat"><code class="docutils literal notranslate"><span class="pre">get_expert_datformat()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.softmax_gumbel_trick"><code class="docutils literal notranslate"><span class="pre">softmax_gumbel_trick()</span></code></a></li>
 </ul>
             </nav>
         </div>
@@ -417,8 +418,23 @@ document.write(`
 
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.utils.identity">
-<span class="sig-prename descclassname"><span class="pre">elicit.utils.</span></span><span class="sig-name descname"><span class="pre">identity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.identity" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">elicit.utils.</span></span><span class="sig-name descname"><span class="pre">identity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">any</span></span></span><a class="reference internal" href="../_modules/elicit/utils.html#identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.identity" title="Link to this definition">#</a></dt>
+<dd><p>identity function. Returns the input</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">any</span></dt><dd><p>arbitrary input object.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">any</span></dt><dd><p>returns the input object without any transformation.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="elicit.utils.DoubleBound">
@@ -427,7 +443,7 @@ document.write(`
 <p>A variable constrained to be in the open interval
 (<code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code>) is transformed to an unconstrained variable Y
 via a scaled and translated log-odds transform.</p>
-<p>Basis for the here used constraints, is the 
+<p>Basis for the here used constraints, is the
 <a class="reference external" href="https://mc-stan.org/docs/reference-manual/transforms.html">constraint transforms implementation in Stan</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -445,7 +461,7 @@ via a scaled and translated log-odds transform.</p>
 <dd><p>A variable constrained to be in the open interval
 (<code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code>) is transformed to an unconstrained variable Y
 via a scaled and translated log-odds transform.</p>
-<p>Basis for the here used constraints, is the 
+<p>Basis for the here used constraints, is the
 <a class="reference external" href="https://mc-stan.org/docs/reference-manual/transforms.html">constraint transforms implementation in Stan</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -560,7 +576,7 @@ with <code class="docutils literal notranslate"><span class="pre">lower</span></
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A variable with a <code class="docutils literal notranslate"><span class="pre">lower</span></code> bound is transformed to an
 unconstrained variable Y via an inverse-softplus transform.</p>
-<p>Basis for the here used constraints, is the 
+<p>Basis for the here used constraints, is the
 <a class="reference external" href="https://mc-stan.org/docs/reference-manual/transforms.html">constraint transforms implementation in Stan</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -575,7 +591,7 @@ unconstrained variable Y via an inverse-softplus transform.</p>
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lower</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#LowerBound.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.LowerBound.__init__" title="Link to this definition">#</a></dt>
 <dd><p>A variable with a <code class="docutils literal notranslate"><span class="pre">lower</span></code> bound is transformed to an
 unconstrained variable Y via an inverse-softplus transform.</p>
-<p>Basis for the here used constraints, is the 
+<p>Basis for the here used constraints, is the
 <a class="reference external" href="https://mc-stan.org/docs/reference-manual/transforms.html">constraint transforms implementation in Stan</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -641,7 +657,7 @@ variable x with <code class="docutils literal notranslate"><span class="pre">low
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A variable with an <code class="docutils literal notranslate"><span class="pre">upper</span></code> bound is transformed into an
 unconstrained variable Y via an inverse-softplus transform.</p>
-<p>Basis for the here used constraints, is the 
+<p>Basis for the here used constraints, is the
 <a class="reference external" href="https://mc-stan.org/docs/reference-manual/transforms.html">constraint transforms implementation in Stan</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -656,7 +672,7 @@ unconstrained variable Y via an inverse-softplus transform.</p>
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upper</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#UpperBound.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.UpperBound.__init__" title="Link to this definition">#</a></dt>
 <dd><p>A variable with an <code class="docutils literal notranslate"><span class="pre">upper</span></code> bound is transformed into an
 unconstrained variable Y via an inverse-softplus transform.</p>
-<p>Basis for the here used constraints, is the 
+<p>Basis for the here used constraints, is the
 <a class="reference external" href="https://mc-stan.org/docs/reference-manual/transforms.html">constraint transforms implementation in Stan</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -726,11 +742,11 @@ variable x with <code class="docutils literal notranslate"><span class="pre">upp
 <dt><strong>prior_model</strong><span class="classifier">instance of Priors class objects</span></dt><dd><p>initialized prior distributions which can be used for sampling.</p>
 </dd>
 <dt><strong>trainer</strong><span class="classifier">callable</span></dt><dd><p>specification of training settings and meta-information for
-workflow using <code class="xref py py-func docutils literal notranslate"><span class="pre">trainer()</span></code></p>
+workflow using <a class="reference internal" href="elicit.elicit.html#elicit.elicit.trainer" title="elicit.elicit.trainer"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.trainer()</span></code></a></p>
 </dd>
-<dt><strong>model</strong><span class="classifier">callable</span></dt><dd><p>specification of generative model using <code class="xref py py-func docutils literal notranslate"><span class="pre">model()</span></code>.</p>
+<dt><strong>model</strong><span class="classifier">callable</span></dt><dd><p>specification of generative model using <a class="reference internal" href="elicit.elicit.html#elicit.elicit.model" title="elicit.elicit.model"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.model()</span></code></a>.</p>
 </dd>
-<dt><strong>targets</strong><span class="classifier">list</span></dt><dd><p>list of target quantities specified with <code class="xref py py-func docutils literal notranslate"><span class="pre">target()</span></code>.</p>
+<dt><strong>targets</strong><span class="classifier">list</span></dt><dd><p>list of target quantities specified with <a class="reference internal" href="elicit.elicit.html#elicit.elicit.target" title="elicit.elicit.target"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.target()</span></code></a>.</p>
 </dd>
 </dl>
 </dd>
@@ -762,15 +778,15 @@ data simulations using a pre-defined ground truth.</p>
 <dt><strong>trainer</strong><span class="classifier">callable</span></dt><dd><p>specification of training settings and meta-information for
 workflow using <code class="xref py py-func docutils literal notranslate"><span class="pre">trainer()</span></code></p>
 </dd>
-<dt><strong>model</strong><span class="classifier">callable</span></dt><dd><p>specification of generative model using <code class="xref py py-func docutils literal notranslate"><span class="pre">model()</span></code>.</p>
+<dt><strong>model</strong><span class="classifier">callable</span></dt><dd><p>specification of generative model using <a class="reference internal" href="elicit.elicit.html#elicit.elicit.model" title="elicit.elicit.model"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.model()</span></code></a>.</p>
 </dd>
-<dt><strong>targets</strong><span class="classifier">list</span></dt><dd><p>list of target quantities specified with <code class="xref py py-func docutils literal notranslate"><span class="pre">target()</span></code>.</p>
+<dt><strong>targets</strong><span class="classifier">list</span></dt><dd><p>list of target quantities specified with <a class="reference internal" href="elicit.elicit.html#elicit.elicit.target" title="elicit.elicit.target"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.target()</span></code></a>.</p>
 </dd>
 <dt><strong>expert</strong><span class="classifier">callable</span></dt><dd><p>provide input data from expert or simulate data from oracle with
 either the <code class="docutils literal notranslate"><span class="pre">data</span></code> or <code class="docutils literal notranslate"><span class="pre">simulator</span></code> method of the
 <a class="reference internal" href="elicit.elicit.html#elicit.elicit.Expert" title="elicit.elicit.Expert"><code class="xref py py-mod docutils literal notranslate"><span class="pre">elicit.elicit.Expert</span></code></a> module.</p>
 </dd>
-<dt><strong>parameters</strong><span class="classifier">list</span></dt><dd><p>list of model parameters specified with <code class="xref py py-func docutils literal notranslate"><span class="pre">parameter()</span></code>.</p>
+<dt><strong>parameters</strong><span class="classifier">list</span></dt><dd><p>list of model parameters specified with <a class="reference internal" href="elicit.elicit.html#elicit.elicit.parameter" title="elicit.elicit.parameter"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.parameter()</span></code></a>.</p>
 </dd>
 <dt><strong>network</strong><span class="classifier">callable or None</span></dt><dd><p>specification of neural network using a method implemented in
 <a class="reference internal" href="elicit.networks.html#module-elicit.networks" title="elicit.networks"><code class="xref py py-mod docutils literal notranslate"><span class="pre">elicit.networks</span></code></a>.
@@ -931,6 +947,8 @@ used as it requires this information.</p>
 used as it requires this information.</p>
 <p>if <code class="docutils literal notranslate"><span class="pre">prior_samples</span></code> is excluded <a class="reference internal" href="elicit.plots.html#elicit.plots.priors" title="elicit.plots.priors"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.plots.priors()</span></code></a> can’t be
 used as it requires this information.</p>
+<p>if <code class="docutils literal notranslate"><span class="pre">model_samples</span></code> is excluded <a class="reference internal" href="elicit.plots.html#elicit.plots.priorpredictive" title="elicit.plots.priorpredictive"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.plots.priorpredictive()</span></code></a>
+can’t be used as it requires this information.</p>
 <p>if <code class="docutils literal notranslate"><span class="pre">expert_elicited_statistics</span></code> or <code class="docutils literal notranslate"><span class="pre">elicited_statistics</span></code> is
 excluded <a class="reference internal" href="elicit.plots.html#elicit.plots.elicits" title="elicit.plots.elicits"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.plots.elicits()</span></code></a> can’t be used as it requires this
 information.</p>
@@ -945,13 +963,70 @@ data is expected by the method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>targets</strong><span class="classifier">list</span></dt><dd><p>list of target quantities specified with <code class="xref py py-func docutils literal notranslate"><span class="pre">target()</span></code>.</p>
+<dt><strong>targets</strong><span class="classifier">list</span></dt><dd><p>list of target quantities specified with <a class="reference internal" href="elicit.elicit.html#elicit.elicit.target" title="elicit.elicit.target"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.target()</span></code></a>.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>elicit_dict</strong><span class="classifier">dict[str, list]</span></dt><dd><p>expected format of expert data.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="elicit.utils.softmax_gumbel_trick">
+<span class="sig-prename descclassname"><span class="pre">elicit.utils.</span></span><span class="sig-name descname"><span class="pre">softmax_gumbel_trick</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">likelihood</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_thres</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.6</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/elicit/utils.html#softmax_gumbel_trick"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.utils.softmax_gumbel_trick" title="Link to this definition">#</a></dt>
+<dd><p>The softmax-gumbel trick computes a continuous approximation of ypred from
+a discrete likelihood and thus allows for the computation of gradients for
+discrete random variables.</p>
+<p>Currently this approach is only implemented for models without upper
+boundary (e.g., Poisson model).</p>
+<p>Corresponding literature:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Maddison, C. J., Mnih, A. &amp; Teh, Y. W. The concrete distribution:
+A continuous relaxation of discrete random variables in International
+Conference on Learning Representations (2017).
+<a class="reference external" href="https://doi.org/10.48550/arXiv.1611.00712">https://doi.org/10.48550/arXiv.1611.00712</a></p></li>
+<li><p>Jang, E., Gu, S. &amp; Poole, B. Categorical reparameterization with
+gumbel-softmax in International Conference on Learning Representations
+(2017). <a class="reference external" href="https://openreview.net/forum?id=rkE3y85ee">https://openreview.net/forum?id=rkE3y85ee</a>.</p></li>
+<li><p>Joo, W., Kim, D., Shin, S. &amp; Moon, I.-C. Generalized gumbel-softmax
+gradient estimator for generic discrete random variables. Preprint
+at <a class="reference external" href="https://doi.org/10.48550/arXiv.2003.01847">https://doi.org/10.48550/arXiv.2003.01847</a> (2020).</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>epred</strong><span class="classifier">tf.Tensor, shape = [B, num_samples, num_obs]</span></dt><dd><p>simulated linear predictor from the model simulations</p>
+</dd>
+<dt><strong>likelihood</strong><span class="classifier">tfp.distributions object, shape = [B, num_samples, num_obs, 1]</span></dt><dd><p>likelihood function used in the generative model.
+Must be a tfp.distributions object.</p>
+</dd>
+<dt><strong>upper_thres</strong><span class="classifier">float</span></dt><dd><p>upper threshold at which the distribution of the outcome variable is
+truncated. For double-bounded distribution (e.g. Binomial) this is
+simply the “total count” information. Lower-bounded distribution
+(e.g. Poisson) must be truncated to create an artificial
+double-boundedness.</p>
+</dd>
+<dt><strong>temp</strong><span class="classifier">float, temp &gt; 0</span></dt><dd><p>temperature hyperparameter of softmax function. A temperature going
+towards zero yields approximates a categorical distribution, while
+a temperature &gt;&gt; 0 approximates a continuous distribution.
+The default value is <code class="docutils literal notranslate"><span class="pre">1.6</span></code>.</p>
+</dd>
+<dt><strong>kwargs</strong><span class="classifier">any</span></dt><dd><p>additional keyword arguments including the seed information. <strong>Note</strong>:
+the <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> argument is required in this function (!) as it
+extracts internally the seed information.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>ypred</strong><span class="classifier">tf.Tensor</span></dt><dd><p>continuously approximated ypred from the discrete likelihood.</p>
 </dd>
 </dl>
 </dd>
@@ -1034,6 +1109,7 @@ data is expected by the method.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.save_history"><code class="docutils literal notranslate"><span class="pre">save_history()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.save_results"><code class="docutils literal notranslate"><span class="pre">save_results()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.get_expert_datformat"><code class="docutils literal notranslate"><span class="pre">get_expert_datformat()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.utils.softmax_gumbel_trick"><code class="docutils literal notranslate"><span class="pre">softmax_gumbel_trick()</span></code></a></li>
 </ul>
   </nav></div>
 

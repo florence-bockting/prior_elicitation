@@ -314,6 +314,8 @@ document.write(`
 
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
 
+<span class="n">tfd</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">distributions</span>
+
 
 <div class="viewcode-block" id="save_as_pkl">
 <a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.save_as_pkl">[docs]</a>
@@ -347,7 +349,21 @@ document.write(`
 
 <div class="viewcode-block" id="identity">
 <a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.identity">[docs]</a>
-<span class="k">def</span> <span class="nf">identity</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">identity</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    identity function. Returns the input</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : any</span>
+<span class="sd">        arbitrary input object.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    x : any</span>
+<span class="sd">        returns the input object without any transformation.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">x</span></div>
 
 
@@ -363,7 +379,7 @@ document.write(`
 <span class="sd">        (``lower``, ``upper``) is transformed to an unconstrained variable Y</span>
 <span class="sd">        via a scaled and translated log-odds transform.</span>
 
-<span class="sd">        Basis for the here used constraints, is the </span>
+<span class="sd">        Basis for the here used constraints, is the</span>
 <span class="sd">        `constraint transforms implementation in Stan &lt;https://mc-stan.org/docs/reference-manual/transforms.html&gt;`_.</span>
 
 <span class="sd">        Parameters</span>
@@ -507,7 +523,7 @@ document.write(`
 <span class="sd">        A variable with a ``lower`` bound is transformed to an</span>
 <span class="sd">        unconstrained variable Y via an inverse-softplus transform.</span>
 
-<span class="sd">        Basis for the here used constraints, is the </span>
+<span class="sd">        Basis for the here used constraints, is the</span>
 <span class="sd">        `constraint transforms implementation in Stan &lt;https://mc-stan.org/docs/reference-manual/transforms.html&gt;`_.</span>
 
 <span class="sd">        Parameters</span>
@@ -589,7 +605,7 @@ document.write(`
 <span class="sd">        A variable with an ``upper`` bound is transformed into an</span>
 <span class="sd">        unconstrained variable Y via an inverse-softplus transform.</span>
 
-<span class="sd">        Basis for the here used constraints, is the </span>
+<span class="sd">        Basis for the here used constraints, is the</span>
 <span class="sd">        `constraint transforms implementation in Stan &lt;https://mc-stan.org/docs/reference-manual/transforms.html&gt;`_.</span>
 
 <span class="sd">        Parameters</span>
@@ -663,9 +679,10 @@ document.write(`
 
 <div class="viewcode-block" id="one_forward_simulation">
 <a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.one_forward_simulation">[docs]</a>
-<span class="k">def</span> <span class="nf">one_forward_simulation</span><span class="p">(</span><span class="n">prior_model</span><span class="p">:</span> <span class="n">el</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">Priors</span><span class="p">,</span>
-                           <span class="n">trainer</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">targets</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span>
-                           <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
+<span class="k">def</span> <span class="nf">one_forward_simulation</span><span class="p">(</span>
+    <span class="n">prior_model</span><span class="p">:</span> <span class="n">el</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">Priors</span><span class="p">,</span> <span class="n">trainer</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">targets</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>  <span class="c1"># noqa: E125</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    One forward simulation from prior samples to elicited statistics.</span>
 
@@ -675,11 +692,11 @@ document.write(`
 <span class="sd">        initialized prior distributions which can be used for sampling.</span>
 <span class="sd">    trainer : callable</span>
 <span class="sd">        specification of training settings and meta-information for</span>
-<span class="sd">        workflow using :func:`trainer`</span>
+<span class="sd">        workflow using :func:`elicit.elicit.trainer`</span>
 <span class="sd">    model : callable</span>
-<span class="sd">        specification of generative model using :func:`model`.</span>
+<span class="sd">        specification of generative model using :func:`elicit.elicit.model`.</span>
 <span class="sd">    targets : list</span>
-<span class="sd">        list of target quantities specified with :func:`target`.</span>
+<span class="sd">        list of target quantities specified with :func:`elicit.elicit.target`.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -718,12 +735,16 @@ document.write(`
 
 
 
-<span class="c1">#%% simulate expert data or get input data</span>
 <div class="viewcode-block" id="get_expert_data">
 <a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.get_expert_data">[docs]</a>
-<span class="k">def</span> <span class="nf">get_expert_data</span><span class="p">(</span><span class="n">trainer</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">targets</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span>
-                    <span class="n">expert</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span> <span class="n">network</span><span class="p">:</span> <span class="nb">dict</span>
-                    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
+<span class="k">def</span> <span class="nf">get_expert_data</span><span class="p">(</span>
+    <span class="n">trainer</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">targets</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span>
+    <span class="n">expert</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">parameters</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span>
+    <span class="n">network</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Wrapper for loading the training data which can be expert data or</span>
 <span class="sd">    data simulations using a pre-defined ground truth.</span>
@@ -734,15 +755,15 @@ document.write(`
 <span class="sd">        specification of training settings and meta-information for</span>
 <span class="sd">        workflow using :func:`trainer`</span>
 <span class="sd">    model : callable</span>
-<span class="sd">        specification of generative model using :func:`model`.</span>
+<span class="sd">        specification of generative model using :func:`elicit.elicit.model`.</span>
 <span class="sd">    targets : list</span>
-<span class="sd">        list of target quantities specified with :func:`target`.</span>
+<span class="sd">        list of target quantities specified with :func:`elicit.elicit.target`.</span>
 <span class="sd">    expert : callable</span>
 <span class="sd">        provide input data from expert or simulate data from oracle with</span>
 <span class="sd">        either the ``data`` or ``simulator`` method of the</span>
 <span class="sd">        :mod:`elicit.elicit.Expert` module.</span>
 <span class="sd">    parameters : list</span>
-<span class="sd">        list of model parameters specified with :func:`parameter`.</span>
+<span class="sd">        list of model parameters specified with :func:`elicit.elicit.parameter`.</span>
 <span class="sd">    network : callable or None</span>
 <span class="sd">        specification of neural network using a method implemented in</span>
 <span class="sd">        :mod:`elicit.networks`.</span>
@@ -759,24 +780,27 @@ document.write(`
 <span class="sd">        samples from ground truth. Exists only if expert data are simulated</span>
 <span class="sd">        from an oracle. Otherwise this output is ``None``</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">expert</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-        <span class="n">oracle</span><span class="o">=</span><span class="kc">True</span>
+        <span class="n">oracle</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">oracle</span><span class="o">=</span><span class="kc">False</span>
+        <span class="n">oracle</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="k">if</span> <span class="n">oracle</span><span class="p">:</span>
         <span class="c1"># set seed</span>
         <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">])</span>
         <span class="c1"># sample from true priors</span>
         <span class="n">prior_model</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">Priors</span><span class="p">(</span>
-            <span class="n">ground_truth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+            <span class="n">ground_truth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">init_matrix_slice</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">trainer</span><span class="o">=</span><span class="n">trainer</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">network</span><span class="o">=</span><span class="n">network</span><span class="p">,</span>
+            <span class="n">trainer</span><span class="o">=</span><span class="n">trainer</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span>
+            <span class="n">network</span><span class="o">=</span><span class="n">network</span><span class="p">,</span>
             <span class="n">expert</span><span class="o">=</span><span class="n">expert</span><span class="p">,</span>
-            <span class="n">seed</span><span class="o">=</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">])</span>
+            <span class="n">seed</span><span class="o">=</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
         <span class="c1"># compute elicited statistics and target quantities</span>
         <span class="n">expert_data</span><span class="p">,</span> <span class="n">expert_prior</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">one_forward_simulation</span><span class="p">(</span>
             <span class="n">prior_model</span><span class="p">,</span> <span class="n">trainer</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">targets</span>
@@ -784,8 +808,6 @@ document.write(`
         <span class="k">return</span> <span class="n">expert_data</span><span class="p">,</span> <span class="n">expert_prior</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># load expert data from file</span>
-        <span class="c1"># TODO Expert data must have same name and structure as sim-based</span>
-        <span class="c1"># elicited statistics</span>
         <span class="n">expert_data</span> <span class="o">=</span> <span class="n">expert</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">expert_data</span><span class="p">,</span> <span class="kc">None</span></div>
 
@@ -793,32 +815,42 @@ document.write(`
 
 <div class="viewcode-block" id="save">
 <a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.save">[docs]</a>
-<span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="n">eliobj</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-         <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">save</span><span class="p">(</span>
+    <span class="n">eliobj</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">file</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="c1"># either name or file must be specified</span>
-    <span class="k">assert</span> <span class="p">(</span><span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;Name and file cannot be both &quot;</span><span class="o">+</span>
-                        <span class="s2">&quot;None or both specified. Either one has to be None.&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="p">(</span><span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">),</span> <span class="p">(</span>
+        <span class="s2">&quot;Name and file cannot be both &quot;</span>
+        <span class="o">+</span> <span class="s2">&quot;None or both specified. Either one has to be None.&quot;</span>
+    <span class="p">)</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.pkl&quot;</span><span class="p">):</span>
-                <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="s2">&quot;.pkl&quot;</span><span class="p">)</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="s2">&quot;.pkl&quot;</span><span class="p">)</span>
         <span class="c1"># create saving path</span>
         <span class="n">path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;./results/</span><span class="si">{</span><span class="n">eliobj</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">eliobj</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s1">&#39;seed&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>  <span class="c1"># noqa</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
         <span class="c1"># postprocess file (or name) to avoid file.pkl.pkl</span>
         <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.pkl&quot;</span><span class="p">):</span>
-                <span class="n">file</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="s2">&quot;.pkl&quot;</span><span class="p">)</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;./&quot;</span><span class="o">+</span><span class="n">file</span>
+            <span class="n">file</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="s2">&quot;.pkl&quot;</span><span class="p">)</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;./&quot;</span> <span class="o">+</span> <span class="n">file</span>
     <span class="c1"># check whether saving path is already used</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s2">&quot;.pkl&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
-        <span class="n">user_ans</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;In provided directory exists already a file with&quot;</span><span class="o">+</span>
-                         <span class="s2">&quot; identical name. Do you want to overwrite it?&quot;</span><span class="o">+</span>
-                         <span class="s2">&quot; Press &#39;y&#39; for overwriting and &#39;n&#39; for abording.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;.pkl&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
+        <span class="n">user_ans</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span>
+            <span class="s2">&quot;In provided directory exists already a file with&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; identical name. Do you want to overwrite it?&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; Press &#39;y&#39; for overwriting and &#39;n&#39; for abording.&quot;</span>
+        <span class="p">)</span>
         <span class="k">while</span> <span class="n">user_ans</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">]:</span>
-            <span class="n">user_ans</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Please press either &#39;y&#39; for overwriting or &#39;n&#39;&quot;</span><span class="o">+</span>
-                             <span class="s2">&quot;for abording the process.&quot;</span><span class="p">)</span>
+            <span class="n">user_ans</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span>
+                <span class="s2">&quot;Please press either &#39;y&#39; for overwriting or &#39;n&#39;&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;for abording the process.&quot;</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">user_ans</span> <span class="o">==</span> <span class="s2">&quot;n&quot;</span><span class="p">:</span>
-            <span class="k">return</span><span class="p">(</span><span class="s2">&quot;Process aborded. File is not overwritten.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s2">&quot;Process aborded. File is not overwritten.&quot;</span>
 
     <span class="n">storage</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="c1"># user inputs</span>
@@ -834,7 +866,7 @@ document.write(`
     <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">results</span>
     <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;history&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">history</span>
 
-    <span class="n">save_as_pkl</span><span class="p">(</span><span class="n">storage</span><span class="p">,</span> <span class="n">path</span><span class="o">+</span><span class="s2">&quot;.pkl&quot;</span><span class="p">)</span>
+    <span class="n">save_as_pkl</span><span class="p">(</span><span class="n">storage</span><span class="p">,</span> <span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;.pkl&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;saved in: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">.pkl&quot;</span><span class="p">)</span></div>
 
 
@@ -859,15 +891,15 @@ document.write(`
     <span class="n">obj</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
 
     <span class="n">eliobj</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">Elicit</span><span class="p">(</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">],</span>
-        <span class="n">parameters</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">],</span>
-        <span class="n">targets</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;targets&quot;</span><span class="p">],</span>
-        <span class="n">expert</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;expert&quot;</span><span class="p">],</span>
-        <span class="n">optimizer</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;optimizer&quot;</span><span class="p">],</span>
-        <span class="n">trainer</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;trainer&quot;</span><span class="p">],</span>
-        <span class="n">initializer</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;initializer&quot;</span><span class="p">],</span>
-        <span class="n">network</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;network&quot;</span><span class="p">]</span>
-        <span class="p">)</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">],</span>
+        <span class="n">parameters</span><span class="o">=</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">],</span>
+        <span class="n">targets</span><span class="o">=</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;targets&quot;</span><span class="p">],</span>
+        <span class="n">expert</span><span class="o">=</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;expert&quot;</span><span class="p">],</span>
+        <span class="n">optimizer</span><span class="o">=</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;optimizer&quot;</span><span class="p">],</span>
+        <span class="n">trainer</span><span class="o">=</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;trainer&quot;</span><span class="p">],</span>
+        <span class="n">initializer</span><span class="o">=</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;initializer&quot;</span><span class="p">],</span>
+        <span class="n">network</span><span class="o">=</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;network&quot;</span><span class="p">],</span>
+    <span class="p">)</span>
 
     <span class="c1"># add results if already fitted</span>
     <span class="n">eliobj</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;history&quot;</span><span class="p">]</span>
@@ -931,14 +963,16 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">loss</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">loss_component</span><span class="p">:</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-            <span class="s2">&quot;el.plots.loss() requires information about &quot;</span><span class="o">+</span>
-            <span class="s2">&quot;&#39;loss&#39; and &#39;loss_component&#39;. If you don&#39;t save this information &quot;</span><span class="o">+</span>
-            <span class="s2">&quot;el.plot.loss() can&#39;t be used.&quot;</span><span class="p">)</span>
+            <span class="s2">&quot;el.plots.loss() requires information about &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;&#39;loss&#39; and &#39;loss_component&#39;. If you don&#39;t save this information &quot;</span>  <span class="c1"># noqa</span>
+            <span class="o">+</span> <span class="s2">&quot;el.plot.loss() can&#39;t be used.&quot;</span>
+        <span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">hyperparameter</span><span class="p">:</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
             <span class="s2">&quot;el.plots.hyperparameter() and el.plots.marginals() require&quot;</span>
-            <span class="o">+</span><span class="s2">&quot; information about &#39;hyperparameter&#39;. If you don&#39;t save this&quot;</span>
-            <span class="o">+</span><span class="s2">&quot; information these plots can&#39;t be used.&quot;</span><span class="p">)</span>
+            <span class="o">+</span> <span class="s2">&quot; information about &#39;hyperparameter&#39;. If you don&#39;t save this&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; information these plots can&#39;t be used.&quot;</span>
+        <span class="p">)</span>
 
     <span class="n">save_hist_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">loss</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span>
@@ -1030,32 +1064,45 @@ document.write(`
 <span class="sd">    if ``prior_samples`` is excluded :func:`elicit.plots.priors` can&#39;t be</span>
 <span class="sd">    used as it requires this information.</span>
 
+<span class="sd">    if ``model_samples`` is excluded :func:`elicit.plots.priorpredictive`</span>
+<span class="sd">    can&#39;t be used as it requires this information.</span>
+
 <span class="sd">    if ``expert_elicited_statistics`` or ``elicited_statistics`` is</span>
 <span class="sd">    excluded :func:`elicit.plots.elicits` can&#39;t be used as it requires this</span>
 <span class="sd">    information.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">elicited_statistics</span><span class="p">:</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-            <span class="s2">&quot;el.plots.loss() requires information about &quot;</span><span class="o">+</span>
-            <span class="s2">&quot;&#39;elicited_statistics&#39;. If you don&#39;t save this information &quot;</span><span class="o">+</span>
-            <span class="s2">&quot;el.plot.loss() can&#39;t be used.&quot;</span><span class="p">)</span>
+            <span class="s2">&quot;el.plots.loss() requires information about &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;&#39;elicited_statistics&#39;. If you don&#39;t save this information &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;el.plot.loss() can&#39;t be used.&quot;</span>
+        <span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">init_matrix</span><span class="p">:</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-            <span class="s2">&quot;el.plots.initialization() requires information about &quot;</span><span class="o">+</span>
-            <span class="s2">&quot;&#39;init_matrix&#39;. If you don&#39;t save this information &quot;</span><span class="o">+</span>
-            <span class="s2">&quot;this plotting function can&#39;t be used.&quot;</span><span class="p">)</span>
+            <span class="s2">&quot;el.plots.initialization() requires information about &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;&#39;init_matrix&#39;. If you don&#39;t save this information &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;this plotting function can&#39;t be used.&quot;</span>
+        <span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">prior_samples</span><span class="p">:</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-            <span class="s2">&quot;el.plots.priors() requires information about &quot;</span><span class="o">+</span>
-            <span class="s2">&quot;&#39;prior_samples&#39;. If you don&#39;t save this information &quot;</span><span class="o">+</span>
-            <span class="s2">&quot;this plotting function can&#39;t be used.&quot;</span><span class="p">)</span>
+            <span class="s2">&quot;el.plots.priors() requires information about &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;&#39;prior_samples&#39;. If you don&#39;t save this information &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;this plotting function can&#39;t be used.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">model_samples</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;el.plots.priorpredictive() requires information about &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;&#39;model_samples&#39;. If you don&#39;t save this information &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;this plotting function can&#39;t be used.&quot;</span>
+        <span class="p">)</span>
     <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">expert_elicited_statistics</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">elicited_statistics</span><span class="p">):</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-            <span class="s2">&quot;el.plots.elicits() requires information about &quot;</span><span class="o">+</span>
-            <span class="s2">&quot;&#39;expert_elicited_statistics&#39; and &#39;elicited_statistics&#39;. &quot;</span><span class="o">+</span>
-            <span class="s2">&quot;If you don&#39;t save this information this plotting function&quot;</span><span class="o">+</span>
-            <span class="s2">&quot; can&#39;t be used.&quot;</span><span class="p">)</span>
+            <span class="s2">&quot;el.plots.elicits() requires information about &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;&#39;expert_elicited_statistics&#39; and &#39;elicited_statistics&#39;. &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;If you don&#39;t save this information this plotting function&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; can&#39;t be used.&quot;</span>
+        <span class="p">)</span>
 
     <span class="n">save_res_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">target_quantities</span><span class="o">=</span><span class="n">target_quantities</span><span class="p">,</span>
@@ -1085,7 +1132,7 @@ document.write(`
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    targets : list</span>
-<span class="sd">        list of target quantities specified with :func:`target`.</span>
+<span class="sd">        list of target quantities specified with :func:`elicit.elicit.target`.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -1097,10 +1144,135 @@ document.write(`
     <span class="k">for</span> <span class="n">tar</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
         <span class="n">query</span> <span class="o">=</span> <span class="n">tar</span><span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
         <span class="n">target</span> <span class="o">=</span> <span class="n">tar</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
-        <span class="n">key</span> <span class="o">=</span> <span class="n">query</span><span class="o">+</span><span class="s2">&quot;_&quot;</span><span class="o">+</span><span class="n">target</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">query</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">target</span>
         <span class="n">elicit_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-    
+
     <span class="k">return</span> <span class="n">elicit_dict</span></div>
+
+
+
+<div class="viewcode-block" id="softmax_gumbel_trick">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.softmax_gumbel_trick">[docs]</a>
+<span class="k">def</span> <span class="nf">softmax_gumbel_trick</span><span class="p">(</span><span class="n">epred</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">likelihood</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span>
+                         <span class="n">upper_thres</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">temp</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">1.6</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The softmax-gumbel trick computes a continuous approximation of ypred from</span>
+<span class="sd">    a discrete likelihood and thus allows for the computation of gradients for</span>
+<span class="sd">    discrete random variables.</span>
+
+<span class="sd">    Currently this approach is only implemented for models without upper</span>
+<span class="sd">    boundary (e.g., Poisson model).</span>
+
+<span class="sd">    Corresponding literature:</span>
+
+<span class="sd">        - Maddison, C. J., Mnih, A. &amp; Teh, Y. W. The concrete distribution:</span>
+<span class="sd">          A continuous relaxation of discrete random variables in International</span>
+<span class="sd">          Conference on Learning Representations (2017).</span>
+<span class="sd">          https://doi.org/10.48550/arXiv.1611.00712</span>
+<span class="sd">        - Jang, E., Gu, S. &amp; Poole, B. Categorical reparameterization with</span>
+<span class="sd">          gumbel-softmax in International Conference on Learning Representations</span>
+<span class="sd">          (2017). https://openreview.net/forum?id=rkE3y85ee.</span>
+<span class="sd">        - Joo, W., Kim, D., Shin, S. &amp; Moon, I.-C. Generalized gumbel-softmax</span>
+<span class="sd">          gradient estimator for generic discrete random variables. Preprint</span>
+<span class="sd">          at https://doi.org/10.48550/arXiv.2003.01847 (2020).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    epred : tf.Tensor, shape = [B, num_samples, num_obs]</span>
+<span class="sd">        simulated linear predictor from the model simulations </span>
+<span class="sd">    likelihood : tfp.distributions object, shape = [B, num_samples, num_obs, 1]</span>
+<span class="sd">        likelihood function used in the generative model.</span>
+<span class="sd">        Must be a tfp.distributions object.</span>
+<span class="sd">    upper_thres : float</span>
+<span class="sd">        upper threshold at which the distribution of the outcome variable is</span>
+<span class="sd">        truncated. For double-bounded distribution (e.g. Binomial) this is</span>
+<span class="sd">        simply the &quot;total count&quot; information. Lower-bounded distribution</span>
+<span class="sd">        (e.g. Poisson) must be truncated to create an artificial</span>
+<span class="sd">        double-boundedness.</span>
+<span class="sd">    temp : float, temp &gt; 0</span>
+<span class="sd">        temperature hyperparameter of softmax function. A temperature going</span>
+<span class="sd">        towards zero yields approximates a categorical distribution, while</span>
+<span class="sd">        a temperature &gt;&gt; 0 approximates a continuous distribution.</span>
+<span class="sd">        The default value is ``1.6``.</span>
+<span class="sd">    kwargs : any</span>
+<span class="sd">        additional keyword arguments including the seed information. **Note**:</span>
+<span class="sd">        the ``**kwargs`` argument is required in this function (!) as it</span>
+<span class="sd">        extracts internally the seed information.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ypred : tf.Tensor</span>
+<span class="sd">        continuously approximated ypred from the discrete likelihood.</span>
+
+<span class="sd">    Raise</span>
+<span class="sd">    -----</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        if rank of ``likelihood`` is not 4. The shape of the likelihood obj</span>
+<span class="sd">        must have an extra final dimension, i.e., (B, num_samples, num_obs, 1),</span>
+<span class="sd">        for the softmax-gumbel computation. Use for example</span>
+<span class="sd">        ``tf.expand_dims(mu,-1)`` for expanding the batch-shape of the</span>
+<span class="sd">        likelihood.</span>
+
+<span class="sd">        if likelihood is not in tfp.distributions module. The likelihood</span>
+<span class="sd">        must be a tfp.distributions object.</span>
+
+<span class="sd">    KeyError</span>
+<span class="sd">        if ``**kwargs`` is not in function arguments. It is required to pass</span>
+<span class="sd">        the **kwargs argument as it is used for extracting internally </span>
+<span class="sd">        information about the seed.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># check rank of likelihood object</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">likelihood</span><span class="o">.</span><span class="n">batch_shape</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;The &#39;likelihood&#39; in the generative model must have&quot;</span>
+            <span class="o">+</span><span class="s2">&quot; batch_shape = (B, num_samples, num_obs, 1).&quot;</span>
+            <span class="o">+</span><span class="s2">&quot; The additional final axis is required by the softmax-gumbel&quot;</span>
+            <span class="o">+</span><span class="s2">&quot; computation. Use for example `tf.expand_dims(mu,-1)` for&quot;</span>
+            <span class="o">+</span><span class="s2">&quot; expanding the batch-shape of the likelihood.&quot;</span>
+            <span class="p">)</span>
+    <span class="c1"># check value/type of likelihood object</span>
+    <span class="k">if</span> <span class="n">likelihood</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">tfd</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Likelihood in generative model must be a tfp.distribution object.&quot;</span>
+            <span class="p">)</span>
+    <span class="k">if</span> <span class="s2">&quot;seed&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+            <span class="s2">&quot;Please provide the **kwargs argument in the el.utils.softmax-&quot;</span>
+              <span class="o">+</span><span class="s2">&quot;gumble function. This is required for extracting internally&quot;</span>
+              <span class="o">+</span><span class="s2">&quot; information about the seed.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># set seed</span>
+    <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">])</span>
+    <span class="c1"># get batch size</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">epred</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># get number of simulations from priors</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">epred</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="c1"># get number of observations</span>
+    <span class="n">number_obs</span> <span class="o">=</span> <span class="n">epred</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="c1"># constant outcome vector (including zero outcome)</span>
+    <span class="n">thres</span> <span class="o">=</span> <span class="n">upper_thres</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">thres</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="c1"># broadcast to shape (B, rep, outcome-length)</span>
+    <span class="n">c_brct</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:],</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">number_obs</span><span class="p">,</span>
+                                                            <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)))</span>
+    <span class="c1"># compute pmf value</span>
+    <span class="n">pi</span> <span class="o">=</span> <span class="n">likelihood</span><span class="o">.</span><span class="n">prob</span><span class="p">(</span><span class="n">c_brct</span><span class="p">)</span>
+    <span class="c1"># prevent underflow</span>
+    <span class="n">pi</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pi</span> <span class="o">&lt;</span> <span class="mf">1.8</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">),</span> <span class="mf">1.8</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">),</span> <span class="n">pi</span><span class="p">)</span>
+    <span class="c1"># sample from uniform</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">B</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">number_obs</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)))</span>
+    <span class="c1"># generate a gumbel sample from uniform sample</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="o">-</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="o">-</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">u</span><span class="p">))</span>
+    <span class="c1"># softmax gumbel trick</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span>
+        <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">pi</span><span class="p">),</span> <span class="n">g</span><span class="p">),</span> <span class="n">temp</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="c1"># reparameterization/linear transformation</span>
+    <span class="n">ypred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">c</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ypred</span></div>
 
 </pre></div>
 

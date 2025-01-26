@@ -667,18 +667,18 @@ def initializer(
     hyperparams: dict or None=None
 ) -> dict:
     """
+    Only necessary for method ``parametric_prior``:
     Initialization of hyperparameter values. Two approaches are currently
     possible:
 
-        (1) Specify specific initial values for each hyperparameter.
-        (2) Use one of the implemented sampling approaches to draw initial
-        values from one of the provided initialization distributions
+        1. Specify specific initial values for each hyperparameter.
+        2. Use one of the implemented sampling approaches to draw initial
+           values from one of the provided initialization distributions
 
     In (2) initial values for each hyperparameter are drawn from a uniform
     distribution ranging from ``mean-radius`` to ``mean+radius``.
     Further details on the implemented initialization method can be found in
     `Explanation: Initialization method <url>`_.
-    Only necessary for method ``parametric_prior``.
 
     Parameters
     ----------
@@ -698,10 +698,10 @@ def initializer(
         The default value is ``None``.
     hyperparams : dict or None
         Dictionary with specific initial values per hyperparameter. 
-        **Note:** Initial values are considered to be on the unconstrained
-        scale. Use  the `forward` method of :func:`elicit.utils.LowerBound`,
+        **Note:** Initial values are considered to be on the *unconstrained
+        scale*. Use  the ``forward`` method of :func:`elicit.utils.LowerBound`,
         :func:`elicit.utils.UpperBound` and :func:`elicit.utils.DoubleBound`
-        for transforming a constrained hyerparameter into an unconstrained one.
+        for transforming a constrained hyperparameter into an unconstrained one.
         In hyperparams dictionary, *keys* refer to hyperparameter names,
         as specified in :func:`hyper` and *values* to the respective initial
         values. The default value is ``None``.
@@ -905,6 +905,10 @@ class Elicit:
             if ``method="deep_prior"``, ``network`` can't be None and ``initialization``
             should be None.
 
+            if ``method="deep_prior"``, ``num_params`` as specified in the ``network_specs``
+            argument (section: network) does not match the number of parameters
+            specified in the parameters section.
+
             if ``method="parametric_prior"``, ``network`` should be None and
             ``initialization`` can't be None.
 
@@ -959,6 +963,15 @@ class Elicit:
                     "[section initializer] For method 'deep_prior' the "
                     + "'initializer' is not used and should be set to None."
                 )
+            if network["network_specs"]["num_params"] != len(parameters):
+                raise ValueError(
+                    "[section network] The number of model parameters as "
+                    +"specified in the parameters section, must match the"
+                    +" number of parameters specified in the network (see"
+                    +" network_specs['num_params'] argument)."
+                    +f" Expected {len(parameters)} but got"
+                    +f" {network['network_specs']['num_params']}"
+                    )
         # check that initializer is provided when method=parametric prior
         # and network is none
         if trainer["method"] == "parametric_prior":

@@ -1,0 +1,643 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Initialization of hyperparameter values &#8212; Prior Learning</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=87e54e7c" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=e645c8fa"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'howto/initialization';</script>
+    <link rel="icon" href="../_static/favicon-light.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/mmp-logo-light.png" class="logo__image only-light" alt="Prior Learning - Home"/>
+    <script>document.write(`<img src="../_static/mmp-logo-dark.png" class="logo__image only-dark" alt="Prior Learning - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/modules.html">API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/elicit.html">elicit package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/elicit.extras.html">elicit.extras package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/elicit.extras.utils.html">elicit.extras.utils module</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.elicit.html">elicit.elicit module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.initialization.html">elicit.initialization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.losses.html">elicit.losses module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.networks.html">elicit.networks module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.optimization.html">elicit.optimization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.plots.html">elicit.plots module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.simulations.html">elicit.simulations module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.targets.html">elicit.targets module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.utils.html">elicit.utils module</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">How-To</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explanation/index.html">Explanation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/florence-bockting/prior_elicitation" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/howto/initialization.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Initialization of hyperparameter values</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="initialization-of-hyperparameter-values">
+<h1>Initialization of hyperparameter values<a class="headerlink" href="#initialization-of-hyperparameter-values" title="Link to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create toy model</span>
+<span class="kn">import</span> <span class="nn">tensorflow_probability</span> <span class="k">as</span> <span class="nn">tfp</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">elicit</span> <span class="k">as</span> <span class="nn">el</span>
+
+<span class="kn">from</span> <span class="nn">elicit.extras</span> <span class="kn">import</span> <span class="n">utils</span>
+
+<span class="n">tfd</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">distributions</span>
+
+<span class="c1"># numeric, standardized predictor</span>
+<span class="k">def</span> <span class="nf">std_predictor</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">quantiles</span><span class="p">):</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="n">X_std</span> <span class="o">=</span> <span class="p">(</span><span class="n">X</span><span class="o">-</span><span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">X</span><span class="p">))</span><span class="o">/</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_std</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">X_sel</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">X_std</span><span class="p">,</span> <span class="n">quantiles</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">X_sel</span>
+
+<span class="c1"># implemented, generative model</span>
+<span class="k">class</span> <span class="nc">ToyModel2</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">,</span> <span class="n">design_matrix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># preprocess shape of design matrix</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">design_matrix</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,:],</span>
+                           <span class="p">(</span><span class="n">B</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">design_matrix</span><span class="p">)))</span>
+        <span class="c1"># linear predictor (= mu)</span>
+        <span class="n">epred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">][:,:,</span><span class="kc">None</span><span class="p">],</span>
+                       <span class="n">tf</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">][:,:,</span><span class="kc">None</span><span class="p">],</span> <span class="n">X</span><span class="p">)</span>
+                       <span class="p">)</span>
+        <span class="c1"># data-generating model</span>
+        <span class="n">likelihood</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span>
+            <span class="n">loc</span><span class="o">=</span><span class="n">epred</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">[:,</span> <span class="p">:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="c1"># prior predictive distribution (=height)</span>
+        <span class="n">ypred</span> <span class="o">=</span> <span class="n">likelihood</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+        
+        <span class="c1"># selected observations</span>
+        <span class="n">y_X0</span><span class="p">,</span> <span class="n">y_X1</span><span class="p">,</span> <span class="n">y_X2</span> <span class="o">=</span> <span class="p">(</span><span class="n">ypred</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">ypred</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">ypred</span><span class="p">[:,:,</span><span class="mi">2</span><span class="p">])</span>
+
+        <span class="c1"># log R2 (log for numerical stability)</span>
+        <span class="n">log_R2</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">log_R2</span><span class="p">(</span><span class="n">ypred</span><span class="p">,</span> <span class="n">epred</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">likelihood</span><span class="o">=</span><span class="n">likelihood</span><span class="p">,</span>
+            <span class="n">ypred</span><span class="o">=</span><span class="n">ypred</span><span class="p">,</span> <span class="n">epred</span><span class="o">=</span><span class="n">epred</span><span class="p">,</span>
+            <span class="n">prior_samples</span><span class="o">=</span><span class="n">prior_samples</span><span class="p">,</span>
+            <span class="n">y_X0</span><span class="o">=</span><span class="n">y_X0</span><span class="p">,</span> <span class="n">y_X1</span><span class="o">=</span><span class="n">y_X1</span><span class="p">,</span> <span class="n">y_X2</span><span class="o">=</span><span class="n">y_X2</span><span class="p">,</span>
+            <span class="n">log_R2</span><span class="o">=</span><span class="n">log_R2</span>
+        <span class="p">)</span>
+
+<span class="n">ground_truth</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;beta0&quot;</span><span class="p">:</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="s2">&quot;beta1&quot;</span><span class="p">:</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="s2">&quot;sigma&quot;</span><span class="p">:</span> <span class="n">tfd</span><span class="o">.</span><span class="n">HalfNormal</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mf">10.0</span><span class="p">),</span>
+<span class="p">}</span>
+
+<span class="n">eliobj</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">Elicit</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">model</span><span class="p">(</span>
+        <span class="n">obj</span><span class="o">=</span><span class="n">ToyModel2</span><span class="p">,</span>
+        <span class="n">design_matrix</span><span class="o">=</span><span class="n">std_predictor</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">quantiles</span><span class="o">=</span><span class="p">[</span><span class="mi">25</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">75</span><span class="p">])</span>
+        <span class="p">),</span>
+    <span class="n">parameters</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">el</span><span class="o">.</span><span class="n">parameter</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;beta0&quot;</span><span class="p">,</span>
+            <span class="n">family</span><span class="o">=</span><span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">,</span>
+            <span class="n">hyperparams</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">loc</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">hyper</span><span class="p">(</span><span class="s2">&quot;mu0&quot;</span><span class="p">),</span>
+                <span class="n">scale</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">hyper</span><span class="p">(</span><span class="s2">&quot;sigma0&quot;</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="p">)</span>
+        <span class="p">),</span>
+        <span class="n">el</span><span class="o">.</span><span class="n">parameter</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;beta1&quot;</span><span class="p">,</span>
+            <span class="n">family</span><span class="o">=</span><span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">,</span>
+            <span class="n">hyperparams</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">loc</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">hyper</span><span class="p">(</span><span class="s2">&quot;mu1&quot;</span><span class="p">),</span>
+                <span class="n">scale</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">hyper</span><span class="p">(</span><span class="s2">&quot;sigma1&quot;</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="p">)</span>
+        <span class="p">),</span>
+        <span class="n">el</span><span class="o">.</span><span class="n">parameter</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;sigma&quot;</span><span class="p">,</span>
+            <span class="n">family</span><span class="o">=</span><span class="n">tfd</span><span class="o">.</span><span class="n">HalfNormal</span><span class="p">,</span>
+            <span class="n">hyperparams</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">scale</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">hyper</span><span class="p">(</span><span class="s2">&quot;sigma2&quot;</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="p">)</span>
+        <span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">targets</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">el</span><span class="o">.</span><span class="n">target</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;y_X</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">query</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">queries</span><span class="o">.</span><span class="n">quantiles</span><span class="p">((</span><span class="mf">.05</span><span class="p">,</span> <span class="mf">.25</span><span class="p">,</span> <span class="mf">.50</span><span class="p">,</span> <span class="mf">.75</span><span class="p">,</span> <span class="mf">.95</span><span class="p">)),</span>
+            <span class="n">loss</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">MMD2</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;energy&quot;</span><span class="p">),</span>
+            <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span>
+        <span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="p">]</span><span class="o">+</span><span class="p">[</span>
+        <span class="n">el</span><span class="o">.</span><span class="n">target</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;log_R2&quot;</span><span class="p">,</span>    
+            <span class="n">query</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">queries</span><span class="o">.</span><span class="n">quantiles</span><span class="p">((</span><span class="mf">.05</span><span class="p">,</span> <span class="mf">.25</span><span class="p">,</span> <span class="mf">.50</span><span class="p">,</span> <span class="mf">.75</span><span class="p">,</span> <span class="mf">.95</span><span class="p">)),</span>
+            <span class="n">loss</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">MMD2</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;energy&quot;</span><span class="p">),</span>
+            <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span>
+        <span class="p">)</span>
+    <span class="p">],</span>
+    <span class="n">expert</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">expert</span><span class="o">.</span><span class="n">simulator</span><span class="p">(</span>
+        <span class="n">ground_truth</span> <span class="o">=</span> <span class="n">ground_truth</span><span class="p">,</span>
+        <span class="n">num_samples</span> <span class="o">=</span> <span class="mi">10_000</span>
+    <span class="p">),</span>
+    <span class="n">optimizer</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">optimizer</span><span class="p">(</span>
+        <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">,</span>
+        <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">clipnorm</span><span class="o">=</span><span class="mf">1.0</span>
+        <span class="p">),</span>
+    <span class="n">trainer</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">trainer</span><span class="p">(</span>
+        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;parametric_prior&quot;</span><span class="p">,</span>
+        <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">epochs</span><span class="o">=</span><span class="mi">600</span>
+    <span class="p">),</span>
+    <span class="n">initializer</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">initializer</span><span class="p">(</span>
+        <span class="n">hyperparams</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">mu0</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">sigma0</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">LowerBound</span><span class="p">(</span><span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="mf">0.3</span><span class="p">),</span>
+            <span class="n">mu1</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">sigma1</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">LowerBound</span><span class="p">(</span><span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="mf">0.5</span><span class="p">),</span>
+            <span class="n">sigma2</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">LowerBound</span><span class="p">(</span><span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="mf">0.4</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bockting\AppData\Roaming\Python\Python311\site-packages\bayesflow\trainers.py:27: TqdmExperimentalWarning: Using `tqdm.autonotebook.tqdm` in notebook mode. Use `tqdm.tqdm` instead to force console mode (e.g. in jupyter console)
+  from tqdm.autonotebook import tqdm
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eliobj</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Training
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 600/600 [03:17&lt;00:00,  3.04it/s]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">hyperparameter</span><span class="p">(</span><span class="n">eliobj</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/24185746d3b911b661e0fbb0e89052064f815d450b40c6be8c48d8b130320555.png" src="../_images/24185746d3b911b661e0fbb0e89052064f815d450b40c6be8c48d8b130320555.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">copy</span>
+
+<span class="n">eliobj2</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">eliobj</span><span class="p">)</span>
+
+<span class="n">initializer_updated</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">initializer</span><span class="p">(</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;sobol&quot;</span><span class="p">,</span>
+    <span class="n">loss_quantile</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">iterations</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+    <span class="n">distribution</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span>
+        <span class="n">radius</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span>
+        <span class="n">mean</span><span class="o">=</span><span class="mf">0.</span>
+        <span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">eliobj2</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">initializer</span><span class="o">=</span><span class="n">initializer_updated</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO: Results have been reset.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eliobj2</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initialization
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 32/32 [00:05&lt;00:00,  6.36it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 
+Training
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 600/600 [03:46&lt;00:00,  2.65it/s]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">hyperparameter</span><span class="p">(</span><span class="n">eliobj2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/47492fb1b8acb41b5bbd231a05ab7b3bea3872f8f5754a051cd822bf7aedf279.png" src="../_images/47492fb1b8acb41b5bbd231a05ab7b3bea3872f8f5754a051cd822bf7aedf279.png" />
+</div>
+</div>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Florence Bockting
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Florence Bockting.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

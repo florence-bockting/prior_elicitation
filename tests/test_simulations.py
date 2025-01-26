@@ -18,10 +18,10 @@ def init_matrix_slice():
     """Fixture providing initial matrix slice values."""
     return dict(
         mu0=tf.constant(1.0),
-        sigma0=tf.constant(0.5),
+        sigma0=0.5,
         mu1=tf.constant(1.0),
         mu2=tf.constant(2.0),
-        sigma2=tf.constant(1.3),
+        sigma2=1.3,
     )
 
 @pytest.fixture
@@ -325,3 +325,51 @@ def test_prior_samples_4(init_matrix_slice, parameters_deep, expert, network):
     assert tf.reduce_all(prior_samples == prior_samples_copy)
     # check that different seed yields different prior samples
     assert not tf.reduce_all(prior_samples == prior_samples_copy2)
+
+#%% test simulate_from_generator
+# constants
+N = 20
+B = 5
+num_samples=30
+
+@pytest.fixture
+def predictor():
+    X = tf.concat([tf.ones(int(N//2)), tf.zeros(int(N//2))],0)
+    X_brcst=tf.broadcast_to(X[None,None,:], (B,num_samples,N))
+    return X_brcst
+
+@pytest.fixture
+def prior_samples():
+    return tf.concat(
+    [tfd.Normal(0.,1.).sample((B, num_samples,1)),
+     tfd.Normal(-0.5,1.3).sample((B, num_samples,1))
+     ],-1)
+
+@pytest.fixture
+def model(predictor):
+    class Model:
+        def __call__(self, prior_samples, **kwargs):
+            # model
+            epred=tf.add(prior_samples[:,:,0][:,:,None],
+                         prior_samples[:,:,1][:,:,None]*predictor)
+            likelihood = tfd.Normal(loc=epred, scale=tf.ones(epred.shape))
+            ypred = likelihood.sample()
+            return dict(ypred=ypred,
+                        epred=epred,
+                        prior_samples=prior_samples,
+                        likelihood=likelihood)
+    return dict(obj=Model)
+
+
+def test_model_samples(prior_samples, model):
+    model_sim = el.simulations.simulate_from_generator(
+        prior_samples, 0, model)
+
+    # check whether required output format is correct
+    for key in ["ypred", "epred", "likelihood", "prior_samples"]:
+        assert key in list(model_sim.keys()), f"{key} not in model simulations"
+
+    # check whether shape is correct
+    assert model_sim["ypred"].shape == (B,num_samples,N)
+    assert model_sim["epred"].shape == (B,num_samples,N)
+    

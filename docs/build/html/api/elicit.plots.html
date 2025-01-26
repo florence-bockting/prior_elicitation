@@ -352,6 +352,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.plots.priors"><code class="docutils literal notranslate"><span class="pre">priors()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.plots.elicits"><code class="docutils literal notranslate"><span class="pre">elicits()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.plots.marginals"><code class="docutils literal notranslate"><span class="pre">marginals()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.plots.priorpredictive"><code class="docutils literal notranslate"><span class="pre">priorpredictive()</span></code></a></li>
 </ul>
             </nav>
         </div>
@@ -550,7 +551,7 @@ The default is <code class="docutils literal notranslate"><span class="pre">4</s
 <dt>span<span class="classifier">int, optional</span></dt><dd><p>number of last epochs used to get a final averaged value for mean and
 sd of the prior marginal. The default is <code class="docutils literal notranslate"><span class="pre">30</span></code>.</p>
 </dd>
-<dt><a href="#id5"><span class="problematic" id="id6">**</span></a>kwargs<span class="classifier">any, optional</span></dt><dd><p>additional keyword arguments that can be passed to specify
+<dt>kwargs<span class="classifier">any, optional</span></dt><dd><p>additional keyword arguments that can be passed to specify
 <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html">plt.subplots()</a></p>
 </dd>
 </dl>
@@ -565,6 +566,35 @@ sd of the prior marginal. The default is <code class="docutils literal notransla
 </dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">marginals</span><span class="p">(</span><span class="n">eliobj</span><span class="p">,</span> <span class="n">figuresize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="elicit.plots.priorpredictive">
+<span class="sig-prename descclassname"><span class="pre">elicit.plots.</span></span><span class="sig-name descname"><span class="pre">priorpredictive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eliobj</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/elicit/plots.html#priorpredictive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.plots.priorpredictive" title="Link to this definition">#</a></dt>
+<dd><p>plots prior predictive distribution of samples from the generative model
+in the last epoch</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>eliobj</strong><span class="classifier">instance of <a class="reference internal" href="elicit.elicit.html#elicit.elicit.Elicit" title="elicit.elicit.Elicit"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.Elicit()</span></code></a></span></dt><dd><p>fitted <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> object.</p>
+</dd>
+<dt><strong>kwargs</strong><span class="classifier">any, optional</span></dt><dd><p>additional keyword arguments that can be passed to specify
+<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html">plt.subplots()</a></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>KeyError</dt><dd><p>Can’t find ‘model_samples’ in ‘eliobj.results’. Have you excluded 
+‘model_samples’ from results savings?</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">priorpredictive</span><span class="p">(</span><span class="n">eliobj</span><span class="p">,</span> <span class="n">figuresize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -622,6 +652,7 @@ sd of the prior marginal. The default is <code class="docutils literal notransla
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.plots.priors"><code class="docutils literal notranslate"><span class="pre">priors()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.plots.elicits"><code class="docutils literal notranslate"><span class="pre">elicits()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.plots.marginals"><code class="docutils literal notranslate"><span class="pre">marginals()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elicit.plots.priorpredictive"><code class="docutils literal notranslate"><span class="pre">priorpredictive()</span></code></a></li>
 </ul>
   </nav></div>
 

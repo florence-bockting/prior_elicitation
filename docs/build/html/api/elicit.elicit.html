@@ -881,29 +881,46 @@ The default is <code class="docutils literal notranslate"><span class="pre">tf.k
 
 <dl class="py function">
 <dt class="sig sig-object py" id="elicit.elicit.initializer">
-<span class="sig-prename descclassname"><span class="pre">elicit.elicit.</span></span><span class="sig-name descname"><span class="pre">initializer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distribution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{'hyper':</span> <span class="pre">None,</span> <span class="pre">'mean':</span> <span class="pre">0.0,</span> <span class="pre">'radius':</span> <span class="pre">1.0}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_quantile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../_modules/elicit/elicit.html#initializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.elicit.initializer" title="Link to this definition">#</a></dt>
-<dd><p>Initialization method for finding initial values of model hyperparameters
-required for instantiating training with SGD. Initial values for each
-hyperparameter are drawn from a uniform distribution ranging from
-<code class="docutils literal notranslate"><span class="pre">mean-radius</span></code> to <code class="docutils literal notranslate"><span class="pre">mean+radius</span></code>.
+<span class="sig-prename descclassname"><span class="pre">elicit.elicit.</span></span><span class="sig-name descname"><span class="pre">initializer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distribution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_quantile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyperparams</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../_modules/elicit/elicit.html#initializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#elicit.elicit.initializer" title="Link to this definition">#</a></dt>
+<dd><p>Only necessary for method <code class="docutils literal notranslate"><span class="pre">parametric_prior</span></code>:
+Initialization of hyperparameter values. Two approaches are currently
+possible:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Specify specific initial values for each hyperparameter.</p></li>
+<li><p>Use one of the implemented sampling approaches to draw initial
+values from one of the provided initialization distributions</p></li>
+</ol>
+</div></blockquote>
+<p>In (2) initial values for each hyperparameter are drawn from a uniform
+distribution ranging from <code class="docutils literal notranslate"><span class="pre">mean-radius</span></code> to <code class="docutils literal notranslate"><span class="pre">mean+radius</span></code>.
 Further details on the implemented initialization method can be found in
-<a class="reference external" href="url">Explanation: Initialization method</a>.
-Only necessary for method <code class="docutils literal notranslate"><span class="pre">parametric_prior</span></code>.</p>
+<a class="reference external" href="url">Explanation: Initialization method</a>.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl>
-<dt><strong>method</strong><span class="classifier">string</span></dt><dd><p>Name of initialization method. Currently supported are “random”, “lhs”,
-and “sobol”.</p>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>method</strong><span class="classifier">string or None</span></dt><dd><p>Name of initialization method. Currently supported are “random”, “lhs”,
+and “sobol”. The default value is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </dd>
-<dt><strong>distribution</strong><span class="classifier">callable, <a class="reference internal" href="elicit.initialization.html#elicit.initialization.uniform" title="elicit.initialization.uniform"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.initialization.uniform()</span></code></a></span></dt><dd><p>Specification of initialization distribution.
-Currently implemented methods: <a class="reference internal" href="elicit.initialization.html#elicit.initialization.uniform" title="elicit.initialization.uniform"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.initialization.uniform()</span></code></a></p>
+<dt><strong>distribution</strong><span class="classifier">callable or None</span></dt><dd><p>Specification of initialization distribution.
+Currently implemented methods: <a class="reference internal" href="elicit.initialization.html#elicit.initialization.uniform" title="elicit.initialization.uniform"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.initialization.uniform()</span></code></a>
+The default value is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </dd>
-<dt><strong>loss_quantile</strong><span class="classifier">float,</span></dt><dd><p>Quantile indicating which loss value should be used for selecting the
+<dt><strong>loss_quantile</strong><span class="classifier">float or None,</span></dt><dd><p>Quantile indicating which loss value should be used for selecting the
 initial hyperparameters.Specified as probability value between 0-1.
-The default is <code class="docutils literal notranslate"><span class="pre">0</span></code> i.e., the minimum loss.</p>
+The default value is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </dd>
-<dt><strong>iterations</strong><span class="classifier">int</span></dt><dd><p>Number of samples drawn from the initialization distribution.
-The default is <code class="docutils literal notranslate"><span class="pre">100</span></code>.</p>
+<dt><strong>iterations</strong><span class="classifier">int or None</span></dt><dd><p>Number of samples drawn from the initialization distribution.
+The default value is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd>
+<dt><strong>hyperparams</strong><span class="classifier">dict or None</span></dt><dd><p>Dictionary with specific initial values per hyperparameter. 
+<strong>Note:</strong> Initial values are considered to be on the <em>unconstrained
+scale</em>. Use  the <code class="docutils literal notranslate"><span class="pre">forward</span></code> method of <a class="reference internal" href="elicit.utils.html#elicit.utils.LowerBound" title="elicit.utils.LowerBound"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.utils.LowerBound()</span></code></a>,
+<a class="reference internal" href="elicit.utils.html#elicit.utils.UpperBound" title="elicit.utils.UpperBound"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.utils.UpperBound()</span></code></a> and <a class="reference internal" href="elicit.utils.html#elicit.utils.DoubleBound" title="elicit.utils.DoubleBound"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.utils.DoubleBound()</span></code></a>
+for transforming a constrained hyperparameter into an unconstrained one.
+In hyperparams dictionary, <em>keys</em> refer to hyperparameter names,
+as specified in <a class="reference internal" href="#elicit.elicit.hyper" title="elicit.elicit.hyper"><code class="xref py py-func docutils literal notranslate"><span class="pre">hyper()</span></code></a> and <em>values</em> to the respective initial
+values. The default value is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </dd>
 </dl>
 </dd>
@@ -917,6 +934,7 @@ The default is <code class="docutils literal notranslate"><span class="pre">100<
 <dd class="field-odd"><dl>
 <dt>ValueError</dt><dd><p><code class="docutils literal notranslate"><span class="pre">method</span></code> can only take the values “random”, “sobol”, or “lhs”</p>
 <p><code class="docutils literal notranslate"><span class="pre">loss_quantile</span></code> must be a probability ranging between 0 and 1.</p>
+<p>Either <code class="docutils literal notranslate"><span class="pre">method</span></code> or <code class="docutils literal notranslate"><span class="pre">hyperparams</span></code> has to be specified.</p>
 </dd>
 </dl>
 </dd>
@@ -929,6 +947,15 @@ The default is <code class="docutils literal notranslate"><span class="pre">100<
 <span class="gp">&gt;&gt;&gt; </span>    <span class="n">distribution</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span>
 <span class="gp">&gt;&gt;&gt; </span>        <span class="n">radius</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>        <span class="n">mean</span><span class="o">=</span><span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">el</span><span class="o">.</span><span class="n">initializer</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">hyperparams</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">mu0</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">sigma0</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">LowerBound</span><span class="p">(</span><span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="mf">0.3</span><span class="p">),</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">mu1</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">sigma1</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">LowerBound</span><span class="p">(</span><span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="mf">0.5</span><span class="p">),</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">sigma2</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">LowerBound</span><span class="p">(</span><span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="mf">0.4</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span>        <span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="p">)</span>
 </pre></div>
@@ -1033,8 +1060,19 @@ the same as the number of model parameters.</p>
 </dd>
 <dt>ValueError</dt><dd><p>if <code class="docutils literal notranslate"><span class="pre">method=&quot;deep_prior&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">network</span></code> can’t be None and <code class="docutils literal notranslate"><span class="pre">initialization</span></code>
 should be None.</p>
+<p>if <code class="docutils literal notranslate"><span class="pre">method=&quot;deep_prior&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">num_params</span></code> as specified in the <code class="docutils literal notranslate"><span class="pre">network_specs</span></code>
+argument (section: network) does not match the number of parameters
+specified in the parameters section.</p>
 <p>if <code class="docutils literal notranslate"><span class="pre">method=&quot;parametric_prior&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">network</span></code> should be None and
 <code class="docutils literal notranslate"><span class="pre">initialization</span></code> can’t be None.</p>
+<p>if <code class="docutils literal notranslate"><span class="pre">method</span> <span class="pre">=&quot;parametric_prior&quot;</span> <span class="pre">and</span> <span class="pre">multiple</span> <span class="pre">hyperparameter</span> <span class="pre">have</span>
+<span class="pre">the</span> <span class="pre">same</span> <span class="pre">name</span> <span class="pre">but</span> <span class="pre">are</span> <span class="pre">not</span> <span class="pre">shared</span> <span class="pre">by</span> <span class="pre">setting</span> <span class="pre">``shared=True</span></code>.”</p>
+<p>if <code class="docutils literal notranslate"><span class="pre">hyperparams</span></code> is specified in section <code class="docutils literal notranslate"><span class="pre">initializer</span></code> and a
+hyperparameter name (key in hyperparams dict) does not match any
+hyperparameter name specified in <a class="reference internal" href="#elicit.elicit.hyper" title="elicit.elicit.hyper"><code class="xref py py-func docutils literal notranslate"><span class="pre">hyper()</span></code></a>.</p>
+</dd>
+<dt>NotImplementedError</dt><dd><p>[network] Currently only the standard normal distribution is
+implemented as base distribution. See <a class="reference external" href="https://github.com/florence-bockting/prior_elicitation/issues/35">GitHub issue #35</a>.</p>
 </dd>
 </dl>
 </dd>
@@ -1089,8 +1127,19 @@ the same as the number of model parameters.</p>
 </dd>
 <dt>ValueError</dt><dd><p>if <code class="docutils literal notranslate"><span class="pre">method=&quot;deep_prior&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">network</span></code> can’t be None and <code class="docutils literal notranslate"><span class="pre">initialization</span></code>
 should be None.</p>
+<p>if <code class="docutils literal notranslate"><span class="pre">method=&quot;deep_prior&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">num_params</span></code> as specified in the <code class="docutils literal notranslate"><span class="pre">network_specs</span></code>
+argument (section: network) does not match the number of parameters
+specified in the parameters section.</p>
 <p>if <code class="docutils literal notranslate"><span class="pre">method=&quot;parametric_prior&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">network</span></code> should be None and
 <code class="docutils literal notranslate"><span class="pre">initialization</span></code> can’t be None.</p>
+<p>if <code class="docutils literal notranslate"><span class="pre">method</span> <span class="pre">=&quot;parametric_prior&quot;</span> <span class="pre">and</span> <span class="pre">multiple</span> <span class="pre">hyperparameter</span> <span class="pre">have</span>
+<span class="pre">the</span> <span class="pre">same</span> <span class="pre">name</span> <span class="pre">but</span> <span class="pre">are</span> <span class="pre">not</span> <span class="pre">shared</span> <span class="pre">by</span> <span class="pre">setting</span> <span class="pre">``shared=True</span></code>.”</p>
+<p>if <code class="docutils literal notranslate"><span class="pre">hyperparams</span></code> is specified in section <code class="docutils literal notranslate"><span class="pre">initializer</span></code> and a
+hyperparameter name (key in hyperparams dict) does not match any
+hyperparameter name specified in <a class="reference internal" href="#elicit.elicit.hyper" title="elicit.elicit.hyper"><code class="xref py py-func docutils literal notranslate"><span class="pre">hyper()</span></code></a>.</p>
+</dd>
+<dt>NotImplementedError</dt><dd><p>[network] Currently only the standard normal distribution is
+implemented as base distribution. See <a class="reference external" href="https://github.com/florence-bockting/prior_elicitation/issues/35">GitHub issue #35</a>.</p>
 </dd>
 </dl>
 </dd>
@@ -1144,9 +1193,9 @@ epoch only. For usage information see
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>name.: str or None</strong></dt><dd><p>file name used to store the eliobj, whereby saving is done
+<dt><strong>name: str or None</strong></dt><dd><p>file name used to store the eliobj. Saving is done
 according to the following rule: <code class="docutils literal notranslate"><span class="pre">./{method}/{name}_{seed}.pkl</span></code>
-whereby ‘method’ and ‘seed’ are arguments of
+with ‘method’ and ‘seed’ being arguments of
 <a class="reference internal" href="#elicit.elicit.trainer" title="elicit.elicit.trainer"><code class="xref py py-func docutils literal notranslate"><span class="pre">elicit.elicit.trainer()</span></code></a>.</p>
 </dd>
 <dt><strong>file</strong><span class="classifier">str or None</span></dt><dd><p>user-specific path for saving the eliobj. If file is specified

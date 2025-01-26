@@ -333,7 +333,7 @@ document.write(`
 <div class="viewcode-block" id="Priors.__init__">
 <a class="viewcode-back" href="../../api/elicit.simulations.html#elicit.simulations.Priors.__init__">[docs]</a>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
-                 <span class="n">init_matrix_slice</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">init_matrix_slice</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">trainer</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">network</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">expert</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
                  <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -343,15 +343,16 @@ document.write(`
 <span class="sd">        ----------</span>
 <span class="sd">        ground_truth : bool</span>
 <span class="sd">            True if expert data are simulated from a given ground truth (oracle)</span>
-<span class="sd">        init_matrix_slice : tf.Tensor or None</span>
+<span class="sd">        init_matrix_slice : dict[str, tf.Tensor] or None</span>
 <span class="sd">            samples drawn from the initialization distribution to initialize</span>
 <span class="sd">            the hyperparameter of the parametric prior distributions</span>
 <span class="sd">            Only required for method=&quot;parametric_prior&quot; otherwise None.</span>
 <span class="sd">        trainer : callable</span>
 <span class="sd">            specification of training settings and meta-information for</span>
-<span class="sd">            workflow using :func:`trainer`</span>
+<span class="sd">            workflow using :func:`elicit.elicit.trainer`</span>
 <span class="sd">        parameters : list</span>
-<span class="sd">            list of model parameters specified with :func:`parameter`.</span>
+<span class="sd">            list of model parameters specified with</span>
+<span class="sd">            :func:`elicit.elicit.parameter`.</span>
 <span class="sd">        network : callable or None</span>
 <span class="sd">            specification of neural network using a method implemented in</span>
 <span class="sd">            :mod:`elicit.networks`.</span>
@@ -408,7 +409,7 @@ document.write(`
 
 <div class="viewcode-block" id="intialize_priors">
 <a class="viewcode-back" href="../../api/elicit.simulations.html#elicit.simulations.intialize_priors">[docs]</a>
-<span class="k">def</span> <span class="nf">intialize_priors</span><span class="p">(</span><span class="n">init_matrix_slice</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">]</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
+<span class="k">def</span> <span class="nf">intialize_priors</span><span class="p">(</span><span class="n">init_matrix_slice</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
                      <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span>
                      <span class="n">network</span><span class="p">:</span> <span class="nb">dict</span>
                      <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
@@ -428,7 +429,8 @@ document.write(`
 <span class="sd">        seed of current workflow run as specified in</span>
 <span class="sd">        :func:`elicit.elicit.trainer`</span>
 <span class="sd">    parameters : list[dict]</span>
-<span class="sd">        list of model parameter specifications using :func:`parameter`.</span>
+<span class="sd">        list of model parameter specifications using</span>
+<span class="sd">        :func:`elicit.elicit.parameter`.</span>
 <span class="sd">    network : dict</span>
 <span class="sd">        specification of neural network using a method implemented in</span>
 <span class="sd">        :mod:`elicit.networks`.</span>
@@ -473,7 +475,7 @@ document.write(`
                 <span class="k">pass</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># get initial value</span>
-                <span class="n">initial_value</span> <span class="o">=</span> <span class="n">init_matrix_slice</span><span class="p">[</span><span class="n">hp_n</span><span class="p">]</span>
+                <span class="n">initial_value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">init_matrix_slice</span><span class="p">[</span><span class="n">hp_n</span><span class="p">])</span>
                 <span class="c1"># initialize hyperparameter</span>
                 <span class="n">initialized_hyperparam</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">hp_k</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">hp_n</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span>
                     <span class="n">initial_value</span><span class="o">=</span><span class="n">hp_dict</span><span class="p">[</span><span class="s2">&quot;constraint&quot;</span><span class="p">](</span><span class="n">initial_value</span><span class="p">),</span>
@@ -527,7 +529,8 @@ document.write(`
 <span class="sd">        parametric_prior or deep_prior method as specified in</span>
 <span class="sd">        :func:`elicit.elicit.trainer`</span>
 <span class="sd">    parameters : list</span>
-<span class="sd">        list of model parameters specified with :func:`parameter`.</span>
+<span class="sd">        list of model parameters specified with</span>
+<span class="sd">        :func:`elicit.elicit.parameter`.</span>
 <span class="sd">    network : dict</span>
 <span class="sd">        specification of neural network using a method implemented in</span>
 <span class="sd">        :mod:`elicit.networks`.</span>
@@ -564,8 +567,8 @@ document.write(`
         <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">priors</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;parametric_prior&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">ground_truth</span><span class="p">):</span>
-
         <span class="n">priors</span> <span class="o">=</span> <span class="p">[]</span>
+
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parameters</span><span class="p">)):</span>
             <span class="c1"># get the prior distribution family as specified by the user</span>
             <span class="n">prior_family</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;family&quot;</span><span class="p">]</span>
@@ -583,91 +586,20 @@ document.write(`
                 <span class="p">)</span>
         <span class="c1"># stack all prior distributions into one tf.Tensor of</span>
         <span class="c1"># shape (B, S, num_parameters)</span>
-        <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">priors</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">priors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">priors</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">priors</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;deep_prior&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">ground_truth</span><span class="p">):</span>
-
         <span class="c1"># initialize base distribution</span>
         <span class="n">base_dist</span> <span class="o">=</span> <span class="n">network</span><span class="p">[</span><span class="s2">&quot;base_distribution&quot;</span><span class="p">](</span><span class="n">num_params</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">parameters</span><span class="p">))</span>
         <span class="c1"># sample from base distribution</span>
         <span class="n">u</span> <span class="o">=</span> <span class="n">base_dist</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">B</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">))</span>
         <span class="c1"># apply transformation function to samples from base distr.</span>
         <span class="n">prior_samples</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">initialized_priors</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">condition</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
+    
     <span class="k">return</span> <span class="n">prior_samples</span></div>
-
-
-
-<div class="viewcode-block" id="softmax_gumbel_trick">
-<a class="viewcode-back" href="../../api/elicit.simulations.html#elicit.simulations.softmax_gumbel_trick">[docs]</a>
-<span class="k">def</span> <span class="nf">softmax_gumbel_trick</span><span class="p">(</span><span class="n">epred</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">likelihood</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span>
-                         <span class="n">upper_thres</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">temp</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    The softmax-gumbel trick computes a continuous approximation of ypred from</span>
-<span class="sd">    a discrete likelihood and thus allows for the computation of gradients for</span>
-<span class="sd">    discrete random variables.</span>
-
-<span class="sd">    Currently this approach is only implemented for models without upper</span>
-<span class="sd">    boundary (e.g., Poisson model).</span>
-
-<span class="sd">    Corresponding literature:</span>
-
-<span class="sd">    - Maddison, C. J., Mnih, A. &amp; Teh, Y. W. The concrete distribution:</span>
-<span class="sd">        A continuous relaxation of</span>
-<span class="sd">      discrete random variables in International Conference on Learning</span>
-<span class="sd">      Representations (2017). https://doi.org/10.48550/arXiv.1611.00712</span>
-<span class="sd">    - Jang, E., Gu, S. &amp; Poole, B. Categorical reparameterization with</span>
-<span class="sd">    gumbel-softmax in International Conference on Learning Representations</span>
-<span class="sd">    (2017). https://openreview.net/forum?id=rkE3y85ee.</span>
-<span class="sd">    - Joo, W., Kim, D., Shin, S. &amp; Moon, I.-C. Generalized gumbel-softmax</span>
-<span class="sd">    gradient estimator for generic discrete random variables.</span>
-<span class="sd">      Preprint at https://doi.org/10.48550/arXiv.2003.01847 (2020).</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    model_simulations : dict</span>
-<span class="sd">        dictionary containing all simulated output variables from the</span>
-<span class="sd">        generative model.</span>
-<span class="sd">    global_dict : dict</span>
-<span class="sd">        dictionary including all user-input settings.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    ypred : tf.Tensor</span>
-<span class="sd">        continuously approximated ypred from the discrete likelihood.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># set seed</span>
-    <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
-    <span class="c1"># get batch size</span>
-    <span class="n">B</span> <span class="o">=</span> <span class="n">epred</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="c1"># get number of simulations from priors</span>
-    <span class="n">S</span> <span class="o">=</span> <span class="n">epred</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="c1"># get number of observations</span>
-    <span class="n">number_obs</span> <span class="o">=</span> <span class="n">epred</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-    <span class="c1"># constant outcome vector (including zero outcome)</span>
-    <span class="n">thres</span> <span class="o">=</span> <span class="n">upper_thres</span>
-    <span class="n">c</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">thres</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-    <span class="c1"># broadcast to shape (B, rep, outcome-length)</span>
-    <span class="n">c_brct</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:],</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">number_obs</span><span class="p">,</span>
-                                                            <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)))</span>
-    <span class="c1"># compute pmf value</span>
-    <span class="n">pi</span> <span class="o">=</span> <span class="n">likelihood</span><span class="o">.</span><span class="n">prob</span><span class="p">(</span><span class="n">c_brct</span><span class="p">)</span>
-    <span class="c1"># prevent underflow</span>
-    <span class="n">pi</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pi</span> <span class="o">&lt;</span> <span class="mf">1.8</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">),</span> <span class="mf">1.8</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">),</span> <span class="n">pi</span><span class="p">)</span>
-    <span class="c1"># sample from uniform</span>
-    <span class="n">u</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">B</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">number_obs</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)))</span>
-    <span class="c1"># generate a gumbel sample from uniform sample</span>
-    <span class="n">g</span> <span class="o">=</span> <span class="o">-</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="o">-</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">u</span><span class="p">))</span>
-    <span class="c1"># softmax gumbel trick</span>
-    <span class="n">w</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span>
-        <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span>
-            <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">pi</span><span class="p">),</span> <span class="n">g</span><span class="p">),</span> <span class="n">temp</span><span class="p">,</span>
-        <span class="p">)</span>
-    <span class="p">)</span>
-    <span class="c1"># reparameterization/linear transformation</span>
-    <span class="n">ypred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">c</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">ypred</span></div>
 
 
 
@@ -684,9 +616,9 @@ document.write(`
 <span class="sd">    prior_samples : tf.Tensor, shape: [B, num_samples, num_params]</span>
 <span class="sd">        samples from prior distributions.</span>
 <span class="sd">    seed : int</span>
-<span class="sd">        seed used for learning.</span>
+<span class="sd">        seed used for learning. Specification in :func:`elicit.elicit.trainer`.</span>
 <span class="sd">    model : callable</span>
-<span class="sd">        specification of generative model using :func:`model`.</span>
+<span class="sd">        specification of generative model using :func:`elicit.elicit.model`.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
