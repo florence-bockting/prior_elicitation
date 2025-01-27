@@ -1064,7 +1064,7 @@ document.write(`
 <span class="sd">    if ``prior_samples`` is excluded :func:`elicit.plots.priors` can&#39;t be</span>
 <span class="sd">    used as it requires this information.</span>
 
-<span class="sd">    if ``model_samples`` is excluded :func:`elicit.plots.priorpredictive`</span>
+<span class="sd">    if ``target_quantities`` is excluded :func:`elicit.plots.priorpredictive`</span>
 <span class="sd">    can&#39;t be used as it requires this information.</span>
 
 <span class="sd">    if ``expert_elicited_statistics`` or ``elicited_statistics`` is</span>
@@ -1090,10 +1090,10 @@ document.write(`
             <span class="o">+</span> <span class="s2">&quot;&#39;prior_samples&#39;. If you don&#39;t save this information &quot;</span>
             <span class="o">+</span> <span class="s2">&quot;this plotting function can&#39;t be used.&quot;</span>
         <span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">model_samples</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">target_quantities</span><span class="p">:</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
             <span class="s2">&quot;el.plots.priorpredictive() requires information about &quot;</span>
-            <span class="o">+</span> <span class="s2">&quot;&#39;model_samples&#39;. If you don&#39;t save this information &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;&#39;target_quantities&#39;. If you don&#39;t save this information &quot;</span>
             <span class="o">+</span> <span class="s2">&quot;this plotting function can&#39;t be used.&quot;</span>
         <span class="p">)</span>
     <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">expert_elicited_statistics</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">elicited_statistics</span><span class="p">):</span>

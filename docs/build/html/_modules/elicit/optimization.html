@@ -362,6 +362,16 @@ document.write(`
     <span class="n">gradients_ep</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">time_per_epoch</span> <span class="o">=</span> <span class="p">[]</span>
 
+    <span class="c1"># save initialized trainable variables of epoch=0 (before first update)</span>
+    <span class="n">init_vars_values</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">prior_model</span><span class="o">.</span><span class="n">trainable_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">prior_model</span><span class="o">.</span><span class="n">trainable_variables</span><span class="p">))</span>
+        <span class="p">]</span>
+    <span class="n">init_vars_names</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">prior_model</span><span class="o">.</span><span class="n">trainable_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">prior_model</span><span class="o">.</span><span class="n">trainable_variables</span><span class="p">))</span>
+        <span class="p">]</span>
+
     <span class="c1"># initialize the adam optimizer</span>
     <span class="n">optimizer_copy</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">init_sgd_optimizer</span> <span class="o">=</span> <span class="n">optimizer</span><span class="p">[</span><span class="s2">&quot;optimizer&quot;</span><span class="p">]</span>
@@ -425,6 +435,9 @@ document.write(`
                     <span class="n">hyp_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hyperparams</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
                 <span class="c1"># create a dict with empty list for each hyperparameter</span>
                 <span class="n">res_dict</span> <span class="o">=</span> <span class="p">{</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">hyp_list</span><span class="p">}</span>
+                <span class="c1"># create final dict with initial train. variables</span>
+                <span class="k">for</span> <span class="n">val</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">init_vars_values</span><span class="p">,</span> <span class="n">init_vars_names</span><span class="p">):</span>
+                    <span class="n">res_dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
 
             <span class="c1"># save names and values of hyperparameters</span>
             <span class="n">vars_values</span> <span class="o">=</span> <span class="p">[</span>
@@ -443,9 +456,8 @@ document.write(`
             <span class="k">if</span> <span class="n">epoch</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">res_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;means&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;stds&quot;</span><span class="p">:</span> <span class="p">[]}</span>
 
-            <span class="n">means</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">model_sim</span><span class="p">[</span><span class="s2">&quot;prior_samples&quot;</span><span class="p">],</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-            <span class="n">sds</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_std</span><span class="p">(</span><span class="n">model_sim</span><span class="p">[</span><span class="s2">&quot;prior_samples&quot;</span><span class="p">],</span>
-                                                    <span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">means</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">prior_sim</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="n">sds</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_std</span><span class="p">(</span><span class="n">prior_sim</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
 
             <span class="k">for</span> <span class="n">val</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">means</span><span class="p">,</span> <span class="n">sds</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;means&quot;</span><span class="p">,</span> <span class="s2">&quot;stds&quot;</span><span class="p">]):</span>
                 <span class="n">res_dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>

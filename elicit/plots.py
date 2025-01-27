@@ -688,33 +688,32 @@ def priorpredictive(eliobj, **kwargs) -> None:
     Raises
     ------
     KeyError
-        Can't find 'model_samples' in 'eliobj.results'. Have you excluded 
-        'model_samples' from results savings?
+        Can't find 'target_quantities' in 'eliobj.results'. Have you excluded 
+        'target_quantities' from results savings?
 
     """
     # check that all information can be assessed
     try:
-        eliobj.results["model_samples"]
+        eliobj.results["target_quantities"]
     except KeyError:
         print(
-            "No information about 'model_samples' found in 'eliobj.results'"
-            +" Have you excluded 'model_samples' from results savings?"
+            "No information about 'target_quantities' found in 'eliobj.results'"
+            +" Have you excluded 'target_quantities' from results savings?"
         )
 
-    B=eliobj.trainer["B"]
-    num_samples=eliobj.trainer["num_samples"]
-    n_obs = eliobj.results["model_samples"]["ypred"].shape[-1]
-
-    pp_samples = tf.reshape(eliobj.results["model_samples"]["ypred"],
-                            (B*num_samples,n_obs))
-
+    target_reshaped=[]
+    for k in eliobj.results["target_quantities"]:
+        target = eliobj.results["target_quantities"][k]
+        target_reshaped.append(tf.reshape(target, (target.shape[0]*target.shape[1])))
+    
+    targets = tf.stack(target_reshaped,-1)
 
     fig, axs = plt.subplots(1, 1, constrained_layout=True, **kwargs)
     axs.grid(color="lightgrey", linestyle="dotted", linewidth=1)
-    for i in range(n_obs):
-        shade = i / (n_obs - 1)
+    for i in range(targets.shape[-1]):
+        shade = i / (targets.shape[-1] - 1)
         color = plt.cm.gray(shade)
-        sns.histplot(pp_samples[:,i], stat="probability", bins=40,
+        sns.histplot(targets[:,i], stat="probability", bins=40,
                      label=eliobj.targets[i]["name"], ax=axs,
                      color=color
                      )

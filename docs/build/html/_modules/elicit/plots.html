@@ -795,13 +795,13 @@ document.write(`
                          <span class="n">color</span><span class="o">=</span><span class="s2">&quot;lightgrey&quot;</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">training</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
             <span class="p">],</span>
-            <span class="p">[</span><span class="n">axs</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">training</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])],</span>
+            <span class="n">axs</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
             <span class="n">axs</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">training</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
             <span class="n">axs</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span>
                 <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">training</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])],</span>
                 <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;cor</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">training</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])],</span>
             <span class="p">),</span>
-            <span class="n">axs</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;x-small&quot;</span><span class="p">,</span> <span class="n">markerscale</span><span class="o">=</span><span class="mf">0.5</span><span class="p">),</span>
+            <span class="n">axs</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;x-small&quot;</span><span class="p">,</span> <span class="n">markerscale</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
         <span class="p">)</span>
 
     <span class="c1"># get number of hyperparameter</span>
@@ -1010,33 +1010,32 @@ document.write(`
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
 <span class="sd">    KeyError</span>
-<span class="sd">        Can&#39;t find &#39;model_samples&#39; in &#39;eliobj.results&#39;. Have you excluded </span>
-<span class="sd">        &#39;model_samples&#39; from results savings?</span>
+<span class="sd">        Can&#39;t find &#39;target_quantities&#39; in &#39;eliobj.results&#39;. Have you excluded </span>
+<span class="sd">        &#39;target_quantities&#39; from results savings?</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># check that all information can be assessed</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">eliobj</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;model_samples&quot;</span><span class="p">]</span>
+        <span class="n">eliobj</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;target_quantities&quot;</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">&quot;No information about &#39;model_samples&#39; found in &#39;eliobj.results&#39;&quot;</span>
-            <span class="o">+</span><span class="s2">&quot; Have you excluded &#39;model_samples&#39; from results savings?&quot;</span>
+            <span class="s2">&quot;No information about &#39;target_quantities&#39; found in &#39;eliobj.results&#39;&quot;</span>
+            <span class="o">+</span><span class="s2">&quot; Have you excluded &#39;target_quantities&#39; from results savings?&quot;</span>
         <span class="p">)</span>
 
-    <span class="n">B</span><span class="o">=</span><span class="n">eliobj</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;B&quot;</span><span class="p">]</span>
-    <span class="n">num_samples</span><span class="o">=</span><span class="n">eliobj</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s2">&quot;num_samples&quot;</span><span class="p">]</span>
-    <span class="n">n_obs</span> <span class="o">=</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;model_samples&quot;</span><span class="p">][</span><span class="s2">&quot;ypred&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-
-    <span class="n">pp_samples</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">eliobj</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;model_samples&quot;</span><span class="p">][</span><span class="s2">&quot;ypred&quot;</span><span class="p">],</span>
-                            <span class="p">(</span><span class="n">B</span><span class="o">*</span><span class="n">num_samples</span><span class="p">,</span><span class="n">n_obs</span><span class="p">))</span>
-
+    <span class="n">target_reshaped</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;target_quantities&quot;</span><span class="p">]:</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;target_quantities&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
+        <span class="n">target_reshaped</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">target</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+    
+    <span class="n">targets</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">target_reshaped</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">constrained_layout</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="n">axs</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;lightgrey&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;dotted&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_obs</span><span class="p">):</span>
-        <span class="n">shade</span> <span class="o">=</span> <span class="n">i</span> <span class="o">/</span> <span class="p">(</span><span class="n">n_obs</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">targets</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="n">shade</span> <span class="o">=</span> <span class="n">i</span> <span class="o">/</span> <span class="p">(</span><span class="n">targets</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">color</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">gray</span><span class="p">(</span><span class="n">shade</span><span class="p">)</span>
-        <span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">pp_samples</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span> <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;probability&quot;</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
+        <span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">targets</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span> <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;probability&quot;</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
                      <span class="n">label</span><span class="o">=</span><span class="n">eliobj</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">,</span>
                      <span class="n">color</span><span class="o">=</span><span class="n">color</span>
                      <span class="p">)</span>

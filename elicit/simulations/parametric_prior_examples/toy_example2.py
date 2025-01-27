@@ -46,9 +46,9 @@ class ToyModel2:
         log_R2 = utils.log_R2(ypred, epred)
 
         return dict(
-            likelihood=likelihood,
-            ypred=ypred, epred=epred,
-            prior_samples=prior_samples,
+            #likelihood=likelihood,
+            #ypred=ypred, epred=epred,
+            #prior_samples=prior_samples,
             y_X0=y_X0, y_X1=y_X1, y_X2=y_X2,
             log_R2=log_R2
         )
@@ -145,7 +145,7 @@ eliobj = el.Elicit(
     trainer=el.trainer(
         method="parametric_prior",
         seed=0,
-        epochs=600
+        epochs=6
     ),
     initializer=el.initializer(
         hyperparams = dict(
@@ -158,6 +158,9 @@ eliobj = el.Elicit(
 )
 
 eliobj.fit()
+
+eliobj.results.keys()
+
 #el.utils.get_expert_datformat(targets)
 
 el.plots.hyperparameter(eliobj)

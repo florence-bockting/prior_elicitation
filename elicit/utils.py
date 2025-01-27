@@ -697,7 +697,7 @@ def save_results(
     if ``prior_samples`` is excluded :func:`elicit.plots.priors` can't be
     used as it requires this information.
 
-    if ``model_samples`` is excluded :func:`elicit.plots.priorpredictive`
+    if ``target_quantities`` is excluded :func:`elicit.plots.priorpredictive`
     can't be used as it requires this information.
 
     if ``expert_elicited_statistics`` or ``elicited_statistics`` is
@@ -723,10 +723,10 @@ def save_results(
             + "'prior_samples'. If you don't save this information "
             + "this plotting function can't be used."
         )
-    if not model_samples:
+    if not target_quantities:
         warnings.warn(
             "el.plots.priorpredictive() requires information about "
-            + "'model_samples'. If you don't save this information "
+            + "'target_quantities'. If you don't save this information "
             + "this plotting function can't be used."
         )
     if (not expert_elicited_statistics) or (not elicited_statistics):
