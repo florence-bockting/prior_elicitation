@@ -135,7 +135,7 @@ def test_integration_initialization():
 
 
     class ToyModel:
-        def __call__(self, prior_samples, design_matrix, **kwargs):
+        def __call__(self, prior_samples, design_matrix):
             B = prior_samples.shape[0]
             S = prior_samples.shape[1]
 

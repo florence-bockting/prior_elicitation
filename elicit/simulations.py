@@ -2,6 +2,7 @@
 #
 # noqa SPDX-License-Identifier: Apache-2.0
 
+import inspect
 import tensorflow as tf
 import tensorflow_probability as tfp
 
@@ -315,11 +316,13 @@ def simulate_from_generator(
     # get model specific arguments (that are not prior samples)
     add_model_args = model.copy()
     add_model_args.pop("obj")
-    add_model_args["seed"]=seed
     # simulate from generator
-    if add_model_args is not None:
+    if add_model_args is None:
+        model_simulations = generative_model(prior_samples)
+    elif "kwargs" not in inspect.getfullargspec(GenerativeModel.__call__)[0]:
         model_simulations = generative_model(prior_samples, **add_model_args)
     else:
-        model_simulations = generative_model(prior_samples)
+        add_model_args["seed"]=seed
+        model_simulations = generative_model(prior_samples, **add_model_args)
 
     return model_simulations
