@@ -2,8 +2,8 @@ name: Tests
 
 on:
   push:
-    branches:
-      - release
+    tags: ['tests']
+    branches: [master]
 
 jobs:
   tests:

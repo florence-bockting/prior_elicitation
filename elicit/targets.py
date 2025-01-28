@@ -15,61 +15,13 @@ bfn = bf.networks
 
 
 # TODO: Update Custom Target Function
-def use_custom_functions(custom_function, model_simulations):
+def use_custom_functions():
     """
-    Helper function that prepares custom functions if specified by checking
-    all inputs and extracting the argument from different sources.
-
-    Parameters
-    ----------
-    custom_function : callable
-        custom function as specified by the user.
-    model_simulations : dict
-        simulations from the generative model.
-    global_dict : dict
-        dictionary including all user-input settings.
-
-    Returns
-    -------
-    custom_quantity : tf.Tensor
-        returns the evaluated custom function.
+    ToDo: Function for using custom target_method
 
     """
-    # get function
-    custom_func = custom_function["function"]
-    # create a dict with arguments from model simulations and custom args
-    # for custom func
-    args_dict = dict()
-    if custom_function["additional_args"] is not None:
-        additional_args_dict = {
-            f"{key}": custom_function["additional_args"][key]
-            for key in list(custom_function["additional_args"].keys())
-        }
-    else:
-        additional_args_dict = {}
-    # select only relevant keys from args_dict
-    custom_args_keys = inspect.getfullargspec(custom_func)[0]
-    # check whether expert-specific input has been specified
-    if "from_simulated_truth" in custom_args_keys:
-        for i in range(len(inspect.getfullargspec(custom_func)[3][0])):
-            quantity = inspect.getfullargspec(custom_func)[3][i][0]
-            true_model_simulations = pd.read_pickle(
-                output_path + "/expert/model_simulations.pkl"
-            )
-            for key in custom_args_keys:
-                if f"{key}" == quantity:
-                    args_dict[key] = true_model_simulations[quantity]
-                    custom_args_keys.remove(quantity)
-        custom_args_keys.remove("from_simulated_truth")
-    # TODO: check that all args needed for custom function were detected
-    for key in list(set(custom_args_keys) - set(additional_args_dict)):
-        args_dict[key] = model_simulations[key]
-    for key in additional_args_dict:
-        args_dict.update(additional_args_dict)
-    # evaluate custom function
-    custom_quantity = custom_func(**args_dict)
-    return custom_quantity
-
+    raise NotImplementedError(
+        "Tue usage of custom target_method is not implemented yet.")
 
 
 def computation_elicited_statistics(
@@ -115,7 +67,7 @@ def computation_elicited_statistics(
             elicited_statistic = utils.pearson_correlation(
                 target_quantities[targets[i]['name']])
             # save correlation in result dictionary
-            elicits_res[f"pearson_{targets[i]['name']}"
+            elicits_res[f"cor_{targets[i]['name']}"
                         ] = elicited_statistic
 
         if targets[i]["query"]["name"] == "quantiles":
@@ -147,8 +99,10 @@ def computation_elicited_statistics(
     return elicits_res
 
 
-def computation_target_quantities(model_simulations: dict[str,tf.Tensor],
-                                  targets: dict) -> dict[str, tf.Tensor]:
+def computation_target_quantities(
+        model_simulations: dict[str,tf.Tensor],
+        prior_samples: tf.Tensor, # shape=[B,rep,num_param]
+        targets: dict) -> dict[str, tf.Tensor]:
     """
     Computes target quantities from model simulations.
 
@@ -156,6 +110,10 @@ def computation_target_quantities(model_simulations: dict[str,tf.Tensor],
     ----------
     model_simulations : dict[str, tf.Tensor]
         simulations from generative model.
+    prior_samples : tf.Tensor; shape = [B, rep, num_params]
+        samples from prior distributions of model parameters. Currently only
+        needed if correlations between model parameters is used as elicitation
+        technique.
     targets : list[dict]
         list of target quantities specified with :func:`elicit.elicit.target`.
 
@@ -169,16 +127,13 @@ def computation_target_quantities(model_simulations: dict[str,tf.Tensor],
     # loop over target quantities
     for i in range(len(targets)):
         tar = targets[i]
-        # use custom function for target quantity if it has been defined
-        if tar["name"] == "correlation":
-            target_quantity = model_simulations["prior_samples"]
+
+        if tar["query"]["name"] == "pearson_correlation":
+            target_quantity = prior_samples
         elif (
             tar["target_method"] is not None
         ):
-            target_quantity = use_custom_functions(
-                tar["target_method"],
-                model_simulations
-            )
+            target_quantity = use_custom_functions()
         else:
             target_quantity = model_simulations[tar["name"]]
 

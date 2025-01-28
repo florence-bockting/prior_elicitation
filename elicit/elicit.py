@@ -250,15 +250,9 @@ def model(obj: callable, **kwargs) -> dict:
     >>> # specify the generative model class
     >>> class ToyModel:
     >>>     def __call__(self, prior_samples, design_matrix, **kwargs):
-    >>>         B = prior_samples.shape[0]
-    >>>         S = prior_samples.shape[1]
-    >>>         # preprocess shape of design matrix
-    >>>         X = tf.broadcast_to(design_matrix[None, None,:],
-    >>>                            (B,S,len(design_matrix)))
     >>>         # linear predictor
-    >>>         epred = tf.add(prior_samples[:, :, 0][:,:,None],
-    >>>                        tf.multiply(prior_samples[:, :, 1][:,:,None], X)
-    >>>                        )
+    >>>         epred = tf.matmul(prior_samples, design_matrix,
+    >>>                           transpose_b=True)
     >>>         # data-generating model
     >>>         likelihood = tfd.Normal(
     >>>             loc=epred, scale=tf.expand_dims(prior_samples[:, :, -1], -1)
@@ -274,7 +268,7 @@ def model(obj: callable, **kwargs) -> dict:
 
     >>> # specify the model category in the elicit object
     >>> el.model(obj=ToyModel,
-    >>>          design_matrix=std_predictor(N=200, quantiles=[25,50,75])
+    >>>          design_matrix=design_matrix
     >>>          )
     """  # noqa: E501
     # get input arguments of generative model class
@@ -461,7 +455,7 @@ def target(
     Examples
     --------
     >>> el.target(name="y_X0",
-    >>>           query=el.queries.quantiles((5, 25, 50, 75, 95)),
+    >>>           query=el.queries.quantiles((.05, .25, .50, .75, .95)),
     >>>           loss=el.losses.MMD2(kernel="energy"),
     >>>           weight=1.0
     >>>           )

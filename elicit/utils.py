@@ -371,7 +371,7 @@ def one_forward_simulation(
     )
     # compute the target quantities
     target_quantities = el.targets.computation_target_quantities(
-        model_simulations, targets
+        model_simulations, prior_samples, targets
     )
     # compute the elicited statistics by applying a specific elicitation
     # method on the target quantities
