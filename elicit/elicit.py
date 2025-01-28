@@ -825,9 +825,10 @@ def trainer(
     """  # noqa: E501
     # check that epochs are positive numbers
     if epochs <= 0:
-        raise ValueError:
+        raise ValueError(
             "[section: trainer] The number of epochs has to be at least 1."+
             f" Got {epochs} epochs"
+            )
     # check that method is implemented
     if method not in ["parametric_prior", "deep_prior"]:
         raise ValueError(
