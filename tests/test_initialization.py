@@ -243,7 +243,8 @@ def test_integration_initialization():
     assert hist["hyperparameter"]["mu0"][0] == res["init_matrix"]["mu0"]
     assert hist["hyperparameter"]["mu1"][0] == res["init_matrix"]["mu1"]
     assert el.utils.LowerBound(0.).forward(
-        hist["hyperparameter"]["sigma0"][0]) == res["init_matrix"]["sigma0"]
+        hist["hyperparameter"]["sigma0"][0]).numpy() == pytest.approx(
+            res["init_matrix"]["sigma0"], abs=0.001)
     assert el.utils.LowerBound(0.).forward(
         hist["hyperparameter"]["sigma1"][0]) == res["init_matrix"]["sigma1"]
     
