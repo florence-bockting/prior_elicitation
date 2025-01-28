@@ -77,7 +77,6 @@ def sgd_training(
     # start training loop
     print("Training")
     for epoch in tqdm(tf.range(trainer["epochs"])):
-
         # runtime of one epoch
         epoch_time_start = time.time()
 
@@ -134,7 +133,6 @@ def sgd_training(
                 # create final dict with initial train. variables
                 for val, name in zip(init_vars_values, init_vars_names):
                     res_dict[name].append(val)
-
             # save names and values of hyperparameters
             vars_values = [
                 hyperparams[i].numpy().copy() for i in range(len(hyperparams))

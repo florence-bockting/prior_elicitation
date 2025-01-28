@@ -810,6 +810,9 @@ def trainer(
     ValueError
         ``method`` can only take the value "parametric_prior" or "deep_prior"
 
+        ``epochs`` can only take positive integers. Minimum number of epochs
+        is 1.
+
     Examples
     --------
     >>> el.trainer(
@@ -820,6 +823,11 @@ def trainer(
     >>>     num_samples=200
     >>> )
     """  # noqa: E501
+    # check that epochs are positive numbers
+    if epochs <= 0:
+        raise ValueError:
+            "[section: trainer] The number of epochs has to be at least 1."+
+            f" Got {epochs} epochs"
     # check that method is implemented
     if method not in ["parametric_prior", "deep_prior"]:
         raise ValueError(

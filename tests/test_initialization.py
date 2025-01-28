@@ -156,9 +156,6 @@ def test_integration_initialization():
             y_X0, y_X1 = (ypred[:,:,0], ypred[:,:,1])
 
             return dict(
-                likelihood=likelihood,
-                ypred=ypred, epred=epred,
-                prior_samples=prior_samples,
                 y_X0=y_X0, y_X1=y_X1
             )
 
@@ -170,9 +167,7 @@ def test_integration_initialization():
     eliobj = el.Elicit(
         model=el.model(
             obj=ToyModel,
-            design_matrix=std_predictor(N=200, quantiles=[0.25,0.75]),
-            total_count = 30,
-            temp = 1.6
+            design_matrix=std_predictor(N=200, quantiles=[0.25,0.75])
             ),
         parameters=[
             el.parameter(
@@ -218,7 +213,7 @@ def test_integration_initialization():
         trainer=el.trainer(
             method="parametric_prior",
             seed=0,
-            epochs=1
+            epochs=2
         ),
         initializer=el.initializer(
             method="sobol",
