@@ -1,0 +1,1311 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Quickstart &#8212; Prior Learning</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=87e54e7c" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=4acdca81"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'quickstart';</script>
+    <link rel="icon" href="_static/favicon-light.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/mmp-logo-light.png" class="logo__image only-light" alt="Prior Learning - Home"/>
+    <img src="_static/mmp-logo-dark.png" class="logo__image only-dark pst-js-only" alt="Prior Learning - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Home</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/modules.html">API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/elicit.html">elicit package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/elicit.extras.html">elicit.extras package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/elicit.extras.utils.html">elicit.extras.utils module</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="api/elicit.elicit.html">elicit.elicit module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/elicit.initialization.html">elicit.initialization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/elicit.losses.html">elicit.losses module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/elicit.networks.html">elicit.networks module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/elicit.optimization.html">elicit.optimization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/elicit.plots.html">elicit.plots module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/elicit.simulations.html">elicit.simulations module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/elicit.targets.html">elicit.targets module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/elicit.utils.html">elicit.utils module</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="howto/index.html">How-To</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explanation/index.html">Explanation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/florence-bockting/prior_elicitation" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/quickstart.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Quickstart</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-statistical-model">The statistical model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#specify-design-matrix">Specify design matrix</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#define-generative-model">Define generative model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#specify-model-parameters">Specify model parameters</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-expert">The expert</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#use-an-oracle">Use an oracle</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicited-information">Elicited information</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#putting-it-all-together-and-learn-the-prior-hyperparameters">Putting it all together and learn the prior hyperparameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inspect-results">Inspect results</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">tensorflow</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tf</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tensorflow_probability</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tfp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">elicit.plotting</span><span class="w"> </span><span class="kn">import</span> <span class="n">func</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">elicit.loss_functions</span><span class="w"> </span><span class="kn">import</span> <span class="n">MMD_energy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">elicit.main</span><span class="w"> </span><span class="kn">import</span> <span class="n">prior_elicitation</span>
+
+<span class="n">tfd</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">distributions</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\bockting\AppData\Roaming\Python\Python311\site-packages\bayesflow\trainers.py:27: TqdmExperimentalWarning: Using `tqdm.autonotebook.tqdm` in notebook mode. Use `tqdm.tqdm` instead to force console mode (e.g. in jupyter console)
+  from tqdm.autonotebook import tqdm
+</pre></div>
+</div>
+</div>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="quickstart">
+<h1>Quickstart<a class="headerlink" href="#quickstart" title="Link to this heading">#</a></h1>
+<section id="the-statistical-model">
+<h2>The statistical model<a class="headerlink" href="#the-statistical-model" title="Link to this heading">#</a></h2>
+<p>Specify your generative model.</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+    \beta_i &amp;\sim \text{Normal}(\mu_i, \sigma_i) \quad \text{for } i=0,1 \\
+    \sigma &amp;\sim \text{HalfNormal}(\sigma_2) \\
+    \mu &amp;= \boldsymbol{\beta}\mathbf{X} \\
+    y_\text{pred} &amp;= \text{Normal}(\mu, \sigma)
+\end{align*}\]</div>
+<p>Hyperparameter to-be-learned
+$<span class="math notranslate nohighlight">\(
+\lambda = (\mu_0, \sigma_0, \mu_1, \sigma_1, \sigma_2)
+\)</span>$</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ModelExample</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">,</span> <span class="n">design_matrix</span><span class="p">):</span>
+        <span class="c1"># model parameters</span>
+        <span class="n">beta0</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">][:,:,</span><span class="kc">None</span><span class="p">]</span>
+        <span class="n">beta1</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">][:,:,</span><span class="kc">None</span><span class="p">]</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="n">prior_samples</span><span class="p">[:,:,</span><span class="o">-</span><span class="mi">1</span><span class="p">][:,:,</span><span class="kc">None</span><span class="p">]</span>
+        <span class="c1"># linear predictor (= mu)</span>
+        <span class="n">epred</span> <span class="o">=</span> <span class="n">beta0</span><span class="o">+</span><span class="n">beta1</span><span class="o">*</span><span class="n">design_matrix</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">,:]</span>
+        <span class="c1"># likelihood</span>
+        <span class="n">likelihood</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">epred</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
+        <span class="c1"># prior predictive distribution</span>
+        <span class="n">ypred</span> <span class="o">=</span> <span class="n">likelihood</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">likelihood</span><span class="o">=</span><span class="n">likelihood</span><span class="p">,</span> <span class="n">ypred</span><span class="o">=</span><span class="n">ypred</span><span class="p">,</span> <span class="n">epred</span><span class="o">=</span><span class="n">epred</span><span class="p">,</span>
+            <span class="n">prior_samples</span><span class="o">=</span><span class="n">prior_samples</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="specify-design-matrix">
+<h3>Specify design matrix<a class="headerlink" href="#specify-design-matrix" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>standardize predictor!</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">create_design_matrix</span><span class="p">(</span><span class="n">selected_obs_quants</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="c1"># standardize predictor</span>
+    <span class="n">X_std</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">X</span><span class="p">)),</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_std</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
+    <span class="c1"># select only specific design points of predictor</span>
+    <span class="n">X_std_selected</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">X_std</span><span class="p">,</span> <span class="n">selected_obs_quants</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">X_std_selected</span>
+
+<span class="n">design_matrix</span><span class="o">=</span><span class="n">create_design_matrix</span><span class="p">([</span><span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">],</span> <span class="mi">30</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="define-generative-model">
+<h3>Define generative model<a class="headerlink" href="#define-generative-model" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">generative_model</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">ModelExample</span><span class="p">,</span>
+    <span class="n">additional_model_args</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">design_matrix</span><span class="o">=</span><span class="n">design_matrix</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="specify-model-parameters">
+<h3>Specify model parameters<a class="headerlink" href="#specify-model-parameters" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># hyperparameter in the unconstrained space</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">elicit.user.custom_functions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Normal_log</span><span class="p">,</span> <span class="n">HalfNormal_log</span>
+
+<span class="n">halfnormal_log</span> <span class="o">=</span> <span class="n">HalfNormal_log</span><span class="p">()</span>
+<span class="n">normal_log</span> <span class="o">=</span> <span class="n">Normal_log</span><span class="p">()</span>
+
+<span class="n">model_parameters</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+    <span class="n">beta0</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">family</span><span class="o">=</span><span class="n">normal_log</span><span class="p">,</span>
+        <span class="n">hyperparams</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">mean</span> <span class="o">=</span> <span class="n">hp</span><span class="p">(</span><span class="s2">&quot;mu0&quot;</span><span class="p">,</span> <span class="n">lower</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">class</span><span class="o">=</span><span class="s2">&quot;real&quot;</span> <span class="n">vs</span><span class="o">.</span> <span class="s2">&quot;array&quot;</span> <span class="n">vs</span><span class="o">.</span> <span class="s2">&quot;correlation_matrix&quot;</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">sd</span> <span class="o">=</span> <span class="s2">&quot;log_sigma0&quot;</span><span class="p">),</span>
+        
+    <span class="p">),</span>
+    <span class="n">beta1</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">family</span><span class="o">=</span><span class="n">normal_log</span><span class="p">,</span>
+        <span class="n">hyperparams</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mu1&quot;</span><span class="p">,</span> <span class="s2">&quot;log_sigma1&quot;</span><span class="p">]</span>
+    <span class="p">),</span>
+    <span class="n">sigma</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">family</span><span class="o">=</span><span class="n">halfnormal_log</span><span class="p">,</span>
+        <span class="n">hyperparams</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;log_sigma2&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="the-expert">
+<h2>The expert<a class="headerlink" href="#the-expert" title="Link to this heading">#</a></h2>
+<section id="use-an-oracle">
+<h3>Use an oracle<a class="headerlink" href="#use-an-oracle" title="Link to this heading">#</a></h3>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+    \beta_0 &amp;\sim \text{Normal}(5., 2.) \\
+    \beta_1 &amp;\sim \text{Normal}(0.5, 0.8) \\
+    \sigma &amp;\sim \text{HalfNormal}(10.)
+\end{align*}\]</div>
+<p>Thus,
+$<span class="math notranslate nohighlight">\(
+\lambda^*=(5., 2., 0.5, 0.8, 10.)
+\)</span>$</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">expert_data</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">from_ground_truth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">simulator_specs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">beta0</span><span class="o">=</span><span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="mf">5.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">),</span>
+        <span class="n">beta1</span><span class="o">=</span><span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">),</span>
+        <span class="n">sigma</span><span class="o">=</span><span class="n">tfd</span><span class="o">.</span><span class="n">HalfNormal</span><span class="p">(</span><span class="mf">10.</span><span class="p">)</span>
+        <span class="p">),</span>
+    <span class="n">samples_from_prior</span> <span class="o">=</span> <span class="mi">10_000</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">expert_data</span><span class="o">=</span> <span class="n">simulated_expert_data</span><span class="p">(</span><span class="n">specs</span><span class="p">,</span> <span class="n">samples</span><span class="o">=...</span><span class="p">)</span>
+<span class="c1">#vs </span>
+<span class="n">expert_data</span> <span class="o">=</span> <span class="n">expert_data</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="elicited-information">
+<h3>Elicited information<a class="headerlink" href="#elicited-information" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Quantile-based elicitation for ypred yielding in <span class="math notranslate nohighlight">\(y_\text{pred} \mid X_{q25}\)</span>, <span class="math notranslate nohighlight">\(y_\text{pred} \mid X_{q50}\)</span> and <span class="math notranslate nohighlight">\(y_\text{pred} \mid X_{q75}\)</span></p></li>
+<li><p>Quantile-based elicitation for <span class="math notranslate nohighlight">\(R^2\)</span></p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">compute_logR2</span><span class="p">(</span><span class="n">ypred</span><span class="p">,</span> <span class="n">epred</span><span class="p">):</span>
+    <span class="n">var_epred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">epred</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># variance of difference between ypred and epred</span>
+    <span class="n">var_diff</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">ypred</span><span class="p">,</span> <span class="n">epred</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">var_total</span> <span class="o">=</span> <span class="n">var_epred</span> <span class="o">+</span> <span class="n">var_diff</span>
+    <span class="c1"># variance of linear predictor divided by total variance</span>
+    <span class="n">log_R2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">var_epred</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">var_total</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">log_R2</span>
+
+<span class="n">target_quantities</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+    <span class="n">ypred</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">elicitation_method</span><span class="o">=</span><span class="s2">&quot;quantiles&quot;</span><span class="p">,</span>
+        <span class="n">quantiles_specs</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">95</span><span class="p">),</span>
+        <span class="n">loss</span><span class="o">=</span><span class="n">MMD_energy</span><span class="p">,</span>
+        <span class="n">loss_weight</span><span class="o">=</span><span class="mf">1.</span>
+    <span class="p">),</span>
+    <span class="n">logR2</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">custom_target_function</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">function</span><span class="o">=</span><span class="n">compute_logR2</span><span class="p">,</span>
+            <span class="n">additional_args</span><span class="o">=</span><span class="kc">None</span>
+        <span class="p">),</span>
+        <span class="n">elicitation_method</span><span class="o">=</span><span class="s2">&quot;quantiles&quot;</span><span class="p">,</span>
+        <span class="n">quantiles_specs</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">95</span><span class="p">),</span>
+        <span class="n">loss</span><span class="o">=</span><span class="n">MMD_energy</span><span class="p">,</span>
+        <span class="n">loss_weight</span><span class="o">=</span><span class="mf">1.</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="putting-it-all-together-and-learn-the-prior-hyperparameters">
+<h2>Putting it all together and learn the prior hyperparameters<a class="headerlink" href="#putting-it-all-together-and-learn-the-prior-hyperparameters" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">prior_elicitation</span><span class="p">(</span>
+    <span class="n">model_parameters</span><span class="o">=</span><span class="n">model_parameters</span><span class="p">,</span>
+    <span class="n">expert_data</span><span class="o">=</span><span class="n">expert_data</span><span class="p">,</span>
+    <span class="n">generative_model</span><span class="o">=</span><span class="n">generative_model</span><span class="p">,</span>
+    <span class="n">target_quantities</span><span class="o">=</span><span class="n">target_quantities</span><span class="p">,</span>
+    <span class="n">optimization_settings</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">,</span>
+        <span class="n">optimizer_specs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> 
+            <span class="n">clipnorm</span><span class="o">=</span><span class="mf">1.0</span>
+        <span class="p">)</span>
+    <span class="p">),</span>
+    <span class="n">initialization_settings</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;random&quot;</span><span class="p">,</span> 
+        <span class="n">loss_quantile</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">number_of_iterations</span><span class="o">=</span><span class="mi">10</span>
+    <span class="p">),</span>
+    <span class="n">training_settings</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;parametric_prior&quot;</span><span class="p">,</span>
+        <span class="n">sim_id</span><span class="o">=</span><span class="s2">&quot;example_model&quot;</span><span class="p">,</span>
+        <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">B</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
+        <span class="n">samples_from_prior</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+        <span class="n">epochs</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+        <span class="n">output_path</span><span class="o">=</span><span class="s2">&quot;results&quot;</span><span class="p">,</span>
+        <span class="n">view_ep</span><span class="o">=</span><span class="mi">50</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>init_method=random
+(0) 3.8 (1) 5.5 (2) 4.1 (3) 2.6 (4) 5.3 (5) 4.1 (6) 5.7 (7) 3.1 (8) 4.6 (9) 3.9  
+epoch_time: 0.323 sec
+Epoch: 0, loss: 2.54697,                      lr: 0.010000
+epoch_time: 0.313 sec
+Epoch: 50, loss: 1.90316,                      lr: 0.010000
+Estimated time until completion: 00:02:47
+epoch_time: 0.313 sec
+Epoch: 100, loss: 1.02646,                      lr: 0.010000
+Estimated time until completion: 00:02:25
+epoch_time: 0.383 sec
+Epoch: 150, loss: 0.59139,                      lr: 0.010000
+Estimated time until completion: 00:02:03
+epoch_time: 0.440 sec
+Epoch: 200, loss: 0.35818,                      lr: 0.010000
+Estimated time until completion: 00:01:46
+epoch_time: 0.411 sec
+Epoch: 250, loss: 0.22915,                      lr: 0.010000
+Estimated time until completion: 00:01:27
+epoch_time: 0.393 sec
+Epoch: 300, loss: 0.20542,                      lr: 0.010000
+Estimated time until completion: 00:01:09
+epoch_time: 0.408 sec
+Epoch: 350, loss: 0.20541,                      lr: 0.010000
+Estimated time until completion: 00:00:52
+epoch_time: 0.302 sec
+Epoch: 400, loss: 0.20540,                      lr: 0.010000
+Estimated time until completion: 00:00:35
+epoch_time: 0.370 sec
+Epoch: 450, loss: 0.20540,                      lr: 0.010000
+Estimated time until completion: 00:00:17
+Done :)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="inspect-results">
+<h2>Inspect results<a class="headerlink" href="#inspect-results" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;elicit/results/parametric_prior/example_model_0/&quot;</span>
+
+<span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/expert/elicited_statistics.pkl&quot;</span><span class="p">)</span>
+
+<span class="c1"># loss function</span>
+<span class="n">func</span><span class="o">.</span><span class="n">plot_loss</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">AttributeError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span> <span class="n">line</span> <span class="mi">6</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/expert/elicited_statistics.pkl&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="c1"># loss function</span>
+<span class="ne">----&gt; </span><span class="mi">6</span> <span class="n">func</span><span class="o">.</span><span class="n">plot_loss</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+<span class="nn">File ~\Documents\GitHub\prior_elicitation\elicit\plotting\func.py:26,</span> in <span class="ni">plot_loss</span><span class="nt">(path)</span>
+<span class="g g-Whitespace">     </span><span class="mi">24</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">total_loss</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">25</span> <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">loss_components</span><span class="p">)</span>
+<span class="ne">---&gt; </span><span class="mi">26</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;epochs&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">27</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;discrepancy loss&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">28</span> <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="ne">AttributeError</span>: &#39;Axes&#39; object has no attribute &#39;xlabel&#39;
+</pre></div>
+</div>
+<img alt="_images/9c79793a811c4c07554d1d228e779db2d4c532fc60efe6e4ae9fb02868711b43.png" src="_images/9c79793a811c4c07554d1d228e779db2d4c532fc60efe6e4ae9fb02868711b43.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/elicited_statistics.pkl&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;quantiles_ypred&#39;: &lt;tf.Tensor: shape=(128, 5), dtype=float32, numpy=
+ array([[-1.40922184e+01,  4.34350491e-01,  4.92502642e+00,
+          8.96121979e+00,  2.43081417e+01],
+        [-1.16768131e+01,  1.28443384e+00,  5.03073025e+00,
+          8.90634441e+00,  2.13240242e+01],
+        [-1.18353682e+01,  9.74644661e-01,  5.03020239e+00,
+          9.17309189e+00,  2.32363052e+01],
+        [-1.32483339e+01,  1.89633536e+00,  5.02199030e+00,
+          9.04155636e+00,  2.35339661e+01],
+        [-1.18181114e+01,  9.26339149e-01,  4.98266172e+00,
+          8.63720322e+00,  2.27122440e+01],
+        [-9.92835999e+00,  1.58493900e+00,  5.03793478e+00,
+          8.36143398e+00,  1.93368034e+01],
+        [-1.23658648e+01,  1.20916915e+00,  5.21361113e+00,
+          8.48181152e+00,  2.10963554e+01],
+        [-1.19396191e+01,  7.94543743e-01,  4.68009472e+00,
+          8.60949326e+00,  2.05611897e+01],
+        [-1.28879347e+01,  1.34788966e+00,  5.21771145e+00,
+          9.31998062e+00,  2.14068623e+01],
+        [-1.05268707e+01,  5.95682144e-01,  4.79762888e+00,
+          8.13189411e+00,  2.03809948e+01],
+        [-9.01053810e+00,  1.13486719e+00,  4.74435663e+00,
+          8.07370186e+00,  1.85336151e+01],
+        [-9.67150593e+00,  1.67636633e+00,  5.11754656e+00,
+          9.06112576e+00,  2.14510345e+01],
+        [-1.16297798e+01,  1.98326516e+00,  5.10379982e+00,
+          8.31814575e+00,  2.32927380e+01],
+        [-1.02612286e+01,  1.25446439e+00,  4.97930813e+00,
+          9.05769825e+00,  2.28656712e+01],
+        [-1.19801121e+01,  2.83935070e-01,  4.60003471e+00,
+          7.73478508e+00,  2.01229324e+01],
+        [-8.34319878e+00,  1.91048980e+00,  5.00823116e+00,
+          9.18946075e+00,  1.89759102e+01],
+        [-1.02163792e+01,  1.46808529e+00,  5.03841257e+00,
+          8.67046070e+00,  2.14475670e+01],
+        [-1.26617718e+01,  8.79744768e-01,  5.03857040e+00,
+          9.29617691e+00,  2.45951958e+01],
+        [-1.18389664e+01,  9.30206776e-01,  4.83705139e+00,
+          8.67935658e+00,  2.33452930e+01],
+        [-9.75073242e+00,  1.45882845e+00,  4.93184090e+00,
+          8.36547089e+00,  2.05415993e+01],
+        [-1.58809700e+01,  1.10214162e+00,  4.91854382e+00,
+          8.62455368e+00,  2.23549805e+01],
+        [-1.24559383e+01,  5.81154585e-01,  4.90024805e+00,
+          9.31640053e+00,  2.25000076e+01],
+        [-9.40088463e+00,  5.84902287e-01,  4.78554106e+00,
+          7.99463272e+00,  1.92737694e+01],
+        [-1.27190495e+01,  1.68823731e+00,  5.49311209e+00,
+          9.52070808e+00,  2.09647942e+01],
+        [-1.56467733e+01,  8.88754845e-01,  4.89944839e+00,
+          9.82302856e+00,  2.37443790e+01],
+        [-1.41964312e+01,  4.23272133e-01,  5.00259352e+00,
+          9.72532368e+00,  2.29530792e+01],
+        [-1.13462801e+01,  6.12569332e-01,  4.63463688e+00,
+          8.46767902e+00,  2.00439968e+01],
+        [-1.21602526e+01,  1.25878191e+00,  4.93445063e+00,
+          8.65371895e+00,  2.10969009e+01],
+        [-1.39516907e+01,  2.68853903e-01,  5.15296841e+00,
+          8.69402599e+00,  2.25938873e+01],
+        [-1.05711060e+01,  8.88611794e-01,  4.81128168e+00,
+          8.97744560e+00,  1.99773178e+01],
+        [-1.52191486e+01,  5.07615089e-01,  5.20119190e+00,
+          9.44891357e+00,  2.48122578e+01],
+        [-1.36175423e+01,  8.45260382e-01,  4.91554356e+00,
+          8.61167336e+00,  2.35135040e+01],
+        [-1.31000013e+01,  6.15137577e-01,  4.88009167e+00,
+          8.79688931e+00,  2.13650703e+01],
+        [-1.01610584e+01,  1.62763548e+00,  4.85882807e+00,
+          8.26716042e+00,  1.89482765e+01],
+        [-9.76085663e+00,  2.45318174e+00,  5.40134859e+00,
+          1.10090637e+01,  2.19049397e+01],
+        [-1.21624298e+01,  1.31146646e+00,  4.91841459e+00,
+          8.60838890e+00,  2.18389225e+01],
+        [-1.20859489e+01,  1.91235971e+00,  5.02246809e+00,
+          8.22571373e+00,  2.17782516e+01],
+        [-1.42205029e+01,  2.57585526e-01,  4.99147654e+00,
+          8.93137550e+00,  2.06465569e+01],
+        [-9.58833694e+00,  1.66049409e+00,  4.99782753e+00,
+          7.69371033e+00,  2.03889313e+01],
+        [-1.36444283e+01,  8.55676651e-01,  5.03117323e+00,
+          8.23917389e+00,  2.18449020e+01],
+        [-1.53279457e+01,  2.16502905e-01,  4.46523094e+00,
+          7.44237852e+00,  2.36095600e+01],
+        [-1.16555061e+01,  9.02200460e-01,  4.92249298e+00,
+          8.61320114e+00,  1.94203339e+01],
+        [-1.49206877e+01,  1.26569510e+00,  5.05209827e+00,
+          9.38748169e+00,  2.19798965e+01],
+        [-1.48683205e+01,  1.54748440e-01,  5.29936075e+00,
+          9.95221519e+00,  2.17738495e+01],
+        [-1.36861858e+01,  2.04953241e+00,  5.14011765e+00,
+          9.27777958e+00,  2.08826885e+01],
+        [-9.29318047e+00,  1.57212019e+00,  5.08865595e+00,
+          8.11664772e+00,  1.99746227e+01],
+        [-1.25801029e+01,  8.78853559e-01,  5.05348635e+00,
+          8.83925629e+00,  2.04488144e+01],
+        [-1.29496632e+01,  1.29482126e+00,  5.06291962e+00,
+          9.56921196e+00,  2.51807365e+01],
+        [-1.25326633e+01,  9.61065292e-03,  4.86016464e+00,
+          8.84782505e+00,  1.93720970e+01],
+        [-1.14039822e+01,  1.41830945e+00,  4.80925751e+00,
+          8.39650917e+00,  1.99298496e+01],
+        [-1.25843906e+01,  7.20907450e-01,  4.93593740e+00,
+          8.60010815e+00,  2.22139130e+01],
+        [-1.21500320e+01,  1.37571836e+00,  4.93033504e+00,
+          9.00831223e+00,  2.18319016e+01],
+        [-1.10211868e+01,  1.35983741e+00,  5.12960291e+00,
+          9.57304192e+00,  2.33227520e+01],
+        [-1.25391684e+01,  1.25770497e+00,  5.10228872e+00,
+          9.22955132e+00,  2.32306919e+01],
+        [-1.16750050e+01,  1.87314939e+00,  4.97046137e+00,
+          8.28628445e+00,  1.81339684e+01],
+        [-1.19943905e+01,  1.42410016e+00,  4.87084866e+00,
+          8.61266136e+00,  2.42006893e+01],
+        [-1.45128536e+01,  7.70932674e-01,  4.57919407e+00,
+          9.01253986e+00,  2.08866501e+01],
+        [-1.33160458e+01,  9.86407757e-01,  4.96733713e+00,
+          8.82095718e+00,  2.28843288e+01],
+        [-1.29706879e+01,  1.36594462e+00,  5.04316902e+00,
+          8.72325897e+00,  2.41384068e+01],
+        [-1.26452780e+01,  8.61538410e-01,  5.04183102e+00,
+          8.91053009e+00,  2.10785427e+01],
+        [-9.36733246e+00,  5.07698059e-01,  4.65300274e+00,
+          8.02102852e+00,  1.81963615e+01],
+        [-1.37457256e+01,  2.95269966e-01,  4.62755680e+00,
+          7.94337177e+00,  2.22360344e+01],
+        [-9.87974739e+00,  1.20880079e+00,  5.16805458e+00,
+          8.45947361e+00,  2.37390099e+01],
+        [-8.87251854e+00,  1.98343563e+00,  5.24057388e+00,
+          8.19377708e+00,  1.88021412e+01],
+        [-1.02762966e+01,  1.03889871e+00,  5.03819227e+00,
+          9.11963272e+00,  2.26543808e+01],
+        [-1.28398695e+01,  1.52746153e+00,  5.45166922e+00,
+          9.50594616e+00,  2.15852814e+01],
+        [-1.21652966e+01,  1.02968693e+00,  5.02301025e+00,
+          8.76811218e+00,  2.15248337e+01],
+        [-1.07915401e+01,  1.34616494e+00,  4.81711769e+00,
+          8.31375885e+00,  1.86904755e+01],
+        [-9.71489143e+00,  4.87082005e-01,  5.00721073e+00,
+          9.08249092e+00,  2.11148472e+01],
+        [-1.03119040e+01,  1.08480430e+00,  4.76222658e+00,
+          8.43647575e+00,  2.07929554e+01],
+        [-1.09475212e+01,  1.62960625e+00,  5.17688751e+00,
+          8.85538769e+00,  2.03816853e+01],
+        [-1.37645979e+01,  1.55849576e+00,  4.96730995e+00,
+          8.18087387e+00,  2.00461502e+01],
+        [-1.12206430e+01,  1.02401590e+00,  5.24248981e+00,
+          9.14055824e+00,  2.21401367e+01],
+        [-1.66356335e+01,  9.28172588e-01,  4.92993498e+00,
+          8.59425259e+00,  2.14886799e+01],
+        [-1.24981232e+01,  7.94700146e-01,  4.99807882e+00,
+          9.46751595e+00,  2.06240654e+01],
+        [-1.20182400e+01,  6.05359793e-01,  4.97189093e+00,
+          9.02805328e+00,  2.28616028e+01],
+        [-1.10185738e+01,  8.90594959e-01,  5.02280617e+00,
+          8.81200981e+00,  2.10183372e+01],
+        [-1.18353195e+01,  6.72409058e-01,  4.76983976e+00,
+          9.20342064e+00,  2.22061310e+01],
+        [-1.08406391e+01,  1.26272917e+00,  5.08612633e+00,
+          8.78852367e+00,  1.97219105e+01],
+        [-1.23057156e+01,  1.32052970e+00,  4.76702499e+00,
+          9.13882637e+00,  2.16520290e+01],
+        [-1.15876541e+01, -2.21014023e-02,  4.56174612e+00,
+          8.00757027e+00,  1.95142841e+01],
+        [-9.25238514e+00,  2.01557994e+00,  5.25769806e+00,
+          8.73437119e+00,  2.05862503e+01],
+        [-1.07438164e+01,  1.42474675e+00,  4.94008255e+00,
+          7.98897600e+00,  1.85531025e+01],
+        [-1.03224640e+01,  2.01139212e+00,  5.33008385e+00,
+          9.85540581e+00,  2.25338993e+01],
+        [-1.17468653e+01,  1.89636266e+00,  5.01766968e+00,
+          7.57290030e+00,  1.76387405e+01],
+        [-1.23927746e+01,  1.14257693e+00,  5.06179428e+00,
+          8.67972469e+00,  2.11686554e+01],
+        [-1.13228893e+01,  5.45580864e-01,  4.68956327e+00,
+          9.04146576e+00,  2.15725555e+01],
+        [-1.37425852e+01,  5.28935909e-01,  4.88922024e+00,
+          8.86513329e+00,  2.19897022e+01],
+        [-1.33058329e+01,  1.53355551e+00,  4.99279070e+00,
+          9.01873589e+00,  2.13129520e+01],
+        [-1.01447840e+01,  9.93896961e-01,  4.79102468e+00,
+          8.79140854e+00,  2.11557426e+01],
+        [-1.26018410e+01,  4.59294319e-01,  4.48354053e+00,
+          8.28902149e+00,  2.34283237e+01],
+        [-1.05593586e+01,  1.21959209e+00,  4.97961330e+00,
+          8.93564701e+00,  2.26939621e+01],
+        [-1.21887035e+01,  7.10114002e-01,  5.12549114e+00,
+          9.53254986e+00,  2.14654274e+01],
+        [-1.44021597e+01,  3.19312572e-01,  4.98892212e+00,
+          1.01514845e+01,  2.31640091e+01],
+        [-1.15339222e+01,  9.52270031e-01,  4.60152149e+00,
+          8.16764545e+00,  2.04459553e+01],
+        [-1.16865330e+01,  1.25628662e+00,  5.00651979e+00,
+          9.37720490e+00,  2.08262501e+01],
+        [-1.11176462e+01,  7.27264404e-01,  4.74818707e+00,
+          8.82811165e+00,  2.16716671e+01],
+        [-1.22808781e+01,  9.76831675e-01,  4.70837402e+00,
+          8.79791355e+00,  2.03700943e+01],
+        [-1.01971264e+01,  4.81549263e-01,  4.74639893e+00,
+          8.51175213e+00,  2.17842464e+01],
+        [-1.43778105e+01, -7.71152496e-01,  4.63909483e+00,
+          8.15206051e+00,  2.08912468e+01],
+        [-1.08492699e+01,  1.59791970e+00,  4.95743465e+00,
+          8.50837898e+00,  2.11556396e+01],
+        [-1.23456936e+01,  1.61065531e+00,  5.07508659e+00,
+          9.33878899e+00,  2.30076523e+01],
+        [-1.03114758e+01,  1.75481534e+00,  4.96467304e+00,
+          9.16972542e+00,  1.99404850e+01],
+        [-1.51438265e+01,  6.98658943e-01,  5.26255465e+00,
+          9.83518410e+00,  2.66558323e+01],
+        [-1.14356537e+01,  5.51811218e-01,  4.87952375e+00,
+          9.05186844e+00,  2.03344650e+01],
+        [-1.13052769e+01,  1.88572705e+00,  4.87201118e+00,
+          9.04002666e+00,  2.23462124e+01],
+        [-8.97605896e+00,  1.15303516e+00,  5.13333941e+00,
+          9.52575016e+00,  2.06348553e+01],
+        [-1.23443260e+01,  1.68442607e+00,  5.08624840e+00,
+          9.40350151e+00,  2.02953854e+01],
+        [-1.12846336e+01,  9.91622925e-01,  4.90321827e+00,
+          9.29792404e+00,  2.16980400e+01],
+        [-1.34866543e+01,  1.00623512e+00,  4.79794741e+00,
+          8.20157623e+00,  1.91261730e+01],
+        [-1.12600574e+01,  6.84609413e-01,  4.93966007e+00,
+          8.84902954e+00,  2.26368065e+01],
+        [-1.09222603e+01,  1.28665495e+00,  4.72906351e+00,
+          8.71898270e+00,  2.02025681e+01],
+        [-1.14556856e+01,  4.34462547e-01,  4.65595722e+00,
+          7.99874020e+00,  2.01113434e+01],
+        [-9.93751431e+00,  1.38107061e+00,  4.88571787e+00,
+          9.25052071e+00,  2.12658920e+01],
+        [-1.32363949e+01,  7.04646587e-01,  4.78456879e+00,
+          8.73096752e+00,  2.29123669e+01],
+        [-9.29295731e+00,  1.02934670e+00,  5.02624702e+00,
+          8.28771019e+00,  2.14502716e+01],
+        [-1.10448551e+01,  2.00585961e+00,  5.01697063e+00,
+          8.61964130e+00,  2.11081123e+01],
+        [-1.16152325e+01,  1.30973101e+00,  4.75918102e+00,
+          7.85438967e+00,  2.01990891e+01],
+        [-9.83307838e+00,  1.38349724e+00,  4.91009808e+00,
+          8.49831390e+00,  2.23100471e+01],
+        [-1.05385733e+01,  8.79636765e-01,  4.99985123e+00,
+          8.67967606e+00,  2.27051964e+01],
+        [-1.17387390e+01,  1.94017363e+00,  4.90416241e+00,
+          8.37401772e+00,  1.92484531e+01],
+        [-1.02267666e+01,  1.08148551e+00,  4.97065783e+00,
+          9.53096390e+00,  2.32197800e+01],
+        [-1.15687265e+01,  1.52385283e+00,  4.93105459e+00,
+          8.93021202e+00,  2.08571091e+01],
+        [-1.35163822e+01,  3.37480783e-01,  4.59012651e+00,
+          8.51517010e+00,  2.35314312e+01],
+        [-1.31426105e+01,  1.36306000e+00,  5.03081799e+00,
+          9.20634079e+00,  2.28468609e+01],
+        [-1.35966740e+01,  1.02170181e+00,  4.58794737e+00,
+          8.13614273e+00,  2.10832787e+01],
+        [-1.59179344e+01,  1.50285816e+00,  4.76182652e+00,
+          8.04806328e+00,  2.02066689e+01],
+        [-1.03170681e+01,  1.01328087e+00,  5.32645702e+00,
+          9.32011890e+00,  2.28467522e+01]], dtype=float32)&gt;,
+ &#39;quantiles_logR2&#39;: &lt;tf.Tensor: shape=(128, 5), dtype=float32, numpy=
+ array([[ -9.699097  ,  -6.2677603 ,  -4.6005907 ,  -2.8506446 ,
+          -0.25544432],
+        [-10.064842  ,  -6.3965864 ,  -4.192902  ,  -2.0672681 ,
+          -0.2073201 ],
+        [ -9.7239275 ,  -6.5354795 ,  -4.5726485 ,  -2.639609  ,
+          -0.37212503],
+        [-11.04582   ,  -6.7018228 ,  -4.4764647 ,  -2.0651581 ,
+          -0.16759658],
+        [ -9.316697  ,  -6.0014696 ,  -4.341748  ,  -2.891797  ,
+          -0.514328  ],
+        [ -9.189818  ,  -6.5191536 ,  -4.736862  ,  -2.540275  ,
+          -0.33168572],
+        [-10.0165615 ,  -6.478319  ,  -4.386669  ,  -2.4259183 ,
+          -0.68313354],
+        [-10.480705  ,  -6.4819818 ,  -4.3890944 ,  -2.2844362 ,
+          -0.231493  ],
+        [-10.162357  ,  -6.4607835 ,  -4.370263  ,  -2.3049896 ,
+          -0.27812004],
+        [ -9.859445  ,  -6.0328937 ,  -3.8493729 ,  -2.1655226 ,
+          -0.49591094],
+        [ -8.547831  ,  -6.0245    ,  -4.1167197 ,  -2.7120957 ,
+          -0.42163527],
+        [ -9.639187  ,  -6.1040773 ,  -4.3842955 ,  -2.3368847 ,
+          -0.18281513],
+        [-10.16225   ,  -6.110947  ,  -4.2983084 ,  -2.5069575 ,
+          -0.31078655],
+        [-10.21587   ,  -6.659568  ,  -4.6210155 ,  -2.9370852 ,
+          -0.1796509 ],
+        [-10.632229  ,  -6.6542735 ,  -4.1557517 ,  -2.4081128 ,
+          -0.21551466],
+        [ -9.865378  ,  -6.124008  ,  -4.520603  ,  -2.7558432 ,
+          -0.18746233],
+        [-10.858726  ,  -6.7167053 ,  -4.699463  ,  -2.4331193 ,
+          -0.16509031],
+        [-10.428238  ,  -6.5645638 ,  -4.8555064 ,  -2.9009285 ,
+          -0.26036152],
+        [-10.657834  ,  -6.8477464 ,  -4.9123354 ,  -2.559574  ,
+          -0.10183574],
+        [-10.316166  ,  -6.4845586 ,  -4.6330314 ,  -2.679431  ,
+          -0.37949288],
+        [ -9.863684  ,  -6.7357864 ,  -4.890694  ,  -2.5375319 ,
+          -0.19973898],
+        [-10.724918  ,  -6.772786  ,  -4.4933867 ,  -2.9011273 ,
+          -0.48160517],
+        [ -9.44633   ,  -5.9667344 ,  -4.518896  ,  -2.763022  ,
+          -0.37691307],
+        [-10.234499  ,  -6.531657  ,  -4.427006  ,  -2.5570006 ,
+          -0.4935    ],
+        [-10.372028  ,  -7.1295714 ,  -4.8783526 ,  -2.760409  ,
+          -0.54194665],
+        [ -9.85186   ,  -6.7631664 ,  -4.949715  ,  -3.0527186 ,
+          -0.0912931 ],
+        [ -9.505444  ,  -6.455657  ,  -4.756322  ,  -2.62145   ,
+          -0.22175959],
+        [-10.149589  ,  -6.7635775 ,  -4.598541  ,  -2.3162918 ,
+          -0.40917373],
+        [ -9.377722  ,  -6.026369  ,  -4.3478017 ,  -2.3001385 ,
+          -0.24230814],
+        [ -9.390963  ,  -6.2573404 ,  -4.461249  ,  -2.3975885 ,
+          -0.33134064],
+        [-11.29579   ,  -6.8817267 ,  -5.1220846 ,  -3.038763  ,
+          -0.34174252],
+        [ -9.652182  ,  -6.663151  ,  -4.3282146 ,  -2.6893234 ,
+          -0.3052914 ],
+        [-10.212826  ,  -6.6910048 ,  -4.5520396 ,  -2.3674517 ,
+          -0.25305665],
+        [ -9.901968  ,  -6.6199245 ,  -4.589086  ,  -2.2523704 ,
+          -0.23481092],
+        [ -8.973561  ,  -6.379916  ,  -4.484437  ,  -2.9550602 ,
+          -0.32413185],
+        [ -8.817365  ,  -6.0167527 ,  -4.177412  ,  -2.4411633 ,
+          -0.24772261],
+        [ -9.386805  ,  -6.3741126 ,  -4.041289  ,  -2.2710817 ,
+          -0.11714435],
+        [ -8.989473  ,  -6.47311   ,  -4.52612   ,  -2.6761765 ,
+          -0.7680983 ],
+        [-10.261744  ,  -6.2317276 ,  -4.1896257 ,  -2.079464  ,
+          -0.23421049],
+        [-10.055401  ,  -6.5865602 ,  -4.3969345 ,  -2.74882   ,
+          -0.32586372],
+        [ -9.324468  ,  -6.411585  ,  -4.716687  ,  -2.6848276 ,
+          -0.21416345],
+        [ -9.585894  ,  -6.6850615 ,  -5.0022087 ,  -2.558968  ,
+          -0.10582644],
+        [ -9.822998  ,  -6.690917  ,  -4.8842    ,  -2.5698519 ,
+          -0.30005443],
+        [ -9.616918  ,  -6.449332  ,  -4.8158455 ,  -2.9427464 ,
+          -0.46928006],
+        [ -9.47435   ,  -6.6027474 ,  -4.6197815 ,  -2.7134771 ,
+          -0.33585346],
+        [ -9.51502   ,  -5.9201603 ,  -3.9479356 ,  -2.3229573 ,
+          -0.3835268 ],
+        [ -9.238407  ,  -6.3537827 ,  -4.117263  ,  -2.4151537 ,
+          -0.5249553 ],
+        [-10.090594  ,  -6.786822  ,  -4.353382  ,  -2.8862956 ,
+          -0.5708841 ],
+        [-10.267498  ,  -6.54636   ,  -4.4618177 ,  -2.9073207 ,
+          -0.7734898 ],
+        [ -8.884821  ,  -6.0051885 ,  -4.111738  ,  -2.526705  ,
+          -0.35063237],
+        [-10.261284  ,  -6.6625166 ,  -4.4881654 ,  -2.536111  ,
+          -0.359308  ],
+        [ -9.332277  ,  -6.349665  ,  -4.1737833 ,  -2.5701127 ,
+          -0.38219786],
+        [ -9.324464  ,  -6.0260134 ,  -4.5319824 ,  -2.7869952 ,
+          -0.17230722],
+        [ -9.875179  ,  -6.9687614 ,  -4.532445  ,  -2.5186825 ,
+          -0.33796197],
+        [ -9.560239  ,  -6.036762  ,  -4.0878067 ,  -2.4255106 ,
+          -0.30602598],
+        [ -9.842985  ,  -6.4301434 ,  -4.3081098 ,  -2.674683  ,
+          -0.2730165 ],
+        [ -9.511922  ,  -6.4277606 ,  -4.723113  ,  -2.7157505 ,
+          -0.36082748],
+        [ -9.643608  ,  -6.5897326 ,  -4.3626614 ,  -2.5929713 ,
+          -0.54233426],
+        [-10.994779  ,  -6.925214  ,  -4.518938  ,  -2.9050484 ,
+          -0.7660773 ],
+        [ -9.476948  ,  -6.0954866 ,  -4.140662  ,  -2.5762413 ,
+          -0.20777856],
+        [ -9.331364  ,  -6.4430084 ,  -4.312118  ,  -2.4608834 ,
+          -0.3396839 ],
+        [ -9.594549  ,  -6.384351  ,  -4.2987967 ,  -2.7165706 ,
+          -0.25013107],
+        [-10.450629  ,  -6.652614  ,  -4.505145  ,  -2.4747026 ,
+          -0.5307164 ],
+        [ -9.733822  ,  -5.9058757 ,  -4.1021123 ,  -2.158403  ,
+          -0.05149984],
+        [ -9.2060375 ,  -6.4921823 ,  -4.359705  ,  -2.6629667 ,
+          -0.18059921],
+        [-10.408321  ,  -6.0921    ,  -4.032165  ,  -2.588862  ,
+          -0.21119899],
+        [ -8.889826  ,  -6.349887  ,  -4.445187  ,  -2.8803287 ,
+          -0.47823954],
+        [ -9.680267  ,  -6.2851543 ,  -4.4677463 ,  -2.8211818 ,
+          -0.2605605 ],
+        [-10.277337  ,  -6.210442  ,  -4.594451  ,  -2.9579937 ,
+          -0.3780346 ],
+        [ -9.158476  ,  -6.562447  ,  -4.575985  ,  -2.4342482 ,
+          -0.17023969],
+        [-10.238222  ,  -5.9386725 ,  -4.2754893 ,  -2.1328418 ,
+          -0.20588267],
+        [-10.63302   ,  -6.5767016 ,  -4.155361  ,  -2.1371615 ,
+          -0.2670827 ],
+        [ -9.964081  ,  -6.7659655 ,  -4.8565426 ,  -2.9559352 ,
+          -0.30854174],
+        [-10.265403  ,  -6.417707  ,  -4.424794  ,  -1.994357  ,
+          -0.14109433],
+        [ -9.442495  ,  -6.463698  ,  -4.535633  ,  -2.9962845 ,
+          -0.35844967],
+        [-10.319374  ,  -6.9739685 ,  -4.713675  ,  -2.7522824 ,
+          -0.44552398],
+        [-10.418593  ,  -6.2844014 ,  -4.2127333 ,  -2.752119  ,
+          -0.37316597],
+        [-10.201994  ,  -6.612363  ,  -4.7247195 ,  -2.8885546 ,
+          -0.676337  ],
+        [ -9.555164  ,  -5.8504467 ,  -4.554554  ,  -2.448     ,
+          -0.16612625],
+        [-10.851423  ,  -6.5717983 ,  -4.4023676 ,  -2.5352528 ,
+          -0.25134188],
+        [ -9.2651615 ,  -6.369773  ,  -4.2003517 ,  -2.1443524 ,
+          -0.36348647],
+        [ -8.2504425 ,  -5.869048  ,  -4.366763  ,  -2.2970762 ,
+          -0.286749  ],
+        [-10.335841  ,  -6.2161407 ,  -4.396718  ,  -2.372511  ,
+          -0.2937982 ],
+        [ -9.722128  ,  -7.0891047 ,  -4.7217226 ,  -2.777453  ,
+          -0.4738695 ],
+        [ -9.407045  ,  -6.0949793 ,  -4.126684  ,  -2.1710641 ,
+          -0.30317923],
+        [ -9.599022  ,  -6.199228  ,  -4.6697125 ,  -2.7242785 ,
+          -0.09494627],
+        [ -9.765062  ,  -6.417556  ,  -4.484029  ,  -2.7786047 ,
+          -0.32973886],
+        [-10.502895  ,  -6.8643017 ,  -4.859228  ,  -2.860444  ,
+          -0.07008147],
+        [ -9.798762  ,  -5.95518   ,  -3.941321  ,  -2.2161958 ,
+          -0.55615836],
+        [ -9.389631  ,  -6.3991017 ,  -4.4511433 ,  -2.4514403 ,
+          -0.26897705],
+        [ -9.942766  ,  -6.8469677 ,  -4.5584807 ,  -2.2210999 ,
+          -0.07711515],
+        [-10.720326  ,  -6.9165916 ,  -4.675903  ,  -2.9539113 ,
+          -0.23696947],
+        [ -9.401826  ,  -6.6367607 ,  -4.9022455 ,  -2.6754735 ,
+          -0.252309  ],
+        [-10.871934  ,  -7.284261  ,  -4.832389  ,  -2.8503861 ,
+          -0.4624635 ],
+        [ -9.831297  ,  -6.429982  ,  -4.37527   ,  -2.1887064 ,
+          -0.25321275],
+        [ -9.254085  ,  -6.3252525 ,  -4.2511663 ,  -2.422977  ,
+          -0.40899044],
+        [ -8.652863  ,  -5.979864  ,  -4.56598   ,  -2.350605  ,
+          -0.61350524],
+        [-10.098606  ,  -6.889264  ,  -4.3357615 ,  -2.212519  ,
+          -0.06611013],
+        [ -9.61264   ,  -6.6095366 ,  -4.509616  ,  -2.9919617 ,
+          -0.18093026],
+        [ -9.800019  ,  -6.5204697 ,  -4.6098337 ,  -3.1509018 ,
+          -0.32497984],
+        [ -9.144293  ,  -5.9951296 ,  -3.9132557 ,  -2.0427442 ,
+          -0.33162054],
+        [-10.271972  ,  -6.6190195 ,  -4.453188  ,  -3.0010037 ,
+          -0.25011623],
+        [ -8.80032   ,  -6.4543004 ,  -4.5770802 ,  -2.3812644 ,
+          -0.17306578],
+        [-10.52237   ,  -6.858784  ,  -5.0048175 ,  -3.116531  ,
+          -0.14136317],
+        [ -9.217073  ,  -6.128395  ,  -4.600011  ,  -2.6500063 ,
+          -0.47302032],
+        [ -9.850376  ,  -6.789177  ,  -4.3220096 ,  -2.6561704 ,
+          -0.324505  ],
+        [ -9.120508  ,  -6.0277605 ,  -4.3367586 ,  -2.4476385 ,
+          -0.1683971 ],
+        [ -9.927656  ,  -6.8485594 ,  -4.5437775 ,  -2.5501366 ,
+          -0.43166777],
+        [-10.206646  ,  -6.7578554 ,  -4.745843  ,  -2.5057206 ,
+          -0.42214608],
+        [-10.051657  ,  -6.4631653 ,  -4.19279   ,  -2.5277364 ,
+          -0.19424653],
+        [ -9.661339  ,  -6.345904  ,  -4.487103  ,  -2.423864  ,
+          -0.18939716],
+        [ -9.311945  ,  -6.479255  ,  -4.5495224 ,  -2.4209247 ,
+          -0.43491638],
+        [ -9.356887  ,  -6.409919  ,  -4.205214  ,  -2.380359  ,
+          -0.1791628 ],
+        [ -8.722239  ,  -6.1165667 ,  -4.5298967 ,  -2.42792   ,
+          -0.37564668],
+        [-10.882067  ,  -6.544224  ,  -4.4261065 ,  -2.2244055 ,
+          -0.35015613],
+        [-10.44994   ,  -6.2315283 ,  -4.2447505 ,  -2.2482262 ,
+          -0.24722588],
+        [ -9.377356  ,  -6.709236  ,  -4.417561  ,  -2.1604114 ,
+          -0.35379767],
+        [ -8.703444  ,  -5.87272   ,  -3.954518  ,  -2.3750916 ,
+          -0.20836629],
+        [ -9.871606  ,  -6.4470944 ,  -4.7974014 ,  -2.92659   ,
+          -0.19619083],
+        [ -9.631094  ,  -6.4771433 ,  -4.5511947 ,  -2.6711464 ,
+          -0.47869462],
+        [ -9.238675  ,  -6.2965465 ,  -4.0856156 ,  -2.2494097 ,
+          -0.1725778 ],
+        [ -9.267616  ,  -6.4049478 ,  -4.665292  ,  -2.7163343 ,
+          -0.47095   ],
+        [-10.738625  ,  -6.301648  ,  -4.5173607 ,  -2.7698102 ,
+          -0.22146563],
+        [-10.39776   ,  -6.912064  ,  -5.0756135 ,  -2.8609774 ,
+          -0.41413158],
+        [-10.517754  ,  -6.6315775 ,  -5.030649  ,  -2.5968237 ,
+          -0.37085092],
+        [-10.340384  ,  -6.3216367 ,  -4.3443766 ,  -2.139385  ,
+          -0.18180948],
+        [ -9.576599  ,  -6.607875  ,  -4.223403  ,  -2.416673  ,
+          -0.16516054],
+        [ -9.980106  ,  -6.5834665 ,  -4.89034   ,  -2.9775233 ,
+          -0.29648685]], dtype=float32)&gt;}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># convergence</span>
+<span class="n">func</span><span class="o">.</span><span class="n">plot_convergence</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/56d2293fcf46ea16e95c93461907369287b77f6a8ddb2baee4b1770232659b5e.png" src="_images/56d2293fcf46ea16e95c93461907369287b77f6a8ddb2baee4b1770232659b5e.png" />
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-statistical-model">The statistical model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#specify-design-matrix">Specify design matrix</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#define-generative-model">Define generative model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#specify-model-parameters">Specify model parameters</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-expert">The expert</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#use-an-oracle">Use an oracle</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elicited-information">Elicited information</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#putting-it-all-together-and-learn-the-prior-hyperparameters">Putting it all together and learn the prior hyperparameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inspect-results">Inspect results</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Florence Bockting
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Florence Bockting.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

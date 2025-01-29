@@ -1,0 +1,759 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>elicit.losses &#8212; Prior Learning</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=4acdca81"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/elicit/losses';</script>
+    <link rel="icon" href="../../_static/favicon-light.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/mmp-logo-light.png" class="logo__image only-light" alt="Prior Learning - Home"/>
+    <img src="../../_static/mmp-logo-dark.png" class="logo__image only-dark pst-js-only" alt="Prior Learning - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Home</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/modules.html">API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/elicit.html">elicit package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../api/elicit.extras.html">elicit.extras package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/elicit.extras.utils.html">elicit.extras.utils module</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.elicit.html">elicit.elicit module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.initialization.html">elicit.initialization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.losses.html">elicit.losses module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.networks.html">elicit.networks module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.optimization.html">elicit.optimization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.plots.html">elicit.plots module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.simulations.html">elicit.simulations module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.targets.html">elicit.targets module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.utils.html">elicit.utils module</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../howto/index.html">How-To</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../explanation/index.html">Explanation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/florence-bockting/prior_elicitation" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for elicit.losses</h1><div class="highlight"><pre>
+<span></span><span class="c1"># noqa SPDX-FileCopyrightText: 2024 Florence Bockting &lt;florence.bockting@tu-dortmund.de&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># noqa SPDX-License-Identifier: Apache-2.0</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">tensorflow</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tf</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tensorflow_probability</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tfp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">bayesflow</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bf</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span>
+
+<span class="n">tfd</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">distributions</span>
+<span class="n">bfn</span> <span class="o">=</span> <span class="n">bf</span><span class="o">.</span><span class="n">networks</span>
+
+
+<div class="viewcode-block" id="preprocess">
+<a class="viewcode-back" href="../../api/elicit.losses.html#elicit.losses.preprocess">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">preprocess</span><span class="p">(</span><span class="n">elicited_statistics</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span>
+               <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Preprocess elicited statistics such that they have the required format for</span>
+<span class="sd">    computing the individual losses between expert- and simulated statistics.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    elicited_statistics : dict</span>
+<span class="sd">        dictionary including the elicited statistics.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    preprocessed_elicits : dict</span>
+<span class="sd">        dictionary including all preprocessed elicited statistics which will</span>
+<span class="sd">        enter the loss function to compute the individual loss components.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    AssertionError</span>
+<span class="sd">        ``elicited_statistics`` can only have 2 dimensions</span>
+<span class="sd">        (i.e., tensor of rank 2)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># extract names from elicited statistics</span>
+    <span class="n">name_elicits</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">elicited_statistics</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+    <span class="c1"># prepare dictionary for storing results</span>
+    <span class="n">preprocessed_elicits</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="c1"># initialize some helpers for keeping track of target quantity</span>
+    <span class="n">target_control</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">i_target</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">eval_target</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="c1"># loop over elicited statistics</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">name_elicits</span><span class="p">):</span>
+        <span class="c1"># get name of target quantity</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">sep</span><span class="o">=</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># check whether elicited statistic correspond to same target</span>
+            <span class="c1"># quantity</span>
+            <span class="n">eval_target</span> <span class="o">=</span> <span class="n">target_control</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span>
+        <span class="c1"># append current target quantity</span>
+        <span class="n">target_control</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+        <span class="c1"># if target quantity changes go with index one up</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">eval_target</span><span class="p">:</span>
+            <span class="n">i_target</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c1"># extract data</span>
+        <span class="n">tensor_elicit</span> <span class="o">=</span> <span class="n">elicited_statistics</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">tf</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">tensor_elicit</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span>
+                <span class="s2">&quot;elicited statistics can only have 2 dimensions.&quot;</span>
+                <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">tf</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">tensor_elicit</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># add a last axis for loss computation</span>
+            <span class="n">prep_elicit</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">tensor_elicit</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="c1"># store result</span>
+            <span class="n">preprocessed_elicits</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_loss&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prep_elicit</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">preprocessed_elicits</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_loss_</span><span class="si">{</span><span class="n">i_target</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tensor_elicit</span>
+
+    <span class="k">return</span> <span class="n">preprocessed_elicits</span></div>
+
+
+
+<div class="viewcode-block" id="indiv_loss">
+<a class="viewcode-back" href="../../api/elicit.losses.html#elicit.losses.indiv_loss">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">indiv_loss</span><span class="p">(</span>
+    <span class="n">elicit_expert</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>  <span class="c1"># shape: [1,num_stats]</span>
+    <span class="n">elicit_training</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>  <span class="c1"># shape: [B,num_stats]</span>
+    <span class="n">targets</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>  <span class="c1"># shape: []</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes the individual loss between expert data and model-simulated data.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    elicit_expert : dict</span>
+<span class="sd">        dictionary including all preprocessed elicited statistics</span>
+<span class="sd">    elicit_training : dict</span>
+<span class="sd">        dictionary including all preprocessed model statistics</span>
+<span class="sd">    targets : dict</span>
+<span class="sd">        user-input from :func:`elicit.elicit.target`</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    indiv_losses : list</span>
+<span class="sd">        list of individual losses for each loss component</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># create dictionary for storing results</span>
+    <span class="n">indiv_losses</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># extract expert loss components by name</span>
+    <span class="n">name_prep_elicits</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">elicit_expert</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="c1"># compute discrepancy</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">name_prep_elicits</span><span class="p">):</span>
+        <span class="c1"># import loss function</span>
+        <span class="n">loss_function</span> <span class="o">=</span> <span class="n">targets</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;loss&quot;</span><span class="p">]</span>
+        <span class="c1"># broadcast expert loss to training data-shape</span>
+        <span class="n">elicit_expert_brdcst</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span>
+            <span class="n">elicit_expert</span><span class="p">[</span><span class="n">name</span><span class="p">],</span>
+            <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">elicit_training</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                   <span class="n">elicit_expert</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+        <span class="p">)</span>
+        <span class="c1"># compute loss</span>
+        <span class="n">indiv_loss</span> <span class="o">=</span> <span class="n">loss_function</span><span class="p">(</span><span class="n">elicit_expert_brdcst</span><span class="p">,</span> <span class="n">elicit_training</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
+        <span class="n">indiv_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">indiv_loss</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">indiv_losses</span></div>
+
+
+
+<div class="viewcode-block" id="total_loss">
+<a class="viewcode-back" href="../../api/elicit.losses.html#elicit.losses.total_loss">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">total_loss</span><span class="p">(</span>
+    <span class="n">elicit_training</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>  <span class="c1"># shape: [B,num_stats]</span>
+    <span class="n">elicit_expert</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>  <span class="c1"># shape: [1,num_stats]</span>
+    <span class="n">epoch</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">targets</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>  <span class="c1"># shape: []</span>
+           <span class="nb">list</span><span class="p">[</span><span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>  <span class="c1"># shape: []</span>
+           <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>  <span class="c1"># shape: [1,num_stats]</span>
+           <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]]:</span>  <span class="c1"># shape: [B,num_stats]</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes the weighted average across all individual losses between expert</span>
+<span class="sd">    data and model simulations.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    elicit_training : dict</span>
+<span class="sd">        elicited statistics simulated by the model.</span>
+<span class="sd">    elicit_expert : dict</span>
+<span class="sd">        elicited statistics as queried from the expert.</span>
+<span class="sd">    epoch : int</span>
+<span class="sd">        epoch (iteration within optimization process).</span>
+<span class="sd">    targets : dict</span>
+<span class="sd">        user-input from :func:`elicit.elicit.target`</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    loss : float</span>
+<span class="sd">        weighted average across individual losses quantifying the discrepancy</span>
+<span class="sd">        between expert data and model simulations.</span>
+<span class="sd">    individual_losses : list</span>
+<span class="sd">        list of individual losses for each loss component.</span>
+<span class="sd">    elicit_expert_prep : dict</span>
+<span class="sd">        dictionary including all preprocessed expert elicited statistics.</span>
+<span class="sd">    elicit_training_prep : dict</span>
+<span class="sd">        dictionary including all preprocessed model-simulated elicited</span>
+<span class="sd">        statistics.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># preprocess expert data and simulated data for usage in loss computation</span>
+    <span class="n">elicit_expert_prep</span> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><span class="n">elicit_expert</span><span class="p">)</span>
+    <span class="n">elicit_training_prep</span> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><span class="n">elicit_training</span><span class="p">)</span>
+    <span class="c1"># compute individual losses for each loss component</span>
+    <span class="n">individual_losses</span> <span class="o">=</span> <span class="n">indiv_loss</span><span class="p">(</span><span class="n">elicit_expert_prep</span><span class="p">,</span>
+                                   <span class="n">elicit_training_prep</span><span class="p">,</span>
+                                   <span class="n">targets</span><span class="p">)</span>
+    <span class="c1"># compute weighted average across individual losses to get the final loss</span>
+    <span class="c1"># TODO: check whether order of loss_per_component and target quantities</span>
+    <span class="c1"># is equivalent!</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">)):</span>
+        <span class="n">loss</span> <span class="o">+=</span> <span class="n">tf</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">individual_losses</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">targets</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;weight&quot;</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="n">individual_losses</span><span class="p">,</span> <span class="n">elicit_expert_prep</span><span class="p">,</span> <span class="n">elicit_training_prep</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="L2">
+<a class="viewcode-back" href="../../api/elicit.losses.html#elicit.losses.L2">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">L2</span><span class="p">(</span>
+    <span class="n">loss_component_expert</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>  <span class="c1"># shape=[B, num_stats]</span>
+    <span class="n">loss_component_training</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>  <span class="c1"># shape=[B, num_stats]</span>
+    <span class="n">axis</span><span class="p">:</span> <span class="nb">int</span> <span class="ow">or</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="nb">ord</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;euclidean&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>  <span class="c1"># shape=[]</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper around tf.norm that computes the norm of the difference between</span>
+<span class="sd">    two tensors along the specified axis.</span>
+<span class="sd">    Used for the correlation loss when priors are assumed to be independent</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    correlation_training : A Tensor.</span>
+<span class="sd">    axis     : Any or None</span>
+<span class="sd">        Axis along which to compute the norm of the difference.</span>
+<span class="sd">        Default is None.</span>
+<span class="sd">    ord      : int or str</span>
+<span class="sd">        Order of the norm. Supports &#39;euclidean&#39; and other norms</span>
+<span class="sd">        supported by tf.norm. Default is &#39;euclidean&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">difference</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">loss_component_expert</span><span class="p">,</span> <span class="n">loss_component_training</span><span class="p">)</span>
+    <span class="n">norm_values</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">difference</span><span class="p">,</span> <span class="nb">ord</span><span class="o">=</span><span class="nb">ord</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">norm_values</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="MMD2">
+<a class="viewcode-back" href="../../api/elicit.losses.html#elicit.losses.MMD2">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MMD2</span><span class="p">:</span>
+<div class="viewcode-block" id="MMD2.__init__">
+<a class="viewcode-back" href="../../api/elicit.losses.html#elicit.losses.MMD2.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kernel</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;energy&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the biased, squared maximum mean discrepancy</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        kernel : str</span>
+<span class="sd">            kernel type used for computing the MMD.</span>
+<span class="sd">            Currently implemented kernels are &quot;gaussian&quot;, &quot;energy&quot;.</span>
+<span class="sd">            When using a gaussian kernel an additional &#39;sigma&#39; argument has to</span>
+<span class="sd">            be passed.</span>
+<span class="sd">            The default kernel is &quot;energy&quot;.</span>
+<span class="sd">        **kwargs : any</span>
+<span class="sd">            additional keyword arguments that might be required by the</span>
+<span class="sd">            different individual kernels</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            ``kernel`` must be either &#39;energy&#39; or &#39;gaussian&#39; kernel.</span>
+
+<span class="sd">            ``sigma`` argument need to be passed if ``kernel=&quot;gaussian&quot;``</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; el.losses.MMD2(kernel=&quot;energy&quot;)</span>
+
+<span class="sd">        &gt;&gt;&gt; el.losses.MMD2(kernel=&quot;gaussian&quot;, sigma = 1.)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># ensure that all additionally, required arguments are provided for</span>
+        <span class="c1"># the respective kernel</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">kernel</span> <span class="o">==</span> <span class="s2">&quot;gaussian&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s2">&quot;sigma&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;You need to pass a &#39;sigma&#39; argument when using a gaussian&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot; kernel in the MMD loss&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span>
+        <span class="c1"># ensure correct kernel specification</span>
+        <span class="k">if</span> <span class="n">kernel</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;energy&quot;</span><span class="p">,</span> <span class="s2">&quot;gaussian&quot;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;&#39;kernel&#39; must be either &#39;energy&#39; or &#39;gaussian&#39; kernel.&quot;</span>
+                <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">kernel_name</span> <span class="o">=</span> <span class="n">kernel</span></div>
+
+
+<div class="viewcode-block" id="MMD2.__call__">
+<a class="viewcode-back" href="../../api/elicit.losses.html#elicit.losses.MMD2.__call__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">x</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>  <span class="c1"># shape: [B, num_stats]</span>
+                 <span class="n">y</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span>  <span class="c1"># shape: [B, num_stats]</span>
+                 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>  <span class="c1"># shape: []</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the biased, squared maximum mean discrepancy of two samples</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : tensor, shape=[B, num_stats]</span>
+<span class="sd">            preprocessed expert-elicited statistics.</span>
+<span class="sd">            Preprocessing refers to broadcasting expert data to same shape as</span>
+<span class="sd">            model-simulated data.</span>
+<span class="sd">        y : tensor, shape=[B, num_stats]</span>
+<span class="sd">            model-simulated statistics corresponding to expert-elicited</span>
+<span class="sd">            statistics</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        MMD2_mean : tensor, shape=[]</span>
+<span class="sd">            Average biased, squared maximum mean discrepancy between expert-</span>
+<span class="sd">            elicited and model simulated data.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># treat samples as column vectors</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Step 1</span>
+        <span class="c1"># compute dot product between samples</span>
+        <span class="n">xx</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">transpose_b</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">xy</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">transpose_b</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">yy</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">transpose_b</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># compute squared difference</span>
+        <span class="n">u_xx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">xx</span><span class="p">)[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">xx</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">xx</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">u_xy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">xx</span><span class="p">)[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">xy</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">yy</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">u_yy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">yy</span><span class="p">)[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">yy</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">yy</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+
+        <span class="c1"># apply kernel function to squared difference</span>
+        <span class="n">XX</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">u_xx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel_name</span><span class="p">)</span>
+        <span class="n">XY</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">u_xy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel_name</span><span class="p">)</span>
+        <span class="n">YY</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">u_yy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel_name</span><span class="p">)</span>
+
+        <span class="c1"># Step 2</span>
+        <span class="c1"># compute biased, squared MMD</span>
+        <span class="n">MMD2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">XX</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">MMD2</span> <span class="o">-=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">XY</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">MMD2</span> <span class="o">+=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">YY</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+        <span class="n">MMD2_mean</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">MMD2</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">MMD2_mean</span></div>
+
+
+<div class="viewcode-block" id="MMD2.clip">
+<a class="viewcode-back" href="../../api/elicit.losses.html#elicit.losses.MMD2.clip">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+             <span class="n">u</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span>  <span class="c1"># shape: [B, num_stats, num_stats]</span>
+             <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>  <span class="c1"># shape: [B, num_stats, num_stats]</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        upper and lower clipping of value `u` to improve numerical stability</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        u : tf.Tensor, shape=[B, num_stats, num_stats]</span>
+<span class="sd">            result of prior computation.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        u_clipped : tf.Tensor, shape=[B, num_stats, num_stats]</span>
+<span class="sd">            clipped u value with ``min=1e-8`` and ``max=1e10``.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">u_clipped</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">clip_by_value</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">clip_value_min</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span>
+                                     <span class="n">clip_value_max</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">1e10</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">u_clipped</span></div>
+
+
+<div class="viewcode-block" id="MMD2.diag">
+<a class="viewcode-back" href="../../api/elicit.losses.html#elicit.losses.MMD2.diag">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">diag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xx</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span>  <span class="c1"># shape: [B, num_stats, num_stats]</span>
+             <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>  <span class="c1"># shape: [B, num_stats]</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        get diagonale elements of a matrix, whereby the first tensor dimension</span>
+<span class="sd">        are batches and should not be considered to get diagonale elements.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        xx : tensor, shape=[B,num_stats,num_stats]</span>
+<span class="sd">            Similarity matrices with batch dimension in axis=0.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        diag : tensor, shape=[B,num_stats]</span>
+<span class="sd">            diagonale elements of matrices per batch.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">diag</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">experimental</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">diagonal</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">axis1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis2</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">diag</span></div>
+
+
+<div class="viewcode-block" id="MMD2.kernel">
+<a class="viewcode-back" href="../../api/elicit.losses.html#elicit.losses.MMD2.kernel">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>  <span class="c1"># shape: [B, num_stats, num_stats]</span>
+               <span class="n">kernel</span><span class="p">:</span> <span class="nb">str</span>
+               <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>  <span class="c1"># shape: [B, num_stats, num_stats]</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Kernel used in MMD to compute discrepancy between samples.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        u : tensor, shape=[B,num_stats,num_stats]</span>
+<span class="sd">            squared distance between samples.</span>
+<span class="sd">        kernel : str</span>
+<span class="sd">            name of kernel used for computing discrepancy.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        d : tensor, shape=[B,num_stats,num_stats]</span>
+<span class="sd">            discrepancy between samples.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">kernel</span> <span class="o">==</span> <span class="s2">&quot;energy&quot;</span><span class="p">:</span>
+            <span class="c1"># clipping for numerical stability reasons</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="o">-</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">u</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">kernel</span> <span class="o">==</span> <span class="s2">&quot;gaussian&quot;</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">tf</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">d</span></div>
+</div>
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Florence Bockting
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Florence Bockting.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
