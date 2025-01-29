@@ -3,7 +3,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "elicit" 
+name = "elicits" 
 version = "0.0.2"
 description = "Tool for learning prior distributions based on expert prior knowledge elicitation"
 license = "Apache-2.0"
