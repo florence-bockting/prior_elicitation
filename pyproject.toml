@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "elicits" 
-version = "0.0.2"
+version = "0.0.3"
 description = "Tool for learning prior distributions based on expert prior knowledge elicitation"
 license = "Apache-2.0"
 authors = [
@@ -20,7 +20,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "3.11.9"
+python = ">=3.11, <3.12"
 configs = "3.0.3"
 numpy = "1.24.3"
 pandas = "2.2.3"
