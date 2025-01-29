@@ -30,11 +30,6 @@ tensorflow = "2.14"
 tensorflow-probability = "0.22.1"
 tensorflow-io-gcs-filesystem = "0.31.0"
 bayesflow = "1.1.6"
-
-[tool.poetry.group.docs]
-optional = true
-
-[tool.poetry.group.docs.dependencies]
 sphinx-pyproject = "0.3.0"
 sphinx = "7.3.7"
 sphinx-book-theme = "1.1.2"
