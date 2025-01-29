@@ -13,7 +13,7 @@ SPDX-License-Identifier: Apache-2.0
 *Note: This project is still in the development stage and not yet tested for practical use.*
 
 ## Description
-The `prior_elicitation` package provides a simulation-based framework for learning either parametric or non-parametric, as well as independent or join prior distributions for parameters in a Bayesian model based on expert knowledge.
+The `elicit` package provides a simulation-based framework for learning either parametric or non-parametric, as well as independent or join prior distributions for parameters in a Bayesian model based on expert knowledge.
 
 Further information can be found in the corresponding papers:
 
@@ -22,17 +22,34 @@ Further information can be found in the corresponding papers:
 
 ## Installation
 
-+ requires: Python >=3.10 and <= 3.12
++ requires: Python >=3.10 and < 3.12
+
+### Use virtual Python environments and pip
 
 ```
 # Create an empty Python environment (here with conda example)
-conda create -n elicitation-env python=3.11
+virtualenv elicit-env python=python3.11
 
-# activate environment
-conda activate elicitation-env
+# activate the environment
+source elicit-env/Scripts/activate 
 
 # install elicit package
-pip install git+https://github.com/florence-bockting/prior_elicitation.git
+pip install elicits
+```
+
+### Install from GitHub
+Install *elicit* from GitHub via
+
+```
+pip install git+https://github.com/florence-bockting/elicit
+``` 
+
+If you need access to the source code, instead use
+
+```
+git clone git@github.com:florence-bockting/elicit.git
+cd elicit
+pip install -e .
 ```
 
 ## Usage 

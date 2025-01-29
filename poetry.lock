@@ -938,6 +938,29 @@ files = [
 ]
 
 [[package]]
+name = "genbadge"
+version = "1.1.1"
+description = "Generate badges for tools that do not provide one."
+optional = false
+python-versions = "*"
+files = [
+    {file = "genbadge-1.1.1-py2.py3-none-any.whl", hash = "sha256:c8b67ccdad2867434cdc0be7c4bd3f6af6003c466d8ff5013b8b5842ca8730de"},
+    {file = "genbadge-1.1.1.tar.gz", hash = "sha256:12cdaaacbc9e0ea3164bf580cfb87ec61ff17ae0728f09a7f0102f8ab3112f4c"},
+]
+
+[package.dependencies]
+click = ">7.0"
+pillow = "*"
+requests = "*"
+setuptools = "*"
+
+[package.extras]
+all = ["defusedxml", "flake8-html"]
+coverage = ["defusedxml"]
+flake8 = ["flake8-html"]
+tests = ["defusedxml"]
+
+[[package]]
 name = "google-auth"
 version = "2.38.0"
 description = "Google Authentication Library"
@@ -4068,4 +4091,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.11, <3.12"
-content-hash = "fd0c81543d02f4338e2ea8287f1f0bcac30b3f6f0b188db425b3d074a8cdf3bc"
+content-hash = "67cb688a3629ec2d5fc7c7dcab54f05b8e04d0392b14bbf0204ddb962fe16476"
