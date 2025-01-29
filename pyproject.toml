@@ -62,6 +62,6 @@ fail_under = 0
 directory = "htmlcov"
 
 [tool.coverage.xml]
-output = "test_reports/coverage/coverage.xml"
+output = "reports/coverage/coverage.xml"
 
 	
