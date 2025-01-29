@@ -1,0 +1,52 @@
+###### About 
+This is a pseudo-makefile
+Main Purpose of this file is to save the Computational steps involved in Publishing the repository to PyPi
+
+
+
+###### Publishing repository via TestPyPi ######
+
+# Create Account on TestPyPi
+
+# Create an API Token
+
+# add repository to Poetry config
+poetry config repositories.test-pypi https://test.pypi.org/legacy/
+
+# add token information to poetry config
+poetry config pypi-token.test-pypi pypi-XXX
+
+# build project
+poetry build
+
+# publish porject to TestPyPi
+poetry publish -r test-pypi
+
+
+
+
+
+###### Publishing repository via PyPi ######
+
+# Create Account on PyPi
+
+# Create an API Token
+
+# add token information to poetry config
+poetry config pypi-token.pypi pypi-XXX
+
+
+# create virtual Environment (requires virtualenv)
+virtualenv venv --python=python3.11
+
+# activate virtual Environment
+source venv/Scripts/activate
+
+# create poetry.lock file
+poetry install
+
+# build project
+poetry build
+
+# publish porject to PyPi
+poetry publish

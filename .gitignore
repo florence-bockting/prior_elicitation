@@ -3,7 +3,6 @@
 .spyproject/
 .vscode/
 docs/source/notebooks/elicit/
-elicit/simulations/LiDO_cluster/
 manuscript/
 docs/source/notebooks/books/normal_model.ipynb
 docs/source/notebooks/books/multilevel_model.ipynb
@@ -15,4 +14,4 @@ manuscript_non_parametric_joint_prior/simulation_results
 manuscript_non_parametric_joint_prior/experts
 logs
 *.zip
-/elicit/user
+misc/
