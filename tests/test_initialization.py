@@ -235,7 +235,7 @@ def test_integration_initialization():
         assert tf.reduce_mean(
             eliobj.results["init_matrix"][k]).numpy() == pytest.approx(
                 t, abs=0.01)
-    
+
     # check whether initialized hyperparameter correspond to drawn initial 
     # values
     hist = eliobj.history
@@ -246,8 +246,9 @@ def test_integration_initialization():
         hist["hyperparameter"]["sigma0"][0]).numpy() == pytest.approx(
             res["init_matrix"]["sigma0"], abs=0.001)
     assert el.utils.LowerBound(0.).forward(
-        hist["hyperparameter"]["sigma1"][0]) == res["init_matrix"]["sigma1"]
-    
+        hist["hyperparameter"]["sigma1"][0]).numpy() == pytest.approx(
+            res["init_matrix"]["sigma1"], abs=0.001)
+
     # check whether prior samples reflect corresponding initial hyperparameter
     means = tf.reduce_mean(res["prior_samples"], (0,1))
     stds = tf.reduce_mean(tf.math.reduce_std(res["prior_samples"], 1),0)
