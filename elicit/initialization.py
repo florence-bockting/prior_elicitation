@@ -85,6 +85,7 @@ def uniform_samples(
     n_hypparam = 0
     name_hyper = list()
     res_dict = dict()
+
     if hyppar is None:
         for i in range(len(parameters)):
             for hyperparam in parameters[i]["hyperparams"]:
@@ -93,33 +94,41 @@ def uniform_samples(
                 n_hypparam += dim
                 for j in range(dim):
                     name_hyper.append(name)
-    
-    
-                # make sure type is correct
-                mean = tf.cast(mean, tf.float32)
-                radius = tf.cast(radius, tf.float32)
-    
-                # Generate samples based on the chosen method
-                if method == "sobol":
-                    sampler = qmc.Sobol(d=dim, seed=seed.numpy())
-                    sample_data = sampler.random(n=n_samples)
-                elif method == "lhs":
-                    sampler = qmc.LatinHypercube(d=dim, seed=seed.numpy())
-                    sample_data = sampler.random(n=n_samples)
-                elif method == "random":
-                    uniform_samples = tfd.Uniform(
-                        tf.subtract(mean, radius), tf.add(mean, radius)
-                    ).sample((n_samples, dim))
-                # Inverse transform
-                if method == "sobol" or method == "lhs":
-                    sample_dat = tf.cast(tf.convert_to_tensor(sample_data),
-                                         tf.float32)
-                    uniform_samples = tfd.Uniform(
-                        tf.subtract(mean, radius), tf.add(mean, radius)
-                    ).quantile(sample_dat)
-                res_dict[name] = uniform_samples
+
+        # make sure type is correct
+        mean = tf.cast(mean, tf.float32)
+        radius = tf.cast(radius, tf.float32)
+
+        # Generate samples based on the chosen method
+        if method == "sobol":
+            sampler = qmc.Sobol(d=n_hypparam, seed=seed)
+            sample_data = sampler.random(n=n_samples)
+        elif method == "lhs":
+            sampler = qmc.LatinHypercube(d=n_hypparam, seed=seed)
+            sample_data = sampler.random(n=n_samples)
+        elif method == "random":
+            uniform_samples = tfd.Uniform(
+                tf.subtract(mean, radius), tf.add(mean, radius)
+            ).sample((n_samples, n_hypparam))
+        # Inverse transform
+        if method == "sobol" or method == "lhs":
+            sample_dat = tf.cast(tf.convert_to_tensor(sample_data),
+                                 tf.float32)
+            uniform_samples = tfd.Uniform(
+                tf.subtract(mean, radius), tf.add(mean, radius)
+            ).quantile(sample_dat)
+        # store initialization results per hyperparameter
+        for j, name in zip(range(n_hypparam), name_hyper):
+            res_dict[name] = uniform_samples[:,j]
     else:
         uniform_samples = []
+
+        # initialize sampler
+        if method == "sobol":
+            sampler = qmc.Sobol(d=1, seed=seed)
+        elif method == "lhs":
+            sampler = qmc.LatinHypercube(d=1, seed=seed)
+
         for i, j, n in zip(mean, radius, hyppar):
             # make sure type is correct
             i = tf.cast(i, tf.float32)
@@ -129,22 +138,17 @@ def uniform_samples(
                 uniform_samples = tfd.Uniform(
                     tf.subtract(i, j), tf.add(i, j)
                 ).sample((n_samples, 1))
-            elif method == "sobol":
-                sampler = qmc.Sobol(d=1)
+            else:
                 sample_data = sampler.random(n=n_samples)
-            elif method == "lhs":
-                sampler = qmc.LatinHypercube(d=1)
-                sample_data = sampler.random(n=n_samples)
-
-            # Inverse transform
-            if method == "sobol" or method == "lhs":
+                # Inverse transform
                 sample_dat = tf.cast(
                     tf.convert_to_tensor(sample_data), tf.float32
                 )
                 uniform_samples = tfd.Uniform(
                     tf.subtract(i, j), tf.add(i, j)
-                ).quantile(tf.squeeze(sample_dat, -1))
-            res_dict[n] = tf.stack(uniform_samples, axis=-1)[:,None]
+                ).quantile(sample_dat)
+
+            res_dict[n] = tf.squeeze(uniform_samples, axis=-1)
     return res_dict
 
 
@@ -157,6 +161,7 @@ def init_runs(
     targets: dict,
     network: dict,
     expert: dict,
+    seed: int
 ):
     """
     Computes the discrepancy between expert data and simulated data for
@@ -181,6 +186,8 @@ def init_runs(
         :mod:`elicit.networks` module.
     expert : dict
         user-input from :func:`elicit.elicit.Expert`.
+    seed : int
+        internal seed for reproducible results
 
     Returns
     -------
@@ -195,7 +202,7 @@ def init_runs(
     """
     # create a copy of the seed variable for incremental increase of seed
     # for each initialization run
-    seed = tf.identity(trainer["seed"])
+    seed_copy = tf.identity(seed)
     # set seed
     tf.random.set_seed(seed)
     # initialize saving of results
@@ -218,7 +225,7 @@ def init_runs(
 
     for i in tqdm(range(initializer["iterations"])):
         # update seed
-        seed = seed + 1
+        seed_copy = seed_copy + 1
         # extract initial hyperparameter value for each run
         init_matrix_slice = {f"{key}": init_matrix[key][i]
                              for key in init_matrix}
@@ -230,13 +237,13 @@ def init_runs(
             parameters=parameters,
             network=network,
             expert=expert,
-            seed=seed,
+            seed=seed_copy,
         )
 
         # simulate from priors and generative model and compute the
         # elicited statistics corresponding to the initial hyperparameters
         (training_elicited_statistics, *_) = el.utils.one_forward_simulation(
-            prior_model, trainer, model, targets
+            prior_model, trainer, model, targets, seed
         )
 
         # compute discrepancy between expert elicited statistics and
@@ -266,6 +273,7 @@ def init_prior(
     targets: dict,
     network: dict,
     expert: dict,
+    seed: int
 ):
     """
     Extracts target loss, corresponding initial hyperparameter values, and
@@ -290,6 +298,8 @@ def init_prior(
         :mod:`elicit.networks` module.
     expert : dict
         user-input from :func:`elicit.elicit.Expert`.
+    seed : int
+        internally used seed for reproducible results
 
     Returns
     -------
@@ -318,6 +328,7 @@ def init_prior(
                 targets,
                 network,
                 expert,
+                seed
             )
     
             # extract pre-specified quantile loss out of all runs
@@ -338,7 +349,7 @@ def init_prior(
                 parameters=parameters,
                 network=network,
                 expert=expert,
-                seed=trainer["seed"],
+                seed=seed,
             )
             # initialize empty variables for avoiding return conflicts
             loss_list, init_prior, init_matrix = (None, None, None)
@@ -351,7 +362,7 @@ def init_prior(
             parameters=parameters,
             network=network,
             expert=expert,
-            seed=trainer["seed"],
+            seed=seed,
         )
         # initialize empty variables for avoiding return conflicts
         loss_list, init_prior, init_matrix = (None, None, None)

@@ -24,15 +24,32 @@ Further information can be found in the corresponding papers:
 
 + requires: Python >=3.10 and < 3.12
 
-### Use virtual Python environments and pip
+### Via pip and virtual environments
+
+If you want to use a python environment (here with `virtualenv`)
 
 ```
-# Create an empty Python environment (here with conda example)
+# create an environment
 virtualenv elicit-env python=python3.11
 
-# activate the environment
+# activate it
 source elicit-env/Scripts/activate 
+```
 
+Another option is the use of a conda environment
+
+```
+# create an environment
+conda create --name=elicit-env python==3.11
+
+# activate it
+conda activate elicit-env
+
+```
+
+Install package via `pip`
+
+```
 # install elicit package
 pip install elicits
 ```

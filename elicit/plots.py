@@ -38,16 +38,37 @@ def initialization(eliobj, cols: int = 4, **kwargs) -> None:
         Can't find 'init_matrix' in eliobj.results. Have you excluded it from
         saving?
 
+    ValueError
+        if `eliobj.results["init_matrix"]` is None: No samples from
+        initialization distribution found. This plot function cannot be used
+        if initial values were fixed by the user through the `hyperparams`
+        argument in :func:`elicit.elicit.initializer`.
+
     """  # noqa: E501
+    # extract one replication (if parallel was used) to setup plot info
+    if type(eliobj.results) is list:
+        eliobj1 = eliobj.results[0]
+        parallel = True
+    else:
+        eliobj1 = eliobj.results
+        parallel = False
+
     # check that all information can be assessed
     try:
-        eliobj.results["init_matrix"]
+        eliobj1["init_matrix"]
     except KeyError:
         print("Can't find 'init_matrix' in eliobj.results."
               +" Have you excluded it from saving?")
 
+    if eliobj1["init_matrix"] is None:
+            raise ValueError(
+                "No samples from initialization distribution found."+
+                " This plot function cannot be used if initial values were"+
+                " fixed by the user through the `hyperparams` argument of"+
+                " `initializer`.")
+
     # get number of hyperparameter
-    n_par = len(eliobj.results["init_matrix"].keys())
+    n_par = len(eliobj1["init_matrix"].keys())
     # make sure that user uses only as many columns as hyperparameter
     # such that session does not crash...
     if cols > n_par:
@@ -64,10 +85,14 @@ def initialization(eliobj, cols: int = 4, **kwargs) -> None:
         eliobj.initializer["distribution"]["mean"],
         eliobj.initializer["distribution"]["radius"],
     )
-    if type(low) is not list:
+    try:
+        len(low)
+    except TypeError:
         low = [low] * n_par
-    if type(high) is not list:
         high = [high] * n_par
+    else:
+        pass
+
     # use remainder to track which plots should be turned-off/hidden
     if remainder != 0:
         rows += 1
@@ -81,15 +106,23 @@ def initialization(eliobj, cols: int = 4, **kwargs) -> None:
     fig, axs = plt.subplots(rows, cols, constrained_layout=True, sharey=True,
                             **kwargs)
     if rows == 1:
-        for c, hyp, lo, hi in zip(
-            tf.range(cols), eliobj.results["init_matrix"], low, high
-        ):
-            sns.ecdfplot(
-                tf.squeeze(eliobj.results["init_matrix"][hyp]),
-                ax=axs[c],
-                color="black",
-                lw=2,
-            )
+        for c, hyp, lo, hi in zip(tf.range(cols), eliobj1["init_matrix"],
+                                  low, high):
+            if parallel:
+                [sns.ecdfplot(
+                    tf.squeeze(eliobj.results[j]["init_matrix"][hyp]),
+                    ax=axs[c],
+                    color= "black",
+                    lw=2,
+                    alpha=0.5
+                ) for j in range(len(eliobj.results))]
+            else:
+                sns.ecdfplot(
+                    tf.squeeze(eliobj.results["init_matrix"][hyp]),
+                    ax=axs[c],
+                    color="black",
+                    lw=2,
+                )
             axs[c].set_title(f"{hyp}", fontsize="small")
             axs[c].axline((lo, 0), (hi, 1), color="grey", linestyle="dashed",
                           lw=1)
@@ -102,16 +135,25 @@ def initialization(eliobj, cols: int = 4, **kwargs) -> None:
     else:
         for (r, c), hyp, lo, hi in zip(
             itertools.product(tf.range(rows), tf.range(cols)),
-            eliobj.results["init_matrix"],
+            eliobj1["init_matrix"],
             low,
             high,
         ):
-            sns.ecdfplot(
-                tf.squeeze(eliobj.results["init_matrix"][hyp]),
-                ax=axs[r, c],
-                color="black",
-                lw=2,
-            )
+            if parallel:
+                [sns.ecdfplot(
+                    tf.squeeze(eliobj.results[j]["init_matrix"][hyp]),
+                    ax=axs[r, c],
+                    color="black",
+                    lw=2,
+                    alpha=0.5
+                ) for j in range(len(eliobj.results))]
+            else:
+                sns.ecdfplot(
+                    tf.squeeze(eliobj.results["init_matrix"][hyp]),
+                    ax=axs[r, c],
+                    color="black",
+                    lw=2,
+                )
             axs[r, c].set_title(f"{hyp}", fontsize="small")
             axs[r, c].axline((lo, 0), (hi, 1), color="grey",
                              linestyle="dashed", lw=1)
@@ -154,23 +196,47 @@ def loss(eliobj, **kwargs) -> None:
         excluded 'elicited_statistics' from results savings?
 
     """  # noqa: E501
+    if type(eliobj.results) is list:
+        eliobj1 = eliobj.results[0]
+        eliobj2 = eliobj.history[0]
+        parallel = True
+        num_reps = len(eliobj.results)
+        # check whether some replications stopped with NAN
+        ep_run = [len(eliobj.history[i]["loss"]) for i in range(num_reps)]
+        seed_rep = [eliobj.results[i]["seed"] for i in range(num_reps)]
+        # extract successful and failed seeds and indices for further plotting
+        fail=[]
+        success=[]
+        for i, ep in enumerate(ep_run):
+            if ep < eliobj.trainer["epochs"]:
+                fail.append((i,seed_rep[i]))
+            else:
+                success.append(i)
+        print(
+            f"{len(fail)} of {num_reps} replications yield loss NAN and are"+
+            f" excluded from the plot. Failed seeds: {fail} (index, seed)")
+    else:
+        eliobj1 = eliobj.results
+        eliobj2 = eliobj.history
+        parallel=False
+
     # check that all information can be assessed
     try:
-        eliobj.history["loss_component"]
+        eliobj2["loss_component"]
     except KeyError:
         print(
             "No information about 'loss_component' found in 'eliobj.history'."
             + "Have you excluded 'loss_components' from history savings?"
         )
     try:
-        eliobj.history["loss"]
+        eliobj2["loss"]
     except KeyError:
         print(
             "No information about 'loss' found in 'eliobj.history'."
             + "Have you excluded 'loss' from history savings?"
         )
     try:
-        eliobj.results["elicited_statistics"]
+        eliobj1["elicited_statistics"]
     except KeyError:
         print(
             "No information about 'elicited_statistics' found in "
@@ -178,17 +244,35 @@ def loss(eliobj, **kwargs) -> None:
             + "results savings?"
         )
 
-    # preprocess loss_component results
-    indiv_losses = tf.stack(eliobj.history["loss_component"])
     # names of loss_components
-    names_losses = eliobj.results["elicited_statistics"].keys()
+    names_losses = eliobj1["elicited_statistics"].keys()
 
     fig, axs = plt.subplots(1, 2, constrained_layout=True, sharex=True,
                             **kwargs)
-    axs[0].plot(eliobj.history["loss"], color="black", lw=2)
+    # plot total loss
+    if parallel:
+        [axs[0].plot(eliobj.history[i]["loss"], color="black",
+                     alpha=0.5, lw=2) for i in success]
+    else:
+        axs[0].plot(eliobj.history["loss"], color="black", lw=2)
+    # plot loss per component
     for i, name in enumerate(names_losses):
-        axs[1].plot(indiv_losses[:, i], label=name, lw=2)
-        axs[1].legend(fontsize="small", handlelength=0.4)
+        if parallel:
+            for j in success:
+                # preprocess loss_component results
+                indiv_losses = tf.stack(eliobj.history[j]["loss_component"])
+                if i==0:
+                    axs[1].plot(indiv_losses[:, i], label=name, lw=2,
+                                alpha=0.5)
+                else:
+                    axs[1].plot(indiv_losses[:, i], lw=2,
+                                alpha=0.5)
+        else:
+            # preprocess loss_component results
+            indiv_losses = tf.stack(eliobj.history["loss_component"])
+            
+            axs[1].plot(indiv_losses[:, i], label=name, lw=2)
+        axs[1].legend(fontsize="small", handlelength=0.4, frameon=False)
     [
         axs[i].set_title(t, fontsize="small")
         for i, t in enumerate(["total loss", "individual losses"])
@@ -230,9 +314,31 @@ def hyperparameter(eliobj, cols: int = 4, span: int = 30, **kwargs) -> None:
         'hyperparameter' from history savings?
 
     """  # noqa: E501
+    if type(eliobj.results) is list:
+        parallel = True
+        eliobj2 = eliobj.history[0]
+        num_reps = len(eliobj.results)
+        # check whether some replications stopped with NAN
+        ep_run = [len(eliobj.history[i]["loss"]) for i in range(num_reps)]
+        seed_rep = [eliobj.results[i]["seed"] for i in range(num_reps)]
+        # extract successful and failed seeds and indices for further plotting
+        fail=[]
+        success=[]
+        for i, ep in enumerate(ep_run):
+            if ep < eliobj.trainer["epochs"]:
+                fail.append((i,seed_rep[i]))
+            else:
+                success.append(i)
+        print(
+            f"{len(fail)} of {num_reps} replications yield loss NAN and are"+
+            f" excluded from the plot. Failed seeds: {fail} (index, seed)")
+    else:
+        parallel = False
+        eliobj2 = eliobj.history
+
     # check that all information can be assessed
     try:
-        eliobj.history["hyperparameter"]
+        eliobj2["hyperparameter"]
     except KeyError:
         print(
             "No information about 'hyperparameter' found in "
@@ -241,7 +347,7 @@ def hyperparameter(eliobj, cols: int = 4, span: int = 30, **kwargs) -> None:
         )
 
     # get number of hyperparameter
-    n_par = len(eliobj.history["hyperparameter"].keys())
+    n_par = len(eliobj2["hyperparameter"].keys())
     # make sure that user uses only as many columns as hyperparameter
     # such that session does not crash...
     if cols > n_par:
@@ -258,15 +364,21 @@ def hyperparameter(eliobj, cols: int = 4, span: int = 30, **kwargs) -> None:
 
     fig, axs = plt.subplots(rows, cols, constrained_layout=True, **kwargs)
     if rows == 1:
-        for c, hyp in zip(tf.range(cols), eliobj.history["hyperparameter"]):
-            # compute mean of last c hyperparameter values
-            avg_hyp = tf.reduce_mean(
-                eliobj.history["hyperparameter"][hyp][-span:])
-            axs[c].axhline(avg_hyp.numpy(), color="darkgrey",
-                           linestyle="dotted")
-            # plot convergence
-            axs[c].plot(eliobj.history["hyperparameter"][hyp], color="black",
-                        lw=2)
+        for c, hyp in zip(tf.range(cols), eliobj2["hyperparameter"]):
+            if parallel:
+                # plot convergence
+                [axs[c].plot(eliobj.history[i]["hyperparameter"][hyp],
+                            color="black", lw=2, alpha=0.5)
+                 for i in success]
+            else:
+                # compute mean of last c hyperparameter values
+                avg_hyp = tf.reduce_mean(
+                    eliobj.history["hyperparameter"][hyp][-span:])
+                axs[c].axhline(avg_hyp.numpy(), color="darkgrey",
+                               linestyle="dotted")
+                # plot convergence
+                axs[c].plot(eliobj.history["hyperparameter"][hyp], 
+                            color="black", lw=2)
             axs[c].set_title(f"{hyp}", fontsize="small")
             axs[c].tick_params(axis="y", labelsize="x-small")
             axs[c].tick_params(axis="x", labelsize="x-small")
@@ -278,16 +390,21 @@ def hyperparameter(eliobj, cols: int = 4, span: int = 30, **kwargs) -> None:
     else:
         for (r, c), hyp in zip(
             itertools.product(tf.range(rows), tf.range(cols)),
-            eliobj.history["hyperparameter"],
+            eliobj2["hyperparameter"],
         ):
-            # compute mean of last c hyperparameter values
-            avg_hyp = tf.reduce_mean(
-                eliobj.history["hyperparameter"][hyp][-span:])
-            # plot convergence
-            axs[r, c].axhline(avg_hyp.numpy(), color="darkgrey",
-                              linestyle="dotted")
-            axs[r, c].plot(eliobj.history["hyperparameter"][hyp],
-                           color="black", lw=2)
+            if parallel:
+                [axs[r, c].plot(eliobj.history[i]["hyperparameter"][hyp],
+                               color="black", lw=2, alpha=0.5)
+                 for i in success]
+            else:
+                # compute mean of last c hyperparameter values
+                avg_hyp = tf.reduce_mean(
+                    eliobj.history["hyperparameter"][hyp][-span:])
+                # plot convergence
+                axs[r, c].axhline(avg_hyp.numpy(), color="darkgrey",
+                                  linestyle="dotted")
+                axs[r, c].plot(eliobj.history["hyperparameter"][hyp],
+                               color="black", lw=2)
             axs[r, c].set_title(f"{hyp}", fontsize="small")
             axs[r, c].tick_params(axis="y", labelsize="x-small")
             axs[r, c].tick_params(axis="x", labelsize="x-small")
@@ -300,10 +417,13 @@ def hyperparameter(eliobj, cols: int = 4, span: int = 30, **kwargs) -> None:
     plt.show()
 
 
-def priors(eliobj, constraints: dict or None = None, **kwargs) -> None:
+def prior_joint(eliobj, constraints: dict or None = None,
+                idx: int or None = None, **kwargs) -> None:
     """
     plot learned prior distributions of each model parameter based on prior
-    samples from last epoch.
+    samples from last epoch. If parallelization has been used, select which
+    replication you want to investigate by indexing it through the 'idx'
+    argument.
 
     Parameters
     ----------
@@ -315,14 +435,19 @@ def priors(eliobj, constraints: dict or None = None, **kwargs) -> None:
         to the constraint. Currently only 'positive' as constraint is supported.
         Set the argument to None if no constraints should be specified.
         The default value is ``None``.
+    idx : int or None
+        only required if parallelization is used for fitting the method.
+        Indexes the replications and allows to choose for which replication the
+        prior distributions should be shown.
     **kwargs : any, optional
         additional keyword arguments that can be passed to specify
         `plt.subplots() <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html>`_
 
     Examples
     --------
-    >>> el.plots.priors(eliobj, constraints=dict(sigma="positive"),
-    >>>                 figsize=(4,4))
+    >>> el.plots.prior_joint(eliobj,
+    >>>                      constraints=dict(sigma="positive"),
+    >>>                      figsize=(4,4))
 
     Raises
     ------
@@ -330,14 +455,42 @@ def priors(eliobj, constraints: dict or None = None, **kwargs) -> None:
         Currently only 'positive' can be used as constraint. Found unsupported
         constraint type.
 
+        If parallelization has been used for fitting, select one specific
+        replication (seed) through the 'idx' argument.
+
+        The value for 'idx' is larger than the number of parallelizations.
+
     KeyError
         Can't find 'prior_samples' in 'eliobj.results'. Have you excluded
         'prior_samples' from results savings?
 
     """  # noqa: E501
+    # prepare title for plot
+    title = "Learned joint prior"
+
+    if type(eliobj.results) is list:
+        if idx is None:
+            raise ValueError("If parallelization has been used for fitting, "+
+                             "select one specific replication (seed) through"+
+                             " the 'idx' argument.")
+        if idx > len(eliobj.results):
+            raise ValueError("The value for 'idx' is larger than the number"+
+                             " of parallelizations. 'idx' should not exceed"+
+                             f" {len(eliobj.results)} but got {idx}.")
+        if len(eliobj.history[int(idx)]["loss"]) < eliobj.trainer["epochs"]:
+            raise ValueError(
+                f"Training failed for seed with index={idx} (loss is NAN)."+
+                " No results for plotting available.")
+        # select one result set
+        eliobj1 = eliobj.results[int(idx)]
+        seed = eliobj.results[int(idx)]["seed"]
+        title=title+f" (seed={seed})"
+    else:
+        eliobj1 = eliobj.results
+
     # check that all information can be assessed
     try:
-        eliobj.results["prior_samples"]
+        eliobj1["prior_samples"]
     except KeyError:
         print(
             "No information about 'prior_samples' found in "
@@ -361,10 +514,9 @@ def priors(eliobj, constraints: dict or None = None, **kwargs) -> None:
             if n not in list(constraints.keys()):
                 constraints[n]=None
     # get shape of prior samples
-    B, n_samples, n_params = eliobj.results["prior_samples"].shape
+    B, n_samples, n_params = eliobj1["prior_samples"].shape
     # reshape samples by merging batches and number of samples
-    priors = tf.reshape(eliobj.results["prior_samples"], (B * n_samples,
-                                                          n_params))
+    priors = tf.reshape(eliobj1["prior_samples"], (B * n_samples, n_params))
 
     fig, axs = plt.subplots(n_params, n_params, constrained_layout=True,
                             **kwargs)
@@ -400,7 +552,178 @@ def priors(eliobj, constraints: dict or None = None, **kwargs) -> None:
         axs[j, i].set_axis_off()
         axs[i, j].grid(color="lightgrey", linestyle="dotted", linewidth=1)
         axs[i, j].spines[["right", "top"]].set_visible(False)
-    fig.suptitle("Learned prior distributions", fontsize="medium")
+    fig.suptitle(title, fontsize="medium")
+    plt.show()
+
+
+def prior_marginals(eliobj, cols: int = 4, constraints: dict or None=None,
+                    **kwargs) -> None:
+    """
+    plots the convergence of each hyperparameter across epochs.
+
+    Parameters
+    ----------
+    eliobj : instance of :func:`elicit.elicit.Elicit`
+        fitted ``eliobj`` object.
+    cols : int, optional
+        number of columns for arranging the subplots in the figure.
+        The default is ``4``.
+    constraints : dict or None
+        constraints that apply to the model parameters. *Keys* refer to the
+        name of the model parameter that should be constraint. *Values* refer
+        to the constraint. Currently only 'positive' as constraint is supported.
+        Set the argument to None if no constraints should be specified.
+        The default value is ``None``.
+    **kwargs : any, optional
+        additional keyword arguments that can be passed to specify
+        `plt.subplots() <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html>`_
+
+    Examples
+    --------
+    >>> el.plots.prior_marginals(eliobj, figuresize=(8,3))
+
+    >>> el.plots.prior_marginals(eliobj,
+    >>>                          constraints=dict(sigma="positive"),
+    >>>                          figuresize=(8,3))
+
+    Raises
+    ------
+    KeyError
+        Can't find 'prior_samples' in 'eliobj.results'. Have you excluded
+        'prior_samples' from results savings?
+
+    """  # noqa: E501
+    if type(eliobj.results) is list:
+        parallel = True
+        eliobj1 = eliobj.results[0]
+        num_reps = len(eliobj.results)
+        # check whether some replications stopped with NAN
+        ep_run = [len(eliobj.history[i]["loss"]) for i in range(num_reps)]
+        seed_rep = [eliobj.results[i]["seed"] for i in range(num_reps)]
+        # extract successful and failed seeds and indices for further plotting
+        fail=[]
+        success=[]
+        for i, ep in enumerate(ep_run):
+            if ep < eliobj.trainer["epochs"]:
+                fail.append((i,seed_rep[i]))
+            else:
+                success.append(i)
+        print(
+            f"{len(fail)} of {num_reps} replications yield loss NAN and are"+
+            f" excluded from the plot. Failed seeds: {fail} (index, seed)")
+    else:
+        parallel = False
+        eliobj1 = eliobj.results
+
+    # check that all information can be assessed
+    try:
+        eliobj1["prior_samples"]
+    except KeyError:
+        print(
+            "No information about 'prior_samples' found in "
+            + "'eliobj.results'. Have you excluded 'prior_samples' from"
+            + "results savings?"
+        )
+
+    # get parameter names
+    name_params = [eliobj.parameters[i]["name"] for
+                   i in range(len(eliobj.parameters))]
+    # get shape of prior samples
+    B, n_samples, n_par = eliobj1["prior_samples"].shape
+
+
+    def constraint(priors, constraints, name_params):
+        constrained_prior = []
+        # postprocess constraints (add None to all parameters without constraint)
+        if constraints is not None:
+            for n in name_params:
+                if n not in list(constraints.keys()):
+                    constraints[n]=None
+            for i, const in zip(range(priors.shape[-1]), constraints):
+                if const is not None:
+                    if constraints[name_params[i]] == "positive":
+                        prior = tf.abs(priors[:, i])
+                    else:
+                        prior = priors[:, i]
+                else:
+                    prior = priors[:, i]
+                constrained_prior.append(prior)
+            constrained_prior = tf.stack(constrained_prior,-1)
+        else:
+            constrained_prior = priors
+        return constrained_prior
+
+    # make sure that user uses only as many columns as hyperparameter
+    # such that session does not crash...
+    if cols > n_par:
+        cols = n_par
+        print(f"INFO: Reset cols={cols} (total number of hyperparameters)")
+    # compute number of rows for subplots
+    rows, remainder = np.divmod(n_par, cols)
+    # use remainder to track which plots should be turned-off/hidden
+    if remainder != 0:
+        rows += 1
+        k = cols - remainder
+    else:
+        k = remainder
+
+    fig, axs = plt.subplots(rows, cols, constrained_layout=True, **kwargs)
+    if rows == 1:
+        for c, par in zip(tf.range(cols), name_params):
+            if parallel:
+                for i in success:
+                    # reshape samples by merging batches and number of samples
+                    priors = tf.reshape(eliobj.results[i]["prior_samples"],
+                                        (B * n_samples, n_par))
+                    prior = constraint(priors, constraints, name_params)
+                    sns.kdeplot(prior[:,c], ax=axs[c], color="black", lw=2,
+                                alpha=0.5)
+
+            else:
+                # reshape samples by merging batches and number of samples
+                priors = tf.reshape(eliobj.results["prior_samples"],
+                                    (B * n_samples, n_par))
+                prior = constraint(priors, constraints, name_params)
+                sns.kdeplot(prior[:,c], ax=axs[c], color="black", lw=2)
+
+            axs[c].set_title(f"{par}", fontsize="small")
+            axs[c].tick_params(axis="y", labelsize="x-small")
+            axs[c].tick_params(axis="x", labelsize="x-small")
+            axs[c].set_xlabel(r"$\theta$", fontsize="small")
+            axs[c].set_ylabel("density", fontsize="small")
+            axs[c].grid(color="lightgrey", linestyle="dotted", linewidth=1)
+            axs[c].spines[["right", "top"]].set_visible(False)
+        for k_idx in range(k):
+            axs[cols - k_idx - 1].set_axis_off()
+    else:
+        for j, ((r, c), par) in enumerate(zip(
+            itertools.product(tf.range(rows), tf.range(cols)), name_params
+        )):
+            if parallel:
+                for i in success:
+                    # reshape samples by merging batches and number of samples
+                    priors = tf.reshape(eliobj.results[i]["prior_samples"],
+                                        (B * n_samples, n_par))
+                    prior = constraint(priors, constraints, name_params)
+                    sns.kdeplot(prior[:,j], ax=axs[r, c], color="black",
+                                lw=2, alpha=0.5)
+            else:
+                # reshape samples by merging batches and number of samples
+                priors = tf.reshape(eliobj.results["prior_samples"],
+                                    (B * n_samples, n_par))
+                prior = constraint(priors, constraints, name_params)
+                sns.kdeplot(prior[:,j], ax=axs[r, c], color="black", lw=2)
+
+            axs[r, c].set_title(f"{par}", fontsize="small")
+            axs[r, c].tick_params(axis="y", labelsize="x-small")
+            axs[r, c].tick_params(axis="x", labelsize="x-small")
+            axs[r, c].set_xlabel(r"$\theta$", fontsize="small")
+            axs[r, c].set_ylabel("density", fontsize="small")
+            axs[r, c].grid(color="lightgrey", linestyle="dotted", linewidth=1)
+            axs[r, c].spines[["right", "top"]].set_visible(False)
+        for k_idx in range(k):
+            axs[rows - 1, cols - k_idx - 1].set_axis_off()
+    fig.suptitle("Learned marginal priors", fontsize="medium")
     plt.show()
 
 
@@ -433,9 +756,18 @@ def elicits(eliobj, cols: int = 4, **kwargs) -> None:
         excluded 'elicited_statistics' from results savings?
 
     """  # noqa: E501
+    if type(eliobj.results) is list:
+        eliobj1 = eliobj.results[0]
+        parallel = True
+        num_reps = len(eliobj.results)
+    else:
+        eliobj1 = eliobj.results
+        parallel = False
+        num_reps=1
+
     # check that all information can be assessed
     try:
-        eliobj.results["expert_elicited_statistics"]
+        eliobj1["expert_elicited_statistics"]
     except KeyError:
         print(
             "No information about 'expert_elicited_statistics' found in "
@@ -443,7 +775,7 @@ def elicits(eliobj, cols: int = 4, **kwargs) -> None:
             + " from results savings?"
         )
     try:
-        eliobj.results["elicited_statistics"]
+        eliobj1["elicited_statistics"]
     except KeyError:
         print(
             "No information about 'elicited_statistics' found in "
@@ -451,45 +783,37 @@ def elicits(eliobj, cols: int = 4, **kwargs) -> None:
             + " from results savings?"
         )
 
-    def quantiles(axs: any, expert: tf.Tensor, training: tf.Tensor
-                  ) -> Tuple[any]:
+    def quantiles(axs: any, expert: tf.Tensor, training: tf.Tensor,
+                  labels: None=None) -> Tuple[any]:
         return (
-            axs.axline((0, 0), slope=1, color="darkgrey", linestyle="dashed",
-                       lw=1),
             axs.plot(
                 expert[0, :], tf.reduce_mean(training, axis=0), "o", ms=5,
-                color="black"
+                color="black", alpha=0.5
             ),
         )
 
-    def correlation(axs: any, expert: tf.Tensor, training: tf.Tensor
-                    ) -> Tuple[any]:
+    def correlation(axs: any, expert: tf.Tensor, training: tf.Tensor,
+                    labels: list[tuple]) -> Tuple[any]:
         return (
-            axs.plot(0, expert[:, 0], "s", color="black", label="expert"),
+            axs.plot(0, expert[:, 0], "*", color="red", label=labels[0],
+                     zorder=2),
             axs.plot(
-                0, tf.reduce_mean(training[:, 0]), "^", color="lightgrey",
-                label="train"
+                0, tf.reduce_mean(training[:, 0]), "s", color="black",
+                label=labels[1], alpha=0.5, zorder=1
             ),
             [
-                axs.plot(i, expert[:, i], "s", color="black")
-                for i in range(1, training.shape[-1])
+                axs.plot(i, expert[:, i], "*", color="red",
+                         zorder=2) for i in range(1, training.shape[-1])
             ],
             [
-                axs.plot(i, tf.reduce_mean(training[:, i]), "^",
-                         color="lightgrey")
+                axs.plot(i, tf.reduce_mean(training[:, i]), "s",
+                         color="black", alpha=0.5, zorder=1)
                 for i in range(1, training.shape[-1])
             ],
-            axs.set_ylim(-1, 1),
-            axs.set_xlim(-0.5, training.shape[-1]),
-            axs.set_xticks(
-                [i for i in range(training.shape[-1])],
-                [f"cor{i}" for i in range(training.shape[-1])],
-            ),
-            axs.legend(fontsize="x-small", markerscale=0.5, frameon=False),
         )
 
     # get number of hyperparameter
-    n_elicits = len(eliobj.results["expert_elicited_statistics"].keys())
+    n_elicits = len(eliobj1["expert_elicited_statistics"].keys())
     # make sure that user uses only as many columns as hyperparameter
     # such that session does not crash...
     if cols > n_elicits:
@@ -504,7 +828,7 @@ def elicits(eliobj, cols: int = 4, **kwargs) -> None:
     else:
         k = remainder
 
-    names_elicits = list(eliobj.results["expert_elicited_statistics"].keys())
+    names_elicits = list(eliobj1["expert_elicited_statistics"].keys())
     method = [names_elicits[i].split("_")[0] for
               i in range(len(names_elicits))]
 
@@ -512,42 +836,114 @@ def elicits(eliobj, cols: int = 4, **kwargs) -> None:
     if rows == 1:
         for c, (elicit, meth) in enumerate(zip(names_elicits, method)):
             if meth == "quantiles":
+                labels = [None]*num_reps
+                prep = (axs[c].axline((0, 0), slope=1, color="darkgrey",
+                                      linestyle="dashed", lw=1),)
                 method = quantiles
-            if meth == "pearson":
+
+            if meth == "cor":
+                # prepare labels for plotting
+                labels = [("expert","train")]+[(None,None) for i in
+                                               range(num_reps-1)]
+                # select method function
                 method = correlation
-            method(
-                axs[c],
-                eliobj.results["expert_elicited_statistics"][elicit],
-                eliobj.results["elicited_statistics"][elicit],
-            )
+                # get number of correlations
+                num_cor = eliobj1["elicited_statistics"][elicit].shape[-1]
+                prep = (
+                    axs[c].set_ylim(-1, 1),
+                    axs[c].set_xlim(-0.5, num_cor),
+                    axs[c].set_xticks(
+                        [i for i in range(num_cor)],
+                        [f"cor{i}" for i in range(num_cor)],
+                    ),
+                )
+
+            if parallel:
+                for i in range(num_reps):
+                    method(
+                        axs[c],
+                        eliobj.results[i]["expert_elicited_statistics"][elicit],
+                        eliobj.results[i]["elicited_statistics"][elicit],
+                        labels[i]
+                    )+prep
+            else:
+                method(
+                    axs[c],
+                    eliobj.results["expert_elicited_statistics"][elicit],
+                    eliobj.results["elicited_statistics"][elicit],
+                    labels[0]
+                )+prep
+
+            if elicit.endswith("_cor"):
+                axs[c].legend(fontsize="x-small", markerscale=0.5, 
+                              frameon=False)
+
             axs[c].set_title(elicit, fontsize="small")
             axs[c].grid(color="lightgrey", linestyle="dotted", linewidth=1)
             axs[c].spines[["right", "top"]].set_visible(False)
             axs[c].tick_params(axis="y", labelsize="x-small")
             axs[c].tick_params(axis="x", labelsize="x-small")
+            if not elicit.endswith("_cor"):
+                axs[c].set_xlabel("expert", fontsize="small")
+                axs[c].set_ylabel("model-sim.", fontsize="small")
         for k_idx in range(k):
             axs[cols - k_idx - 1].set_axis_off()
+
     else:
         for (r, c), elicit, meth in zip(
             itertools.product(tf.range(rows), tf.range(cols)), names_elicits,
             method
         ):
             if meth == "quantiles":
+                labels = [None]*num_reps
+                prep = (axs[r, c].axline((0, 0), slope=1, color="darkgrey",
+                                      linestyle="dashed", lw=1),)
                 method = quantiles
-            if meth == "pearson":
+
+            if meth == "cor":
+                labels = [("expert","train")]+[(None,None) for i in 
+                                               range(num_reps-1)]
                 method = correlation
-            method(
-                axs[r, c],
-                eliobj.results["expert_elicited_statistics"][elicit],
-                eliobj.results["elicited_statistics"][elicit],
-            )
+                num_cor = eliobj1["elicited_statistics"][elicit].shape[-1]
+                prep = (
+                    axs[r, c].set_ylim(-1, 1),
+                    axs[r, c].set_xlim(-0.5, num_cor),
+                    axs[r, c].set_xticks(
+                        [i for i in range(num_cor)],
+                        [f"cor{i}" for i in range(num_cor)],
+                    ),
+                )
+
+            if parallel:
+                for i in range(num_reps):
+                    method(
+                        axs[r, c],
+                        eliobj.results[i]["expert_elicited_statistics"][elicit],
+                        eliobj.results[i]["elicited_statistics"][elicit],
+                        labels[i]
+                    )+prep
+            else:
+                method(
+                    axs[r, c],
+                    eliobj.results["expert_elicited_statistics"][elicit],
+                    eliobj.results["elicited_statistics"][elicit],
+                    labels[0]
+                )+prep
+
+            if elicit.endswith("_cor"):
+                axs[r, c].legend(fontsize="x-small", markerscale=0.5,
+                                 frameon=False)
             axs[r, c].set_title(elicit, fontsize="small")
             axs[r, c].grid(color="lightgrey", linestyle="dotted", linewidth=1)
             axs[r, c].spines[["right", "top"]].set_visible(False)
             axs[r, c].tick_params(axis="y", labelsize="x-small")
             axs[r, c].tick_params(axis="x", labelsize="x-small")
+            if not elicit.endswith("_cor"):
+                axs[r, c].set_xlabel("expert", fontsize="small")
+                axs[r, c].set_ylabel("model-sim.", fontsize="small")
         for k_idx in range(k):
             axs[rows - 1, cols - k_idx - 1].set_axis_off()
+
     fig.suptitle("Expert vs. model-simulated elicited statistics",
                  fontsize="medium")
     plt.show()

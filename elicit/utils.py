@@ -224,7 +224,7 @@ class LowerBound:
             unconstrained variable.
 
         """
-        # logarithmic transform
+        # inverse softplus transform
         y = tfp.math.softplus_inverse(x - self.lower)
         # cast y into correct type
         y = tf.cast(y, dtype=tf.float32)
@@ -250,7 +250,7 @@ class LowerBound:
             variable with a lower bound.
 
         """
-        # exponential transform
+        # softplus transform
         x = tf.math.softplus(y) + self.lower
         # cast x into correct dtype
         x = tf.cast(x, dtype=tf.float32)
@@ -329,7 +329,7 @@ class UpperBound:
 
 def one_forward_simulation(
     prior_model: el.simulations.Priors, trainer: dict, model: dict,
-    targets: list[dict]
+    targets: list[dict], seed: int
     ) -> Tuple[dict, tf.Tensor, dict, dict]:  # noqa: E125
     """
     One forward simulation from prior samples to elicited statistics.
@@ -358,16 +358,18 @@ def one_forward_simulation(
         for the model parameters
     target_quantities : dict
         target quantities as a function of the model simulations.
+    seed : int
+        internal seed for reproducible results
 
     """
     # set seed
-    tf.random.set_seed(trainer["seed"])
+    tf.random.set_seed(seed)
     # generate samples from initialized prior
     prior_samples = prior_model()
     # simulate prior predictive distribution based on prior samples
     # and generative model
     model_simulations = el.simulations.simulate_from_generator(
-        prior_samples, trainer["seed"], model
+        prior_samples, seed, model
     )
     # compute the target quantities
     target_quantities = el.targets.computation_target_quantities(
@@ -389,6 +391,7 @@ def get_expert_data(
     expert: dict,
     parameters: list[dict],
     network: dict,
+    seed: int
 ) -> Tuple[dict[str, tf.Tensor], tf.Tensor]:
     """
     Wrapper for loading the training data which can be expert data or
@@ -414,6 +417,8 @@ def get_expert_data(
         :mod:`elicit.networks`.
         Only required for ``deep_prior`` method. For ``parametric_prior``
         use ``None``. Default value is ``None``.
+    seed : int
+        internal seed for reproducible results
 
     Returns
     -------
@@ -435,7 +440,7 @@ def get_expert_data(
 
     if oracle:
         # set seed
-        tf.random.set_seed(trainer["seed"])
+        tf.random.set_seed(seed)
         # sample from true priors
         prior_model = el.simulations.Priors(
             ground_truth=True,
@@ -444,11 +449,11 @@ def get_expert_data(
             parameters=parameters,
             network=network,
             expert=expert,
-            seed=trainer["seed"],
+            seed=seed,
         )
         # compute elicited statistics and target quantities
         expert_data, expert_prior, *_ = one_forward_simulation(
-            prior_model, trainer, model, targets
+            prior_model, trainer, model, targets, seed
         )
         return expert_data, expert_prior
     else:
@@ -547,6 +552,41 @@ def load(file: str) -> callable:
     return eliobj
 
 
+def parallel(
+        chains: int = 4,
+        cores: int = 4,
+        seeds : list = None
+        ) -> dict:
+    """
+    Specification for parallelizing training by running multiple training
+    instances with different seeds simultaneously.
+
+    Parameters
+    ----------
+    chains : int, optional
+        Number of replication. The default is ``4``.
+    cores : int, optional
+        Number of cores that should be used. The default is ``4``.
+    seeds : list, optional
+        A list of seeds. If ``None`` seeds are drawn from a Uniform(0,999999)
+        distribution. The seed information corresponding to each chain is
+        stored in ``eliobj.results``. The default is ``None``.
+
+    Returns
+    -------
+    parallel_dict : dict
+        dictionary containing the parallelization settings.
+
+    """
+    parallel_dict = dict(
+        chains=chains,
+        cores=cores,
+        seeds=seeds
+        )
+
+    return parallel_dict
+
+
 def save_history(
     loss: bool = True,
     loss_component: bool = True,
@@ -624,7 +664,6 @@ def save_results(
     elicited_statistics: bool = True,
     prior_samples: bool = True,
     model_samples: bool = True,
-    model: bool = True,
     expert_elicited_statistics: bool = True,
     expert_prior_samples: bool = True,
     init_loss_list: bool = True,
@@ -650,9 +689,6 @@ def save_results(
         The default is ``True``.
     model_samples : bool, optional
         output variables from the simulation-based generative model.
-        The default is ``True``.
-    model : bool, optional
-        fitted elicit model object including the trainable variables.
         The default is ``True``.
     expert_elicited_statistics : bool, optional
         expert-elicited statistics. The default is ``True``.
@@ -694,7 +730,7 @@ def save_results(
     if ``init_matrix`` is excluded :func:`elicit.plots.initialization` can't be
     used as it requires this information.
 
-    if ``prior_samples`` is excluded :func:`elicit.plots.priors` can't be
+    if ``prior_samples`` is excluded :func:`elicit.plots.prior_joint` can't be
     used as it requires this information.
 
     if ``target_quantities`` is excluded :func:`elicit.plots.priorpredictive`
@@ -742,7 +778,6 @@ def save_results(
         elicited_statistics=elicited_statistics,
         prior_samples=prior_samples,
         model_samples=model_samples,
-        model=model,
         expert_elicited_statistics=expert_elicited_statistics,
         expert_prior_samples=expert_prior_samples,
         init_loss_list=init_loss_list,
@@ -752,6 +787,50 @@ def save_results(
         loss_tensor_model=loss_tensor_model,
     )
     return save_res_dict
+
+
+def clean_savings(history: dict, 
+                  results: dict,
+                  save_history: dict,
+                  save_results: dict
+                  ) -> Tuple[dict, dict]:
+    """
+    Parameters
+    ----------
+    history : dict
+        results that are saved across epochs including among others loss,
+        loss_component, time, and hyperparameter. See :func:`save_history` for
+        complete list.
+    results : dict
+        results that are saved for the last epoch only including prior_samples,
+        elicited_statistics, target_quantities, etc. See :func:`save_results`
+        for complete list.
+    save_history : callable, :func:`elicit.utils.save_history`
+        Exclude or include sub-results in the final result file.
+        In the ``history`` object are all results that are saved across epochs.
+        For usage information see
+        `How-To: Save and load the eliobj <https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html>`_
+    save_results : callable, :func:`elicit.utils.save_results`
+        Exclude or include sub-results in the final result file.
+        In the ``results`` object are all results that are saved for the last
+        epoch only. For usage information see
+        `How-To: Save and load the eliobj <https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html>`_
+
+    Returns
+    -------
+    results, history : Tuple[dict, dict]
+        final results taking in consideration exclusion criteria as specified
+        in :func:`save_history` and :func:`save_results`.
+
+    """  # noqa: E501
+    for key_hist in save_history:
+        if not save_history[key_hist]:
+            history.pop(key_hist)
+
+    for key_res in save_results:
+        if not save_results[key_res]:
+            results.pop(key_res)
+    return results, history
 
 
 def get_expert_datformat(targets: list[dict]) -> dict[str, list]:

@@ -6,6 +6,9 @@ import tensorflow as tf
 import tensorflow_probability as tfp
 import elicit as el
 import inspect
+import joblib
+
+from typing import Tuple
 
 tfd = tfp.distributions
 
@@ -122,24 +125,28 @@ def hyper(
     if (lower != float("-inf")) and (upper == float("inf")):
         lower_bound = el.utils.LowerBound(lower)
         transform = lower_bound.inverse
+        constraint_name = "softplusL"
     # only upper bound
     elif (upper != float("inf")) and (lower == float("-inf")):
         upper_bound = el.utils.UpperBound(upper)
         transform = upper_bound.inverse
+        constraint_name = "softplusU"
     # upper and lower bound
     elif (upper != float("inf")) and (lower != float("-inf")):
         double_bound = el.utils.DoubleBound(lower, upper)
         transform = double_bound.inverse
+        constraint_name = "invlogit"
     # unbounded
     else:
         transform = el.utils.identity
+        constraint_name = "identity"
 
     # value type
     dtype_dim = Dtype(vtype, dim)
 
     hyppar_dict = dict(
-        name=name, constraint=transform, vtype=dtype_dim, dim=dim,
-        shared=shared
+        name=name, constraint=transform, constraint_name=constraint_name,
+        vtype=dtype_dim, dim=dim, shared=shared
     )
 
     return hyppar_dict
@@ -749,7 +756,7 @@ def initializer(
             )
 
         # check that quantile is provided as probability
-        if (quantile_perc < 0) or (quantile_perc > 1):
+        if (loss_quantile < 0.) or (loss_quantile > 1.):
             raise ValueError(
                 "[section: initializer] 'loss_quantile' must be a value between 0"
                 + f" and 1. Found 'loss_quantile={loss_quantile}'."
@@ -1054,7 +1061,8 @@ class Elicit:
     def fit(self,
             overwrite=False,
             save_history: callable = el.utils.save_history(),
-            save_results: callable = el.utils.save_results()
+            save_results: callable = el.utils.save_results(),
+            parallel: callable or None = None
             ) -> None:
         """
         method for fitting the eliobj and learn prior distributions.
@@ -1076,6 +1084,9 @@ class Elicit:
             In the ``results`` object are all results that are saved for the last
             epoch only. For usage information see
             `How-To: Save and load the eliobj <https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html>`_
+        parallel : callable, :func:`elicit.utils.parallel`
+            specify parallelization settings if multiple trainings should run
+            in parallel.
 
         Examples
         --------
@@ -1087,7 +1098,13 @@ class Elicit:
         >>>                )
         >>>            )
 
+        >>> eliobj.fit(parallel=el.utils.parallel(chains=4, cores=4)
+
         """  # noqa: E501
+
+        # set seed
+        tf.random.set_seed(self.trainer["seed"])
+
         # check whether elicit object is already fitted
         if len(self.history.keys()) != 0 and not overwrite:
             user_answ = input(
@@ -1105,64 +1122,41 @@ class Elicit:
             if user_answ == "n":
                 return "Process aborded; eliobj is not re-fitted."
 
-        # set seed
-        tf.random.set_seed(self.trainer["seed"])
+        # run single time if no parallelization is required
+        if parallel is None:
+            results, history = self.workflow(self.trainer["seed"])
+            # include seed information into results
+            results["seed"]=self.trainer["seed"]
+            # remove results that user wants to exclude from saving
+            self.results, self.history = el.utils.clean_savings(
+                history, results, save_history, save_results)
 
-        # get expert data
-        expert_elicits, expert_prior = el.utils.get_expert_data(
-            self.trainer,
-            self.model,
-            self.targets,
-            self.expert,
-            self.parameters,
-            self.network,
-        )
-
-        # initialization of hyperparameter
-        (init_prior_model, loss_list, init_prior, init_matrix) = (
-            el.initialization.init_prior(
-                expert_elicits,
-                self.initializer,
-                self.parameters,
-                self.trainer,
-                self.model,
-                self.targets,
-                self.network,
-                self.expert,
-            )
-        )
-
-        # run dag with optimal set of initial values
-        # save results in corresp. attributes
-        self.history, self.results = el.optimization.sgd_training(
-            expert_elicits,
-            init_prior_model,
-            self.trainer,
-            self.optimizer,
-            self.model,
-            self.targets,
-        )
-        # add some additional results
-        self.results["expert_elicited_statistics"] = expert_elicits
-        try:
-            self.expert["ground_truth"]
-        except KeyError:
-            pass
+        # run multiple replications
         else:
-            self.results["expert_prior_samples"] = expert_prior
+            self.results = []
+            self.history = []
 
-        if self.trainer["method"] == "parametric_prior":
-            self.results["init_loss_list"] = loss_list
-            self.results["init_prior"] = init_prior
-            self.results["init_matrix"] = init_matrix
+            # create a list of seeds if not provided
+            if parallel["seeds"] is None:
+                # generate seeds
+                seeds=[int(s) for s in 
+                       tfd.Uniform(0,999999).sample(parallel["chains"])]
+            else:
+                seeds = parallel["seeds"]
 
-        for key_hist in save_history:
-            if not save_history[key_hist]:
-                self.history.pop(key_hist)
+            # run training simultaneously for multiple seeds
+            (*res,) = joblib.Parallel(
+                n_jobs=parallel["cores"])(
+                    joblib.delayed(self.workflow)(seed) for seed in seeds)
 
-        for key_res in save_results:
-            if not save_results[key_res]:
-                self.results.pop(key_res)
+            for i, seed in enumerate(seeds):
+                self.results.append(res[i][0])
+                self.history.append(res[i][1])
+                self.results[i]["seed"]=seed
+
+                self.results[i], self.history[i] = el.utils.clean_savings(
+                    self.history[i], self.results[i], save_history,
+                    save_results)
 
     def save(
         self,
@@ -1259,3 +1253,75 @@ class Elicit:
             self.history = dict()
             # inform user about reset of results
             print("INFO: Results have been reset.")
+
+    def workflow(self, seed: int) -> Tuple[dict, dict]:
+        """
+        helper function that builds the main workflow of the prior elicitation
+        method: get expert data, initialize method, run optimization.
+        Results are returned for further post-processing.
+
+        Parameters
+        ----------
+        seed : int
+            seed information used for reproducing results.
+
+        Returns
+        -------
+        results, history = Tuple(dict, dict)
+            results of the optimization process.
+
+        """
+        self.trainer["seed_chain"]=seed
+        # get expert data
+        expert_elicits, expert_prior = el.utils.get_expert_data(
+            self.trainer,
+            self.model,
+            self.targets,
+            self.expert,
+            self.parameters,
+            self.network,
+            self.trainer["seed"]
+        )
+
+        # initialization of hyperparameter
+        (init_prior_model, loss_list, init_prior, init_matrix) = (
+            el.initialization.init_prior(
+                expert_elicits,
+                self.initializer,
+                self.parameters,
+                self.trainer,
+                self.model,
+                self.targets,
+                self.network,
+                self.expert,
+                seed
+            )
+        )
+
+        # run dag with optimal set of initial values
+        # save results in corresp. attributes
+        history, results = el.optimization.sgd_training(
+            expert_elicits,
+            init_prior_model,
+            self.trainer,
+            self.optimizer,
+            self.model,
+            self.targets,
+            self.parameters,
+            seed
+        )
+        # add some additional results
+        results["expert_elicited_statistics"] = expert_elicits
+        try:
+            self.expert["ground_truth"]
+        except KeyError:
+            pass
+        else:
+            results["expert_prior_samples"] = expert_prior
+
+        if self.trainer["method"] == "parametric_prior":
+            results["init_loss_list"] = loss_list
+            results["init_prior"] = init_prior
+            results["init_matrix"] = init_matrix
+
+        return results, history

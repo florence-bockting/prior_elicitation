@@ -166,9 +166,9 @@ def intialize_priors(init_matrix_slice: dict[str, tf.Tensor] or None,
                 initial_value = float(init_matrix_slice[hp_n])
                 # initialize hyperparameter
                 initialized_hyperparam[f"{hp_k}_{hp_n}"] = tf.Variable(
-                    initial_value=hp_dict["constraint"](initial_value),
+                    initial_value=initial_value, #hp_dict["constraint"](initial_value),
                     trainable=True,
-                    name=f"{hp_n}",
+                    name=f"{hp_dict['constraint_name']}.{hp_n}",
                 )
 
                 # save initialized priors
@@ -262,9 +262,10 @@ def sample_from_priors(initialized_priors: dict[str, tf.Variable],
             init_dict={}
             for k in hp_k:
                 hp_n=parameters[i]["hyperparams"][k]["name"]
+                hp_constraint=parameters[i]["hyperparams"][k]["constraint"]
                 init_key = f"{k}_{hp_n}"
-                init_dict[f"{k}"]=initialized_priors[init_key]
-                
+                #init_dict[f"{k}"]=initialized_priors[init_key]
+                init_dict[f"{k}"]=hp_constraint(initialized_priors[init_key])
             # sample from the prior distribution
             priors.append(
                 prior_family(**init_dict).sample((B, num_samples))

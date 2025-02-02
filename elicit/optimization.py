@@ -19,7 +19,9 @@ def sgd_training(
     trainer: dict,
     optimizer: dict,
     model: dict,
-    targets: dict
+    targets: dict,
+    parameters: list[dict],
+    seed: int
 ) -> Tuple[dict, dict]:
     """
     Wrapper that runs the optimization algorithms for E epochs.
@@ -41,6 +43,11 @@ def sgd_training(
         compute total loss.
     global_dict : dict
         dictionary including all user-input settings.
+    parameters : list[dict]
+        list of model parameters specified with
+        :func:`elicit.elicit.parameter`.
+    seed : int
+        internally used seed for reproducible results
 
     Raises
     ------
@@ -49,7 +56,7 @@ def sgd_training(
 
     """
     # set seed
-    tf.random.set_seed(trainer["seed"])
+    tf.random.set_seed(seed)
 
     # prepare generative model
     prior_model = prior_model_init
@@ -64,7 +71,7 @@ def sgd_training(
             len(prior_model.trainable_variables))
         ]
     init_vars_names = [
-        prior_model.trainable_variables[i].name[:-2] for i in range(
+        prior_model.trainable_variables[i].name[:-2].split(".")[1] for i in range(
             len(prior_model.trainable_variables))
         ]
 
@@ -84,7 +91,7 @@ def sgd_training(
             # generate simulations from model
             (train_elicits, prior_sim, model_sim, target_quants
              ) = el.utils.one_forward_simulation(
-                prior_model, trainer, model, targets
+                prior_model, trainer, model, targets, seed
             )
             # compute total loss as weighted sum
             (loss, indiv_losses, loss_components_expert,
@@ -110,13 +117,23 @@ def sgd_training(
 
         # break for loop if loss is NAN and inform about cause
         if tf.math.is_nan(loss):
-            raise ValueError(
-                "Loss is NAN. The training process has been stopped."
-                )
+            print("Loss is NAN and therefore training stops.")
             break
+        #     raise ValueError(
+        #         "Loss is NAN. The training process has been stopped."
+        #         )
 
         # %% Saving of results
         if trainer["method"] == "parametric_prior":
+            # create a list with constraints for re-transforming hyperparameter
+            # before saving them
+            constraint_dict=dict()
+
+            for i in range(len(parameters)):
+                hyp_dict = parameters[i]["hyperparams"]
+                for hyp in hyp_dict:
+                    constraint_dict[hyp_dict[hyp]["name"]]= hyp_dict[hyp]["constraint"]  # noqa
+
             # save gradients per epoch
             gradients_ep.append(gradients)
 
@@ -127,7 +144,7 @@ def sgd_training(
                 # prepare list for saving hyperparameter values
                 hyp_list = []
                 for i in range(len(hyperparams)):
-                    hyp_list.append(hyperparams[i].name[:-2])
+                    hyp_list.append(hyperparams[i].name[:-2].split(".")[1])
                 # create a dict with empty list for each hyperparameter
                 res_dict = {f"{k}": [] for k in hyp_list}
                 # create final dict with initial train. variables
@@ -138,11 +155,12 @@ def sgd_training(
                 hyperparams[i].numpy().copy() for i in range(len(hyperparams))
                 ]
             vars_names = [
-                hyperparams[i].name[:-2] for i in range(len(hyperparams))
+                hyperparams[i].name[:-2].split(".")[1] for i in range(
+                    len(hyperparams))
                 ]
             # create a final dict of hyperparameter values
             for val, name in zip(vars_values, vars_names):
-                res_dict[name].append(val)
+                res_dict[name].append(float(constraint_dict[name](val)))
 
         if trainer["method"] == "deep_prior":
             # save mean and std for each sampled marginal prior for each epoch
@@ -173,7 +191,6 @@ def sgd_training(
         "elicited_statistics": train_elicits,
         "prior_samples": prior_sim,
         "model_samples": model_sim,
-        "model": prior_model,
         "loss_tensor_expert": loss_components_expert,
         "loss_tensor_model": loss_components_training,
         }
