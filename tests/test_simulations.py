@@ -63,18 +63,13 @@ def expected_keys():
 @pytest.fixture
 def expected_names(init_matrix_slice):
     """Expected names of initialized hyperparameters."""
-    return list(init_matrix_slice.keys())
+    return ["identity.mu0", "softplusL.sigma0", "identity.mu1", "identity.mu2",
+            "softplusL.sigma2"]
 
 @pytest.fixture
 def expected_values():
     """Expected values of initialized hyperparameters."""
-    return [
-        1.0,
-        el.utils.LowerBound(0).inverse(0.5).numpy(),
-        1.0,
-        2.0,
-        el.utils.LowerBound(0).inverse(1.3).numpy(),
-    ]
+    return [1.0, 0.5, 1.0, 2.0, 1.3]
 
 def test_initialize_priors_1(
     init_matrix_slice, parameters, expected_keys, expected_names,
@@ -113,7 +108,8 @@ def test_initialize_priors_1(
 
     # Check initial values of hyperparameters and their correct transformations
     for i, key in enumerate(init_prior):
-        assert init_prior[key].numpy() == expected_values[i], (
+        assert init_prior[key].numpy() == pytest.approx(
+            expected_values[i], abs=0.01), (
             f"Expected value for key '{key}': {expected_values[i]}, "
             f"but got: {init_prior[key].numpy()}"
         )

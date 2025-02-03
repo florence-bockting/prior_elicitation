@@ -43,7 +43,7 @@ def parameters():
     ]
 
 def test_uniform_samples(parameters):
-    seed = tf.constant(1)
+    seed = 1
     hyppar = None
     n_samples = 10
     method = "sobol"
@@ -59,7 +59,7 @@ def test_uniform_samples(parameters):
     assert list(init_matrix.keys()) == ["mu0", "sigma0", "mu1",
                                         "sigma1", "sigma2"]
     # check correct format
-    assert init_matrix["mu0"].shape == (n_samples, 1)
+    assert init_matrix["mu0"].shape == [n_samples]
 
     # check that samples are drawn from a correctly specified
     # initialization distribution
@@ -71,7 +71,7 @@ def test_uniform_samples(parameters):
 #%% test_uniform_samples_array
 # constants
 def test_uniform_samples_array(parameters):
-    seed = tf.constant(1)
+    seed = 1
     hyppar = ["mu0", "sigma0", "mu1", "sigma1", "sigma2"]
     n_samples = 10
     method = "sobol"
@@ -86,7 +86,7 @@ def test_uniform_samples_array(parameters):
     # check names and order of hyperparameters in init_matrix
     assert list(init_matrix.keys()) == hyppar
     # check correct format
-    assert init_matrix["mu0"].shape == (n_samples, 1)
+    assert init_matrix["mu0"].shape == [n_samples]
     
     # check that samples are drawn from a correctly specified
     # initialization distribution
@@ -98,7 +98,7 @@ def test_uniform_samples_array(parameters):
 #%% test_uniform_samples_array random order
 # vary order of hyperparameter and use n_samples of 1
 def test_uniform_samples_order(parameters):
-    seed = tf.constant(1)
+    seed = 1
     hyppar = ["mu0", "mu1", "sigma0", "sigma1", "sigma2"]
     n_samples = 1
     method = "sobol"
@@ -113,7 +113,7 @@ def test_uniform_samples_order(parameters):
     # check names and order of hyperparameters in init_matrix
     assert list(init_matrix.keys()) == hyppar
     # check correct format
-    assert init_matrix["mu0"].shape == (n_samples, 1)
+    assert init_matrix["mu0"].shape == [n_samples]
     
     # check that samples are drawn from a correctly specified
     # initialization distribution
@@ -242,19 +242,17 @@ def test_integration_initialization():
     res = eliobj.results
     assert hist["hyperparameter"]["mu0"][0] == res["init_matrix"]["mu0"]
     assert hist["hyperparameter"]["mu1"][0] == res["init_matrix"]["mu1"]
-    assert el.utils.LowerBound(0.).forward(
-        hist["hyperparameter"]["sigma0"][0]).numpy() == pytest.approx(
+    assert hist["hyperparameter"]["sigma0"][0] == pytest.approx(
             res["init_matrix"]["sigma0"], abs=0.001)
-    assert el.utils.LowerBound(0.).forward(
-        hist["hyperparameter"]["sigma1"][0]).numpy() == pytest.approx(
+    assert hist["hyperparameter"]["sigma1"][0] == pytest.approx(
             res["init_matrix"]["sigma1"], abs=0.001)
 
     # check whether prior samples reflect corresponding initial hyperparameter
     means = tf.reduce_mean(res["prior_samples"], (0,1))
     stds = tf.reduce_mean(tf.math.reduce_std(res["prior_samples"], 1),0)
-    
+
     for m,t in zip(means, [0.,1.]):
         assert abs(m.numpy()) == pytest.approx(t, abs=0.03)
-    
+
     for s,t in zip(stds, [2.,3.]):
         assert s.numpy() == pytest.approx(t, abs=0.13)
