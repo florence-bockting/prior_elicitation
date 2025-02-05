@@ -208,7 +208,7 @@ def loss(eliobj, **kwargs) -> None:
             for j in success:
                 # preprocess loss_component results
                 indiv_losses = tf.stack(eliobj.history[j]["loss_component"])
-                if i==0:
+                if j==0:
                     axs[1].plot(indiv_losses[:, i], label=name, lw=2,
                                 alpha=0.5)
                 else:
@@ -763,25 +763,45 @@ def marginals(eliobj, cols: int = 4, span: int = 30, **kwargs) -> None:
         'hyperparameter' from history savings?
 
     """  # noqa: E501
-
+    # check whether parallelization has been used
+    eliobj_res, eliobj_hist, parallel, n_reps = _check_parallel(eliobj)
+    # check chains that yield NaN
+    if parallel:
+        fails, success, success_name = _check_NaN(eliobj, n_reps)
+    # number of marginals
+    n_elicits = tf.stack(eliobj_hist["hyperparameter"]["means"]).shape[-1]
+    # prepare plot axes
+    cols, rows, k = _prep_subplots(eliobj, cols, n_elicits, bounderies=False)
     # check that all information can be assessed
     try:
-        eliobj.history["hyperparameter"]
+        eliobj_hist["hyperparameter"]
     except KeyError:
         print(
             "No information about 'hyperparameter' found in 'eliobj.history'"
             +" Have you excluded 'hyperparameter' from history savings?"
         )
 
-    elicits_means = tf.stack(eliobj.history["hyperparameter"]["means"])
-    elicits_std = tf.stack(eliobj.history["hyperparameter"]["stds"])
+    if parallel:
+        elicits_means = tf.stack(
+            [eliobj.history[i]["hyperparameter"]["means"] for i in success]
+            )
+        elicits_std = tf.stack(
+            [eliobj.history[i]["hyperparameter"]["stds"] for i in success]
+            )
+        labels = [("mean", "sd")]+[(None,None) for _ in range((n_reps-1))]
+    else:
+        elicits_means = tf.stack(eliobj.history["hyperparameter"]["means"])
+        elicits_std = tf.stack(eliobj.history["hyperparameter"]["stds"])
 
     fig = plt.figure(layout="constrained", **kwargs)
     subfigs = fig.subfigures(2, 1, wspace=0.07)
-    _convergence_plot(subfigs[0], elicits_means, span=span, cols=cols,
-                     label="mean")
-    _convergence_plot(subfigs[1], elicits_std, span=span, cols=cols,
-                      label="sd")
+    _convergence_plot(subfigs[0], elicits_means, span=span,label="mean",
+                      parallel=parallel, rows=rows, cols=cols, k=k,
+                      success=success
+                     )
+    _convergence_plot(subfigs[1], elicits_std, span=span, label="sd",
+                      parallel=parallel, rows=rows, cols=cols, k=k,
+                      success=success)
     fig.suptitle("Convergence of prior marginals mean and sd",
                  fontsize="medium")
     plt.show()
@@ -1067,34 +1087,33 @@ def _convergence_plot(
     subfigs: plt.Figure.subfigures,
     elicits: tf.Tensor,
     span: int,
-    cols: int,
     label: str,
+    parallel: bool,
+    rows: int,
+    cols: int,
+    k: int,
+    success: list
 ) -> plt.Figure.subplots:
-    # get number of hyperparameter
-    n_par = elicits.shape[-1]
-    # make sure that user uses only as many columns as hyperparameter
-    # such that session does not crash...
-    if cols > n_par:
-        cols = n_par
-        print(f"INFO: Reset cols={cols} (total number of hyperparameters)")
-    # compute number of rows for subplots
-    rows, remainder = np.divmod(n_par, cols)
-    # use remainder to track which plots should be turned-off/hidden
-    if remainder != 0:
-        rows += 1
-        k = cols - remainder
-    else:
-        k = remainder
 
     axs = subfigs.subplots(rows, cols)
     if rows == 1:
-        for c, n_hyp in zip(tf.range(cols), tf.range(n_par)):
-            # compute mean of last c hyperparameter values
-            avg_hyp = tf.reduce_mean(elicits[-span:, n_hyp])
-            axs[c].axhline(avg_hyp.numpy(), color="darkgrey",
-                           linestyle="dotted")
-            # plot convergence
-            axs[c].plot(elicits[:, n_hyp], color="black", lw=2)
+        for c, n_hyp in zip(tf.range(cols), 
+                            tf.range(elicits.shape[-1])):
+            if parallel:
+                for i in success:
+                    # compute mean of last c hyperparameter values
+                    avg_hyp = tf.reduce_mean(elicits[i, -span:, n_hyp])
+                    # plot convergence
+                    axs[c].plot(elicits[i,:, n_hyp], color="black", lw=2,
+                                alpha=0.5)
+            else:
+                
+                # compute mean of last c hyperparameter values
+                avg_hyp = tf.reduce_mean(elicits[-span:, n_hyp])
+                axs[c].axhline(avg_hyp.numpy(), color="darkgrey",
+                               linestyle="dotted")
+                # plot convergence
+                axs[c].plot(elicits[:, n_hyp], color="black", lw=2)
             axs[c].set_title(rf"{label}($\theta_{n_hyp}$)",
                              fontsize="small")
             axs[c].tick_params(axis="y", labelsize="x-small")
@@ -1107,14 +1126,21 @@ def _convergence_plot(
     else:
         for (r, c), n_hyp in zip(
             itertools.product(tf.range(rows), tf.range(cols)),
-            tf.range(n_par)
+            tf.range(elicits.shape[-1])
         ):
-            # compute mean of last c hyperparameter values
-            avg_hyp = tf.reduce_mean(elicits[-span:, n_hyp])
-            # plot convergence
-            axs[r, c].axhline(avg_hyp.numpy(), color="darkgrey",
-                              linestyle="dotted")
-            axs[r, c].plot(elicits[:, n_hyp], color="black", lw=2)
+            if parallel:
+                for i in success:
+                    # compute mean of last c hyperparameter values
+                    avg_hyp = tf.reduce_mean(elicits[i, -span:, n_hyp])
+                    # plot convergence
+                    axs[r, c].plot(elicits[i, :, n_hyp], color="black", lw=2)
+            else:
+                # compute mean of last c hyperparameter values
+                avg_hyp = tf.reduce_mean(elicits[-span:, n_hyp])
+                # plot convergence
+                axs[r, c].axhline(avg_hyp.numpy(), color="darkgrey",
+                                  linestyle="dotted")
+                axs[r, c].plot(elicits[:, n_hyp], color="black", lw=2)
             axs[r, c].set_title(rf"$\theta_{n_hyp}$", fontsize="small")
             axs[r, c].tick_params(axis="y", labelsize="x-small")
             axs[r, c].tick_params(axis="x", labelsize="x-small")

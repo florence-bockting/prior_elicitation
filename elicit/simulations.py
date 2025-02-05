@@ -5,6 +5,7 @@
 import inspect
 import tensorflow as tf
 import tensorflow_probability as tfp
+import elicit as el
 
 tfd = tfp.distributions
 
@@ -283,8 +284,13 @@ def sample_from_priors(initialized_priors: dict[str, tf.Variable],
         # sample from base distribution
         u = base_dist.sample((B, num_samples))
         # apply transformation function to samples from base distr.
-        prior_samples, _ = initialized_priors(u, condition=None, inverse=False)
-    
+        unconstr_priors, _ = initialized_priors(u, condition=None, inverse=False)
+        # apply parameter constraints if specified
+        constr_priors=[]
+        for j in range(len(parameters)):
+            constr = parameters[j]["constraint"]
+            constr_priors.append(constr(unconstr_priors[:,:,j]))
+        prior_samples = tf.stack(constr_priors, axis=-1)
     return prior_samples
 
 

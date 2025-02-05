@@ -154,7 +154,9 @@ def hyper(
 
 def parameter(
     name: str, family: callable or None = None,
-    hyperparams: callable or None = None
+    hyperparams: callable or None = None,
+    lower: float = float("-inf"),
+    upper: float = float("inf"),
 ) -> dict:
     """
     Specification of model parameters.
@@ -177,6 +179,13 @@ def parameter(
         Further details are provided in
         `How-To specify prior hyperparameters (TODO) <url>`_.
         Default value is ``None``.
+    lower : float, optional
+        Only used if ``method="deep_prior"``.
+        Lower bound of parameter. If parameter is unbounded ``float("-inf")``.
+    upper : float, optional
+        Only used if ``method="deep_prior"``.
+        Upper bound of parameter.
+        The default is unbounded: ``float("inf")``.
 
     Returns
     -------
@@ -221,7 +230,29 @@ def parameter(
                     + "'hyperparams' dict."
                 )
 
-    param_dict = dict(name=name, family=family, hyperparams=hyperparams)
+    # constraints
+    # only lower bound
+    if (lower != float("-inf")) and (upper == float("inf")):
+        lower_bound = el.utils.LowerBound(lower)
+        transform = lower_bound.inverse
+        constraint_name = "softplusL"
+    # only upper bound
+    elif (upper != float("inf")) and (lower == float("-inf")):
+        upper_bound = el.utils.UpperBound(upper)
+        transform = upper_bound.inverse
+        constraint_name = "softplusU"
+    # upper and lower bound
+    elif (upper != float("inf")) and (lower != float("-inf")):
+        double_bound = el.utils.DoubleBound(lower, upper)
+        transform = double_bound.inverse
+        constraint_name = "invlogit"
+    # unbounded
+    else:
+        transform = el.utils.identity
+        constraint_name = "identity"
+
+    param_dict = dict(name=name, family=family, hyperparams=hyperparams,
+                      constraint_name=constraint_name, constraint=transform)
 
     return param_dict
 

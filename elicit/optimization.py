@@ -64,16 +64,17 @@ def sgd_training(
     component_losses = []
     gradients_ep = []
     time_per_epoch = []
-
-    # save initialized trainable variables of epoch=0 (before first update)
-    init_vars_values = [
-        prior_model.trainable_variables[i].numpy().copy() for i in range(
-            len(prior_model.trainable_variables))
-        ]
-    init_vars_names = [
-        prior_model.trainable_variables[i].name[:-2].split(".")[1] for i in range(
-            len(prior_model.trainable_variables))
-        ]
+    
+    if trainer["method"] == "parametric_prior":
+        # save initialized trainable variables of epoch=0 (before first update)
+        init_vars_values = [
+            prior_model.trainable_variables[i].numpy().copy() for i in range(
+                len(prior_model.trainable_variables))
+            ]
+        init_vars_names = [
+            prior_model.trainable_variables[i].name[:-2].split(".")[1] for i 
+            in range(len(prior_model.trainable_variables))
+            ]
 
     # initialize the adam optimizer
     optimizer_copy = optimizer.copy()

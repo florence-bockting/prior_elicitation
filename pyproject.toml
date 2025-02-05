@@ -2,22 +2,49 @@
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.poetry]
+[project]
 name = "elicits" 
 version = "0.0.4"
-description = "Tool for learning prior distributions based on expert prior knowledge elicitation"
+description = "Tool for learning prior distributions based on expert knowledge"
 license = "Apache-2.0"
+license-files = "LICEN[CS]E*"
 authors = [
-    "Florence Bockting",
-	"Stefan T. Radev",
-	"Paul-Christian Bürkner"
+    {name = "Florence Bockting", email = "florence.bockting@tu-dortmund.de"},
+    {name = "Paul-Christian Bürkner", email = "paul.buerkner@gmail.com"},
 ]
 maintainers = [
-    "Florence Bockting",
+    {name = "Florence Bockting", email = "florence.bockting@tu-dortmund.de"}
 ]
+readme = "README.md"
 packages = [
 	{ include = "elicit" }
 ]
+keywords = [
+    "prior elicitation", "prior distribution", "expert elicitation",
+    "expert knowledge"
+]
+
+[tool.poetry]
+name = "elicits" 
+version = "0.0.4"
+description = "Tool for learning prior distributions based on expert knowledge"
+license = "Apache-2.0"
+authors = [
+    "Florence Bockting <florence.bockting@tu-dortmund.de>",
+    "Paul-Christian Bürkner <paul.buerkner@gmail.com>",
+]
+maintainers = [
+    "Florence Bockting <florence.bockting@tu-dortmund.de>",
+]
+readme = "README.md"
+packages = [
+	{ include = "elicit" }
+]
+
+[project.urls]
+Homepage = "https://florence-bockting.github.io/elicit"
+Documentation = "https://florence-bockting.github.io/elicit"
+Repository = "https://github.com/florence-bockting/elicit"
 
 [tool.poetry.dependencies]
 python = ">=3.11, <3.12"
