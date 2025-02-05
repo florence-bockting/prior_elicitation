@@ -1048,7 +1048,7 @@ def _prep_subplots(eliobj, cols, n_quant, bounderies=False):
     if cols > n_quant:
         cols = n_quant
         print(
-            f"INFO: Reset cols={cols} (number of elicited statistics)")
+            f"INFO: Reset cols={cols}")
     # compute number of rows for subplots
     rows, remainder = np.divmod(n_quant, cols)
     
