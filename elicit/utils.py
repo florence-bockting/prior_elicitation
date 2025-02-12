@@ -553,8 +553,8 @@ def load(file: str) -> callable:
 
 
 def parallel(
-        chains: int = 4,
-        cores: int = 4,
+        runs: int = 4,
+        cores: None or int = None,
         seeds : list = None
         ) -> dict:
     """
@@ -563,10 +563,10 @@ def parallel(
 
     Parameters
     ----------
-    chains : int, optional
+    runs: int, optional
         Number of replication. The default is ``4``.
     cores : int, optional
-        Number of cores that should be used. The default is ``4``.
+        Number of cores that should be used. The default is ``None`` which implies ``cores=runs``.
     seeds : list, optional
         A list of seeds. If ``None`` seeds are drawn from a Uniform(0,999999)
         distribution. The seed information corresponding to each chain is
@@ -579,7 +579,7 @@ def parallel(
 
     """
     parallel_dict = dict(
-        chains=chains,
+        runs=runs,
         cores=cores,
         seeds=seeds
         )

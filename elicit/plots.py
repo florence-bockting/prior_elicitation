@@ -3,6 +3,7 @@
 # noqa SPDX-License-Identifier: Apache-2.0
 
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import seaborn as sns
 import numpy as np
 import tensorflow as tf
@@ -75,24 +76,15 @@ def initialization(eliobj, cols: int = 4, **kwargs) -> None:
     if rows == 1:
         for c, hyp, lo, hi in zip(tf.range(cols), eliobj_res["init_matrix"],
                                   low, high):
-            if parallel:
-                [sns.ecdfplot(
-                    tf.squeeze(eliobj.results[j]["init_matrix"][hyp]),
-                    ax=axs[c],
-                    color= "black",
-                    lw=2,
-                    alpha=0.5
-                ) for j in range(len(eliobj.results))]
-            else:
-                sns.ecdfplot(
-                    tf.squeeze(eliobj.results["init_matrix"][hyp]),
-                    ax=axs[c],
-                    color="black",
-                    lw=2,
-                )
+            [sns.ecdfplot(
+                tf.squeeze(eliobj.results[j]["init_matrix"][hyp]),
+                ax=axs[c],
+                color= "black",
+                lw=2,
+                alpha=0.5
+            ) for j in range(len(eliobj.results))]
             axs[c].set_title(f"{hyp}", fontsize="small")
-            axs[c].axline((lo, 0), (hi, 1), color="grey", linestyle="dashed",
-                          lw=1)
+            axs[c].axline((lo, 0), (hi, 1), color="grey", linestyle="dashed", lw=1)
             axs[c].grid(color="lightgrey", linestyle="dotted", linewidth=1)
             axs[c].spines[["right", "top"]].set_visible(False)
             axs[c].tick_params(axis="y", labelsize="x-small")
@@ -106,24 +98,15 @@ def initialization(eliobj, cols: int = 4, **kwargs) -> None:
             low,
             high,
         ):
-            if parallel:
-                [sns.ecdfplot(
-                    tf.squeeze(eliobj.results[j]["init_matrix"][hyp]),
-                    ax=axs[r, c],
-                    color="black",
-                    lw=2,
-                    alpha=0.5
-                ) for j in range(len(eliobj.results))]
-            else:
-                sns.ecdfplot(
-                    tf.squeeze(eliobj.results["init_matrix"][hyp]),
-                    ax=axs[r, c],
-                    color="black",
-                    lw=2,
-                )
+            [sns.ecdfplot(
+                tf.squeeze(eliobj.results[j]["init_matrix"][hyp]),
+             ax=axs[r, c],
+             color="black",
+             lw=2,
+             alpha=0.5) for j in range(len(eliobj.results))
+            ]
             axs[r, c].set_title(f"{hyp}", fontsize="small")
-            axs[r, c].axline((lo, 0), (hi, 1), color="grey",
-                             linestyle="dashed", lw=1)
+            axs[r, c].axline((lo, 0), (hi, 1), color="grey", linestyle="dashed", lw=1)
             axs[r, c].grid(color="lightgrey", linestyle="dotted", linewidth=1)
             axs[r, c].spines[["right", "top"]].set_visible(False)
             axs[r, c].tick_params(axis="y", labelsize="x-small")
@@ -169,7 +152,8 @@ def loss(eliobj, **kwargs) -> None:
     # check chains that yield NaN
     if parallel:
         fails, success, success_name = _check_NaN(eliobj, n_reps)
-
+    else:
+        success=[0]
     # check that all information can be assessed
     try:
         eliobj_hist["loss_component"]
@@ -197,28 +181,19 @@ def loss(eliobj, **kwargs) -> None:
     fig, axs = plt.subplots(1, 2, constrained_layout=True, sharex=True,
                             **kwargs)
     # plot total loss
-    if parallel:
-        [axs[0].plot(eliobj.history[i]["loss"], color="black",
-                     alpha=0.5, lw=2) for i in success]
-    else:
-        axs[0].plot(eliobj.history["loss"], color="black", lw=2)
+    [axs[0].plot(eliobj.history[i]["loss"], color="black",
+                 alpha=0.5, lw=2) for i in success]
     # plot loss per component
     for i, name in enumerate(names_losses):
-        if parallel:
-            for j in success:
-                # preprocess loss_component results
-                indiv_losses = tf.stack(eliobj.history[j]["loss_component"])
-                if j==0:
-                    axs[1].plot(indiv_losses[:, i], label=name, lw=2,
-                                alpha=0.5)
-                else:
-                    axs[1].plot(indiv_losses[:, i], lw=2,
-                                alpha=0.5)
-        else:
+        for j in success:
             # preprocess loss_component results
-            indiv_losses = tf.stack(eliobj.history["loss_component"])
-            
-            axs[1].plot(indiv_losses[:, i], label=name, lw=2)
+            indiv_losses = tf.stack(eliobj.history[j]["loss_component"])
+            if j==0:
+                axs[1].plot(indiv_losses[:, i], label=name, lw=2,
+                            alpha=0.5)
+            else:
+                axs[1].plot(indiv_losses[:, i], lw=2,
+                            alpha=0.5)
         axs[1].legend(fontsize="small", handlelength=0.4, frameon=False)
     [
         axs[i].set_title(t, fontsize="small")
@@ -230,7 +205,7 @@ def loss(eliobj, **kwargs) -> None:
         axs[i].spines[["right", "top"]].set_visible(False)
         axs[i].tick_params(axis="y", labelsize="x-small")
         axs[i].tick_params(axis="x", labelsize="x-small")
-
+    plt.show()
 
 def hyperparameter(eliobj, cols: int = 4, span: int = 30, **kwargs) -> None:
     """
@@ -269,6 +244,8 @@ def hyperparameter(eliobj, cols: int = 4, span: int = 30, **kwargs) -> None:
     # check chains that yield NaN
     if parallel:
         fails, success, success_name = _check_NaN(eliobj, n_reps)
+    else:
+        success=[0]
     # prepare subplot axes
     cols, rows, k = _prep_subplots(eliobj, cols, n_par, bounderies=False)
 
@@ -285,20 +262,10 @@ def hyperparameter(eliobj, cols: int = 4, span: int = 30, **kwargs) -> None:
     fig, axs = plt.subplots(rows, cols, constrained_layout=True, **kwargs)
     if rows == 1:
         for c, hyp in zip(tf.range(cols), names_par):
-            if parallel:
-                # plot convergence
-                [axs[c].plot(eliobj.history[i]["hyperparameter"][hyp],
-                            color="black", lw=2, alpha=0.5)
-                 for i in success]
-            else:
-                # compute mean of last c hyperparameter values
-                avg_hyp = tf.reduce_mean(
-                    eliobj.history["hyperparameter"][hyp][-span:])
-                axs[c].axhline(avg_hyp.numpy(), color="darkgrey",
-                               linestyle="dotted")
-                # plot convergence
-                axs[c].plot(eliobj.history["hyperparameter"][hyp], 
-                            color="black", lw=2)
+            # plot convergence
+            [axs[c].plot(eliobj.history[i]["hyperparameter"][hyp],
+                        color="black", lw=2, alpha=0.5)
+             for i in success]
             axs[c].set_title(f"{hyp}", fontsize="small")
             axs[c].tick_params(axis="y", labelsize="x-small")
             axs[c].tick_params(axis="x", labelsize="x-small")
@@ -310,19 +277,9 @@ def hyperparameter(eliobj, cols: int = 4, span: int = 30, **kwargs) -> None:
     else:
         for (r, c), hyp in zip(
             itertools.product(tf.range(rows), tf.range(cols)), names_par):
-            if parallel:
-                [axs[r, c].plot(eliobj.history[i]["hyperparameter"][hyp],
-                               color="black", lw=2, alpha=0.5)
-                 for i in success]
-            else:
-                # compute mean of last c hyperparameter values
-                avg_hyp = tf.reduce_mean(
-                    eliobj.history["hyperparameter"][hyp][-span:])
-                # plot convergence
-                axs[r, c].axhline(avg_hyp.numpy(), color="darkgrey",
-                                  linestyle="dotted")
-                axs[r, c].plot(eliobj.history["hyperparameter"][hyp],
-                               color="black", lw=2)
+            [axs[r, c].plot(eliobj.history[i]["hyperparameter"][hyp],
+                           color="black", lw=2, alpha=0.5)
+             for i in success]
             axs[r, c].set_title(f"{hyp}", fontsize="small")
             axs[r, c].tick_params(axis="y", labelsize="x-small")
             axs[r, c].tick_params(axis="x", labelsize="x-small")
@@ -335,8 +292,7 @@ def hyperparameter(eliobj, cols: int = 4, span: int = 30, **kwargs) -> None:
     plt.show()
 
 
-def prior_joint(eliobj, constraints: dict or None = None,
-                idx: int or None = None, **kwargs) -> None:
+def prior_joint(eliobj, idx: int or list or None = None, **kwargs) -> None:
     """
     plot learned prior distributions of each model parameter based on prior
     samples from last epoch. If parallelization has been used, select which
@@ -347,34 +303,23 @@ def prior_joint(eliobj, constraints: dict or None = None,
     ----------
     eliobj : instance of :func:`elicit.elicit.Elicit`
         fitted ``eliobj`` object.
-    constraints : dict or None
-        constraints that apply to the model parameters. *Keys* refer to the
-        name of the model parameter that should be constraint. *Values* refer
-        to the constraint. Currently only 'positive' as constraint is supported.
-        Set the argument to None if no constraints should be specified.
-        The default value is ``None``.
-    idx : int or None
+    idx : int or list or None:
         only required if parallelization is used for fitting the method.
-        Indexes the replications and allows to choose for which replication the
-        prior distributions should be shown.
+        Indexes the replications and allows to choose for which replication(s) the
+        joint prior should be shown.
     **kwargs : any, optional
         additional keyword arguments that can be passed to specify
         `plt.subplots() <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html>`_
 
     Examples
     --------
-    >>> el.plots.prior_joint(eliobj,
-    >>>                      constraints=dict(sigma="positive"),
-    >>>                      figsize=(4,4))
+    >>> el.plots.prior_joint(eliobj, figsize=(4,4))
 
     Raises
     ------
     ValueError
         Currently only 'positive' can be used as constraint. Found unsupported
         constraint type.
-
-        If parallelization has been used for fitting, select one specific
-        replication (seed) through the 'idx' argument.
 
         The value for 'idx' is larger than the number of parallelizations.
 
@@ -383,29 +328,20 @@ def prior_joint(eliobj, constraints: dict or None = None,
         'prior_samples' from results savings?
 
     """  # noqa: E501
-    # prepare title for plot
-    title = "Learned joint prior"
-
-    if type(eliobj.results) is list:
-        if idx is None:
-            raise ValueError("If parallelization has been used for fitting, "+
-                             "select one specific replication (seed) through"+
-                             " the 'idx' argument.")
-        if idx > len(eliobj.results):
-            raise ValueError("The value for 'idx' is larger than the number"+
-                             " of parallelizations. 'idx' should not exceed"+
-                             f" {len(eliobj.results)} but got {idx}.")
-        if len(eliobj.history[int(idx)]["loss"]) < eliobj.trainer["epochs"]:
-            raise ValueError(
-                f"Training failed for seed with index={idx} (loss is NAN)."+
-                " No results for plotting available.")
-        # select one result set
-        eliobj_res = eliobj.results[int(idx)]
-        seed = eliobj.results[int(idx)]["seed"]
-        title = title+f" (seed={seed})"
-    else:
-        eliobj_res = eliobj.results
-
+    if idx is None:
+        idx = [0]
+    if type(idx) is not list:
+        idx = [idx]
+    if len(idx) > len(eliobj.results):
+        raise ValueError("The value for 'idx' is larger than the number"+
+                         " of parallelizations. 'idx' should not exceed"+
+                         f" {len(eliobj.results)} but got {len(idx)}.")
+    if len(eliobj.history[0]["loss"]) < eliobj.trainer["epochs"]:
+        raise ValueError(
+            f"Training failed for seed with index={idx} (loss is NAN)."+
+            " No results for plotting available.")
+    # select one result set
+    eliobj_res = eliobj.results[0]
     # check that all information can be assessed
     try:
         eliobj_res["prior_samples"]
@@ -415,33 +351,34 @@ def prior_joint(eliobj, constraints: dict or None = None,
             + "'eliobj.results'. Have you excluded 'prior_samples' from"
             + "results savings?"
         )
-
+    cmap = mpl.colormaps["turbo"]
     # get shape of prior samples
     B, n_samples, n_params = eliobj_res["prior_samples"].shape
     # get parameter names
     name_params = [eliobj.parameters[i]["name"] for i in range(n_params)]
-    # reshape samples by merging batches and number of samples
-    priors = tf.reshape(eliobj_res["prior_samples"], (B * n_samples, n_params))
 
-    fig, axs = plt.subplots(n_params, n_params, constrained_layout=True,
-                            **kwargs)
-    for i in range(n_params):
-        sns.kdeplot(priors[:, i], ax=axs[i, i], color="black", lw=2)
-        axs[i, i].set_xlabel(name_params[i], size="small")
-        [axs[i, i].tick_params(axis=a, labelsize="x-small") for
-         a in ["x", "y"]]
-        axs[i, i].grid(color="lightgrey", linestyle="dotted", linewidth=1)
-        axs[i, i].spines[["right", "top"]].set_visible(False)
+    fig, axs = plt.subplots(n_params, n_params, constrained_layout=True, **kwargs)
+    colors=cmap(np.linspace(0, 1, len(idx)))
+    for c,k in enumerate(idx):
+        for i in range(n_params):
+            # reshape samples by merging batches and number of samples
+            priors = tf.reshape(eliobj.results[k]["prior_samples"], (B * n_samples, n_params))
+            sns.kdeplot(priors[:, i], ax=axs[i, i], color=colors[c], lw=2)
+            axs[i, i].set_xlabel(name_params[i], size="small")
+            [axs[i, i].tick_params(axis=a, labelsize="x-small") for
+             a in ["x", "y"]]
+            axs[i, i].grid(color="lightgrey", linestyle="dotted", linewidth=1)
+            axs[i, i].spines[["right", "top"]].set_visible(False)
 
-    for i, j in itertools.combinations(range(n_params), 2):
-        sns.kdeplot(priors[:, i], ax=axs[i, i], color="black", lw=2)
-        axs[i, j].plot(priors[:, i], priors[:, j], ",", color="black",
-                       alpha=0.1)
-        [axs[i, j].tick_params(axis=a, labelsize=7) for a in ["x", "y"]]
-        axs[j, i].set_axis_off()
-        axs[i, j].grid(color="lightgrey", linestyle="dotted", linewidth=1)
-        axs[i, j].spines[["right", "top"]].set_visible(False)
-    fig.suptitle(title, fontsize="medium")
+        for i, j in itertools.combinations(range(n_params), 2):
+            sns.kdeplot(priors[:, i], ax=axs[i, i], color=colors[c], lw=2)
+            axs[i, j].plot(priors[:, i], priors[:, j], ",", color=colors[c],
+                           alpha=0.1)
+            [axs[i, j].tick_params(axis=a, labelsize=7) for a in ["x", "y"]]
+            axs[j, i].set_axis_off()
+            axs[i, j].grid(color="lightgrey", linestyle="dotted", linewidth=1)
+            axs[i, j].spines[["right", "top"]].set_visible(False)
+    fig.suptitle("Learned joint prior", fontsize="medium")
     plt.show()
 
 
@@ -486,6 +423,8 @@ def prior_marginals(eliobj, cols: int = 4, constraints: dict or None=None,
     # check chains that yield NaN
     if parallel:
         fails, success, success_name = _check_NaN(eliobj, n_reps)
+    else:
+        success=[0]
     # get shape of prior samples
     B, n_samples, n_par = eliobj_res["prior_samples"].shape
     # get parameter names
@@ -506,19 +445,12 @@ def prior_marginals(eliobj, cols: int = 4, constraints: dict or None=None,
     fig, axs = plt.subplots(rows, cols, constrained_layout=True, **kwargs)
     if rows == 1:
         for c, par in zip(tf.range(cols), name_params):
-            if parallel:
-                for i in success:
-                    # reshape samples by merging batches and number of samples
-                    priors = tf.reshape(eliobj.results[i]["prior_samples"],
-                                        (B * n_samples, n_par))
-                    sns.kdeplot(priors[:,c], ax=axs[c], color="black", lw=2,
-                                alpha=0.5)
-
-            else:
+            for i in success:
                 # reshape samples by merging batches and number of samples
-                priors = tf.reshape(eliobj.results["prior_samples"],
+                priors = tf.reshape(eliobj.results[i]["prior_samples"],
                                     (B * n_samples, n_par))
-                sns.kdeplot(priors[:,c], ax=axs[c], color="black", lw=2)
+                sns.kdeplot(priors[:,c], ax=axs[c], color="black", lw=2,
+                            alpha=0.5)
 
             axs[c].set_title(f"{par}", fontsize="small")
             axs[c].tick_params(axis="y", labelsize="x-small")
@@ -533,19 +465,12 @@ def prior_marginals(eliobj, cols: int = 4, constraints: dict or None=None,
         for j, ((r, c), par) in enumerate(zip(
             itertools.product(tf.range(rows), tf.range(cols)), name_params
         )):
-            if parallel:
-                for i in success:
-                    # reshape samples by merging batches and number of samples
-                    priors = tf.reshape(eliobj.results[i]["prior_samples"],
-                                        (B * n_samples, n_par))
-                    sns.kdeplot(priors[:,j], ax=axs[r, c], color="black",
-                                lw=2, alpha=0.5)
-            else:
+            for i in success:
                 # reshape samples by merging batches and number of samples
-                priors = tf.reshape(eliobj.results["prior_samples"],
+                priors = tf.reshape(eliobj.results[i]["prior_samples"],
                                     (B * n_samples, n_par))
-                sns.kdeplot(priors[:,j], ax=axs[r, c], color="black", lw=2)
-
+                sns.kdeplot(priors[:,j], ax=axs[r, c], color="black",
+                            lw=2, alpha=0.5)
             axs[r, c].set_title(f"{par}", fontsize="small")
             axs[r, c].tick_params(axis="y", labelsize="x-small")
             axs[r, c].tick_params(axis="x", labelsize="x-small")
@@ -595,6 +520,8 @@ def elicits(eliobj, cols: int = 4, **kwargs) -> None:
     # check chains that yield NaN
     if parallel:
         fails, success, success_name = _check_NaN(eliobj, n_reps)
+    else:
+        success=[0]
     # prepare plot axes
     cols, rows, k = _prep_subplots(eliobj, cols, n_elicits, bounderies=False)
     # extract quantities of interest needed for plotting
@@ -646,20 +573,12 @@ def elicits(eliobj, cols: int = 4, **kwargs) -> None:
                     ),
                 )
 
-            if parallel:
-                for i in success:
-                    method(
-                        axs[c],
-                        eliobj.results[i]["expert_elicited_statistics"][elicit],
-                        eliobj.results[i]["elicited_statistics"][elicit],
-                        labels[i]
-                    )+prep
-            else:
+            for i in success:
                 method(
                     axs[c],
-                    eliobj.results["expert_elicited_statistics"][elicit],
-                    eliobj.results["elicited_statistics"][elicit],
-                    labels[0]
+                    eliobj.results[i]["expert_elicited_statistics"][elicit],
+                    eliobj.results[i]["elicited_statistics"][elicit],
+                    labels[i]
                 )+prep
 
             if elicit.endswith("_cor"):
@@ -701,20 +620,12 @@ def elicits(eliobj, cols: int = 4, **kwargs) -> None:
                     ),
                 )
 
-            if parallel:
-                for i in success:
-                    method(
-                        axs[r, c],
-                        eliobj.results[i]["expert_elicited_statistics"][elicit],
-                        eliobj.results[i]["elicited_statistics"][elicit],
-                        labels[i]
-                    )+prep
-            else:
+            for i in success:
                 method(
                     axs[r, c],
-                    eliobj.results["expert_elicited_statistics"][elicit],
-                    eliobj.results["elicited_statistics"][elicit],
-                    labels[0]
+                    eliobj.results[i]["expert_elicited_statistics"][elicit],
+                    eliobj.results[i]["elicited_statistics"][elicit],
+                    labels[i]
                 )+prep
 
             if elicit.endswith("_cor"):
@@ -768,6 +679,8 @@ def marginals(eliobj, cols: int = 4, span: int = 30, **kwargs) -> None:
     # check chains that yield NaN
     if parallel:
         fails, success, success_name = _check_NaN(eliobj, n_reps)
+    else:
+        success=[0]
     # number of marginals
     n_elicits = tf.stack(eliobj_hist["hyperparameter"]["means"]).shape[-1]
     # prepare plot axes
@@ -781,17 +694,13 @@ def marginals(eliobj, cols: int = 4, span: int = 30, **kwargs) -> None:
             +" Have you excluded 'hyperparameter' from history savings?"
         )
 
-    if parallel:
-        elicits_means = tf.stack(
-            [eliobj.history[i]["hyperparameter"]["means"] for i in success]
-            )
-        elicits_std = tf.stack(
-            [eliobj.history[i]["hyperparameter"]["stds"] for i in success]
-            )
-        labels = [("mean", "sd")]+[(None,None) for _ in range((n_reps-1))]
-    else:
-        elicits_means = tf.stack(eliobj.history["hyperparameter"]["means"])
-        elicits_std = tf.stack(eliobj.history["hyperparameter"]["stds"])
+    elicits_means = tf.stack(
+        [eliobj.history[i]["hyperparameter"]["means"] for i in success]
+        )
+    elicits_std = tf.stack(
+        [eliobj.history[i]["hyperparameter"]["stds"] for i in success]
+        )
+    labels = [("mean", "sd")]+[(None,None) for _ in range((n_reps-1))]
 
     fig = plt.figure(layout="constrained", **kwargs)
     subfigs = fig.subfigures(2, 1, wspace=0.07)
@@ -875,8 +784,13 @@ def prior_averaging(eliobj, cols: int=4, n_sim: int=10_000,
     n_reps = len(eliobj.results)
     # prepare plot axes
     cols, rows, k = _prep_subplots(eliobj, cols, n_par)
-    # remove chains for which training yield NaN
-    fail, success, success_name = _check_NaN(eliobj, n_reps)
+    # modify success for non-parallel case
+    if len(eliobj.results) == 1:
+        success=[0]
+        success_name=eliobj.trainer["seed"]
+    else:
+        # remove chains for which training yield NaN
+        fail, success, success_name = _check_NaN(eliobj, n_reps)
 
     # perform model averaging
     w_MMD, averaged_priors, B, n_samples = _model_averaging(
@@ -997,14 +911,13 @@ def _model_averaging(eliobj, weight_factor, success, n_sim):
 
 
 def _check_parallel(eliobj):
-    if type(eliobj.results) is list:
-        eliobj_res = eliobj.results[0]
-        eliobj_hist = eliobj.history[0]
+    eliobj_res = eliobj.results[0]
+    eliobj_hist = eliobj.history[0]
+
+    if len(eliobj.results) > 1:
         parallel = True
         num_reps = len(eliobj.results)
     else:
-        eliobj_res = eliobj.results
-        eliobj_hist = eliobj.history
         parallel = False
         num_reps=1
 

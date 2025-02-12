@@ -337,13 +337,13 @@ def model(obj: callable, **kwargs) -> dict:
 
 
 class Queries:
-    def quantiles(self, quantiles: tuple[float]) -> dict:
+    def quantiles(self, quantiles: tuple[float,]) -> dict:
         """
         Implements a quantile-based elicitation technique.
 
         Parameters
         ----------
-        quants : tuple
+        quantiles : tuple
             Tuple with respective quantiles ranging between 0 and 1.
 
         Returns
@@ -1083,8 +1083,8 @@ class Elicit:
         self.network = network
         self.initializer = initializer
 
-        self.history = dict()
-        self.results = dict()
+        self.history = list()
+        self.results = list()
 
         # set seed
         tf.random.set_seed(self.trainer["seed"])
@@ -1129,7 +1129,7 @@ class Elicit:
         >>>                )
         >>>            )
 
-        >>> eliobj.fit(parallel=el.utils.parallel(chains=4, cores=4)
+        >>> eliobj.fit(parallel=el.utils.parallel(runs=4)
 
         """  # noqa: E501
 
@@ -1137,7 +1137,7 @@ class Elicit:
         tf.random.set_seed(self.trainer["seed"])
 
         # check whether elicit object is already fitted
-        if len(self.history.keys()) != 0 and not overwrite:
+        if len(self.history) != 0 and not overwrite:
             user_answ = input(
                 "eliobj is already fitted."
                 + " Do you want to fit it again and overwrite the results?"
@@ -1151,7 +1151,7 @@ class Elicit:
                 )
 
             if user_answ == "n":
-                return "Process aborded; eliobj is not re-fitted."
+                print("Process aborded; eliobj is not re-fitted.")
 
         # run single time if no parallelization is required
         if parallel is None:
@@ -1159,19 +1159,18 @@ class Elicit:
             # include seed information into results
             results["seed"]=self.trainer["seed"]
             # remove results that user wants to exclude from saving
-            self.results, self.history = el.utils.clean_savings(
+            results_prep, history_prep = el.utils.clean_savings(
                 history, results, save_history, save_results)
-
+            # save results in list attribute
+            self.history.append(history_prep)
+            self.results.append(results_prep)
         # run multiple replications
         else:
-            self.results = []
-            self.history = []
-
             # create a list of seeds if not provided
             if parallel["seeds"] is None:
                 # generate seeds
                 seeds=[int(s) for s in 
-                       tfd.Uniform(0,999999).sample(parallel["chains"])]
+                       tfd.Uniform(0,999999).sample(parallel["runs"])]
             else:
                 seeds = parallel["seeds"]
 
@@ -1257,7 +1256,7 @@ class Elicit:
 
         Examples
         --------
-        >>> eliobj.update(parameter = updated_parameter_dict")
+        >>> eliobj.update(parameter = updated_parameter_dict)
 
         """
         # check that arguments exist as eliobj attributes
@@ -1298,7 +1297,7 @@ class Elicit:
 
         Returns
         -------
-        results, history = Tuple(dict, dict)
+        results, history = Tuple(list, list)
             results of the optimization process.
 
         """
