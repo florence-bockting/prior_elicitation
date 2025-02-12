@@ -401,13 +401,10 @@ class Queries:
         elicit_dict = dict(name="pearson_correlation", value=None)
         return elicit_dict
 
-    def custom(self, func: callable, **kwargs):
+    def custom(self, func: callable):
         """
         Implements a placeholder for custom target methods. The custom method
         can be passed as argument.
-        Note: this function hasn't been implemented yet and will raise
-        an ``NotImplementedError``.  See for further information the
-        corresponding `GitHub issue #33 <https://github.com/florence-bockting/prior_elicitation/issues/33>`_.
 
         Parameters
         ----------
@@ -419,23 +416,9 @@ class Queries:
         elicit_dict : dict
             Dictionary including the custom settings.
 
-        Raises
-        ------
-        NotImplementedError
-            This option for implementing a custom elicitation method is not
-            implemented yet.
-
         """  # noqa: E501
-        raise NotImplementedError(
-            "[section targets]: The use of custom elicitation methods "
-            + "hasn't been implemented yet."
-        )
-        # args_dict = dict()
-        # for key in kwargs:
-        #     args_dict[key] = kwargs[key]
-
-        # return dict(name="custom", value=func, add_args=args_dict)
-
+        elicit_dict = dict(name="custom", func_name=func.__name__, value=func)
+        return elicit_dict
 
 # create an instance of the Queries class
 queries = Queries()

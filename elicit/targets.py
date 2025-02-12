@@ -47,10 +47,10 @@ def computation_elicited_statistics(
         # use custom method if specified otherwise use built-in methods
         if targets[i]["query"]["name"] == "custom":
             elicited_statistic = use_custom_functions(
-                targets[i]["elicitation_method"]["value"],
-                target_quantities
+                target_quantities,
+                targets[i]["query"]["value"]
             )
-            elicits_res[f"custom_{targets[i]['name']}"] = elicited_statistic
+            elicits_res[f"{targets[i]['query']['func_name']}_{targets[i]['name']}"] = elicited_statistic
 
         if targets[i]["query"]["name"] == "identity":
             elicits_res[f"identity_{targets[i]['name']}"
