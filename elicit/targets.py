@@ -13,13 +13,10 @@ bfn = bf.networks
 
 
 # TODO: Update Custom Target Function
-def use_custom_functions():
-    """
-    ToDo: Function for using custom target_method
-
-    """
-    raise NotImplementedError(
-        "Tue usage of custom target_method is not implemented yet.")
+def use_custom_functions(simulations, custom_func):
+    vars_from_func = custom_func.__code__.co_varnames
+    res = {f"{var}":simulations[var] for var in vars_from_func if var in simulations}
+    return custom_func(**res)
 
 
 def computation_elicited_statistics(
@@ -125,13 +122,15 @@ def computation_target_quantities(
     # loop over target quantities
     for i in range(len(targets)):
         tar = targets[i]
-
+        # use correlation between model parameters
         if tar["query"]["name"] == "pearson_correlation":
             target_quantity = prior_samples
+        # use custom target method
         elif (
             tar["target_method"] is not None
         ):
-            target_quantity = use_custom_functions()
+            target_quantity = use_custom_functions(model_simulations, tar["target_method"])
+        # target quantity equal to output of GenerativeModel
         else:
             target_quantity = model_simulations[tar["name"]]
 

@@ -484,12 +484,6 @@ def target(
         Dictionary including all settings regarding the target quantity and
         corresponding elicitation technique.
 
-    Raises
-    ------
-    NotImplementedError
-        ``target_method`` for implementing a custom target quantity is not
-        implemented yet.
-
     Examples
     --------
     >>> el.target(name="y_X0",
@@ -504,13 +498,6 @@ def target(
     >>>           weight=1.0
     >>>           )
     """  # noqa: E501
-    try:
-        target_method is not None
-    except NotImplementedError:
-        print(
-            "[section: targets] The use of a custom target quantity hasn't"
-            + " been implemented yet."
-        )
 
     # create instance of loss class
     loss_instance = loss
