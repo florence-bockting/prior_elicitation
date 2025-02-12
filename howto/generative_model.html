@@ -1,0 +1,998 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Specify the generative model &#8212; Prior Learning</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=87e54e7c" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=4acdca81"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'howto/generative_model';</script>
+    <link rel="icon" href="../_static/favicon-light.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/mmp-logo-light.png" class="logo__image only-light" alt="Prior Learning - Home"/>
+    <img src="../_static/mmp-logo-dark.png" class="logo__image only-dark pst-js-only" alt="Prior Learning - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/modules.html">API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/elicit.html">elicit package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/elicit.extras.html">elicit.extras package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/elicit.extras.utils.html">elicit.extras.utils module</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.elicit.html">elicit.elicit module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.initialization.html">elicit.initialization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.losses.html">elicit.losses module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.networks.html">elicit.networks module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.optimization.html">elicit.optimization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.plots.html">elicit.plots module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.simulations.html">elicit.simulations module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.targets.html">elicit.targets module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.utils.html">elicit.utils module</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">How-To</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explanation/index.html">Explanation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/florence-bockting/prior_elicitation" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/howto/generative_model.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Specify the generative model</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-1-continuous-likelihood">Example 1: Continuous likelihood</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#probabilistic-model-notation">Probabilistic model notation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#target-quantities">Target quantities</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-model-implementation">Computational model implementation</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#create-a-python-class">Create a Python class</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#look-behind-the-scenes">Look behind the scenes</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-in-the-eliobj">Implementation in the <code class="docutils literal notranslate"><span class="pre">eliobj</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-2-discrete-likelihood">Example 2: Discrete Likelihood</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#important-changes-to-the-continuous-case">Important changes to the <em>continuous</em> case</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Probabilistic model notation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Target quantities</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Computational model implementation</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Create a Python class</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Look behind the scenes</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">Implementation in the <code class="docutils literal notranslate"><span class="pre">eliobj</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#notes-about-tensor-operations-shapes">Notes about tensor operations &amp; shapes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-for-matrix-multiplication">Example for matrix multiplication</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-for-vector-multiplication">Example for vector multiplication</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">tensorflow</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tf</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tensorflow_probability</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tfp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">elicit</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">el</span>
+
+<span class="n">tfd</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">distributions</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="specify-the-generative-model">
+<h1>Specify the generative model<a class="headerlink" href="#specify-the-generative-model" title="Link to this heading">#</a></h1>
+<p>The generative model must be a <code class="docutils literal notranslate"><span class="pre">class</span> <span class="pre">callable</span></code> with a specific <em>input-output-structure</em>.</p>
+<p><strong>Input</strong> structure:</p>
+<ul class="simple">
+<li><p>necessary inputs:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">prior_samples</span></code></p></li>
+<li><p>(if <code class="docutils literal notranslate"><span class="pre">tf.utils.softmax_gumbel_trick</span></code> is used) <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code></p></li>
+</ul>
+</li>
+<li><p>optional inputs</p>
+<ul>
+<li><p>any arguments that are required by the internal computation of the generative model (e.g., design matrix, N)</p></li>
+<li><p>the optional arguments have to be specified as keyword arguments in <code class="docutils literal notranslate"><span class="pre">el.model</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p>Note: <code class="docutils literal notranslate"><span class="pre">tf.utils.softmax_gumbel_trick</span></code> is required when a discrete likelihood is used (see <a class="reference internal" href="#example-2:-discrete-likelihood"><span class="xref myst">Example 2</span></a>).</p>
+<p><strong>Output</strong> structure:</p>
+<ul class="simple">
+<li><p>necessary output format: <em>dictionary</em></p>
+<ul>
+<li><p><em>keys</em>: refer to names of target quantities (as defined in section <em>parameters</em> in <code class="docutils literal notranslate"><span class="pre">el.Elicit</span></code>)</p></li>
+<li><p><em>values</em>: corresponding <code class="docutils literal notranslate"><span class="pre">tf.Tensor</span></code> as computed by the generative model</p></li>
+</ul>
+</li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Pseudo Code</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">GenerativeModel</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        
+        <span class="c1"># specify here your generative process: which takes the samples </span>
+        <span class="c1"># from the prior as input and computes the target quantities </span>
+        <span class="c1"># (e.g., observations from the outcome variable)</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="o">...</span>
+        
+        <span class="c1"># return the computed target quantities which </span>
+        <span class="c1"># should be queried from the domain expert</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="example-1-continuous-likelihood">
+<h2>Example 1: Continuous likelihood<a class="headerlink" href="#example-1-continuous-likelihood" title="Link to this heading">#</a></h2>
+<section id="probabilistic-model-notation">
+<h3>Probabilistic model notation<a class="headerlink" href="#probabilistic-model-notation" title="Link to this heading">#</a></h3>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+    (\beta_0, \beta_1) &amp;\sim \text{Normal}(\mu_i, \sigma_i) \quad \text{ for } i=0,1 \\
+    \boldsymbol{\mu} &amp;= \boldsymbol{\beta}\textbf{X}^\top \\
+    \textbf{y}_{pred} &amp;\sim \text{Normal}(\boldsymbol{\mu}, \textbf{1.})
+\end{align*}\]</div>
+</section>
+<section id="target-quantities">
+<h3>Target quantities<a class="headerlink" href="#target-quantities" title="Link to this heading">#</a></h3>
+<p>We assume, we want to query the domain expert regarding the outcome variable.
+Specifically, we ask the expert for two values of the predictor variable:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(y_{pred} \mid X_{1}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(y_{pred} \mid X_{2}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(y_{pred} \mid X_{3}\)</span></p></li>
+</ul>
+<p>Let the corresponding design matrix be</p>
+<p><span class="math notranslate nohighlight">\(
+\textbf{X}=\begin{bmatrix} 1. &amp; -1 \\ 1. &amp; 0. \\ 1. &amp; 1. \end{bmatrix}
+\)</span></p>
+</section>
+<section id="computational-model-implementation">
+<h3>Computational model implementation<a class="headerlink" href="#computational-model-implementation" title="Link to this heading">#</a></h3>
+<section id="create-a-python-class">
+<h4>Create a Python class<a class="headerlink" href="#create-a-python-class" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ExampleModel1</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+
+        <span class="c1"># shape=(B,num_samples,num_obs)</span>
+        <span class="n">mu</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">transpose_b</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> 
+
+        <span class="c1"># shape=(B,num_samples,num_obs)</span>
+        <span class="n">ypred</span><span class="o">=</span><span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span> 
+
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">y_X1</span><span class="o">=</span><span class="n">ypred</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">],</span> <span class="c1"># shape=(B,num_samples)</span>
+                    <span class="n">y_X2</span><span class="o">=</span><span class="n">ypred</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">],</span> <span class="c1"># shape=(B,num_samples)</span>
+                    <span class="n">y_X3</span><span class="o">=</span><span class="n">ypred</span><span class="p">[:,:,</span><span class="mi">2</span><span class="p">])</span> <span class="c1"># shape=(B,num_samples)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="look-behind-the-scenes">
+<h4>Look behind the scenes<a class="headerlink" href="#look-behind-the-scenes" title="Link to this heading">#</a></h4>
+<p>Let us use the <code class="docutils literal notranslate"><span class="pre">ExampleModel1</span></code> and generate some predictions based on artificial prior distributions.</p>
+<ol class="arabic simple">
+<li><p>Draw prior samples from the following “ground truth”: <span class="math notranslate nohighlight">\(\beta_0 \sim \text{Normal}(1., 0.8)\)</span> and <span class="math notranslate nohighlight">\(\beta_1 \sim \text{Normal}(2., 1.5)\)</span></p></li>
+<li><p>Define the design matrix <span class="math notranslate nohighlight">\(\textbf{X}\)</span></p></li>
+<li><p>Instantiate the generative model</p></li>
+<li><p>Simulate from the generative model</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># define number of batches and draws from prior distributions</span>
+<span class="n">B</span><span class="p">,</span> <span class="n">num_samples</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># sample from priors</span>
+<span class="n">prior_samples</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">])</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">B</span><span class="p">,</span><span class="n">num_samples</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;(Step 1) prior samples:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">)</span>
+
+<span class="c1"># define the design matrix</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">([[</span><span class="mf">1.</span><span class="p">,</span><span class="o">-</span><span class="mf">1.</span><span class="p">],[</span><span class="mf">1.</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.</span><span class="p">,</span><span class="mf">1.</span><span class="p">]])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(Step 2) design matrix:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># create an instance of the generative model class</span>
+<span class="n">model_instance</span> <span class="o">=</span> <span class="n">ExampleModel1</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(Step 3) instantiated model:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">model_instance</span><span class="p">)</span>
+
+<span class="c1"># simulate from the generative model</span>
+<span class="n">ypred</span> <span class="o">=</span> <span class="n">model_instance</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(Step 4) samples from outcome variable:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">ypred</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(Step 1) prior samples:
+ tf.Tensor(
+[[[1.1125073  2.076223  ]
+  [0.80801105 1.0152982 ]
+  [0.6078063  2.4104307 ]
+  [1.039326   1.6489855 ]
+  [0.65120023 4.5983553 ]
+  [2.189219   0.14012146]
+  [1.7928746  2.4565156 ]
+  [0.6398772  3.0275126 ]
+  [1.3033034  2.8191433 ]
+  [0.72945213 2.9439828 ]]], shape=(1, 10, 2), dtype=float32)
+
+(Step 2) design matrix:
+ tf.Tensor(
+[[ 1. -1.]
+ [ 1.  0.]
+ [ 1.  1.]], shape=(3, 2), dtype=float32)
+
+(Step 3) instantiated model:
+ &lt;__main__.ExampleModel1 object at 0x000002C263C3E7D0&gt;
+
+(Step 4) samples from outcome variable:
+ {&#39;y_X1&#39;: &lt;tf.Tensor: shape=(1, 10), dtype=float32, numpy=
+array([[-1.1919286, -1.800191 , -2.1663888, -1.4374082, -1.8860066,
+         2.3839483, -2.2876978, -0.7230171,  0.2864045, -3.782659 ]],
+      dtype=float32)&gt;, &#39;y_X2&#39;: &lt;tf.Tensor: shape=(1, 10), dtype=float32, numpy=
+array([[-0.1615212 ,  2.1068852 , -0.06249136, -0.03253329,  2.992262  ,
+         2.6980178 ,  0.5170374 ,  0.67750573,  0.2714877 ,  1.3019307 ]],
+      dtype=float32)&gt;, &#39;y_X3&#39;: &lt;tf.Tensor: shape=(1, 10), dtype=float32, numpy=
+array([[2.800105 , 0.6437601, 2.398678 , 3.0435407, 5.7429676, 4.4191847,
+        1.0006564, 2.4841185, 3.3039265, 3.9367332]], dtype=float32)&gt;}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="implementation-in-the-eliobj">
+<h4>Implementation in the <code class="docutils literal notranslate"><span class="pre">eliobj</span></code><a class="headerlink" href="#implementation-in-the-eliobj" title="Link to this heading">#</a></h4>
+<p>The corresponding implementation in the <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> would then look as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eliobj</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">Elicit</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">model</span><span class="p">(</span>
+        <span class="n">obj</span><span class="o">=</span><span class="n">ExampleModel1</span><span class="p">,</span>    <span class="c1"># model class </span>
+        <span class="n">X</span><span class="o">=</span><span class="n">X</span>                   <span class="c1"># additional input argument for model class</span>
+        <span class="p">),</span>
+    <span class="n">parameters</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">el</span><span class="o">.</span><span class="n">parameter</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;beta</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">family</span><span class="o">=</span><span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">,</span>
+            <span class="n">hyperparams</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">loc</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">hyper</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mu</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span>
+                <span class="n">scale</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">hyper</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;sigma</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="p">)</span>
+        <span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="p">],</span>
+    <span class="n">targets</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">el</span><span class="o">.</span><span class="n">target</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;y_X</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">query</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">queries</span><span class="o">.</span><span class="n">quantiles</span><span class="p">((</span><span class="mf">.05</span><span class="p">,</span> <span class="mf">.25</span><span class="p">,</span> <span class="mf">.50</span><span class="p">,</span> <span class="mf">.75</span><span class="p">,</span> <span class="mf">.95</span><span class="p">)),</span>
+            <span class="n">loss</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">MMD2</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;energy&quot;</span><span class="p">),</span>
+            <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span>
+        <span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+    <span class="p">],</span>
+    <span class="o">...</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="example-2-discrete-likelihood">
+<h2>Example 2: Discrete Likelihood<a class="headerlink" href="#example-2-discrete-likelihood" title="Link to this heading">#</a></h2>
+<section id="important-changes-to-the-continuous-case">
+<h3>Important changes to the <em>continuous</em> case<a class="headerlink" href="#important-changes-to-the-continuous-case" title="Link to this heading">#</a></h3>
+<p>There are two specific changes in the <code class="docutils literal notranslate"><span class="pre">class</span></code> definition that you need to consider when implementing a discrete likelihood</p>
+<ol class="arabic simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> argument must be included in</p>
+<ul class="simple">
+<li><p>the <code class="docutils literal notranslate"><span class="pre">__call__</span></code> method of your model class</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">el.utils.softmax_gumbel_trick</span></code> function</p></li>
+</ul>
+</li>
+<li><p>The likelihood requires a specific batch shape: <code class="docutils literal notranslate"><span class="pre">batch_shape=(B,num_samples,num_obs,1)</span></code></p>
+<ul class="simple">
+<li><p>It is sufficient to add this extra dimension to one of the input arguments of your likelihood, as this will automatically propagate to the batch shape of the likelihood.</p></li>
+</ul>
+</li>
+</ol>
+<p>The reason for (1) is that the <code class="docutils literal notranslate"><span class="pre">el.utils.softmax_gumbel_trick</span></code> function involves sampling. To ensure reproducibility, the <code class="docutils literal notranslate"><span class="pre">seed</span></code> information must be passed to this function. By providing the <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> argument in both the <code class="docutils literal notranslate"><span class="pre">__call__</span></code> method of your class and the <code class="docutils literal notranslate"><span class="pre">el.utils.softmax_gumbel_trick</span></code> function, the <code class="docutils literal notranslate"><span class="pre">seed</span></code> (as specified in the <em>trainer</em> section of <code class="docutils literal notranslate"><span class="pre">el.Elicit</span></code>) can be passed internally.
+While requirement (2) is related to the internal computations performed within the <code class="docutils literal notranslate"><span class="pre">el.utils.softmax_gumbel_trick</span></code> function.</p>
+</section>
+<section id="id1">
+<h3>Probabilistic model notation<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+    (\beta_0, \beta_1) &amp;\sim \text{Normal}(\mu_i, \sigma_i) \quad \text{ for } i=0,1 \\
+    \boldsymbol{\theta} &amp;= \text{sigmoid}(\boldsymbol{\beta}\textbf{X}^\top) \\
+    \textbf{z}_{pred} &amp;\sim \text{Binomial}(N,\boldsymbol{\theta})
+\end{align*}\]</div>
+</section>
+<section id="id2">
+<h3>Target quantities<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<p>We assume, we want to query the domain expert regarding the outcome variable.
+Specifically, we ask the expert for two values of the predictor variable:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(z_{pred} \mid x_{1}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(z_{pred} \mid x_{2}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(z_{pred} \mid x_{3}\)</span></p></li>
+</ul>
+<p>Let the corresponding design matrix be</p>
+<p><span class="math notranslate nohighlight">\(
+\textbf{X}=\begin{bmatrix} 1. &amp; -1 \\ 1. &amp; 0. \\ 1. &amp; 1. \end{bmatrix}
+\)</span></p>
+</section>
+<section id="id3">
+<h3>Computational model implementation<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<section id="id4">
+<h4>Create a Python class<a class="headerlink" href="#id4" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ExampleModel2</span><span class="p">:</span>
+    <span class="c1"># Note: pass the **kwargs argument</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="c1"># shape=(B,num_samples,num_obs)</span>
+        <span class="n">theta</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">transpose_b</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
+        <span class="c1"># likelihood; shape=(B,num_samples,num_obs,1)</span>
+        <span class="c1"># Note: add. dim in likelihood required by softmax_gumbel_trick</span>
+        <span class="n">likelihood</span><span class="o">=</span><span class="n">tfd</span><span class="o">.</span><span class="n">Binomial</span><span class="p">(</span><span class="n">total_count</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> 
+                                <span class="n">probs</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+                               <span class="p">)</span>
+        
+        <span class="c1"># approximate samples from the Binomial distribution</span>
+        <span class="c1"># shape=(B,num_samples,num_obs)</span>
+        <span class="c1"># Note: add the **kwargs argument</span>
+        <span class="n">zpred</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">softmax_gumbel_trick</span><span class="p">(</span>
+            <span class="n">epred</span><span class="o">=</span><span class="n">theta</span><span class="p">,</span> <span class="n">likelihood</span><span class="o">=</span><span class="n">likelihood</span><span class="p">,</span> 
+            <span class="n">upper_thres</span><span class="o">=</span><span class="n">total_count</span><span class="p">,</span> 
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">z_X1</span><span class="o">=</span><span class="n">zpred</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">],</span> <span class="c1"># shape=(B,num_samples)</span>
+                    <span class="n">z_X2</span><span class="o">=</span><span class="n">zpred</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">],</span> <span class="c1"># shape=(B,num_samples)</span>
+                    <span class="n">z_X3</span><span class="o">=</span><span class="n">zpred</span><span class="p">[:,:,</span><span class="mi">2</span><span class="p">])</span> <span class="c1"># shape=(B,num_samples)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id5">
+<h4>Look behind the scenes<a class="headerlink" href="#id5" title="Link to this heading">#</a></h4>
+<p>Let us use the <code class="docutils literal notranslate"><span class="pre">ExampleModel2</span></code> and generate some predictions based on artificial prior distributions.</p>
+<ol class="arabic simple">
+<li><p>Draw prior samples from the following “ground truth”: <span class="math notranslate nohighlight">\(\beta_0 \sim \text{Normal}(0.1, 0.2)\)</span> and <span class="math notranslate nohighlight">\(\beta_1 \sim \text{Normal}(0.2, 0.3)\)</span></p></li>
+<li><p>Define the design matrix <span class="math notranslate nohighlight">\(\textbf{X}\)</span></p></li>
+<li><p>Instantiate the generative model</p></li>
+<li><p>Simulate from the generative model</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># define number of batches and draws from prior distributions</span>
+<span class="c1"># total_count for Binomial model</span>
+<span class="n">B</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">,</span> <span class="n">N</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">30</span><span class="p">)</span>
+
+<span class="c1"># sample from priors</span>
+<span class="n">prior_samples</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">])</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">B</span><span class="p">,</span><span class="n">num_samples</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;(Step 1) prior samples:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">)</span>
+
+<span class="c1"># define the design matrix</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">([[</span><span class="mf">1.</span><span class="p">,</span><span class="o">-</span><span class="mf">1.</span><span class="p">],[</span><span class="mf">1.</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.</span><span class="p">,</span><span class="mf">1.</span><span class="p">]])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(Step 2) design matrix:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># create an instance of the generative model class</span>
+<span class="n">model_instance</span> <span class="o">=</span> <span class="n">ExampleModel2</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(Step 3) instantiated model:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">model_instance</span><span class="p">)</span>
+
+<span class="c1"># simulate from the generative model (specity seed information)</span>
+<span class="n">zpred</span> <span class="o">=</span> <span class="n">model_instance</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(Step 4) samples from outcome variable:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">zpred</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(Step 1) prior samples:
+ tf.Tensor(
+[[[ 0.18061757 -0.12640624]
+  [ 0.08738093  0.60096705]
+  [ 0.24235204  0.05321406]
+  [-0.05284426 -0.1111746 ]
+  [-0.15038678  0.20636728]
+  [-0.01027516 -0.32295096]
+  [ 0.03292781 -0.11280026]
+  [ 0.30182764  0.5708762 ]
+  [-0.03673781  0.40208268]
+  [ 0.01587544 -0.11239086]]], shape=(1, 10, 2), dtype=float32)
+
+(Step 2) design matrix:
+ tf.Tensor(
+[[ 1. -1.]
+ [ 1.  0.]
+ [ 1.  1.]], shape=(3, 2), dtype=float32)
+
+(Step 3) instantiated model:
+ &lt;__main__.ExampleModel2 object at 0x000002C266920550&gt;
+
+(Step 4) samples from outcome variable:
+ {&#39;z_X1&#39;: &lt;tf.Tensor: shape=(1, 10), dtype=float32, numpy=
+array([[16.420263, 11.55657 , 17.039097, 14.793844, 12.669424, 16.667715,
+        17.019955, 13.616165, 11.663627, 16.112122]], dtype=float32)&gt;, &#39;z_X2&#39;: &lt;tf.Tensor: shape=(1, 10), dtype=float32, numpy=
+array([[16.055965, 17.370132, 16.093798, 15.073592, 13.7894  , 14.599481,
+        14.547873, 17.074022, 15.857426, 15.451229]], dtype=float32)&gt;, &#39;z_X3&#39;: &lt;tf.Tensor: shape=(1, 10), dtype=float32, numpy=
+array([[14.718641, 20.798233, 17.821178, 13.658306, 15.893131, 12.64514 ,
+        14.8872  , 20.550808, 17.580793, 14.436962]], dtype=float32)&gt;}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id6">
+<h4>Implementation in the <code class="docutils literal notranslate"><span class="pre">eliobj</span></code><a class="headerlink" href="#id6" title="Link to this heading">#</a></h4>
+<p>The corresponding implementation in the <code class="docutils literal notranslate"><span class="pre">eliobj</span></code> would then look as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eliobj</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">Elicit</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">model</span><span class="p">(</span>
+        <span class="n">obj</span><span class="o">=</span><span class="n">ExampleModel2</span><span class="p">,</span>  <span class="c1"># model class </span>
+        <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>                <span class="c1"># additional input</span>
+        <span class="n">N</span><span class="o">=</span><span class="n">N</span>                 <span class="c1"># additional input </span>
+        <span class="p">),</span>
+    <span class="n">parameters</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">el</span><span class="o">.</span><span class="n">parameter</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;beta</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">family</span><span class="o">=</span><span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">,</span>
+            <span class="n">hyperparams</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">loc</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">hyper</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mu</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span>
+                <span class="n">scale</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">hyper</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;sigma</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="p">)</span>
+        <span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="p">],</span>
+    <span class="n">targets</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">el</span><span class="o">.</span><span class="n">target</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;z_X</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">query</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">queries</span><span class="o">.</span><span class="n">quantiles</span><span class="p">((</span><span class="mf">.05</span><span class="p">,</span> <span class="mf">.25</span><span class="p">,</span> <span class="mf">.50</span><span class="p">,</span> <span class="mf">.75</span><span class="p">,</span> <span class="mf">.95</span><span class="p">)),</span>
+            <span class="n">loss</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">MMD2</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;energy&quot;</span><span class="p">),</span>
+            <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span>
+        <span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+    <span class="p">],</span>
+    <span class="o">...</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="notes-about-tensor-operations-shapes">
+<h2>Notes about tensor operations &amp; shapes<a class="headerlink" href="#notes-about-tensor-operations-shapes" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">prior_samples</span></code> have shape <code class="docutils literal notranslate"><span class="pre">(B,</span> <span class="pre">num_samples,</span> <span class="pre">num_param)</span></code></p></li>
+<li><p>in the notation above <code class="docutils literal notranslate"><span class="pre">B</span></code> refers to the <em>batch size</em>, <code class="docutils literal notranslate"><span class="pre">num_samples</span></code> to the number of prior samples, and <code class="docutils literal notranslate"><span class="pre">num_param</span></code> to the number of model parameters</p></li>
+<li><p>it is important that you take care about the correct tensor shape, when implementing the generative model</p></li>
+</ul>
+<section id="example-for-matrix-multiplication">
+<h3>Example for matrix multiplication<a class="headerlink" href="#example-for-matrix-multiplication" title="Link to this heading">#</a></h3>
+<p>We assume the following <strong>design matrix</strong>:<br />
+<span class="math notranslate nohighlight">\(
+X=\begin{bmatrix} 1. &amp; -1 \\ 1. &amp; 0. \\ 1. &amp; 1. \end{bmatrix}
+\)</span></p>
+<p>Then we would get the linear predictor, <span class="math notranslate nohighlight">\(\mu\)</span>, as follows:
+<span class="math notranslate nohighlight">\(
+\mu = \boldsymbol{\beta}\textbf{X}^\top
+\)</span></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># number of batches</span>
+<span class="n">B</span><span class="o">=</span><span class="mi">2</span>
+<span class="c1"># number of samples drawn from the prior</span>
+<span class="n">num_samples</span><span class="o">=</span><span class="mi">4</span>
+
+<span class="c1"># prior samples for two model parameters; shape=(B,num_samples,num_param)</span>
+<span class="n">prior_samples</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">])</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">B</span><span class="p">,</span><span class="n">num_samples</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;prior samples:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">)</span>
+
+<span class="c1"># design matrix;  shape=(num_obs, num_param)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">([[</span><span class="mf">1.</span><span class="p">,</span><span class="o">-</span><span class="mf">1.</span><span class="p">],[</span><span class="mf">1.</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.</span><span class="p">,</span><span class="mf">1.</span><span class="p">]])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;X:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># compute linear predictor mu; </span>
+<span class="c1"># shapes: [B,num_samples,num_param] x [num_params,num_obs] = [B,num_samples,num_obs]</span>
+<span class="n">mu</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">transpose_b</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;mu:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">mu</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>prior samples:
+ tf.Tensor(
+[[[ 0.21421784  2.1894784 ]
+  [ 2.0228667   3.8906546 ]
+  [ 0.14594889  3.722395  ]
+  [ 1.4024372   1.6433661 ]]
+
+ [[ 0.8237189   4.390056  ]
+  [ 1.5101621   2.3289535 ]
+  [-0.6737598  -0.17162848]
+  [ 2.4565587  -0.43988562]]], shape=(2, 4, 2), dtype=float32)
+X:
+ tf.Tensor(
+[[ 1. -1.]
+ [ 1.  0.]
+ [ 1.  1.]], shape=(3, 2), dtype=float32)
+mu:
+ tf.Tensor(
+[[[-1.9752605   0.21421784  2.4036963 ]
+  [-1.8677878   2.0228667   5.9135213 ]
+  [-3.576446    0.14594889  3.8683438 ]
+  [-0.24092889  1.4024372   3.0458033 ]]
+
+ [[-3.566337    0.8237189   5.213775  ]
+  [-0.8187914   1.5101621   3.8391156 ]
+  [-0.50213134 -0.6737598  -0.8453883 ]
+  [ 2.8964443   2.4565587   2.016673  ]]], shape=(2, 4, 3), dtype=float32)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="example-for-vector-multiplication">
+<h3>Example for vector multiplication<a class="headerlink" href="#example-for-vector-multiplication" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>consider we want to compute the linear predictor instead as follows:
+<span class="math notranslate nohighlight">\(
+\mu = \beta_0 + \beta_1x
+\)</span></p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># extract the two model parameters</span>
+<span class="n">b0</span><span class="o">=</span><span class="n">prior_samples</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># shape=(B,num_samples)</span>
+<span class="n">b1</span><span class="o">=</span><span class="n">prior_samples</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># shape=(B,num_samples)</span>
+
+<span class="c1"># compute linear predictor mu;</span>
+<span class="c1"># shapes: [B,num_samples,1] + [B,num_samples,1] * [1,num_obs] = [B,num_samples,num_obs]</span>
+<span class="c1"># Note: With &#39;None&#39; we can easily expand a tensor with a new dimension </span>
+<span class="n">mu</span> <span class="o">=</span> <span class="n">b0</span><span class="p">[:,:,</span><span class="kc">None</span><span class="p">]</span><span class="o">+</span><span class="n">b1</span><span class="p">[:,:,</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="n">X</span><span class="p">[:,</span><span class="mi">1</span><span class="p">][</span><span class="kc">None</span><span class="p">,:]</span> 
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;mu:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">mu</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;tf.Tensor: shape=(2, 4, 3), dtype=float32, numpy=
+array([[[-1.9752605 ,  0.21421784,  2.4036963 ],
+        [-1.8677878 ,  2.0228667 ,  5.9135213 ],
+        [-3.576446  ,  0.14594889,  3.8683438 ],
+        [-0.24092889,  1.4024372 ,  3.0458033 ]],
+
+       [[-3.566337  ,  0.8237189 ,  5.213775  ],
+        [-0.8187914 ,  1.5101621 ,  3.8391156 ],
+        [-0.50213134, -0.6737598 , -0.8453883 ],
+        [ 2.8964443 ,  2.4565587 ,  2.016673  ]]], dtype=float32)&gt;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-1-continuous-likelihood">Example 1: Continuous likelihood</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#probabilistic-model-notation">Probabilistic model notation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#target-quantities">Target quantities</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-model-implementation">Computational model implementation</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#create-a-python-class">Create a Python class</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#look-behind-the-scenes">Look behind the scenes</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-in-the-eliobj">Implementation in the <code class="docutils literal notranslate"><span class="pre">eliobj</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-2-discrete-likelihood">Example 2: Discrete Likelihood</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#important-changes-to-the-continuous-case">Important changes to the <em>continuous</em> case</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Probabilistic model notation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Target quantities</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Computational model implementation</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Create a Python class</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Look behind the scenes</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">Implementation in the <code class="docutils literal notranslate"><span class="pre">eliobj</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#notes-about-tensor-operations-shapes">Notes about tensor operations &amp; shapes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-for-matrix-multiplication">Example for matrix multiplication</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-for-vector-multiplication">Example for vector multiplication</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Florence Bockting
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Florence Bockting.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

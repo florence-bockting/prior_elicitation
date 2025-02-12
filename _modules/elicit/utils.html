@@ -1,0 +1,1416 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>elicit.utils &#8212; Prior Learning</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=4acdca81"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/elicit/utils';</script>
+    <link rel="icon" href="../../_static/favicon-light.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/mmp-logo-light.png" class="logo__image only-light" alt="Prior Learning - Home"/>
+    <img src="../../_static/mmp-logo-dark.png" class="logo__image only-dark pst-js-only" alt="Prior Learning - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Home</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/modules.html">API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/elicit.html">elicit package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../api/elicit.extras.html">elicit.extras package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/elicit.extras.utils.html">elicit.extras.utils module</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.elicit.html">elicit.elicit module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.initialization.html">elicit.initialization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.losses.html">elicit.losses module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.networks.html">elicit.networks module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.optimization.html">elicit.optimization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.plots.html">elicit.plots module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.simulations.html">elicit.simulations module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.targets.html">elicit.targets module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/elicit.utils.html">elicit.utils module</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../howto/index.html">How-To</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../explanation/index.html">Explanation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/florence-bockting/prior_elicitation" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for elicit.utils</h1><div class="highlight"><pre>
+<span></span><span class="c1"># noqa SPDX-FileCopyrightText: 2024 Florence Bockting &lt;florence.bockting@tu-dortmund.de&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># noqa SPDX-License-Identifier: Apache-2.0</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">tensorflow</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tf</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tensorflow_probability</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tfp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">elicit</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">el</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span>
+
+<span class="n">tfd</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">distributions</span>
+
+
+<div class="viewcode-block" id="save_as_pkl">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.save_as_pkl">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">save_as_pkl</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="nb">any</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Helper functions to save a file as pickle.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    obj : any</span>
+<span class="sd">        variable that needs to be saved.</span>
+<span class="sd">    save_dir : str</span>
+<span class="sd">        path indicating the file location.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; save_as_pkl(obj, &quot;results/file.pkl&quot;)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># if directory does not exists, create it</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">save_dir</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># save obj to location as pickle</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">file</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="identity">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.identity">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">identity</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    identity function. Returns the input</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : any</span>
+<span class="sd">        arbitrary input object.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    x : any</span>
+<span class="sd">        returns the input object without any transformation.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">x</span></div>
+
+
+
+<div class="viewcode-block" id="DoubleBound">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.DoubleBound">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DoubleBound</span><span class="p">:</span>
+<div class="viewcode-block" id="DoubleBound.__init__">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.DoubleBound.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lower</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">upper</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A variable constrained to be in the open interval</span>
+<span class="sd">        (``lower``, ``upper``) is transformed to an unconstrained variable Y</span>
+<span class="sd">        via a scaled and translated log-odds transform.</span>
+
+<span class="sd">        Basis for the here used constraints, is the</span>
+<span class="sd">        `constraint transforms implementation in Stan &lt;https://mc-stan.org/docs/reference-manual/transforms.html&gt;`_.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        lower : float</span>
+<span class="sd">            lower bound of variable x.</span>
+<span class="sd">        upper : float</span>
+<span class="sd">            upper bound of variable x.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">=</span> <span class="n">lower</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">=</span> <span class="n">upper</span></div>
+
+
+<div class="viewcode-block" id="DoubleBound.logit">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.DoubleBound.logit">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">logit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper function that implements the logit transformation for</span>
+<span class="sd">        :math:`u \in (0,1)`:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            logit(u) = \log\left(\frac{u}{1-u}\right)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        u : float</span>
+<span class="sd">            variable in open unit interval.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        v : float</span>
+<span class="sd">            log-odds of u.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># log-odds definition</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">-</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">u</span><span class="p">)</span>
+        <span class="c1"># cast v into correct dtype</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="DoubleBound.inv_logit">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.DoubleBound.inv_logit">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">inv_logit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper function that implements the inverse-logit transformation (i.e.,</span>
+<span class="sd">        the logistic sigmoid for :math:`v \in (-\infty,+\infty)`:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            logit^{-1}(v) = \frac{1}{1+\exp(-v)}</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        v : float</span>
+<span class="sd">            unconstrained variable</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        u : float</span>
+<span class="sd">            logistic sigmoid of the unconstrained variable</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># logistic sigmoid transform</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">tf</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">v</span><span class="p">)))</span>
+        <span class="c1"># cast v to correct dtype</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">u</span></div>
+
+
+<div class="viewcode-block" id="DoubleBound.forward">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.DoubleBound.forward">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        scaled and translated logit transform of variable x with ``lower`` and</span>
+<span class="sd">        ``upper`` bound into an unconstrained variable y.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            Y = logit\left(\frac{X - lower}{upper - lower}\right)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : float</span>
+<span class="sd">            variable with lower and upper bound.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        y : float</span>
+<span class="sd">            unconstrained variable.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># scaled and translated logit transform</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">logit</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">divide</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">),</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)))</span>
+        <span class="c1"># cast y to correct dtype</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">y</span></div>
+
+
+<div class="viewcode-block" id="DoubleBound.inverse">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.DoubleBound.inverse">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        inverse of the log-odds transform applied to the unconstrained</span>
+<span class="sd">        variable y in order to transform it into a constrained variable x</span>
+<span class="sd">        with ``lower`` and ``upper`` bound.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            X = lower + (upper - lower) \cdot logit^{-1}(Y)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y : float</span>
+<span class="sd">            unconstrained variable</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        x : float</span>
+<span class="sd">        constrained variable with lower and upper bound</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># inverse of log-odds transform</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">inv_logit</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="c1"># cast x to correct dtype</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="LowerBound">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.LowerBound">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LowerBound</span><span class="p">:</span>
+<div class="viewcode-block" id="LowerBound.__init__">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.LowerBound.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lower</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A variable with a ``lower`` bound is transformed to an</span>
+<span class="sd">        unconstrained variable Y via an inverse-softplus transform.</span>
+
+<span class="sd">        Basis for the here used constraints, is the</span>
+<span class="sd">        `constraint transforms implementation in Stan &lt;https://mc-stan.org/docs/reference-manual/transforms.html&gt;`_.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        lower : float</span>
+<span class="sd">            lower bound of variable X.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">=</span> <span class="n">lower</span></div>
+
+
+<div class="viewcode-block" id="LowerBound.forward">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.LowerBound.forward">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        inverse-softplus transform of variable x with ``lower`` bound into an</span>
+<span class="sd">        unconstrained variable y.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            Y = softplus^{-1}(X - lower)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : float</span>
+<span class="sd">            variable with a lower bound.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        y : float</span>
+<span class="sd">            unconstrained variable.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># inverse softplus transform</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">softplus_inverse</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span>
+        <span class="c1"># cast y into correct type</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">y</span></div>
+
+
+<div class="viewcode-block" id="LowerBound.inverse">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.LowerBound.inverse">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        softplus transform of unconstrained variable y into a constrained</span>
+<span class="sd">        variable x with ``lower`` bound.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            X = softplus(Y) + lower</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y : float</span>
+<span class="sd">            unconstrained variable.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        x : float</span>
+<span class="sd">            variable with a lower bound.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># softplus transform</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">softplus</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span>
+        <span class="c1"># cast x into correct dtype</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="UpperBound">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.UpperBound">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">UpperBound</span><span class="p">:</span>
+<div class="viewcode-block" id="UpperBound.__init__">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.UpperBound.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">upper</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A variable with an ``upper`` bound is transformed into an</span>
+<span class="sd">        unconstrained variable Y via an inverse-softplus transform.</span>
+
+<span class="sd">        Basis for the here used constraints, is the</span>
+<span class="sd">        `constraint transforms implementation in Stan &lt;https://mc-stan.org/docs/reference-manual/transforms.html&gt;`_.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        upper : float</span>
+<span class="sd">            upper bound of variable X.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">=</span> <span class="n">upper</span></div>
+
+
+<div class="viewcode-block" id="UpperBound.forward">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.UpperBound.forward">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        inverse-softplus transform of variable x with ``upper`` bound into an</span>
+<span class="sd">        unconstrained variable y.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            Y = softplus^{-1}(upper - X)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : float</span>
+<span class="sd">            variable with an upper bound.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        y : float</span>
+<span class="sd">            unconstrained variable.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># logarithmic transform</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">softplus_inverse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span>
+        <span class="c1"># cast y into correct dtype</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">y</span></div>
+
+
+<div class="viewcode-block" id="UpperBound.inverse">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.UpperBound.inverse">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        softplus transform of unconstrained variable y into a constrained</span>
+<span class="sd">        variable x with ``upper`` bound.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            X = upper - softplus(Y)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y : float</span>
+<span class="sd">            unconstrained variable.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        x : float</span>
+<span class="sd">            variable with an upper bound.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># exponential transform</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">-</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">softplus</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="c1"># cast x into correct dtype</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="one_forward_simulation">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.one_forward_simulation">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">one_forward_simulation</span><span class="p">(</span>
+    <span class="n">prior_model</span><span class="p">:</span> <span class="n">el</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">Priors</span><span class="p">,</span> <span class="n">trainer</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">targets</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>  <span class="c1"># noqa: E125</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    One forward simulation from prior samples to elicited statistics.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    prior_model : instance of Priors class objects</span>
+<span class="sd">        initialized prior distributions which can be used for sampling.</span>
+<span class="sd">    trainer : callable</span>
+<span class="sd">        specification of training settings and meta-information for</span>
+<span class="sd">        workflow using :func:`elicit.elicit.trainer`</span>
+<span class="sd">    model : callable</span>
+<span class="sd">        specification of generative model using :func:`elicit.elicit.model`.</span>
+<span class="sd">    targets : list</span>
+<span class="sd">        list of target quantities specified with :func:`elicit.elicit.target`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    elicited_statistics : dict</span>
+<span class="sd">        dictionary containing the elicited statistics that can be used to</span>
+<span class="sd">        compute the loss components</span>
+<span class="sd">    prior_samples : tf.Tensor</span>
+<span class="sd">        samples from prior distributions</span>
+<span class="sd">    model_simulations : dict</span>
+<span class="sd">        samples from the generative model (likelihood) given the prior samples</span>
+<span class="sd">        for the model parameters</span>
+<span class="sd">    target_quantities : dict</span>
+<span class="sd">        target quantities as a function of the model simulations.</span>
+<span class="sd">    seed : int</span>
+<span class="sd">        internal seed for reproducible results</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># set seed</span>
+    <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="c1"># generate samples from initialized prior</span>
+    <span class="n">prior_samples</span> <span class="o">=</span> <span class="n">prior_model</span><span class="p">()</span>
+    <span class="c1"># simulate prior predictive distribution based on prior samples</span>
+    <span class="c1"># and generative model</span>
+    <span class="n">model_simulations</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">simulate_from_generator</span><span class="p">(</span>
+        <span class="n">prior_samples</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">model</span>
+    <span class="p">)</span>
+    <span class="c1"># compute the target quantities</span>
+    <span class="n">target_quantities</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">computation_target_quantities</span><span class="p">(</span>
+        <span class="n">model_simulations</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">,</span> <span class="n">targets</span>
+    <span class="p">)</span>
+    <span class="c1"># compute the elicited statistics by applying a specific elicitation</span>
+    <span class="c1"># method on the target quantities</span>
+    <span class="n">elicited_statistics</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">computation_elicited_statistics</span><span class="p">(</span>
+        <span class="n">target_quantities</span><span class="p">,</span> <span class="n">targets</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">elicited_statistics</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">,</span> <span class="n">model_simulations</span><span class="p">,</span>
+            <span class="n">target_quantities</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_expert_data">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.get_expert_data">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_expert_data</span><span class="p">(</span>
+    <span class="n">trainer</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">targets</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span>
+    <span class="n">expert</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">parameters</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span>
+    <span class="n">network</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper for loading the training data which can be expert data or</span>
+<span class="sd">    data simulations using a pre-defined ground truth.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    trainer : callable</span>
+<span class="sd">        specification of training settings and meta-information for</span>
+<span class="sd">        workflow using :func:`trainer`</span>
+<span class="sd">    model : callable</span>
+<span class="sd">        specification of generative model using :func:`elicit.elicit.model`.</span>
+<span class="sd">    targets : list</span>
+<span class="sd">        list of target quantities specified with :func:`elicit.elicit.target`.</span>
+<span class="sd">    expert : callable</span>
+<span class="sd">        provide input data from expert or simulate data from oracle with</span>
+<span class="sd">        either the ``data`` or ``simulator`` method of the</span>
+<span class="sd">        :mod:`elicit.elicit.Expert` module.</span>
+<span class="sd">    parameters : list</span>
+<span class="sd">        list of model parameters specified with :func:`elicit.elicit.parameter`.</span>
+<span class="sd">    network : callable or None</span>
+<span class="sd">        specification of neural network using a method implemented in</span>
+<span class="sd">        :mod:`elicit.networks`.</span>
+<span class="sd">        Only required for ``deep_prior`` method. For ``parametric_prior``</span>
+<span class="sd">        use ``None``. Default value is ``None``.</span>
+<span class="sd">    seed : int</span>
+<span class="sd">        internal seed for reproducible results</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    expert_data : dict</span>
+<span class="sd">        dictionary containing the training data. Must have same form as the</span>
+<span class="sd">        model-simulated elicited statistics. Correct specification of</span>
+<span class="sd">        keys can be checked using :func:`elicit.utils.get_expert_datformat`</span>
+<span class="sd">    expert_prior : tf.Tensor, shape: [B,num_samples,num_params]</span>
+<span class="sd">        samples from ground truth. Exists only if expert data are simulated</span>
+<span class="sd">        from an oracle. Otherwise this output is ``None``</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">expert</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="n">oracle</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">oracle</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="n">oracle</span><span class="p">:</span>
+        <span class="c1"># set seed</span>
+        <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+        <span class="c1"># sample from true priors</span>
+        <span class="n">prior_model</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">Priors</span><span class="p">(</span>
+            <span class="n">ground_truth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">init_matrix_slice</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">trainer</span><span class="o">=</span><span class="n">trainer</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span>
+            <span class="n">network</span><span class="o">=</span><span class="n">network</span><span class="p">,</span>
+            <span class="n">expert</span><span class="o">=</span><span class="n">expert</span><span class="p">,</span>
+            <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># compute elicited statistics and target quantities</span>
+        <span class="n">expert_data</span><span class="p">,</span> <span class="n">expert_prior</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">one_forward_simulation</span><span class="p">(</span>
+            <span class="n">prior_model</span><span class="p">,</span> <span class="n">trainer</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">seed</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">expert_data</span><span class="p">,</span> <span class="n">expert_prior</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># load expert data from file</span>
+        <span class="n">expert_data</span> <span class="o">=</span> <span class="n">expert</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">expert_data</span><span class="p">,</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="save">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.save">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span>
+    <span class="n">eliobj</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">file</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># either name or file must be specified</span>
+    <span class="k">assert</span> <span class="p">(</span><span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">),</span> <span class="p">(</span>
+        <span class="s2">&quot;Name and file cannot be both &quot;</span>
+        <span class="o">+</span> <span class="s2">&quot;None or both specified. Either one has to be None.&quot;</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.pkl&quot;</span><span class="p">):</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="s2">&quot;.pkl&quot;</span><span class="p">)</span>
+        <span class="c1"># create saving path</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;./results/</span><span class="si">{</span><span class="n">eliobj</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">eliobj</span><span class="o">.</span><span class="n">trainer</span><span class="p">[</span><span class="s1">&#39;seed&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>  <span class="c1"># noqa</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># postprocess file (or name) to avoid file.pkl.pkl</span>
+        <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.pkl&quot;</span><span class="p">):</span>
+            <span class="n">file</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="s2">&quot;.pkl&quot;</span><span class="p">)</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;./&quot;</span> <span class="o">+</span> <span class="n">file</span>
+    <span class="c1"># check whether saving path is already used</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;.pkl&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
+        <span class="n">user_ans</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span>
+            <span class="s2">&quot;In provided directory exists already a file with&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; identical name. Do you want to overwrite it?&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; Press &#39;y&#39; for overwriting and &#39;n&#39; for abording.&quot;</span>
+        <span class="p">)</span>
+        <span class="k">while</span> <span class="n">user_ans</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">]:</span>
+            <span class="n">user_ans</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span>
+                <span class="s2">&quot;Please press either &#39;y&#39; for overwriting or &#39;n&#39;&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;for abording the process.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">user_ans</span> <span class="o">==</span> <span class="s2">&quot;n&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;Process aborded. File is not overwritten.&quot;</span>
+
+    <span class="n">storage</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="c1"># user inputs</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">model</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">parameters</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;targets&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">targets</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;expert&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">expert</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;optimizer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">optimizer</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;trainer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">trainer</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;initializer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">initializer</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;network&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">network</span>
+    <span class="c1"># results</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">results</span>
+    <span class="n">storage</span><span class="p">[</span><span class="s2">&quot;history&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">history</span>
+
+    <span class="n">save_as_pkl</span><span class="p">(</span><span class="n">storage</span><span class="p">,</span> <span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;.pkl&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;saved in: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">.pkl&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="load">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.load">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">callable</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    loads a saved ``eliobj`` from specified path.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    file : str</span>
+<span class="sd">        path where ``eliobj`` object is saved.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    eliobj : el.elicit.Elicit obj</span>
+<span class="sd">        loaded ``eliobj`` object.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+    <span class="n">eliobj</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">Elicit</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">],</span>
+        <span class="n">parameters</span><span class="o">=</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">],</span>
+        <span class="n">targets</span><span class="o">=</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;targets&quot;</span><span class="p">],</span>
+        <span class="n">expert</span><span class="o">=</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;expert&quot;</span><span class="p">],</span>
+        <span class="n">optimizer</span><span class="o">=</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;optimizer&quot;</span><span class="p">],</span>
+        <span class="n">trainer</span><span class="o">=</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;trainer&quot;</span><span class="p">],</span>
+        <span class="n">initializer</span><span class="o">=</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;initializer&quot;</span><span class="p">],</span>
+        <span class="n">network</span><span class="o">=</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;network&quot;</span><span class="p">],</span>
+    <span class="p">)</span>
+
+    <span class="c1"># add results if already fitted</span>
+    <span class="n">eliobj</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;history&quot;</span><span class="p">]</span>
+    <span class="n">eliobj</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">eliobj</span></div>
+
+
+
+<div class="viewcode-block" id="parallel">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.parallel">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">parallel</span><span class="p">(</span>
+        <span class="n">runs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="n">cores</span><span class="p">:</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">seeds</span> <span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Specification for parallelizing training by running multiple training</span>
+<span class="sd">    instances with different seeds simultaneously.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    runs: int, optional</span>
+<span class="sd">        Number of replication. The default is ``4``.</span>
+<span class="sd">    cores : int, optional</span>
+<span class="sd">        Number of cores that should be used. The default is ``None`` which implies ``cores=runs``.</span>
+<span class="sd">    seeds : list, optional</span>
+<span class="sd">        A list of seeds. If ``None`` seeds are drawn from a Uniform(0,999999)</span>
+<span class="sd">        distribution. The seed information corresponding to each chain is</span>
+<span class="sd">        stored in ``eliobj.results``. The default is ``None``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    parallel_dict : dict</span>
+<span class="sd">        dictionary containing the parallelization settings.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parallel_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">runs</span><span class="o">=</span><span class="n">runs</span><span class="p">,</span>
+        <span class="n">cores</span><span class="o">=</span><span class="n">cores</span><span class="p">,</span>
+        <span class="n">seeds</span><span class="o">=</span><span class="n">seeds</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">parallel_dict</span></div>
+
+
+
+<div class="viewcode-block" id="save_history">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.save_history">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">save_history</span><span class="p">(</span>
+    <span class="n">loss</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">loss_component</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">time</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">hyperparameter</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">hyperparameter_gradient</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Controls whether sub-results of the history object should be included</span>
+<span class="sd">    or excluded. Results are saved across epochs. By default all</span>
+<span class="sd">    sub-results are included.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    loss : bool, optional</span>
+<span class="sd">        total loss per epoch. The default is ``True``.</span>
+<span class="sd">    loss_component : bool, optional</span>
+<span class="sd">        loss per loss-component per epoch. The default is ``True``.</span>
+<span class="sd">    time : bool, optional</span>
+<span class="sd">        time in sec per epoch. The default is ``True``.</span>
+<span class="sd">    hyperparameter : bool, optional</span>
+<span class="sd">        &#39;parametric_prior&#39; method: Trainable hyperparameters of parametric</span>
+<span class="sd">        prior distributions.</span>
+<span class="sd">        &#39;deep_prior&#39; method: Mean and standard deviation of each marginal</span>
+<span class="sd">        from the joint prior.</span>
+<span class="sd">        The default is ``True``.</span>
+<span class="sd">    hyperparameter_gradient : bool, optional</span>
+<span class="sd">        Gradients of the hyperparameter. Only for &#39;parametric_prior&#39; method.</span>
+<span class="sd">        The default is ``True``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    save_hist_dict : dict</span>
+<span class="sd">        dictionary with inclusion/exclusion settings for each sub-result in</span>
+<span class="sd">        history object.</span>
+
+<span class="sd">    Warnings</span>
+<span class="sd">    --------</span>
+<span class="sd">    if ``loss_component`` or ``loss`` are excluded, :func:`elicit.plots.loss`</span>
+<span class="sd">    can&#39;t be used as it requires this information.</span>
+
+<span class="sd">    if ``hyperparameter`` is excluded, :func:`elicit.plots.hyperparameter`</span>
+<span class="sd">    can&#39;t be used as it requires this information.</span>
+<span class="sd">    Only parametric_prior method.</span>
+
+<span class="sd">    if ``hyperparameter`` is excluded, :func:`elicit.plots.marginals`</span>
+<span class="sd">    can&#39;t be used as it requires this information.</span>
+<span class="sd">    Only deep_prior method.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">loss</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">loss_component</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;el.plots.loss() requires information about &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;&#39;loss&#39; and &#39;loss_component&#39;. If you don&#39;t save this information &quot;</span>  <span class="c1"># noqa</span>
+            <span class="o">+</span> <span class="s2">&quot;el.plot.loss() can&#39;t be used.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">hyperparameter</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;el.plots.hyperparameter() and el.plots.marginals() require&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; information about &#39;hyperparameter&#39;. If you don&#39;t save this&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; information these plots can&#39;t be used.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">save_hist_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">loss</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span>
+        <span class="n">loss_component</span><span class="o">=</span><span class="n">loss_component</span><span class="p">,</span>
+        <span class="n">hyperparameter</span><span class="o">=</span><span class="n">hyperparameter</span><span class="p">,</span>
+        <span class="n">hyperparameter_gradient</span><span class="o">=</span><span class="n">hyperparameter_gradient</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">save_hist_dict</span></div>
+
+
+
+<div class="viewcode-block" id="save_results">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.save_results">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">save_results</span><span class="p">(</span>
+    <span class="n">target_quantities</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">elicited_statistics</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">prior_samples</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">model_samples</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">expert_elicited_statistics</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">expert_prior_samples</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">init_loss_list</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">init_prior</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">init_matrix</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">loss_tensor_expert</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">loss_tensor_model</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Controls whether sub-results of the result object should be included</span>
+<span class="sd">    or excluded in the final result file. Results are based on the</span>
+<span class="sd">    computation of the last epoch.</span>
+<span class="sd">    By default all sub-results are included.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    target_quantities : bool, optional</span>
+<span class="sd">        simulation-based target quantities. The default is ``True``.</span>
+<span class="sd">    elicited_statistics : bool, optional</span>
+<span class="sd">        simulation-based elicited statistics. The default is ``True``.</span>
+<span class="sd">    prior_samples : bool, optional</span>
+<span class="sd">        samples from simulation-based prior distributions.</span>
+<span class="sd">        The default is ``True``.</span>
+<span class="sd">    model_samples : bool, optional</span>
+<span class="sd">        output variables from the simulation-based generative model.</span>
+<span class="sd">        The default is ``True``.</span>
+<span class="sd">    expert_elicited_statistics : bool, optional</span>
+<span class="sd">        expert-elicited statistics. The default is ``True``.</span>
+<span class="sd">    expert_prior_samples : bool, optional</span>
+<span class="sd">        if oracle is used: samples from the true prior distribution,</span>
+<span class="sd">        otherwise it is None. The default is ``True``.</span>
+<span class="sd">    init_loss_list : bool, optional</span>
+<span class="sd">        initialization phase: Losses related to the samples drawn from the</span>
+<span class="sd">        initialization distribution.</span>
+<span class="sd">        Only included for method &#39;parametric_prior&#39;.</span>
+<span class="sd">        The default is ``True``.</span>
+<span class="sd">    init_prior : bool, optional</span>
+<span class="sd">        initialized elicit model object including the trainable variables.</span>
+<span class="sd">        Only included for method &#39;parametric_prior&#39;.</span>
+<span class="sd">        The default is ``True``.</span>
+<span class="sd">    init_matrix : bool, optional</span>
+<span class="sd">        initialization phase: samples drawn from the initialization</span>
+<span class="sd">        distribution for each hyperparameter.</span>
+<span class="sd">        Only included for method &#39;parametric_prior&#39;.</span>
+<span class="sd">        The default is ``True``.</span>
+<span class="sd">    loss_tensor_expert : bool, optional</span>
+<span class="sd">        expert term in loss component for computing the discrepancy.</span>
+<span class="sd">        The default is ``True``.</span>
+<span class="sd">    loss_tensor_model : bool, optional</span>
+<span class="sd">        simulation-based term in loss component for computing the</span>
+<span class="sd">        discrepancy. The default is ``True``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    save_res_dict : dict</span>
+<span class="sd">        dictionary with inclusion/exclusion settings for each sub-result</span>
+<span class="sd">        in results object.</span>
+
+<span class="sd">    Warnings</span>
+<span class="sd">    --------</span>
+<span class="sd">    if ``elicited_statistics`` is excluded :func:`elicit.plots.loss` can&#39;t be</span>
+<span class="sd">    used as it requires this information.</span>
+
+<span class="sd">    if ``init_matrix`` is excluded :func:`elicit.plots.initialization` can&#39;t be</span>
+<span class="sd">    used as it requires this information.</span>
+
+<span class="sd">    if ``prior_samples`` is excluded :func:`elicit.plots.prior_joint` can&#39;t be</span>
+<span class="sd">    used as it requires this information.</span>
+
+<span class="sd">    if ``target_quantities`` is excluded :func:`elicit.plots.priorpredictive`</span>
+<span class="sd">    can&#39;t be used as it requires this information.</span>
+
+<span class="sd">    if ``expert_elicited_statistics`` or ``elicited_statistics`` is</span>
+<span class="sd">    excluded :func:`elicit.plots.elicits` can&#39;t be used as it requires this</span>
+<span class="sd">    information.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">elicited_statistics</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;el.plots.loss() requires information about &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;&#39;elicited_statistics&#39;. If you don&#39;t save this information &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;el.plot.loss() can&#39;t be used.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">init_matrix</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;el.plots.initialization() requires information about &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;&#39;init_matrix&#39;. If you don&#39;t save this information &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;this plotting function can&#39;t be used.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">prior_samples</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;el.plots.priors() requires information about &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;&#39;prior_samples&#39;. If you don&#39;t save this information &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;this plotting function can&#39;t be used.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">target_quantities</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;el.plots.priorpredictive() requires information about &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;&#39;target_quantities&#39;. If you don&#39;t save this information &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;this plotting function can&#39;t be used.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">expert_elicited_statistics</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">elicited_statistics</span><span class="p">):</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;el.plots.elicits() requires information about &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;&#39;expert_elicited_statistics&#39; and &#39;elicited_statistics&#39;. &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;If you don&#39;t save this information this plotting function&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; can&#39;t be used.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">save_res_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">target_quantities</span><span class="o">=</span><span class="n">target_quantities</span><span class="p">,</span>
+        <span class="n">elicited_statistics</span><span class="o">=</span><span class="n">elicited_statistics</span><span class="p">,</span>
+        <span class="n">prior_samples</span><span class="o">=</span><span class="n">prior_samples</span><span class="p">,</span>
+        <span class="n">model_samples</span><span class="o">=</span><span class="n">model_samples</span><span class="p">,</span>
+        <span class="n">expert_elicited_statistics</span><span class="o">=</span><span class="n">expert_elicited_statistics</span><span class="p">,</span>
+        <span class="n">expert_prior_samples</span><span class="o">=</span><span class="n">expert_prior_samples</span><span class="p">,</span>
+        <span class="n">init_loss_list</span><span class="o">=</span><span class="n">init_loss_list</span><span class="p">,</span>
+        <span class="n">init_prior</span><span class="o">=</span><span class="n">init_prior</span><span class="p">,</span>
+        <span class="n">init_matrix</span><span class="o">=</span><span class="n">init_matrix</span><span class="p">,</span>
+        <span class="n">loss_tensor_expert</span><span class="o">=</span><span class="n">loss_tensor_expert</span><span class="p">,</span>
+        <span class="n">loss_tensor_model</span><span class="o">=</span><span class="n">loss_tensor_model</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">save_res_dict</span></div>
+
+
+
+<div class="viewcode-block" id="clean_savings">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.clean_savings">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">clean_savings</span><span class="p">(</span><span class="n">history</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> 
+                  <span class="n">results</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+                  <span class="n">save_history</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+                  <span class="n">save_results</span><span class="p">:</span> <span class="nb">dict</span>
+                  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    history : dict</span>
+<span class="sd">        results that are saved across epochs including among others loss,</span>
+<span class="sd">        loss_component, time, and hyperparameter. See :func:`save_history` for</span>
+<span class="sd">        complete list.</span>
+<span class="sd">    results : dict</span>
+<span class="sd">        results that are saved for the last epoch only including prior_samples,</span>
+<span class="sd">        elicited_statistics, target_quantities, etc. See :func:`save_results`</span>
+<span class="sd">        for complete list.</span>
+<span class="sd">    save_history : callable, :func:`elicit.utils.save_history`</span>
+<span class="sd">        Exclude or include sub-results in the final result file.</span>
+<span class="sd">        In the ``history`` object are all results that are saved across epochs.</span>
+<span class="sd">        For usage information see</span>
+<span class="sd">        `How-To: Save and load the eliobj &lt;https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html&gt;`_</span>
+<span class="sd">    save_results : callable, :func:`elicit.utils.save_results`</span>
+<span class="sd">        Exclude or include sub-results in the final result file.</span>
+<span class="sd">        In the ``results`` object are all results that are saved for the last</span>
+<span class="sd">        epoch only. For usage information see</span>
+<span class="sd">        `How-To: Save and load the eliobj &lt;https://florence-bockting.github.io/prior_elicitation/howto/saving_loading.html&gt;`_</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    results, history : Tuple[dict, dict]</span>
+<span class="sd">        final results taking in consideration exclusion criteria as specified</span>
+<span class="sd">        in :func:`save_history` and :func:`save_results`.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
+    <span class="k">for</span> <span class="n">key_hist</span> <span class="ow">in</span> <span class="n">save_history</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">save_history</span><span class="p">[</span><span class="n">key_hist</span><span class="p">]:</span>
+            <span class="n">history</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key_hist</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">key_res</span> <span class="ow">in</span> <span class="n">save_results</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">save_results</span><span class="p">[</span><span class="n">key_res</span><span class="p">]:</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key_res</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">results</span><span class="p">,</span> <span class="n">history</span></div>
+
+
+
+<div class="viewcode-block" id="get_expert_datformat">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.get_expert_datformat">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_expert_datformat</span><span class="p">(</span><span class="n">targets</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    helper function for the user to inspect which data format for the expert</span>
+<span class="sd">    data is expected by the method.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    targets : list</span>
+<span class="sd">        list of target quantities specified with :func:`elicit.elicit.target`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    elicit_dict : dict[str, list]</span>
+<span class="sd">        expected format of expert data.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">elicit_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">tar</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">tar</span><span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">tar</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">query</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">target</span>
+        <span class="n">elicit_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">elicit_dict</span></div>
+
+
+
+<div class="viewcode-block" id="softmax_gumbel_trick">
+<a class="viewcode-back" href="../../api/elicit.utils.html#elicit.utils.softmax_gumbel_trick">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">softmax_gumbel_trick</span><span class="p">(</span><span class="n">epred</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">likelihood</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span>
+                         <span class="n">upper_thres</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">temp</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">1.6</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The softmax-gumbel trick computes a continuous approximation of ypred from</span>
+<span class="sd">    a discrete likelihood and thus allows for the computation of gradients for</span>
+<span class="sd">    discrete random variables.</span>
+
+<span class="sd">    Currently this approach is only implemented for models without upper</span>
+<span class="sd">    boundary (e.g., Poisson model).</span>
+
+<span class="sd">    Corresponding literature:</span>
+
+<span class="sd">        - Maddison, C. J., Mnih, A. &amp; Teh, Y. W. The concrete distribution:</span>
+<span class="sd">          A continuous relaxation of discrete random variables in International</span>
+<span class="sd">          Conference on Learning Representations (2017).</span>
+<span class="sd">          https://doi.org/10.48550/arXiv.1611.00712</span>
+<span class="sd">        - Jang, E., Gu, S. &amp; Poole, B. Categorical reparameterization with</span>
+<span class="sd">          gumbel-softmax in International Conference on Learning Representations</span>
+<span class="sd">          (2017). https://openreview.net/forum?id=rkE3y85ee.</span>
+<span class="sd">        - Joo, W., Kim, D., Shin, S. &amp; Moon, I.-C. Generalized gumbel-softmax</span>
+<span class="sd">          gradient estimator for generic discrete random variables. Preprint</span>
+<span class="sd">          at https://doi.org/10.48550/arXiv.2003.01847 (2020).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    epred : tf.Tensor, shape = [B, num_samples, num_obs]</span>
+<span class="sd">        simulated linear predictor from the model simulations </span>
+<span class="sd">    likelihood : tfp.distributions object, shape = [B, num_samples, num_obs, 1]</span>
+<span class="sd">        likelihood function used in the generative model.</span>
+<span class="sd">        Must be a tfp.distributions object.</span>
+<span class="sd">    upper_thres : float</span>
+<span class="sd">        upper threshold at which the distribution of the outcome variable is</span>
+<span class="sd">        truncated. For double-bounded distribution (e.g. Binomial) this is</span>
+<span class="sd">        simply the &quot;total count&quot; information. Lower-bounded distribution</span>
+<span class="sd">        (e.g. Poisson) must be truncated to create an artificial</span>
+<span class="sd">        double-boundedness.</span>
+<span class="sd">    temp : float, temp &gt; 0</span>
+<span class="sd">        temperature hyperparameter of softmax function. A temperature going</span>
+<span class="sd">        towards zero yields approximates a categorical distribution, while</span>
+<span class="sd">        a temperature &gt;&gt; 0 approximates a continuous distribution.</span>
+<span class="sd">        The default value is ``1.6``.</span>
+<span class="sd">    kwargs : any</span>
+<span class="sd">        additional keyword arguments including the seed information. **Note**:</span>
+<span class="sd">        the ``**kwargs`` argument is required in this function (!) as it</span>
+<span class="sd">        extracts internally the seed information.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ypred : tf.Tensor</span>
+<span class="sd">        continuously approximated ypred from the discrete likelihood.</span>
+
+<span class="sd">    Raise</span>
+<span class="sd">    -----</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        if rank of ``likelihood`` is not 4. The shape of the likelihood obj</span>
+<span class="sd">        must have an extra final dimension, i.e., (B, num_samples, num_obs, 1),</span>
+<span class="sd">        for the softmax-gumbel computation. Use for example</span>
+<span class="sd">        ``tf.expand_dims(mu,-1)`` for expanding the batch-shape of the</span>
+<span class="sd">        likelihood.</span>
+
+<span class="sd">        if likelihood is not in tfp.distributions module. The likelihood</span>
+<span class="sd">        must be a tfp.distributions object.</span>
+
+<span class="sd">    KeyError</span>
+<span class="sd">        if ``**kwargs`` is not in function arguments. It is required to pass</span>
+<span class="sd">        the **kwargs argument as it is used for extracting internally </span>
+<span class="sd">        information about the seed.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># check rank of likelihood object</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">likelihood</span><span class="o">.</span><span class="n">batch_shape</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;The &#39;likelihood&#39; in the generative model must have&quot;</span>
+            <span class="o">+</span><span class="s2">&quot; batch_shape = (B, num_samples, num_obs, 1).&quot;</span>
+            <span class="o">+</span><span class="s2">&quot; The additional final axis is required by the softmax-gumbel&quot;</span>
+            <span class="o">+</span><span class="s2">&quot; computation. Use for example `tf.expand_dims(mu,-1)` for&quot;</span>
+            <span class="o">+</span><span class="s2">&quot; expanding the batch-shape of the likelihood.&quot;</span>
+            <span class="p">)</span>
+    <span class="c1"># check value/type of likelihood object</span>
+    <span class="k">if</span> <span class="n">likelihood</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">tfd</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Likelihood in generative model must be a tfp.distribution object.&quot;</span>
+            <span class="p">)</span>
+    <span class="k">if</span> <span class="s2">&quot;seed&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+            <span class="s2">&quot;Please provide the **kwargs argument in the el.utils.softmax-&quot;</span>
+              <span class="o">+</span><span class="s2">&quot;gumble function. This is required for extracting internally&quot;</span>
+              <span class="o">+</span><span class="s2">&quot; information about the seed.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># set seed</span>
+    <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">])</span>
+    <span class="c1"># get batch size</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">epred</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># get number of simulations from priors</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">epred</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="c1"># get number of observations</span>
+    <span class="n">number_obs</span> <span class="o">=</span> <span class="n">epred</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="c1"># constant outcome vector (including zero outcome)</span>
+    <span class="n">thres</span> <span class="o">=</span> <span class="n">upper_thres</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">thres</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="c1"># broadcast to shape (B, rep, outcome-length)</span>
+    <span class="n">c_brct</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:],</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">number_obs</span><span class="p">,</span>
+                                                            <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)))</span>
+    <span class="c1"># compute pmf value</span>
+    <span class="n">pi</span> <span class="o">=</span> <span class="n">likelihood</span><span class="o">.</span><span class="n">prob</span><span class="p">(</span><span class="n">c_brct</span><span class="p">)</span>
+    <span class="c1"># prevent underflow</span>
+    <span class="n">pi</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pi</span> <span class="o">&lt;</span> <span class="mf">1.8</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">),</span> <span class="mf">1.8</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">),</span> <span class="n">pi</span><span class="p">)</span>
+    <span class="c1"># sample from uniform</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">B</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">number_obs</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)))</span>
+    <span class="c1"># generate a gumbel sample from uniform sample</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="o">-</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="o">-</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">u</span><span class="p">))</span>
+    <span class="c1"># softmax gumbel trick</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span>
+        <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">pi</span><span class="p">),</span> <span class="n">g</span><span class="p">),</span> <span class="n">temp</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="c1"># reparameterization/linear transformation</span>
+    <span class="n">ypred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">c</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ypred</span></div>
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Florence Bockting
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Florence Bockting.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,957 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Toy Example - Deep prior &#8212; Prior Learning</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=87e54e7c" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=4acdca81"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/toymodel_deep';</script>
+    <link rel="icon" href="../_static/favicon-light.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/mmp-logo-light.png" class="logo__image only-light" alt="Prior Learning - Home"/>
+    <img src="../_static/mmp-logo-dark.png" class="logo__image only-dark pst-js-only" alt="Prior Learning - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/modules.html">API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/elicit.html">elicit package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/elicit.extras.html">elicit.extras package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/elicit.extras.utils.html">elicit.extras.utils module</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.elicit.html">elicit.elicit module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.initialization.html">elicit.initialization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.losses.html">elicit.losses module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.networks.html">elicit.networks module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.optimization.html">elicit.optimization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.plots.html">elicit.plots module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.simulations.html">elicit.simulations module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.targets.html">elicit.targets module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/elicit.utils.html">elicit.utils module</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../howto/index.html">How-To</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explanation/index.html">Explanation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/florence-bockting/prior_elicitation" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/tutorials/toymodel_deep.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Toy Example - Deep prior</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-model">The Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#generative-model">Generative model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation">Implementation</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Generative model</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#define-design-matrix">Define design matrix</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#model-input-for-elicit-method">Model input for elicit method</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-parameters">Model parameters</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-input-for-elicit-method">Parameter input for elicit method</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#target-quantities-and-elicitation-techniques">Target quantities and elicitation techniques</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#targets-input-for-elicit-method">Targets input for elicit method</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#expert-elicitation">Expert elicitation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#expert-input-for-elicit-method-here-oracle">Expert input for elicit method (here: oracle)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#normalizing-flow">Normalizing Flow</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-learn-prior-distributions-based-on-expert-data">Training: Learn prior distributions based on expert data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results">Results</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convergence">Convergence</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#expert-expectations">Expert expectations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#learned-joint-prior">Learned joint prior</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#add-on-model-averaging">Add-on: Model averaging</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="toy-example-deep-prior">
+<h1>Toy Example - Deep prior<a class="headerlink" href="#toy-example-deep-prior" title="Link to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">tensorflow_probability</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tfp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tensorflow</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tf</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">elicit</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">el</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">bayesflow.inference_networks</span><span class="w"> </span><span class="kn">import</span> <span class="n">InvertibleNetwork</span>
+
+<span class="n">tfd</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">distributions</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">tensorflow_probability</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tfp</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">tensorflow</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tf</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;tensorflow_probability&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<section id="the-model">
+<h2>The Model<a class="headerlink" href="#the-model" title="Link to this heading">#</a></h2>
+<section id="generative-model">
+<h3>Generative model<a class="headerlink" href="#generative-model" title="Link to this heading">#</a></h3>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+    (\beta_0, \beta_1, \sigma) &amp;\sim p_\lambda(\boldsymbol{\theta}) \\
+    \mu &amp;= \beta_0 + \beta_1X \\
+    y_{pred} &amp;\sim \text{Normal}(\mu, \sigma)
+\end{align*}\]</div>
+</section>
+<section id="implementation">
+<h3>Implementation<a class="headerlink" href="#implementation" title="Link to this heading">#</a></h3>
+<section id="id1">
+<h4>Generative model<a class="headerlink" href="#id1" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ToyModel</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prior_samples</span><span class="p">,</span> <span class="n">design_matrix</span><span class="p">):</span>
+        <span class="c1"># linear predictor </span>
+        <span class="n">epred</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">design_matrix</span><span class="p">,</span> 
+                        <span class="n">transpose_b</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="c1"># data-generating model</span>
+        <span class="n">likelihood</span> <span class="o">=</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span>
+            <span class="n">loc</span><span class="o">=</span><span class="n">epred</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">prior_samples</span><span class="p">[:,</span> <span class="p">:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="c1"># prior predictive distribution </span>
+        <span class="n">ypred</span> <span class="o">=</span> <span class="n">likelihood</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+        
+        <span class="c1"># selected observations</span>
+        <span class="n">y_x0</span><span class="p">,</span> <span class="n">y_x1</span><span class="p">,</span> <span class="n">y_x2</span><span class="p">,</span> <span class="n">y_x3</span><span class="p">,</span> <span class="n">y_x4</span> <span class="o">=</span> <span class="p">(</span><span class="n">ypred</span><span class="p">[:,:,</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+
+        <span class="c1"># R2 </span>
+        <span class="n">var_ypred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">ypred</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">var_epred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_variance</span><span class="p">(</span><span class="n">epred</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">r2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">var_ypred</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">var_ypred</span><span class="p">,</span> <span class="n">var_epred</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">y_x0</span><span class="o">=</span><span class="n">y_x0</span><span class="p">,</span> <span class="n">y_x1</span><span class="o">=</span><span class="n">y_x1</span><span class="p">,</span> <span class="n">y_x2</span><span class="o">=</span><span class="n">y_x2</span><span class="p">,</span> <span class="n">y_x3</span><span class="o">=</span><span class="n">y_x3</span><span class="p">,</span> <span class="n">y_x4</span><span class="o">=</span><span class="n">y_x4</span><span class="p">,</span>
+            <span class="n">r2</span><span class="o">=</span><span class="n">r2</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="define-design-matrix">
+<h4>Define design matrix<a class="headerlink" href="#define-design-matrix" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a predictor ranging from 1 to 200 </span>
+<span class="c1"># standardize predictor</span>
+<span class="c1"># select the 5th, 25th, 50th, 75th, and 95th quantile of the std. predictor for querying the expert</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">x_design</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">quantiles</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="n">x_std</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">/</span><span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_std</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">x_sel</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">x_std</span><span class="p">,</span> <span class="n">quantiles</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">tf</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">x_sel</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">x_sel</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">x_design</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">quantiles</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">75</span><span class="p">,</span><span class="mi">95</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;tf.Tensor: shape=(5, 2), dtype=float32, numpy=
+array([[ 1.        , -1.5502049 ],
+       [ 1.        , -0.85737586],
+       [ 1.        ,  0.00866036],
+       [ 1.        ,  0.85737586],
+       [ 1.        ,  1.5502049 ]], dtype=float32)&gt;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="model-input-for-elicit-method">
+<h4>Model input for elicit method<a class="headerlink" href="#model-input-for-elicit-method" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># specify the model</span>
+<span class="n">model</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">model</span><span class="p">(</span>
+        <span class="n">obj</span><span class="o">=</span><span class="n">ToyModel</span><span class="p">,</span>
+        <span class="n">design_matrix</span><span class="o">=</span><span class="n">x_design</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">quantiles</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">75</span><span class="p">,</span><span class="mi">95</span><span class="p">])</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="model-parameters">
+<h3>Model parameters<a class="headerlink" href="#model-parameters" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>intercept parameter <span class="math notranslate nohighlight">\(\beta_0\)</span></p></li>
+<li><p>slope parameter <span class="math notranslate nohighlight">\(\beta_1\)</span></p></li>
+<li><p>error term <span class="math notranslate nohighlight">\(\sigma\)</span></p></li>
+</ul>
+<p><strong>To be learned hyperparameters</strong>
+<span class="math notranslate nohighlight">\(\lambda\)</span>: reflecting the weights of the deep neural networks within the normalizing flow architecture.</p>
+<section id="parameter-input-for-elicit-method">
+<h4>Parameter input for elicit method<a class="headerlink" href="#parameter-input-for-elicit-method" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">parameters</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">el</span><span class="o">.</span><span class="n">parameter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;beta0&quot;</span><span class="p">),</span>
+        <span class="n">el</span><span class="o">.</span><span class="n">parameter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;beta1&quot;</span><span class="p">),</span>
+        <span class="n">el</span><span class="o">.</span><span class="n">parameter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;sigma&quot;</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span>
+    <span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="target-quantities-and-elicitation-techniques">
+<h2>Target quantities and elicitation techniques<a class="headerlink" href="#target-quantities-and-elicitation-techniques" title="Link to this heading">#</a></h2>
+<p><strong>Target quantities</strong></p>
+<ul class="simple">
+<li><p>query expert regarding <strong>prior predictions</strong> <span class="math notranslate nohighlight">\(y \mid X_{i}\)</span> with <span class="math notranslate nohighlight">\(i\)</span> being the 5th, 25th, 50th, 75th, and 95th quantile of the predictor.</p></li>
+<li><p><span class="math notranslate nohighlight">\(R^2 = \frac{\text{Var}(\mu)}{\text{Var}(y)}\)</span> (we use <span class="math notranslate nohighlight">\(\log R^2\)</span> for numerical stability)</p></li>
+<li><p>correlation between model parameters</p></li>
+</ul>
+<p><strong>Elicitation technique</strong></p>
+<ul class="simple">
+<li><p>query each prior prediction using <strong>quantile-based elicitation</strong> using <span class="math notranslate nohighlight">\(Q_p(y \mid X)\)</span> for <span class="math notranslate nohighlight">\(p=5, 25, 50, 75, 95\)</span></p></li>
+<li><p>query <span class="math notranslate nohighlight">\(R^2\)</span> using <strong>quantile-based elicitation</strong> using <span class="math notranslate nohighlight">\(Q_p(y \mid X)\)</span> for <span class="math notranslate nohighlight">\(p=5, 25, 50, 75, 95\)</span></p></li>
+<li><p>regarding the correlation structure, we assume independence between the model parameters (thus, <span class="math notranslate nohighlight">\(\boldsymbol{\rho}_\boldsymbol{\theta}=\mathbf{0}\)</span>)</p></li>
+</ul>
+<p><strong>Importance of elicited statistics in loss</strong></p>
+<ul class="simple">
+<li><p>all elicited statistics should have equal importance (weight=1.0)</p></li>
+<li><p>for computing the discrepancy between expert-elicited statistics and model simulations with use the Maximum Mean Discrepancy with Energy kernel</p></li>
+</ul>
+<section id="targets-input-for-elicit-method">
+<h3>Targets input for elicit method<a class="headerlink" href="#targets-input-for-elicit-method" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">targets</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">el</span><span class="o">.</span><span class="n">target</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;y_x</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">query</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">queries</span><span class="o">.</span><span class="n">quantiles</span><span class="p">((</span><span class="mf">.05</span><span class="p">,</span> <span class="mf">.25</span><span class="p">,</span> <span class="mf">.50</span><span class="p">,</span> <span class="mf">.75</span><span class="p">,</span> <span class="mf">.95</span><span class="p">)),</span>
+            <span class="n">loss</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">MMD2</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;energy&quot;</span><span class="p">),</span>
+            <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span>
+        <span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="p">]</span><span class="o">+</span><span class="p">[</span>
+        <span class="n">el</span><span class="o">.</span><span class="n">target</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;r2&quot;</span><span class="p">,</span>
+            <span class="n">query</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">queries</span><span class="o">.</span><span class="n">quantiles</span><span class="p">((</span><span class="mf">.05</span><span class="p">,</span> <span class="mf">.25</span><span class="p">,</span> <span class="mf">.50</span><span class="p">,</span> <span class="mf">.75</span><span class="p">,</span> <span class="mf">.95</span><span class="p">)),</span>
+            <span class="n">loss</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">MMD2</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;energy&quot;</span><span class="p">),</span>
+            <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span>
+        <span class="p">),</span>
+        <span class="n">el</span><span class="o">.</span><span class="n">target</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;correlation&quot;</span><span class="p">,</span>
+            <span class="n">query</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">queries</span><span class="o">.</span><span class="n">correlation</span><span class="p">(),</span>
+            <span class="n">loss</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">L2</span><span class="p">,</span>
+            <span class="n">weight</span><span class="o">=</span><span class="mf">0.1</span>
+        <span class="p">)</span>
+    <span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="expert-elicitation">
+<h2>Expert elicitation<a class="headerlink" href="#expert-elicitation" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>instead of querying a “real” expert, we define a ground truth (i.e., oracle) and simulate the oracle-elicited statistics</p></li>
+</ul>
+<section id="expert-input-for-elicit-method-here-oracle">
+<h3>Expert input for elicit method (here: oracle)<a class="headerlink" href="#expert-input-for-elicit-method-here-oracle" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># specify ground truth</span>
+<span class="n">ground_truth</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;beta0&quot;</span><span class="p">:</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="s2">&quot;beta1&quot;</span><span class="p">:</span> <span class="n">tfd</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+    <span class="s2">&quot;sigma&quot;</span><span class="p">:</span> <span class="n">tfd</span><span class="o">.</span><span class="n">HalfNormal</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mf">5.0</span><span class="p">),</span>
+<span class="p">}</span>
+
+<span class="c1"># define oracle</span>
+<span class="n">expert</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">expert</span><span class="o">.</span><span class="n">simulator</span><span class="p">(</span>
+        <span class="n">ground_truth</span> <span class="o">=</span> <span class="n">ground_truth</span><span class="p">,</span>
+        <span class="n">num_samples</span> <span class="o">=</span> <span class="mi">10_000</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="normalizing-flow">
+<h2>Normalizing Flow<a class="headerlink" href="#normalizing-flow" title="Link to this heading">#</a></h2>
+<p>ToDo</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">network</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">networks</span><span class="o">.</span><span class="n">NF</span><span class="p">(</span>
+        <span class="n">inference_network</span><span class="o">=</span><span class="n">InvertibleNetwork</span><span class="p">,</span>
+        <span class="n">network_specs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">num_params</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+            <span class="n">num_coupling_layers</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+            <span class="n">coupling_design</span><span class="o">=</span><span class="s2">&quot;affine&quot;</span><span class="p">,</span>
+            <span class="n">coupling_settings</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;dropout&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s2">&quot;dense_args&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="mi">128</span><span class="p">,</span>
+                    <span class="s2">&quot;activation&quot;</span><span class="p">:</span> <span class="s2">&quot;relu&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;kernel_regularizer&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;num_dense&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="n">permutation</span><span class="o">=</span><span class="s2">&quot;fixed&quot;</span>
+        <span class="p">),</span>
+        <span class="n">base_distribution</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">networks</span><span class="o">.</span><span class="n">base_normal</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="training-learn-prior-distributions-based-on-expert-data">
+<h2>Training: Learn prior distributions based on expert data<a class="headerlink" href="#training-learn-prior-distributions-based-on-expert-data" title="Link to this heading">#</a></h2>
+<p><strong>All inputs for elicit method</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eliobj</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">Elicit</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+    <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span>
+    <span class="n">targets</span><span class="o">=</span><span class="n">targets</span><span class="p">,</span>
+    <span class="n">expert</span><span class="o">=</span><span class="n">expert</span><span class="p">,</span>
+    <span class="n">optimizer</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">optimizer</span><span class="p">(</span>
+        <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">,</span>
+        <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span>
+        <span class="n">clipnorm</span><span class="o">=</span><span class="mf">1.0</span>
+        <span class="p">),</span>
+    <span class="n">trainer</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">trainer</span><span class="p">(</span>
+        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;deep_prior&quot;</span><span class="p">,</span>
+        <span class="n">seed</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+        <span class="n">epochs</span><span class="o">=</span><span class="mi">500</span>
+    <span class="p">),</span>
+    <span class="n">network</span><span class="o">=</span><span class="n">network</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Run multiple chains</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># run method</span>
+<span class="n">eliobj</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">parallel</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">parallel</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">_RemoteTraceback</span><span class="g g-Whitespace">                          </span>Traceback (most recent call last)
+<span class="ne">_Remote</span>Traceback: 
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Traceback (most recent call last):</span>
+<span class="sd">  File &quot;C:\Users\bockting\.conda\envs\prior_elicitation\Lib\site-packages\joblib\externals\loky\process_executor.py&quot;, line 426, in _process_worker</span>
+<span class="sd">    call_item = call_queue.get(block=True, timeout=timeout)</span>
+<span class="sd">                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+<span class="sd">  File &quot;C:\Users\bockting\.conda\envs\prior_elicitation\Lib\multiprocessing\queues.py&quot;, line 122, in get</span>
+<span class="sd">    return _ForkingPickler.loads(res)</span>
+<span class="sd">           ^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+<span class="sd">  File &quot;C:\Users\bockting\Documents\GitHub\prior_elicitation\elicit\__init__.py&quot;, line 6, in &lt;module&gt;</span>
+<span class="sd">    from . import initialization  # noqa</span>
+<span class="sd">    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+<span class="sd">  File &quot;C:\Users\bockting\Documents\GitHub\prior_elicitation\elicit\initialization.py&quot;, line 5, in &lt;module&gt;</span>
+<span class="sd">    import tensorflow as tf</span>
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;tensorflow&#39;
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">The</span> <span class="n">above</span> <span class="n">exception</span> <span class="n">was</span> <span class="n">the</span> <span class="n">direct</span> <span class="n">cause</span> <span class="n">of</span> <span class="n">the</span> <span class="n">following</span> <span class="n">exception</span><span class="p">:</span>
+
+<span class="ne">BrokenProcessPool</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">31</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># run method</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">eliobj</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">parallel</span><span class="o">=</span><span class="n">el</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">parallel</span><span class="p">(</span><span class="n">chains</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+
+<span class="nn">File ~\Documents\GitHub\prior_elicitation\elicit\elicit.py:1179,</span> in <span class="ni">Elicit.fit</span><span class="nt">(self, overwrite, save_history, save_results, parallel)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1176</span>     <span class="n">seeds</span> <span class="o">=</span> <span class="n">parallel</span><span class="p">[</span><span class="s2">&quot;seeds&quot;</span><span class="p">]</span>
+<span class="g g-Whitespace">   </span><span class="mi">1178</span> <span class="c1"># run training simultaneously for multiple seeds</span>
+<span class="ne">-&gt; </span><span class="mi">1179</span> <span class="p">(</span><span class="o">*</span><span class="n">res</span><span class="p">,)</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">Parallel</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1180</span>     <span class="n">n_jobs</span><span class="o">=</span><span class="n">parallel</span><span class="p">[</span><span class="s2">&quot;cores&quot;</span><span class="p">])(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1181</span>         <span class="n">joblib</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workflow</span><span class="p">)(</span><span class="n">seed</span><span class="p">)</span> <span class="k">for</span> <span class="n">seed</span> <span class="ow">in</span> <span class="n">seeds</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1183</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">seed</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">seeds</span><span class="p">):</span>
+<span class="g g-Whitespace">   </span><span class="mi">1184</span>     <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="nn">File ~\.conda\envs\prior_elicitation\Lib\site-packages\joblib\parallel.py:2007,</span> in <span class="ni">Parallel.__call__</span><span class="nt">(self, iterable)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2001</span> <span class="c1"># The first item from the output is blank, but it makes the interpreter</span>
+<span class="g g-Whitespace">   </span><span class="mi">2002</span> <span class="c1"># progress until it enters the Try/Except block of the generator and</span>
+<span class="g g-Whitespace">   </span><span class="mi">2003</span> <span class="c1"># reaches the first `yield` statement. This starts the asynchronous</span>
+<span class="g g-Whitespace">   </span><span class="mi">2004</span> <span class="c1"># dispatch of the tasks to the workers.</span>
+<span class="g g-Whitespace">   </span><span class="mi">2005</span> <span class="nb">next</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">2007</span> <span class="k">return</span> <span class="n">output</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">return_generator</span> <span class="k">else</span> <span class="nb">list</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+
+<span class="nn">File ~\.conda\envs\prior_elicitation\Lib\site-packages\joblib\parallel.py:1650,</span> in <span class="ni">Parallel._get_outputs</span><span class="nt">(self, iterator, pre_dispatch)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1647</span>     <span class="k">yield</span>
+<span class="g g-Whitespace">   </span><span class="mi">1649</span>     <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">retrieval_context</span><span class="p">():</span>
+<span class="ne">-&gt; </span><span class="mi">1650</span>         <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_retrieve</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1652</span> <span class="k">except</span> <span class="ne">GeneratorExit</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1653</span>     <span class="c1"># The generator has been garbage collected before being fully</span>
+<span class="g g-Whitespace">   </span><span class="mi">1654</span>     <span class="c1"># consumed. This aborts the remaining tasks if possible and warn</span>
+<span class="g g-Whitespace">   </span><span class="mi">1655</span>     <span class="c1"># the user if necessary.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1656</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_exception</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="nn">File ~\.conda\envs\prior_elicitation\Lib\site-packages\joblib\parallel.py:1754,</span> in <span class="ni">Parallel._retrieve</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1747</span> <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wait_retrieval</span><span class="p">():</span>
+<span class="g g-Whitespace">   </span><span class="mi">1748</span> 
+<span class="g g-Whitespace">   </span><span class="mi">1749</span>     <span class="c1"># If the callback thread of a worker has signaled that its task</span>
+<span class="g g-Whitespace">   </span><span class="mi">1750</span>     <span class="c1"># triggered an exception, or if the retrieval loop has raised an</span>
+<span class="g g-Whitespace">   </span><span class="mi">1751</span>     <span class="c1"># exception (e.g. `GeneratorExit`), exit the loop and surface the</span>
+<span class="g g-Whitespace">   </span><span class="mi">1752</span>     <span class="c1"># worker traceback.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1753</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_aborting</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1754</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_raise_error_fast</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1755</span>         <span class="k">break</span>
+<span class="g g-Whitespace">   </span><span class="mi">1757</span>     <span class="c1"># If the next job is not ready for retrieval yet, we just wait for</span>
+<span class="g g-Whitespace">   </span><span class="mi">1758</span>     <span class="c1"># async callbacks to progress.</span>
+
+<span class="nn">File ~\.conda\envs\prior_elicitation\Lib\site-packages\joblib\parallel.py:1789,</span> in <span class="ni">Parallel._raise_error_fast</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1785</span> <span class="c1"># If this error job exists, immediately raise the error by</span>
+<span class="g g-Whitespace">   </span><span class="mi">1786</span> <span class="c1"># calling get_result. This job might not exists if abort has been</span>
+<span class="g g-Whitespace">   </span><span class="mi">1787</span> <span class="c1"># called directly or if the generator is gc&#39;ed.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1788</span> <span class="k">if</span> <span class="n">error_job</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1789</span>     <span class="n">error_job</span><span class="o">.</span><span class="n">get_result</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
+
+<span class="nn">File ~\.conda\envs\prior_elicitation\Lib\site-packages\joblib\parallel.py:745,</span> in <span class="ni">BatchCompletionCallBack.get_result</span><span class="nt">(self, timeout)</span>
+<span class="g g-Whitespace">    </span><span class="mi">739</span> <span class="n">backend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parallel</span><span class="o">.</span><span class="n">_backend</span>
+<span class="g g-Whitespace">    </span><span class="mi">741</span> <span class="k">if</span> <span class="n">backend</span><span class="o">.</span><span class="n">supports_retrieve_callback</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">742</span>     <span class="c1"># We assume that the result has already been retrieved by the</span>
+<span class="g g-Whitespace">    </span><span class="mi">743</span>     <span class="c1"># callback thread, and is stored internally. It&#39;s just waiting to</span>
+<span class="g g-Whitespace">    </span><span class="mi">744</span>     <span class="c1"># be returned.</span>
+<span class="ne">--&gt; </span><span class="mi">745</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_return_or_raise</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">747</span> <span class="c1"># For other backends, the main thread needs to run the retrieval step.</span>
+<span class="g g-Whitespace">    </span><span class="mi">748</span> <span class="k">try</span><span class="p">:</span>
+
+<span class="nn">File ~\.conda\envs\prior_elicitation\Lib\site-packages\joblib\parallel.py:763,</span> in <span class="ni">BatchCompletionCallBack._return_or_raise</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">761</span> <span class="k">try</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">762</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">TASK_ERROR</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">763</span>         <span class="k">raise</span> <span class="bp">self</span><span class="o">.</span><span class="n">_result</span>
+<span class="g g-Whitespace">    </span><span class="mi">764</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_result</span>
+<span class="g g-Whitespace">    </span><span class="mi">765</span> <span class="k">finally</span><span class="p">:</span>
+
+<span class="ne">BrokenProcessPool</span>: A task has failed to un-serialize. Please ensure that the arguments of the function are all picklable.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="results">
+<h2>Results<a class="headerlink" href="#results" title="Link to this heading">#</a></h2>
+<section id="convergence">
+<h3>Convergence<a class="headerlink" href="#convergence" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">eliobj</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/40539ee44d10b27df59ddfe0a47d4edef802b258dad3a9b7dbdf0d4d36c18b39.png" src="../_images/40539ee44d10b27df59ddfe0a47d4edef802b258dad3a9b7dbdf0d4d36c18b39.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">marginals</span><span class="p">(</span><span class="n">eliobj</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/dbf6056fd9d28a8525f0a3874c1cce4e38a14313096d2d4e94b447a62c82ebbd.png" src="../_images/dbf6056fd9d28a8525f0a3874c1cce4e38a14313096d2d4e94b447a62c82ebbd.png" />
+</div>
+</div>
+</section>
+<section id="expert-expectations">
+<h3>Expert expectations<a class="headerlink" href="#expert-expectations" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">elicits</span><span class="p">(</span><span class="n">eliobj</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/57b5a17cc51788797ac368095e205e249702da28a5a08fc4a8677b3415ee6825.png" src="../_images/57b5a17cc51788797ac368095e205e249702da28a5a08fc4a8677b3415ee6825.png" />
+</div>
+</div>
+</section>
+<section id="learned-joint-prior">
+<h3>Learned joint prior<a class="headerlink" href="#learned-joint-prior" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">prior_joint</span><span class="p">(</span><span class="n">eliobj</span><span class="p">,</span> <span class="n">idx</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/d75ad3f1682c559b16714f89de9f7dcc4978e73509df934b3653b6bc69241ff1.png" src="../_images/d75ad3f1682c559b16714f89de9f7dcc4978e73509df934b3653b6bc69241ff1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">prior_marginals</span><span class="p">(</span><span class="n">eliobj</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO: Reset cols=3 (number of elicited statistics)
+</pre></div>
+</div>
+<img alt="../_images/4a3ac354f0b9594edf4cb59300d42274ede13dbad8dbe68d4da7cddfa8fde0d7.png" src="../_images/4a3ac354f0b9594edf4cb59300d42274ede13dbad8dbe68d4da7cddfa8fde0d7.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">el</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">prior_averaging</span><span class="p">(</span><span class="n">eliobj</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO: Reset cols=3 (number of elicited statistics)
+</pre></div>
+</div>
+<img alt="../_images/c05905528787f7d9e7c2b1dd2d924e5baebe1f63418f68a69375a78a5c6b1386.png" src="../_images/c05905528787f7d9e7c2b1dd2d924e5baebe1f63418f68a69375a78a5c6b1386.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="add-on-model-averaging">
+<h2>Add-on: Model averaging<a class="headerlink" href="#add-on-model-averaging" title="Link to this heading">#</a></h2>
+<p>ToDo</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-model">The Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#generative-model">Generative model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation">Implementation</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Generative model</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#define-design-matrix">Define design matrix</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#model-input-for-elicit-method">Model input for elicit method</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-parameters">Model parameters</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-input-for-elicit-method">Parameter input for elicit method</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#target-quantities-and-elicitation-techniques">Target quantities and elicitation techniques</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#targets-input-for-elicit-method">Targets input for elicit method</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#expert-elicitation">Expert elicitation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#expert-input-for-elicit-method-here-oracle">Expert input for elicit method (here: oracle)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#normalizing-flow">Normalizing Flow</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-learn-prior-distributions-based-on-expert-data">Training: Learn prior distributions based on expert data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results">Results</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convergence">Convergence</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#expert-expectations">Expert expectations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#learned-joint-prior">Learned joint prior</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#add-on-model-averaging">Add-on: Model averaging</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Florence Bockting
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Florence Bockting.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

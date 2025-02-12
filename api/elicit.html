@@ -1,0 +1,620 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>elicit package &#8212; Prior Learning</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=87e54e7c" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=4acdca81"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/elicit';</script>
+    <link rel="icon" href="../_static/favicon-light.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="elicit.extras package" href="elicit.extras.html" />
+    <link rel="prev" title="elicit" href="modules.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/mmp-logo-light.png" class="logo__image only-light" alt="Prior Learning - Home"/>
+    <img src="../_static/mmp-logo-dark.png" class="logo__image only-dark pst-js-only" alt="Prior Learning - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="modules.html">API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="current reference internal" href="#">elicit package</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="elicit.extras.html">elicit.extras package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="elicit.extras.utils.html">elicit.extras.utils module</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.elicit.html">elicit.elicit module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.initialization.html">elicit.initialization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.losses.html">elicit.losses module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.networks.html">elicit.networks module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.optimization.html">elicit.optimization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.plots.html">elicit.plots module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.simulations.html">elicit.simulations module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.targets.html">elicit.targets module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.utils.html">elicit.utils module</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../howto/index.html">How-To</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explanation/index.html">Explanation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/florence-bockting/prior_elicitation" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/api/elicit.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>elicit package</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subpackages">Subpackages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-elicit">Module contents</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="elicit-package">
+<h1>elicit package<a class="headerlink" href="#elicit-package" title="Link to this heading">#</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="elicit.extras.html">elicit.extras package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="elicit.extras.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="elicit.extras.utils.html">elicit.extras.utils module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="elicit.extras.utils.html#elicit.extras.utils.log_R2"><code class="docutils literal notranslate"><span class="pre">log_R2()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="elicit.extras.utils.html#elicit.extras.utils.pearson_correlation"><code class="docutils literal notranslate"><span class="pre">pearson_correlation()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.extras.html#module-elicit.extras">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="elicit.elicit.html">elicit.elicit module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="elicit.elicit.html#elicit.elicit.Dtype"><code class="docutils literal notranslate"><span class="pre">Dtype</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="elicit.elicit.html#elicit.elicit.Dtype.__init__"><code class="docutils literal notranslate"><span class="pre">Dtype.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.elicit.html#elicit.elicit.Dtype.__call__"><code class="docutils literal notranslate"><span class="pre">Dtype.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.elicit.html#elicit.elicit.hyper"><code class="docutils literal notranslate"><span class="pre">hyper()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.elicit.html#elicit.elicit.parameter"><code class="docutils literal notranslate"><span class="pre">parameter()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.elicit.html#elicit.elicit.model"><code class="docutils literal notranslate"><span class="pre">model()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.elicit.html#elicit.elicit.Queries"><code class="docutils literal notranslate"><span class="pre">Queries</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="elicit.elicit.html#elicit.elicit.Queries.quantiles"><code class="docutils literal notranslate"><span class="pre">Queries.quantiles()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.elicit.html#elicit.elicit.Queries.identity"><code class="docutils literal notranslate"><span class="pre">Queries.identity()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.elicit.html#elicit.elicit.Queries.correlation"><code class="docutils literal notranslate"><span class="pre">Queries.correlation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.elicit.html#elicit.elicit.Queries.custom"><code class="docutils literal notranslate"><span class="pre">Queries.custom()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.elicit.html#elicit.elicit.target"><code class="docutils literal notranslate"><span class="pre">target()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.elicit.html#elicit.elicit.Expert"><code class="docutils literal notranslate"><span class="pre">Expert</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="elicit.elicit.html#elicit.elicit.Expert.data"><code class="docutils literal notranslate"><span class="pre">Expert.data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.elicit.html#elicit.elicit.Expert.simulator"><code class="docutils literal notranslate"><span class="pre">Expert.simulator()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.elicit.html#elicit.elicit.optimizer"><code class="docutils literal notranslate"><span class="pre">optimizer()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.elicit.html#elicit.elicit.initializer"><code class="docutils literal notranslate"><span class="pre">initializer()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.elicit.html#elicit.elicit.trainer"><code class="docutils literal notranslate"><span class="pre">trainer()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.elicit.html#elicit.elicit.Elicit"><code class="docutils literal notranslate"><span class="pre">Elicit</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="elicit.elicit.html#elicit.elicit.Elicit.__init__"><code class="docutils literal notranslate"><span class="pre">Elicit.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.elicit.html#elicit.elicit.Elicit.fit"><code class="docutils literal notranslate"><span class="pre">Elicit.fit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.elicit.html#elicit.elicit.Elicit.save"><code class="docutils literal notranslate"><span class="pre">Elicit.save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.elicit.html#elicit.elicit.Elicit.update"><code class="docutils literal notranslate"><span class="pre">Elicit.update()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.elicit.html#elicit.elicit.Elicit.workflow"><code class="docutils literal notranslate"><span class="pre">Elicit.workflow()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="elicit.initialization.html">elicit.initialization module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="elicit.initialization.html#elicit.initialization.uniform_samples"><code class="docutils literal notranslate"><span class="pre">uniform_samples()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.initialization.html#elicit.initialization.init_runs"><code class="docutils literal notranslate"><span class="pre">init_runs()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.initialization.html#elicit.initialization.init_prior"><code class="docutils literal notranslate"><span class="pre">init_prior()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.initialization.html#elicit.initialization.uniform"><code class="docutils literal notranslate"><span class="pre">uniform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="elicit.losses.html">elicit.losses module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="elicit.losses.html#elicit.losses.preprocess"><code class="docutils literal notranslate"><span class="pre">preprocess()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.losses.html#elicit.losses.indiv_loss"><code class="docutils literal notranslate"><span class="pre">indiv_loss()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.losses.html#elicit.losses.total_loss"><code class="docutils literal notranslate"><span class="pre">total_loss()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.losses.html#elicit.losses.L2"><code class="docutils literal notranslate"><span class="pre">L2()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.losses.html#elicit.losses.MMD2"><code class="docutils literal notranslate"><span class="pre">MMD2</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="elicit.losses.html#elicit.losses.MMD2.__init__"><code class="docutils literal notranslate"><span class="pre">MMD2.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.losses.html#elicit.losses.MMD2.__call__"><code class="docutils literal notranslate"><span class="pre">MMD2.__call__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.losses.html#elicit.losses.MMD2.clip"><code class="docutils literal notranslate"><span class="pre">MMD2.clip()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.losses.html#elicit.losses.MMD2.diag"><code class="docutils literal notranslate"><span class="pre">MMD2.diag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.losses.html#elicit.losses.MMD2.kernel"><code class="docutils literal notranslate"><span class="pre">MMD2.kernel()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="elicit.networks.html">elicit.networks module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="elicit.networks.html#elicit.networks.NF"><code class="docutils literal notranslate"><span class="pre">NF()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.networks.html#elicit.networks.BaseNormal"><code class="docutils literal notranslate"><span class="pre">BaseNormal</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="elicit.networks.html#elicit.networks.BaseNormal.__call__"><code class="docutils literal notranslate"><span class="pre">BaseNormal.__call__()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="elicit.optimization.html">elicit.optimization module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="elicit.optimization.html#elicit.optimization.sgd_training"><code class="docutils literal notranslate"><span class="pre">sgd_training()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="elicit.plots.html">elicit.plots module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="elicit.plots.html#elicit.plots.initialization"><code class="docutils literal notranslate"><span class="pre">initialization()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.plots.html#elicit.plots.loss"><code class="docutils literal notranslate"><span class="pre">loss()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.plots.html#elicit.plots.hyperparameter"><code class="docutils literal notranslate"><span class="pre">hyperparameter()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.plots.html#elicit.plots.prior_joint"><code class="docutils literal notranslate"><span class="pre">prior_joint()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.plots.html#elicit.plots.prior_marginals"><code class="docutils literal notranslate"><span class="pre">prior_marginals()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.plots.html#elicit.plots.elicits"><code class="docutils literal notranslate"><span class="pre">elicits()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.plots.html#elicit.plots.marginals"><code class="docutils literal notranslate"><span class="pre">marginals()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.plots.html#elicit.plots.priorpredictive"><code class="docutils literal notranslate"><span class="pre">priorpredictive()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.plots.html#elicit.plots.prior_averaging"><code class="docutils literal notranslate"><span class="pre">prior_averaging()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="elicit.simulations.html">elicit.simulations module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="elicit.simulations.html#elicit.simulations.Priors"><code class="docutils literal notranslate"><span class="pre">Priors</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="elicit.simulations.html#elicit.simulations.Priors.__init__"><code class="docutils literal notranslate"><span class="pre">Priors.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.simulations.html#elicit.simulations.Priors.__call__"><code class="docutils literal notranslate"><span class="pre">Priors.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.simulations.html#elicit.simulations.intialize_priors"><code class="docutils literal notranslate"><span class="pre">intialize_priors()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.simulations.html#elicit.simulations.sample_from_priors"><code class="docutils literal notranslate"><span class="pre">sample_from_priors()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.simulations.html#elicit.simulations.simulate_from_generator"><code class="docutils literal notranslate"><span class="pre">simulate_from_generator()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="elicit.targets.html">elicit.targets module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="elicit.targets.html#elicit.targets.use_custom_functions"><code class="docutils literal notranslate"><span class="pre">use_custom_functions()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.targets.html#elicit.targets.computation_elicited_statistics"><code class="docutils literal notranslate"><span class="pre">computation_elicited_statistics()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.targets.html#elicit.targets.computation_target_quantities"><code class="docutils literal notranslate"><span class="pre">computation_target_quantities()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="elicit.utils.html">elicit.utils module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="elicit.utils.html#elicit.utils.save_as_pkl"><code class="docutils literal notranslate"><span class="pre">save_as_pkl()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.utils.html#elicit.utils.identity"><code class="docutils literal notranslate"><span class="pre">identity()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.utils.html#elicit.utils.DoubleBound"><code class="docutils literal notranslate"><span class="pre">DoubleBound</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="elicit.utils.html#elicit.utils.DoubleBound.__init__"><code class="docutils literal notranslate"><span class="pre">DoubleBound.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.utils.html#elicit.utils.DoubleBound.logit"><code class="docutils literal notranslate"><span class="pre">DoubleBound.logit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.utils.html#elicit.utils.DoubleBound.inv_logit"><code class="docutils literal notranslate"><span class="pre">DoubleBound.inv_logit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.utils.html#elicit.utils.DoubleBound.forward"><code class="docutils literal notranslate"><span class="pre">DoubleBound.forward()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.utils.html#elicit.utils.DoubleBound.inverse"><code class="docutils literal notranslate"><span class="pre">DoubleBound.inverse()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.utils.html#elicit.utils.LowerBound"><code class="docutils literal notranslate"><span class="pre">LowerBound</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="elicit.utils.html#elicit.utils.LowerBound.__init__"><code class="docutils literal notranslate"><span class="pre">LowerBound.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.utils.html#elicit.utils.LowerBound.forward"><code class="docutils literal notranslate"><span class="pre">LowerBound.forward()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.utils.html#elicit.utils.LowerBound.inverse"><code class="docutils literal notranslate"><span class="pre">LowerBound.inverse()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.utils.html#elicit.utils.UpperBound"><code class="docutils literal notranslate"><span class="pre">UpperBound</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="elicit.utils.html#elicit.utils.UpperBound.__init__"><code class="docutils literal notranslate"><span class="pre">UpperBound.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.utils.html#elicit.utils.UpperBound.forward"><code class="docutils literal notranslate"><span class="pre">UpperBound.forward()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="elicit.utils.html#elicit.utils.UpperBound.inverse"><code class="docutils literal notranslate"><span class="pre">UpperBound.inverse()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.utils.html#elicit.utils.one_forward_simulation"><code class="docutils literal notranslate"><span class="pre">one_forward_simulation()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.utils.html#elicit.utils.get_expert_data"><code class="docutils literal notranslate"><span class="pre">get_expert_data()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.utils.html#elicit.utils.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.utils.html#elicit.utils.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.utils.html#elicit.utils.parallel"><code class="docutils literal notranslate"><span class="pre">parallel()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.utils.html#elicit.utils.save_history"><code class="docutils literal notranslate"><span class="pre">save_history()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.utils.html#elicit.utils.save_results"><code class="docutils literal notranslate"><span class="pre">save_results()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.utils.html#elicit.utils.clean_savings"><code class="docutils literal notranslate"><span class="pre">clean_savings()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.utils.html#elicit.utils.get_expert_datformat"><code class="docutils literal notranslate"><span class="pre">get_expert_datformat()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="elicit.utils.html#elicit.utils.softmax_gumbel_trick"><code class="docutils literal notranslate"><span class="pre">softmax_gumbel_trick()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="module-elicit">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-elicit" title="Link to this heading">#</a></h2>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="modules.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">elicit</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="elicit.extras.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">elicit.extras package</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subpackages">Subpackages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-elicit">Module contents</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Florence Bockting
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Florence Bockting.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
